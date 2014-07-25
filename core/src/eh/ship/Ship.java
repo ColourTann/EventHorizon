@@ -54,13 +54,14 @@ public abstract class Ship {
 	int maxCards;
 	private int majorDamageTaken=0;
 	private int energyAtEndOfPhase=0;
-
+	private float powerLevel=0;
+	
 	//Enemy ai stuff//
 	public Module focusTarget;
 	
-	//Map stuff//
-	public Hex hex;
+
 	
+	public enum ShipType{Aurora,Comet,Eclipse,Nova}
 	public abstract void placeNiches();
 	public Ship(boolean player, Pic shipPic, Pic genPic, Pic comPic){
 		this.player=player;
@@ -530,10 +531,10 @@ public abstract class Ship {
 		if(battleGraphic==null)battleGraphic=new ShipGraphic(this);
 		return battleGraphic;
 	}
-	public MapShip getMapShip(){
+	/*public MapShip getMapShip(){
 		if(mapGraphic==null)mapGraphic=new MapShip(this, hex);
 		return mapGraphic;
-	}
+	}*/
 	public void setWeapon(Weapon w, int i){
 		if(i!=0&&i!=1){
 			System.out.println("bad set weapon index");
@@ -589,7 +590,8 @@ public abstract class Ship {
 		return result;
 	}
 	
-	public float analyseDeck(){
+	public float getPowerLevel(){
+		if(powerLevel!=0)return powerLevel;
 		deck.clear();
 		makeDeck();
 		float totalEffect=0;
@@ -627,8 +629,8 @@ public abstract class Ship {
 		System.out.println("Proportion of hand played: "+ratio);
 		System.out.println("Final power level: "+handPower);
 		
-		
-		return handPower;
+		powerLevel=handPower;
+		return powerLevel;
 	}
 
 

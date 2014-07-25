@@ -136,22 +136,7 @@ public class Battle extends Screen{
 
 	public static void debug(){
 
-		System.out.println("Deck stats for Aurora");
-		new Aurora(true).analyseDeck();
-		System.out.println();
-
-		System.out.println("Deck stats for Nova");
-		new Nova(true).analyseDeck();
-		System.out.println();
-
-		System.out.println("Deck stats for Comet");
-		new Comet(true).analyseDeck();
-		System.out.println();
-
-		System.out.println("Deck stats for Eclipse");
-		new Eclipse(true).analyseDeck();
-		System.out.println();
-
+		
 
 		/*player.analyseDeck();
 		enemy.analyseDeck();*/

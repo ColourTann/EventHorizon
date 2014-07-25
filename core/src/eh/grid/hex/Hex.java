@@ -36,7 +36,7 @@ public class Hex {
 
 	public HexContent content;
 
-
+	public boolean highlight;
 	boolean moused; 
 	static Hex mousedHex;
 
@@ -98,11 +98,11 @@ public class Hex {
 		int yDist=h.y-y;
 		return Math.max(Math.abs(xDist), Math.max(Math.abs(yDist), Math.abs(xDist+yDist)));
 	}
-	
+
 	public float getDistanceFromExplosion() {
 		return(getLineDistance(Map.explosion)-(Map.explosionSize+.5f));
 	}
-	
+
 	public float getLineDistance(Hex h){
 		Sink origin=getPixel();
 		Sink target=h.getPixel();
@@ -132,9 +132,9 @@ public class Hex {
 			Map.player.setPath(path);
 		}
 	}
-	
+
 	public void rightClick(){
-		System.out.println(howGood(null));
+		System.out.println(howGood(Map.player));
 	}
 
 	public void addShip(MapShip ship) {
@@ -201,42 +201,60 @@ public class Hex {
 		}
 		System.out.println("Can't find path, took too long");return null;
 	}
-	
+
 	private boolean isSwallowed() {
 		return(getLineDistance(Map.explosion)<Map.explosionSize+.5f);
 	}
 
 	public void renderFilled(ShapeRenderer shape){
 		shape.setColor(Colours.dark);
+		if(highlight)shape.setColor(Colours.blueWeaponCols4[2]);
 		if(moused)shape.setColor(Colours.light);	
 		if(isSwallowed())shape.setColor(Colours.redWeaponCols4[0]);
-		
+
 		Sink s=getPixel();
 		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[2], s.y+points[3], s.x+points[4], s.y+points[5]);
 		shape.triangle(s.x+points[4], s.y+points[5], s.x+points[6], s.y+points[7], s.x+points[8], s.y+points[9]);
 		shape.triangle(s.x+points[8], s.y+points[9], s.x+points[10], s.y+points[11], s.x+points[0], s.y+points[1]);
 		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[4], s.y+points[5], s.x+points[8], s.y+points[9]);
 	}
-	
+
 	public float howGood(MapShip ship){
-		//adjusted for how long it takes to move//
+		float myPower=ship.ship.getPowerLevel();
 		float result=0;
-		float distance=getDistanceFromExplosion()-Map.growthRate;
-		System.out.println();
-		System.out.println();
 		
-		//Too close to explosion//
-		if(distance<0)return -999;
 		
-		System.out.println("Base distance: "+distance);
-		System.out.println("Adjusted distance "+-1/Math.pow(distance, 2));
+		//Distance from explosion!//
+
+		float explosionDistance=getDistanceFromExplosion()-Map.growthRate;	//adjusted for how long it takes to move//
+		if(explosionDistance<0)return -999;	//Too close to explosion//
+		float distanceMult=2;
+		float adjustedDistance=(float) (-1/Math.pow(explosionDistance, 2))*distanceMult;
+		result+=adjustedDistance;
+
 		
-		result+=-1/Math.pow(distance, 2);
+		//Nearby Ships//
 		
-		float playerMultiplier=.07f;
-		float playerDistance = getDistance(Map.player.hex);
-		if(playerDistance==0)result+=10;
-		else result+=(1/playerDistance)*playerMultiplier;
+		int distanceCutoff=4;			//Past this distance will be ignored//
+		float playerMultiplier=.04f;	//player is more important//
+		float enemyMultiplier=.02f;
+		float playerAttack=5;			//except for attacking//
+		float enemyAttack=10;
+		
+		for(Hex h:getHexesWithin(distanceCutoff, true)){
+			MapShip hexShip= h.mapShip;
+			if(hexShip==null||hexShip==ship)continue;
+			if(hexShip.ship==null)hexShip.init();
+			boolean player=hexShip.ship.player;
+			int fleeMult=myPower>hexShip.ship.getPowerLevel()?1:-1;	//Run away or not?
+			int shipDistance=h.getDistance(this);
+			if(shipDistance==0){	//Special case for same space//
+				result+=fleeMult*(player?playerAttack:enemyAttack);
+				continue;
+			}
+			result+=fleeMult*(1/shipDistance*(player?playerMultiplier:enemyMultiplier));
+		}
+		
 		
 		return result;
 	}
@@ -264,7 +282,7 @@ public class Hex {
 
 	public boolean isBlocked(){
 		//if(mapShip!=null)return true;
-			return blocked;
+		return blocked;
 	}
 
 	public String toString(){
@@ -282,5 +300,5 @@ public class Hex {
 
 
 
-	
+
 }

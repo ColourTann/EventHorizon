@@ -26,18 +26,17 @@ public class MapShip {
 	Sink destination = new Sink(0, 0);
 	public Sink distance = new Sink(0, 0);
 	public Hex hex;
-	public ArrayList<Hex> path;
+	public ArrayList<Hex> path= new ArrayList<Hex>();
 
 	public float rotation = 0;
 
 	public MapShip(Ship ship, Hex hex) {
 		this.ship = ship;
-		this.hex = hex;
+		hex.addShip(this);
 	}
 
 	public MapShip(Hex hex) {
-		this.hex = hex;
-		source = hex.getPixel();
+		hex.addShip(this);
 	}
 
 	public void moveTo(Hex h) {
@@ -59,7 +58,6 @@ public class MapShip {
 	public void update(float delta) {
 		if (ship == null) {
 			ship = new Aurora(false);
-			ship.hex = hex;
 			source = hex.getPixel();
 		}
 		distance = new Sink(0, 0);
@@ -90,13 +88,14 @@ public class MapShip {
 	}
 
 	public void takeTurn() {
+		if(ship==null)init();
 		moveTo(decideBest());
 	}
 
 	public Hex decideBest(){
 		Hex best=hex;
-		float value=-1;
-		for(Hex h:hex.getHexesWithin(1, false)){
+		float value=-9999;
+		for(Hex h:hex.getHexesWithin(1, true)){
 			if(h!=hex&&h.isBlocked())continue;
 			float hexVal=h.howGood(this);
 			if(hexVal>value){
@@ -118,5 +117,9 @@ public class MapShip {
 
 	public void resetPath() {
 		path.clear();
+	}
+
+	public void init() {
+		ship=new Aurora(false);
 	}
 }

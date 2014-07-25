@@ -5,6 +5,9 @@ import com.badlogic.gdx.math.Polygon;
 
 import eh.assets.Gallery;
 import eh.assets.Pic;
+import eh.grid.hex.Hex;
+import eh.screen.map.Map;
+import eh.screen.map.Map.MapState;
 import eh.util.Bonkject;
 import eh.util.Junk;
 import eh.util.maths.Collider;
@@ -15,7 +18,7 @@ public class MapAbility extends Bonkject{
 	public int cooldown;
 	public Pic abilityPic;
 	Sink location;
-	
+
 	public MapAbility(Sink location) {
 		super(null);
 		this.location=location;
@@ -25,7 +28,7 @@ public class MapAbility extends Bonkject{
 		deactivate();
 		mousectivate();
 	}
-	
+
 	private static Polygon basePolygon;
 	public static float height;
 	public static float width;
@@ -40,23 +43,43 @@ public class MapAbility extends Bonkject{
 		height=basePolygon.getBoundingRectangle().height;
 		width=basePolygon.getBoundingRectangle().width;
 	}
-	
+
 	@Override
 	public void mouseDown() {
-		System.out.println("flub");
 	}
 	@Override
 	public void mouseUp() {
 	}
 	@Override
 	public void mouseClicked(boolean left) {
+		Map.setState(MapState.PickHex);
+		Map.using=this;
+		highlightPickables(Map.player.hex);
 	}
+
+	public void highlightPickables(Hex origin){
+		for(Hex h:origin.getHexesWithin(3, false)){
+			h.highlight=true;
+		}
+	}
+
+	public void pickHex(Hex hex){
+		if(!hex.highlight)return;
+		Map.setState(MapState.PlayerMoving);
+		Map.player.moveTo(hex);
+		for(Hex h:Map.player.hex.getHexesWithin(7, true)){
+			h.highlight=false;
+		}
+		Map.using=null;	
+
+	}
+
 	@Override
 	public void update(float delta) {
 	}
 	@Override
 	public void render(SpriteBatch batch) {
 		Junk.drawTextureScaledCentered(batch, Gallery.mapAbilityTeleport.get(), location.x, location.y, 1, 1);
-		//debugRender(batch);
 	}
+
 }

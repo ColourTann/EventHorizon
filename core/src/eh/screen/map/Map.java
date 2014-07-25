@@ -28,13 +28,14 @@ public class Map extends Screen{
 
 	public static MapShip player;
 	SpriteBatch batch2=new SpriteBatch();
-	public enum MapState{PlayerChoosing,PlayerMoving,EnemyMoving}
+	public enum MapState{PlayerChoosing,PlayerMoving,EnemyMoving,PickHex}
 	private static MapState state=MapState.PlayerChoosing;
 	public static Hex explosion;
 	public static float explosionSize=9;
-	public static float growthRate=1.2f;
+	public static float growthRate=.8f;
 	public static float progress=0;
 	public static float phaseSpeed=3;
+	public static MapAbility using;
 	static MapAbility abil;
 	public Map(){
 		init();
@@ -43,13 +44,14 @@ public class Map extends Screen{
 	public static void init(){
 		grid=Grid.MakeGrid();
 		Hex.init();
-		player=new Nova(true).getMapShip();
-		grid.getHex(50, 50).addShip(player);
+		player=new MapShip(new Nova(true), grid.getHex(50, 50));
+
 		Map.explosion=grid.getHex(45, 48);
 		MapAbility.init();
-		
+
 		abil=new MapAbility(new Sink(5+MapAbility.width/2,Main.height-MapAbility.height/2-5));
 	}
+
 
 	public static MapState getState(){
 		return state;
@@ -75,7 +77,7 @@ public class Map extends Screen{
 	}
 
 	private void updateState(float delta) {
-		
+
 		switch(state){
 		case EnemyMoving:
 			progress+=delta*phaseSpeed;
@@ -101,7 +103,7 @@ public class Map extends Screen{
 	public static void enemyTurn(){
 		for(MapShip enemy:grid.getActiveEnemies())enemy.takeTurn();
 	}
-	
+
 	@Override
 	public void update(float delta) {
 		updateState(delta);		
@@ -131,6 +133,10 @@ public class Map extends Screen{
 	public void mousePressed(Sink location, boolean left) {
 		Hex h=grid.getHexUnderMouse(location.x,location.y);
 		if(h!=null){
+			if(using!=null){
+				using.pickHex(h);
+				return;
+			}
 			if(left)h.click();
 			if(!left)h.rightClick();
 		}
@@ -162,7 +168,7 @@ public class Map extends Screen{
 		batch.end();
 
 		//Black Hole//
-		
+
 		Main.shape.begin(ShapeType.Filled);
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Main.shape.setColor(1,1,0,1);
@@ -183,6 +189,8 @@ public class Map extends Screen{
 		batch.begin();
 
 	}
+
+
 
 
 
