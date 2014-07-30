@@ -67,4 +67,7 @@ public class Sink {
 	public Sink squared() {
 		return new Sink(x*x,y*y);
 	}
+	public Sink absolute() {
+		return new Sink(Math.abs(x),Math.abs(y));
+	}
 }

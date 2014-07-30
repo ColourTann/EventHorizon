@@ -618,6 +618,8 @@ public abstract class Ship {
 		float ratio=energyIncome/handCost;
 		
 		float handPower=handEffect*ratio;
+		boolean debug=false;
+		if(debug){
 		System.out.println("Power levels for "+this);
 		System.out.println("Total effect: "+totalEffect);
 		System.out.println("Total cost: "+totalCost);
@@ -628,6 +630,7 @@ public abstract class Ship {
 		System.out.println("Hand effect: "+handEffect);
 		System.out.println("Proportion of hand played: "+ratio);
 		System.out.println("Final power level: "+handPower);
+		}
 		
 		powerLevel=handPower;
 		return powerLevel;

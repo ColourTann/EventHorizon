@@ -18,15 +18,28 @@ public class MapAbility extends Bonkject{
 	public int cooldown;
 	public Pic abilityPic;
 	Sink location;
+	public enum MapAbilityType{
+		//Generator abilities
+		Teleport, Move, Diagonal,
 
+		//Computer Abilities
+		Cloak, Beam, Forcefield
+
+	}
 	public MapAbility(Sink location) {
 		super(null);
 		this.location=location;
 		Polygon translated=new Polygon(basePolygon.getVertices());
-		translated.translate(location.x, location.y);
 		collider=new PolygonCollider(translated);
 		deactivate();
 		mousectivate();
+	}
+
+	public void setLocation(Sink location){
+		this.location=location;
+		Polygon translated=new Polygon(basePolygon.getVertices());
+		translated.translate(location.x, location.y);
+		collider=new PolygonCollider(translated);
 	}
 
 	private static Polygon basePolygon;
@@ -54,22 +67,20 @@ public class MapAbility extends Bonkject{
 	public void mouseClicked(boolean left) {
 		Map.setState(MapState.PickHex);
 		Map.using=this;
-		highlightPickables(Map.player.hex);
 	}
 
-	public void highlightPickables(Hex origin){
-		for(Hex h:origin.getHexesWithin(3, false)){
-			h.highlight=true;
-		}
+	public boolean isValidChoice(Hex origin, Hex target){
+		int dist=origin.getDistance(target);
+		return dist>1&&dist<=4;
 	}
+
+
 
 	public void pickHex(Hex hex){
-		if(!hex.highlight)return;
+		if(!isValidChoice(Map.player.hex, hex))return;
 		Map.setState(MapState.PlayerMoving);
 		Map.player.moveTo(hex);
-		for(Hex h:Map.player.hex.getHexesWithin(7, true)){
-			h.highlight=false;
-		}
+
 		Map.using=null;	
 
 	}

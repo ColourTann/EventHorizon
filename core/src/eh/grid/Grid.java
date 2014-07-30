@@ -37,7 +37,7 @@ public class Grid {
 		for(int i=0;i<1500;i++){
 			getRandomHex().makeSolarSystem();
 		}
-		for(int i=0;i<20000;i++){
+		for(int i=0;i<2000;i++){
 			getRandomHex().makeMapShip();
 		}
 		

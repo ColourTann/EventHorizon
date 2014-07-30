@@ -37,8 +37,8 @@ public class Hex {
 	public HexContent content;
 
 	public boolean highlight;
-	boolean moused; 
-	static Hex mousedHex;
+	public boolean moused; 
+	public static Hex mousedHex;
 
 	int x;
 	int y;
@@ -46,6 +46,10 @@ public class Hex {
 	public MapShip mapShip;
 	private boolean blocked;
 
+	//Pathfinding stuff//
+	Hex parent;
+	float idealDist=-1;
+	float moves=-1;
 
 
 	public static void init(){
@@ -110,23 +114,49 @@ public class Hex {
 		return (float) (Math.sqrt(distance.x*distance.x+distance.y*distance.y))/Hex.size;
 	}
 	public void mouse() {
+		if(moused)return;
+		
+
+		moused=true;
+		
+		
+
 		mousedHex.unMouse();
 		mousedHex=this;
-		moused=true;
+		if(Map.getState()==MapState.PlayerChoosing){
+		ArrayList<Hex> path=Map.player.hex.pathFind(this);
+		Map.path=path;
+		if(path!=null){
+			for (Hex h: path){
+				h.highlight=true;
+			}
+		}
+		}
+
 	}
 
 	private void unMouse() {
+		
 		moused=false;
+		if(Map.getState()!=MapState.PlayerChoosing)return;
+		if(Map.path!=null){
+			for (Hex h: Map.path){
+				h.highlight=false;
+			}
+		}
 	}
 
 	public void click(){
 		if(getDistance(Map.player.hex)>Grid.viewDist)return;
+		if(Map.using!=null){
+			Map.using.pickHex(this);
+			return;
+		}
 		if(Map.getState()!=MapState.PlayerChoosing){
 			Map.player.resetPath();
 			return;
 		}
 		ArrayList<Hex> path=Map.player.hex.pathFind(this);
-
 		if(path!=null){
 			Map.setState(MapState.PlayerMoving);
 			Map.player.setPath(path);
@@ -134,7 +164,8 @@ public class Hex {
 	}
 
 	public void rightClick(){
-		System.out.println(howGood(Map.player));
+		//System.out.println(howGood(Map.player));
+
 	}
 
 	public void addShip(MapShip ship) {
@@ -170,34 +201,88 @@ public class Hex {
 	}
 
 	public ArrayList<Hex> pathFind(Hex target){
-		class Node{
-			Hex hex;
-			Node previous;
-			Node(Hex hex, Node previous){
-				this.hex=hex;
-				this.previous=previous;
-			}
-		}
-		ArrayList<Node> queue=new ArrayList<Node>();
-		ArrayList<Hex> checked=new ArrayList<Hex>();
-		queue.add(new Node(this,null));
-		for(int i=0;i<1000;i++){
-			if(queue.size()==0)return null;
-			Node n=queue.remove(0);
-			if(n.hex==target){
-				ArrayList<Hex> result= new ArrayList<Hex>();
-				while(n.previous!=null){
-					result.add(0,n.hex);
-					n=n.previous;
+		
+		if(target.isBlocked()||this==target)return null;
+
+		ArrayList<Hex> open=new ArrayList<Hex>();
+		ArrayList<Hex> closed=new ArrayList<Hex>();
+
+
+		idealDist=getDistance(target);
+		moves=0;
+		open.add(this);
+		Sink totalDist=target.getPixel().subtract(getPixel());
+		totalDist=totalDist.absolute();
+		totalDist.x+=.0001f;
+		totalDist.y+=.0001f;
+		while(open.size()>0){
+			float closest=9999;
+			Hex check=null;
+			for(Hex h:open){
+				float bonus=h.getLineDistance(target)/10;
+				float score=h.moves+h.idealDist-bonus;
+				if(score<closest){
+					closest=score;
+					check=h;
 				}
-				return result;
 			}
-			for(Hex h:n.hex.getHexesWithin(1, false)){
-				if(checked.contains(h))continue;
-				if(h.blocked)continue;
-				checked.add(h);
-				queue.add(new Node(h, n));
-			}
+			open.remove(check);
+			closed.add(check);
+			for(Hex h:check.getHexesWithin(1, false)){
+
+				if(h.isBlocked())continue;
+
+				if(closed.contains(h)||open.contains(h)){
+					if(check.moves+1<=h.moves){
+						h.parent=check;
+						h.moves=check.moves+1;
+					}
+					continue;
+				}
+
+
+				if(h==target){
+					ArrayList<Hex> result=new ArrayList<Hex>();
+					h.parent=check;
+					Hex add=h;
+					result.add(add);
+					while(add.parent!=null){
+						add=add.parent;
+						if(add==this)break;
+						result.add(add);
+					}
+					for(Hex reset:open){
+						reset.parent=null;
+						reset.idealDist=-1;
+						reset.moves=-1;
+					}
+					for(Hex reset:closed){
+						reset.parent=null;
+						reset.idealDist=-1;
+						reset.moves=-1;
+					}
+					h.parent=null;
+					closed.clear();
+					open.clear();
+					
+					return result;
+				}
+				h.idealDist=h.getDistance(target);
+				h.parent=check;
+				h.moves=check.moves+1f;
+				
+				open.add(h);
+			}			
+		}
+		for(Hex reset:open){
+			reset.parent=null;
+			reset.idealDist=-1;
+			reset.moves=-1;
+		}
+		for(Hex reset:closed){
+			reset.parent=null;
+			reset.idealDist=-1;
+			reset.moves=-1;
 		}
 		System.out.println("Can't find path, took too long");return null;
 	}
@@ -206,24 +291,14 @@ public class Hex {
 		return(getLineDistance(Map.explosion)<Map.explosionSize+.5f);
 	}
 
-	public void renderFilled(ShapeRenderer shape){
-		shape.setColor(Colours.dark);
-		if(highlight)shape.setColor(Colours.blueWeaponCols4[2]);
-		if(moused)shape.setColor(Colours.light);	
-		if(isSwallowed())shape.setColor(Colours.redWeaponCols4[0]);
-
-		Sink s=getPixel();
-		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[2], s.y+points[3], s.x+points[4], s.y+points[5]);
-		shape.triangle(s.x+points[4], s.y+points[5], s.x+points[6], s.y+points[7], s.x+points[8], s.y+points[9]);
-		shape.triangle(s.x+points[8], s.y+points[9], s.x+points[10], s.y+points[11], s.x+points[0], s.y+points[1]);
-		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[4], s.y+points[5], s.x+points[8], s.y+points[9]);
-	}
+	
 
 	public float howGood(MapShip ship){
-		float myPower=ship.ship.getPowerLevel();
 		float result=0;
-		
-		
+		float myPower=ship.ship.getPowerLevel();
+
+
+
 		//Distance from explosion!//
 
 		float explosionDistance=getDistanceFromExplosion()-Map.growthRate;	//adjusted for how long it takes to move//
@@ -232,34 +307,58 @@ public class Hex {
 		float adjustedDistance=(float) (-1/Math.pow(explosionDistance, 2))*distanceMult;
 		result+=adjustedDistance;
 
-		
+
 		//Nearby Ships//
-		
+		float ignoreRange=.01f;
 		int distanceCutoff=4;			//Past this distance will be ignored//
-		float playerMultiplier=.04f;	//player is more important//
-		float enemyMultiplier=.02f;
+		float playerMultiplier=.04f;	//player is not more important//
+		float enemyMultiplier=.04f;
 		float playerAttack=5;			//except for attacking//
 		float enemyAttack=10;
-		
+
 		for(Hex h:getHexesWithin(distanceCutoff, true)){
 			MapShip hexShip= h.mapShip;
 			if(hexShip==null||hexShip==ship)continue;
 			if(hexShip.ship==null)hexShip.init();
 			boolean player=hexShip.ship.player;
-			int fleeMult=myPower>hexShip.ship.getPowerLevel()?1:-1;	//Run away or not?
-			int shipDistance=h.getDistance(this);
-			if(shipDistance==0){	//Special case for same space//
+			float theirPower=hexShip.getPowerLevel();
+			//Flee decision//
+			float fleeMult=0;
+			if(Math.abs(theirPower-myPower)<ignoreRange)fleeMult=0;
+			else fleeMult=myPower>theirPower?1:-1;	//Run away or not?
+			float shipDistance=h.getDistance(this);
+			if(shipDistance==0){
+				if(fleeMult<1)return -9;			//Don't attack ships you can't take on
 				result+=fleeMult*(player?playerAttack:enemyAttack);
-				continue;
 			}
+
+
+
 			result+=fleeMult*(1/shipDistance*(player?playerMultiplier:enemyMultiplier));
 		}
-		
-		
+
+
 		return result;
 	}
 
+	public void renderFilled(ShapeRenderer shape){
+		shape.setColor(Colours.dark);
+		if(Map.using!=null){
+			if(Map.using.isValidChoice(Map.player.hex, this))shape.setColor(Colours.blueWeaponCols4[2]);
+		}
+		if(highlight)shape.setColor(Colours.blueWeaponCols4[2]);
+		if(moused)shape.setColor(Colours.light);	
+		/*if(closed.contains(this))shape.setColor(1, 0, 0, 1);
+		if(open.contains(this))shape.setColor(0, 1, 0, 1);*/
+		if(isSwallowed())shape.setColor(Colours.redWeaponCols4[0]);
 
+		Sink s=getPixel();
+		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[2], s.y+points[3], s.x+points[4], s.y+points[5]);
+		shape.triangle(s.x+points[4], s.y+points[5], s.x+points[6], s.y+points[7], s.x+points[8], s.y+points[9]);
+		shape.triangle(s.x+points[8], s.y+points[9], s.x+points[10], s.y+points[11], s.x+points[0], s.y+points[1]);
+		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[4], s.y+points[5], s.x+points[8], s.y+points[9]);
+	}
+	
 	public void renderBorder(ShapeRenderer shape) {
 		Sink s=getPixel();
 		p.setPosition(s.x, s.y);

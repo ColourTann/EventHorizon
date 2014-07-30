@@ -1,5 +1,7 @@
 package eh.screen.map;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -37,6 +39,9 @@ public class Map extends Screen{
 	public static float phaseSpeed=3;
 	public static MapAbility using;
 	static MapAbility abil;
+	
+	public static ArrayList<Hex> path= new ArrayList<Hex>();
+	
 	public Map(){
 		init();
 	}
@@ -44,7 +49,8 @@ public class Map extends Screen{
 	public static void init(){
 		grid=Grid.MakeGrid();
 		Hex.init();
-		player=new MapShip(new Nova(true), grid.getHex(50, 50));
+		//player=new MapShip(new Nova(true), grid.getHex(50, 50));
+		player=new MapShip(new Nova(true), grid.getHex(60, 60));
 
 		Map.explosion=grid.getHex(45, 48);
 		MapAbility.init();
@@ -66,6 +72,7 @@ public class Map extends Screen{
 			enemyTurn();
 			break;
 		case PlayerChoosing:
+			Hex.mousedHex.moused=false;
 			explosionSize+=growthRate/2;
 			player.playerStartTurn();
 			break;
@@ -121,6 +128,8 @@ public class Map extends Screen{
 		break;
 		case (Input.Keys.PERIOD):
 			zoom(1);
+		case Input.Keys.SPACE:
+			
 		break;
 		}
 	}
@@ -133,10 +142,6 @@ public class Map extends Screen{
 	public void mousePressed(Sink location, boolean left) {
 		Hex h=grid.getHexUnderMouse(location.x,location.y);
 		if(h!=null){
-			if(using!=null){
-				using.pickHex(h);
-				return;
-			}
 			if(left)h.click();
 			if(!left)h.rightClick();
 		}
@@ -171,7 +176,7 @@ public class Map extends Screen{
 
 		Main.shape.begin(ShapeType.Filled);
 		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Main.shape.setColor(1,1,0,1);
+		Main.shape.setColor(0,0,0,1);
 		Main.shape.circle(explosion.getPixel().x,explosion.getPixel().y, (explosionSize+progress*(growthRate/2))*Hex.size);
 		Main.shape.end();
 

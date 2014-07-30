@@ -6,11 +6,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import eh.grid.Grid;
 import eh.grid.hex.Hex;
 import eh.screen.map.Map;
 import eh.screen.map.Map.MapState;
 import eh.ship.Ship;
 import eh.ship.shipClass.Aurora;
+import eh.ship.shipClass.Eclipse;
 import eh.util.Bonkject;
 import eh.util.Bonkject.Timerr;
 import eh.util.Junk;
@@ -41,6 +43,7 @@ public class MapShip {
 
 	public void moveTo(Hex h) {
 		if (isMoving()) return;
+		if(ship.player)h.highlight=false;
 		source = hex.getPixel();
 		destination = h.getPixel();
 		timer = Bonkject.time(1/Map.phaseSpeed, null);
@@ -57,7 +60,7 @@ public class MapShip {
 
 	public void update(float delta) {
 		if (ship == null) {
-			ship = new Aurora(false);
+			init();
 			source = hex.getPixel();
 		}
 		distance = new Sink(0, 0);
@@ -84,7 +87,7 @@ public class MapShip {
 
 	public void setPath(ArrayList<Hex> path) {
 		this.path = path;
-		if (path.size() > 0) moveTo(path.remove(0));
+		if (path.size() > 0) moveTo(path.remove(path.size()-1));
 	}
 
 	public void takeTurn() {
@@ -95,7 +98,7 @@ public class MapShip {
 	public Hex decideBest(){
 		Hex best=hex;
 		float value=-9999;
-		for(Hex h:hex.getHexesWithin(1, true)){
+		for(Hex h:hex.getHexesWithin(1, false)){
 			if(h!=hex&&h.isBlocked())continue;
 			float hexVal=h.howGood(this);
 			if(hexVal>value){
@@ -105,21 +108,30 @@ public class MapShip {
 		}
 		return best;
 	}
-	
-
-	
+		
 	public void playerStartTurn() {
+		
 		if (path != null && path.size() > 0) {
 			Map.setState(MapState.PlayerMoving);
-			moveTo(path.remove(0));
+			moveTo(path.remove(path.size()-1));
 		}
+		else path=null;
 	}
 
 	public void resetPath() {
+		for(Hex h:path){
+			h.highlight=false;
+		}
 		path.clear();
 	}
 
 	public void init() {
-		ship=new Aurora(false);
+		if(Math.random()>.5)ship=new Aurora(false);
+		else ship=new Eclipse(false);
+		
+	}
+
+	public float getPowerLevel() {
+		return ship.getPowerLevel();
 	}
 }
