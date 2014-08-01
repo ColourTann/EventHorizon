@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javax.smartcardio.CardPermission;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import eh.assets.Clip;
 import eh.assets.Pic;
 import eh.card.CardCode.AI;
@@ -23,8 +25,8 @@ import eh.ship.module.utils.DamagePoint;
 import eh.ship.module.utils.ShieldPoint;
 import eh.ship.module.utils.Buff.BuffType;
 import eh.ship.module.weapon.Weapon;
-import eh.util.Bonkject.Interp;
 import eh.util.Junk;
+import eh.util.Timer.Interp;
 
 public class Card {
 	public Module mod;
@@ -47,9 +49,10 @@ public class Card {
 	public boolean selected;
 	private CardGraphic cg;
 	private int previousIndexInHand;
+	public static ArrayList<CardGraphic> enemyCardsToRender=new ArrayList<CardGraphic>();
 	
 	public boolean wasScrambled;
-
+	
 	//Setting up card//
 	public Card(Module m, int side){
 		mod=m;
@@ -70,19 +73,6 @@ public class Card {
 		}
 		type=m.type;
 	}
-	
-	/*public Card(String name, Pic cardPic, int cost, int effect, int cooldown, String rules, CardCode code, ModuleType type){
-		specialSide=-1;
-		names[0]=name;
-		cardPics[0]=cardPic;
-		baseCost[0]=cost;
-		baseEffect[0]=effect;
-		baseCooldown[0]=cooldown;
-		this.rules[0]=rules;
-		this.code[0]=code;
-		this.type=type;
-		
-	}*/
 
 	//Checking whose card clicked on//
 	public void click(){
@@ -334,15 +324,16 @@ public class Card {
 
 	//Special select method for enenmy. Just deals with graphical junk and targeting//
 	public void enemySelect() {
-
-
+		
+		enemyCardsToRender.add(getGraphic());
+		
 		CardCode code = getCode();
 		Ship ship=getShip();
 		getGraphic().hideLower();
 		getGraphic().moveToTop();
 		getGraphic().setPosition(CardGraphic.enemyPlayStartPosition);
-		getGraphic().lerptivate(CardGraphic.enemyPlayToPosition, Interp.SQUARE, 1.5f);
-
+		getGraphic().slide(CardGraphic.enemyPlayToPosition, 1.5f, Interp.SQUARE);
+		getGraphic().finishFlipping();
 		if(mod.getBuffAmount(BuffType.Scrambled)>0){
 			scrambSelect();
 			return;
@@ -525,7 +516,7 @@ public class Card {
 		CardCode code=getCode();
 		Ship ship = getShip();
 		ship.hand.remove(this);
-		getGraphic().fadeOut(CardGraphic.fadeType, CardGraphic.fadeSpeed);
+		getGraphic().fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
 
 		//Enemies play cards normally, players play discardwhenclickeds immediately//
 		for(int i=0;i<code.getAmount(Special.SelfScramble);i++)mod.scramble();
@@ -578,6 +569,7 @@ public class Card {
 		getShip().updateCardPositions();
 		getGraphic().moveUp();
 		getGraphic().hideLower();
+		CardGraphic.setAugmentOrTarget(getGraphic());
 	}
 
 
@@ -610,6 +602,7 @@ public class Card {
 		getShip().updateCardPositions();
 		getGraphic().moveUp();
 		getGraphic().hideLower();
+		
 	}
 
 	public void moduleChosen() {
@@ -675,6 +668,7 @@ public class Card {
 		getShip().updateCardPositions();
 		getGraphic().moveUp();
 		getGraphic().hideLower();
+		if(mod.ship.player)CardGraphic.setAugmentOrTarget(getGraphic());
 	}
 
 	//Graphical and state stuff from choosing not to augment//
@@ -691,7 +685,7 @@ public class Card {
 	private void augmentThis(Card augmenter) {
 		CardCode augCode=augmenter.getCode();
 		if(augmenter==Battle.augmentSource){
-			Battle.augmentSource.getGraphic().fadeOut(CardGraphic.fadeType, CardGraphic.fadeSpeed);
+			Battle.augmentSource.getGraphic().fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
 			Battle.setState(State.Nothing);
 			Battle.augmentSource=null;
 			CardIcon.addIcon(augmenter);
@@ -1246,5 +1240,6 @@ public class Card {
 		baseEffect[1]=eff;
 	}
 
-
+	
+	
 }

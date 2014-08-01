@@ -47,7 +47,6 @@ public class Checklist extends Bonkject{
 	public void update(float delta) {
 	}
 
-	@Override
 	public void render(SpriteBatch batch) {
 		batch.setColor(Colours.withAlpha(Colours.white,alpha));
 		Junk.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y, 3, 3);

@@ -4,19 +4,19 @@ import com.badlogic.gdx.graphics.Color;
 
 
 public abstract class Collider {
-	public float x,y;
-	public abstract boolean collidePoint(Sink s);
+	public Pair position;
+	public abstract boolean collidePoint(Pair s);
 	public abstract boolean collideWith(Collider c);
 	public abstract void debugDraw();
 	public Color override;
 	public boolean circleBoxCollide(CircleCollider c, BoxCollider b){
 		int misses;
-		float cx=c.x;
-		float cy=c.y;
+		float cx=c.position.x;
+		float cy=c.position.y;
 		float cr=c.r;
-		float left=b.x;
+		float left=b.position.x;
 		float right=left+b.w;
-		float bot=b.y;
+		float bot=b.position.y;
 		float top=bot+b.h;
 
 		//out of bounds
@@ -29,10 +29,10 @@ public abstract class Collider {
 		}
 
 		//edge case
-		misses = c.x>right?1:0;
-		misses+=c.x<left?1:0;
-		misses+=c.y>bot?1:0;
-		misses+=c.y<top?1:0;
+		misses = c.position.x>right?1:0;
+		misses+=c.position.x<left?1:0;
+		misses+=c.position.y>bot?1:0;
+		misses+=c.position.y<top?1:0;
 
 		if(misses==2){
 

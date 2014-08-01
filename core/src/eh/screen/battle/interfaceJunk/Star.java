@@ -11,18 +11,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eh.Main;
 import eh.assets.Gallery;
 import eh.util.Colours;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class Star{
 	public static ArrayList<Star> stars = new ArrayList<Star>();
-	public Sink location;
+	public Pair location;
 	float size;
 	public static Texture pixTex;
 	static Color purp=Colours.make(60, 56, 85);
 	static Color teal=Colours.make(65, 93, 105);
 	public Star() {
 		size=(float) Math.random();
-		location=new Sink((float)Math.random()*Main.width,(float)Math.random()*Main.height);
+		location=new Pair((float)Math.random()*Main.width,(float)Math.random()*Main.height);
 		stars.add(this);
 	}
 

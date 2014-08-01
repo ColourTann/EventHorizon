@@ -8,19 +8,19 @@ import eh.ship.module.weapon.attack.particle.LaserBody;
 import eh.ship.module.weapon.attack.particle.LaserCharge;
 import eh.ship.module.weapon.attack.particle.Smoke.SmokeType;
 import eh.ship.module.weapon.attack.particle.SmokeMachine;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 import eh.util.particleSystem.ParticleSystem;
 
 public class LaserAttack extends AttackGraphic{
 
-	public LaserAttack(Sink origin) {
+	public LaserAttack(Pair origin) {
 		super(origin);
 		frequency=.2f;
 	}
 
 	@Override
-	public void fire(Sink target) {
+	public void fire(Pair target) {
 		this.target=target;
 		particles.add(new LaserBody(origin, target));
 		fired=true;
@@ -34,7 +34,7 @@ public class LaserAttack extends AttackGraphic{
 	@Override
 	public void impact() {
 		if(atk.activateDamage()){
-			ParticleSystem.systems.add(new SmokeMachine(new Sink(target.x,target.y), .6f, 50, SmokeType.Laser));	
+			ParticleSystem.systems.add(new SmokeMachine(new Pair(target.x,target.y), .6f, 50, SmokeType.Laser));	
 		}
 	}
 

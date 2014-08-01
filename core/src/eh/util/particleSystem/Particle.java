@@ -3,13 +3,13 @@ package eh.util.particleSystem;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public abstract class Particle {
 	
 	public float rotation,dr,life,maxLife,ratio,ticks;
-	public Sink position=new Sink();
-	public Sink vector=new Sink();
+	public Pair position=new Pair();
+	public Pair vector=new Pair();
 	public boolean dead;
 	public Color colour;
 	public abstract void update(float delta);

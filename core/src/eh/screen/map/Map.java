@@ -17,12 +17,12 @@ import eh.assets.Gallery;
 import eh.grid.Grid;
 import eh.grid.hex.Hex;
 import eh.screen.Screen;
-import eh.ship.mapThings.MapAbility;
 import eh.ship.mapThings.MapShip;
+import eh.ship.mapThings.mapAbility.MapAbility;
 import eh.ship.shipClass.*;
 import eh.util.Colours;
 import eh.util.Junk;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class Map extends Screen{
 	static float scrollSpeed=100;
@@ -30,8 +30,8 @@ public class Map extends Screen{
 
 	public static MapShip player;
 	SpriteBatch batch2=new SpriteBatch();
-	public enum MapState{PlayerChoosing,PlayerMoving,EnemyMoving,PickHex}
-	private static MapState state=MapState.PlayerChoosing;
+	public enum MapState{PlayerTurn,PlayerMoving,EnemyMoving,PickHex}
+	private static MapState state=MapState.PlayerTurn;
 	public static Hex explosion;
 	public static float explosionSize=9;
 	public static float growthRate=.8f;
@@ -55,7 +55,7 @@ public class Map extends Screen{
 		Map.explosion=grid.getHex(45, 48);
 		MapAbility.init();
 
-		abil=new MapAbility(new Sink(5+MapAbility.width/2,Main.height-MapAbility.height/2-5));
+		abil=new MapAbility(new Pair(5+MapAbility.width/2,Main.height-MapAbility.height/2-5));
 	}
 
 
@@ -71,14 +71,14 @@ public class Map extends Screen{
 			explosionSize+=growthRate/2;
 			enemyTurn();
 			break;
-		case PlayerChoosing:
+		case PlayerTurn:
 			Hex.mousedHex.moused=false;
 			explosionSize+=growthRate/2;
 			player.playerStartTurn();
 			break;
 		case PlayerMoving:
 			break;
-		default:
+		case PickHex:
 			break;
 		}
 	}
@@ -90,10 +90,10 @@ public class Map extends Screen{
 			progress+=delta*phaseSpeed;
 			if(progress>1){
 				progress=0;
-				setState(MapState.PlayerChoosing);
+				setState(MapState.PlayerTurn);
 			}
 			break;
-		case PlayerChoosing:
+		case PlayerTurn:
 			break;
 		case PlayerMoving:
 			progress+=delta*phaseSpeed;
@@ -139,7 +139,7 @@ public class Map extends Screen{
 	}
 
 	@Override
-	public void mousePressed(Sink location, boolean left) {
+	public void mousePressed(Pair location, boolean left) {
 		Hex h=grid.getHexUnderMouse(location.x,location.y);
 		if(h!=null){
 			if(left)h.click();
@@ -153,11 +153,11 @@ public class Map extends Screen{
 	}
 
 	public static void moveCam() {
-		Sink bonus=new Sink(0,0);
+		Pair bonus=new Pair(0,0);
 		if(getState()==MapState.PlayerMoving){
 			bonus=player.distance;
 		}
-		Main.setCam(player.hex.getPixel().add(bonus).subtract(new Sink(Main.width/2,Main.height/2)));
+		Main.setCam(player.hex.getPixel().add(bonus).subtract(new Pair(Main.width/2,Main.height/2)));
 	}
 
 	@Override
@@ -193,6 +193,10 @@ public class Map extends Screen{
 
 		batch.begin();
 
+	}
+
+	@Override
+	public void postRender(SpriteBatch batch) {
 	}
 
 

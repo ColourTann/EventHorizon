@@ -10,15 +10,14 @@ public class CircleCollider extends Collider{
 	float r;
 	
 	public CircleCollider(float x, float y, float r){
-		this.x=x;
-		this.y=y;
+		position=new Pair(x,y);
 		this.r=r;
 	}
 	
 	@Override
-	public boolean collidePoint(Sink s) {
-		float xDist=s.x-x;
-		float yDist=s.y-y;
+	public boolean collidePoint(Pair s) {
+		float xDist=s.x-position.x;
+		float yDist=s.y-position.y;
 		float dist=xDist*xDist+yDist*yDist;
 		return dist<=r*r;
 	}
@@ -34,7 +33,7 @@ public class CircleCollider extends Collider{
 		sr.setColor(1, 1, 1, .3f);
 		if(override!=null) sr.setColor(override);
 		
-		sr.circle(x, y, r);
+		sr.circle(position.x, position.y, r);
 		sr.end();
 		sr.dispose();
 	}
@@ -44,8 +43,8 @@ public class CircleCollider extends Collider{
 		if(c instanceof CircleCollider){
 			CircleCollider circ = (CircleCollider) c;
 			float maxDist=(r+circ.r)*(r+circ.r);
-			float xDist=x-circ.x;
-			float yDist=y-circ.y;
+			float xDist=position.x-circ.position.x;
+			float yDist=position.y-circ.position.y;
 			float actualDist=xDist*xDist+yDist*yDist;
 			
 			if(actualDist<=maxDist){

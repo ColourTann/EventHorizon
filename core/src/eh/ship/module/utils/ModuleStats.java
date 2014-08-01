@@ -15,21 +15,22 @@ import eh.util.Colours;
 import eh.util.Junk;
 import eh.util.maths.BoxCollider;
 import eh.util.maths.Collider;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class ModuleStats extends Bonkject{
 	static int height=Main.height/5;
 	static int width=128;
 	Module mod;
-	ModuleInfo info;
-	static Sink hpLoc=new Sink(14, 111);
-	static Sink hpGap=new Sink(16,15);
+	public ModuleInfo info;
+	static Pair hpLoc=new Pair(14, 111);
+	static Pair hpGap=new Pair(16,15);
 	static int row=6;
 
 	public ModuleStats(Module m) {
 		super(new BoxCollider(m.ship.player?0:Main.width-width, Main.height-height*m.getIndex()-height, width, height));
 		mousectivate();
 		mod=m;
+		info=new ModuleInfo(m);
 	}
 
 
@@ -41,7 +42,8 @@ public class ModuleStats extends Bonkject{
 		mod.moused();
 		if(!Battle.tutorial){
 			Tutorial.next();
-		info=new ModuleInfo(mod);
+			info.stopFading();
+			ModuleInfo.top=info;
 		}
 	}
 	@Override
@@ -53,7 +55,7 @@ public class ModuleStats extends Bonkject{
 	public void update(float delta) {
 	}
 
-	@Override
+
 	public void render(SpriteBatch batch) {
 		Pic base=null;
 		switch(mod.type){
@@ -73,15 +75,15 @@ public class ModuleStats extends Bonkject{
 			base=Gallery.baseModuleStats;
 		}
 		batch.setColor(1,1,1,1);
-		batch.draw(base.get(), collider.x, collider.y);
+		batch.draw(base.get(), collider.position.x, collider.position.y);
 
-		if(mod.moused)batch.draw(Gallery.statsMoused.get(), collider.x, collider.y);
-		if(mod.targeteds>0)	batch.draw(Gallery.statsTargeted.get(), collider.x, collider.y);
-		if(mod.immune)batch.draw(Gallery.statsImmune.get(), collider.x, collider.y);
+		if(mod.moused)batch.draw(Gallery.statsMoused.get(), collider.position.x, collider.position.y);
+		if(mod.targeteds>0)	batch.draw(Gallery.statsTargeted.get(), collider.position.x, collider.position.y);
+		if(mod.immune)batch.draw(Gallery.statsImmune.get(), collider.position.x, collider.position.y);
 
 		if(mod.type==ModuleType.WEAPON){
 			batch.setColor(1, 1, 1, .5f);
-			Junk.drawTextureScaledCentered(batch, mod.modulePic.get(), collider.x+37, collider.y+29, 2f/3f,2f/3f);
+			Junk.drawTextureScaledCentered(batch, mod.modulePic.get(), collider.position.x+37, collider.position.y+29, 2f/3f,2f/3f);
 			batch.setColor(1, 1, 1, 1);
 			//batch.draw(mod.modulePic.get(),collider.x+5,collider.y+5);
 		}
@@ -119,12 +121,12 @@ public class ModuleStats extends Bonkject{
 			}
 			if(mod.thresholds[0]==i+1||mod.thresholds[1]==i+1)index=1;
 			if(i==mod.maxHP-1)index=2;
-			batch.draw(p[index].get(),collider.x+hpLoc.x+hpGap.x*(i%row),collider.y+hpLoc.y-hpGap.y*(i/row));
+			batch.draw(p[index].get(),collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y-hpGap.y*(i/row));
 			if(moused){
-				batch.draw(Gallery.mousedHP.get(), collider.x+hpLoc.x+hpGap.x*(i%row),collider.y+hpLoc.y-hpGap.y*(i/row));
+				batch.draw(Gallery.mousedHP.get(), collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y-hpGap.y*(i/row));
 			}
 		}
-		
+
 		//Off the edge damage//
 		Pic ext=Gallery.orangeHP[3];
 
@@ -132,12 +134,12 @@ public class ModuleStats extends Bonkject{
 			ext=Gallery.blueHP[3];
 		}
 		if(damage+unshieldable+incoming>mod.maxHP){
-			batch.draw(ext.get(),collider.x+hpLoc.x+hpGap.x*(mod.maxHP%row),collider.y+hpLoc.y-hpGap.y*(mod.maxHP/row));
+			batch.draw(ext.get(),collider.position.x+hpLoc.x+hpGap.x*(mod.maxHP%row),collider.position.y+hpLoc.y-hpGap.y*(mod.maxHP/row));
 			//Off the edge number//
 			if(ext==Gallery.orangeHP[3]){
 				Font.small.setColor(Colours.weaponCols8[6]);
 				String s=damage+unshieldable+incoming-shields-mod.maxHP+"";
-				Font.small.draw(batch, s, collider.x+hpLoc.x+hpGap.x*(mod.maxHP%row)+8, collider.y+hpLoc.y-hpGap.y*(mod.maxHP/row)+15);
+				Font.small.draw(batch, s, collider.position.x+hpLoc.x+hpGap.x*(mod.maxHP%row)+8, collider.position.y+hpLoc.y-hpGap.y*(mod.maxHP/row)+15);
 			}
 		}
 
@@ -149,9 +151,11 @@ public class ModuleStats extends Bonkject{
 			if(mod.buffs.get(i).getPic()==null){
 				continue;
 			}
-			batch.draw(mod.buffs.get(i).getPic().get(), collider.x+8+pos*gap, collider.y+49);
+			batch.draw(mod.buffs.get(i).getPic().get(), collider.position.x+8+pos*gap, collider.position.y+49);
 			pos++;
 		}
+
+		info.render(batch);
 
 
 	}

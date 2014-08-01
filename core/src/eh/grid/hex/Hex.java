@@ -18,7 +18,7 @@ import eh.ship.Ship;
 import eh.ship.mapThings.MapShip;
 import eh.util.Colours;
 import eh.util.Junk;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class Hex {
 	//Defining geometry and stuff//
@@ -80,8 +80,8 @@ public class Hex {
 		this.y=y;
 	}
 
-	public Sink getPixel(){
-		return new Sink((float) (x*xGap+y*yGap/sqr3),y*yGap);
+	public Pair getPixel(){
+		return new Pair((float) (x*xGap+y*yGap/sqr3),y*yGap);
 	}
 	public ArrayList<Hex> getHexesWithin(int dist, boolean includeSelf){
 		ArrayList<Hex> result= new ArrayList<Hex>();
@@ -108,12 +108,16 @@ public class Hex {
 	}
 
 	public float getLineDistance(Hex h){
-		Sink origin=getPixel();
-		Sink target=h.getPixel();
-		Sink distance=target.subtract(origin);
+		Pair origin=getPixel();
+		Pair target=h.getPixel();
+		Pair distance=target.subtract(origin);
 		return (float) (Math.sqrt(distance.x*distance.x+distance.y*distance.y))/Hex.size;
 	}
 	public void mouse() {
+		if(getDistance(Map.player.hex)>grid.viewDist){
+			mousedHex.unMouse();
+			return;
+		}
 		if(moused)return;
 		
 
@@ -123,7 +127,7 @@ public class Hex {
 
 		mousedHex.unMouse();
 		mousedHex=this;
-		if(Map.getState()==MapState.PlayerChoosing){
+		if(Map.getState()==MapState.PlayerTurn){
 		ArrayList<Hex> path=Map.player.hex.pathFind(this);
 		Map.path=path;
 		if(path!=null){
@@ -138,7 +142,7 @@ public class Hex {
 	private void unMouse() {
 		
 		moused=false;
-		if(Map.getState()!=MapState.PlayerChoosing)return;
+		if(Map.getState()!=MapState.PlayerTurn)return;
 		if(Map.path!=null){
 			for (Hex h: Map.path){
 				h.highlight=false;
@@ -152,7 +156,7 @@ public class Hex {
 			Map.using.pickHex(this);
 			return;
 		}
-		if(Map.getState()!=MapState.PlayerChoosing){
+		if(Map.getState()!=MapState.PlayerTurn){
 			Map.player.resetPath();
 			return;
 		}
@@ -211,7 +215,7 @@ public class Hex {
 		idealDist=getDistance(target);
 		moves=0;
 		open.add(this);
-		Sink totalDist=target.getPixel().subtract(getPixel());
+		Pair totalDist=target.getPixel().subtract(getPixel());
 		totalDist=totalDist.absolute();
 		totalDist.x+=.0001f;
 		totalDist.y+=.0001f;
@@ -352,7 +356,7 @@ public class Hex {
 		if(open.contains(this))shape.setColor(0, 1, 0, 1);*/
 		if(isSwallowed())shape.setColor(Colours.redWeaponCols4[0]);
 
-		Sink s=getPixel();
+		Pair s=getPixel();
 		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[2], s.y+points[3], s.x+points[4], s.y+points[5]);
 		shape.triangle(s.x+points[4], s.y+points[5], s.x+points[6], s.y+points[7], s.x+points[8], s.y+points[9]);
 		shape.triangle(s.x+points[8], s.y+points[9], s.x+points[10], s.y+points[11], s.x+points[0], s.y+points[1]);
@@ -360,7 +364,7 @@ public class Hex {
 	}
 	
 	public void renderBorder(ShapeRenderer shape) {
-		Sink s=getPixel();
+		Pair s=getPixel();
 		p.setPosition(s.x, s.y);
 		shape.polygon(p.getTransformedVertices());
 

@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
 import eh.util.Colours;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class Pic {
 	
@@ -114,7 +114,7 @@ public class Pic {
 		
 
 	float dist=2;
-new Sink(dist,dist).getDistance();
+new Pair(dist,dist).getDistance();
 		for(float dx=-dist;dx<=dist;dx++){	
 			for(float dy=-dist;dy<=dist;dy++){
 				Color setter=Colours.withAlpha(Colours.shieldCols6[2],.25f);

@@ -7,33 +7,36 @@ import eh.card.Card;
 import eh.ship.module.weapon.attack.particle.PulseParticle;
 import eh.util.Bonkject;
 import eh.util.Bonkject.Finisher;
-import eh.util.maths.Sink;
+import eh.util.Timer;
+import eh.util.Timer.Interp;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 import eh.util.particleSystem.ParticleSystem;
 
 public class PulseAttack extends AttackGraphic{
 
 
-	Sink position;
+	Pair position;
 	float gravity=15; 
 	float frequency=80;
 	boolean goingRight;
-	public PulseAttack(Sink origin) {
-		super(origin.add(new Sink(5,0)));
+	Timer t;
+	public PulseAttack(Pair origin) {
+		super(origin.add(new Pair(5,0)));
 
-		vector=Sink.randomUnitVector().multiply(20);
-		position=this.origin.add(Sink.randomUnitVector().multiply(17));
+		vector=Pair.randomUnitVector().multiply(20);
+		position=this.origin.add(Pair.randomUnitVector().multiply(17));
 	}
 
 	@Override
-	public void fire(Sink target) {
+	public void fire(Pair target) {
 		goingRight=target.x>origin.x;
 		origin=target;
 		frequency=700;
 		gravity=6;
 		fired=true;
-		Bonkject.time((float)Math.random()/4, new Finisher() {
-
+		t=new Timer(0,(float)(Math.random()/4), 1, Interp.LINEAR);
+		t.addFinisher(new Finisher() {
 			@Override
 			public void finish() {
 				Clip.pulse.overlay();
@@ -58,7 +61,7 @@ public class PulseAttack extends AttackGraphic{
 			p.update(delta);
 		}
 		if(disabled)return;
-		Sink difference=position.subtract(origin);
+		Pair difference=position.subtract(origin);
 		vector=vector.subtract(difference.multiply(delta*gravity));	
 		position=position.add(vector.multiply(delta));
 

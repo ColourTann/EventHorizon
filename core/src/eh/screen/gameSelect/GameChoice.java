@@ -46,7 +46,7 @@ public class GameChoice extends Bonkject{
 	public void update(float delta) {
 	}
 
-	@Override
+
 	public void render(SpriteBatch batch) {
 		Junk.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y, 2f, 2f);
 		Junk.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 2f, height);

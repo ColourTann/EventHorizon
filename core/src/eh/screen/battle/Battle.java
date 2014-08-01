@@ -18,22 +18,26 @@ import eh.assets.Gallery;
 import eh.card.Card;
 import eh.card.CardCode;
 import eh.card.CardGraphic;
+import eh.card.CardIcon;
 import eh.card.CardCode.Special;
 import eh.screen.Screen;
 import eh.screen.battle.interfaceJunk.CycleButton;
 import eh.screen.battle.interfaceJunk.HelpPanel;
 import eh.screen.battle.interfaceJunk.PhaseButton;
 import eh.screen.battle.interfaceJunk.Star;
+import eh.screen.battle.tutorial.Checklist;
 import eh.screen.battle.tutorial.Tutorial;
 import eh.screen.battle.tutorial.Tutorial.Trigger;
 import eh.ship.Ship;
 import eh.ship.module.Module;
 import eh.ship.module.utils.DamagePoint;
+import eh.ship.module.utils.ModuleInfo;
 import eh.ship.module.weapon.attack.LightningAttack;
 import eh.ship.niche.Niche;
 import eh.ship.shipClass.*;
 import eh.util.Colours;
-import eh.util.maths.Sink;
+import eh.util.TextWisp;
+import eh.util.maths.Pair;
 
 public class Battle extends Screen{
 	public enum Phase{ShieldPhase, EnemyWeaponsFiring, WeaponPhase, EnemyShieldPhase, PlayerWeaponsFiring, EnemyWeaponPhase, End};
@@ -250,35 +254,6 @@ public class Battle extends Screen{
 		if(t.trig==Trigger.PlayerWeaponPhase&&Battle.getPhase()==Phase.WeaponPhase)Tutorial.next();
 	}
 
-	@Override
-	public void render(SpriteBatch batch) {
-
-		batch.getProjectionMatrix().setToOrtho2D((float)Math.sin(ticks*sinSpeed)*playerShakeIntensity, (float)Math.cos((ticks-2.5f)*sinSpeed)*playerShakeIntensity, Main.width, Main.height);
-
-		batch.draw(Star.pixTex, 160, 280);
-		batch.draw(Gallery.battleScreen.get(), 128, 0);
-
-		//Rendering ships, statblocks and misc interface//
-		player.renderShip(batch);
-		enemy.renderShip(batch);
-		drawInterface(batch);
-
-		//debug phase text
-		if(Main.debug){
-			Font.medium.setColor(Colours.grey);
-			Font.medium.draw(batch, "Phase: "+currentPhase+", State: "+currentState, 300, 620);
-		}
-
-		if(getPhase()==Phase.End){
-			String s=victor.player?"You win!":"You lose.";
-			Font.big.setColor(Colours.light);
-			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 500);
-			s="(esc to return)";
-			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 420);
-		}
-		//	debugRender(batch);
-
-	}
 
 	public void debugRender(SpriteBatch batch){
 		batch.draw(Gallery.laser.get(), 500, 500);
@@ -315,7 +290,7 @@ public class Battle extends Screen{
 					CardGraphic cg=new CardGraphic(enemy.hand.get(i));
 					cg.override=true;
 					enemyHandList.add(cg);
-					cg.setPosition(new Sink(i*CardGraphic.width,Main.height-CardGraphic.height));
+					cg.setPosition(new Pair(i*CardGraphic.width,Main.height-CardGraphic.height));
 				}
 
 				for(Module m:player.getRandomisedModules()){
@@ -365,7 +340,7 @@ public class Battle extends Screen{
 			//hide enemy cards//
 			if(enemyHandList.isEmpty())return;
 			for(CardGraphic cg:enemyHandList){
-				cg.deactivate();
+				cg.debonktivate();
 			}
 
 			enemyHandList.clear();
@@ -421,13 +396,73 @@ public class Battle extends Screen{
 	public static boolean isPlayerTurn(){return(getPhase()!=Phase.End&&getPhase()==Phase.ShieldPhase||getPhase()==Phase.WeaponPhase);}
 
 	@Override
-	public void mousePressed(Sink location, boolean left) {
+	public void mousePressed(Pair location, boolean left) {
 		Tutorial.next();
 		System.out.println(location);
 	}
 
 	@Override
 	public void shapeRender(ShapeRenderer shape) {
+	}
+
+	@Override
+	public void render(SpriteBatch batch) {
+
+		batch.getProjectionMatrix().setToOrtho2D((float)Math.sin(ticks*sinSpeed)*playerShakeIntensity, (float)Math.cos((ticks-2.5f)*sinSpeed)*playerShakeIntensity, Main.width, Main.height);
+
+		batch.draw(Star.pixTex, 160, 280);
+		batch.draw(Gallery.battleScreen.get(), 128, 0);
+
+		//Rendering ships, statblocks and misc interface//
+		player.renderAll(batch);
+		enemy.renderAll(batch);
+		drawInterface(batch);
+		
+		for(CardIcon icon:CardIcon.icons){
+			icon.render(batch);
+		}
+		
+		for(Module m:player.modules){
+			m.getStats().render(batch);
+		}
+		for(Module m:enemy.modules){
+			m.getStats().render(batch);
+		}
+		
+		for(Card c:player.hand){
+			c.getGraphic().render(batch);
+		}
+		
+		
+		CycleButton.get().render(batch);
+		if(help!=null)help.render(batch);
+		
+		
+		
+		//debug phase text
+		if(Main.debug){
+			Font.medium.setColor(Colours.grey);
+			Font.medium.draw(batch, "Phase: "+currentPhase+", State: "+currentState, 300, 620);
+		}
+
+		if(getPhase()==Phase.End){
+			String s=victor.player?"You win!":"You lose.";
+			Font.big.setColor(Colours.light);
+			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 500);
+			s="(esc to return)";
+			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 420);
+		}
+		CardGraphic.renderOffCuts(batch);
+		//	debugRender(batch);
+
+	}
+	
+	@Override
+	public void postRender(SpriteBatch batch) {
+		Tutorial.renderAll(batch);
+		for(CardGraphic cg:Card.enemyCardsToRender)cg.render(batch);
+		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
+		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
 	}
 
 

@@ -6,23 +6,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eh.assets.Gallery;
 import eh.util.Colours;
 import eh.util.Junk;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 import eh.util.particleSystem.ParticleSystem;
 
 public class PulseParticle extends Particle{
-	Sink origin;
+	Pair origin;
 	Color c;
-	Sink explodeVector;
-	public PulseParticle(Sink start){
-		position=start.add(new Sink(0,0));
+	Pair explodeVector;
+	public PulseParticle(Pair start){
+		position=start.add(new Pair(0,0));
 		maxLife=.5f;
 		life=maxLife-.0001f;
 	}
-	public PulseParticle(Sink explodeFrom, Sink baseVector){
+	public PulseParticle(Pair explodeFrom, Pair baseVector){
 		c=Colours.blueWeaponCols4[(int) (Math.random()*4)];
 		position=explodeFrom.copy();
-		explodeVector=baseVector.multiply(.10f).add(Sink.randomAnyVector().multiply(90).multiply(Sink.randomUnitVector()));
+		explodeVector=baseVector.multiply(.10f).add(Pair.randomAnyVector().multiply(90).multiply(Pair.randomUnitVector()));
 		maxLife=.5f;
 		life=maxLife-.0001f;
 

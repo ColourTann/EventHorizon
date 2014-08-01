@@ -1,5 +1,6 @@
 package eh.screen.gameSelect;
 
+import java.awt.Choice;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,7 +10,7 @@ import eh.Main;
 import eh.Main.ScreenType;
 import eh.assets.Font;
 import eh.screen.Screen;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class Selector extends Screen{
 	public static Selector me;
@@ -24,10 +25,13 @@ public class Selector extends Screen{
 	public void update(float delta) {
 	}
 
-	@Override
+
 	public void render(SpriteBatch batch) {
 		Font.small.setColor(1,1,1,1);
 		Font.small.draw(batch, ""+Main.version, 3, Main.height);
+		for(GameChoice c:choices){
+			c.render(batch);
+		}
 	}
 
 	@Override
@@ -39,12 +43,15 @@ public class Selector extends Screen{
 	}
 
 	@Override
-	public void mousePressed(Sink location, boolean left) {
+	public void mousePressed(Pair location, boolean left) {
 	}
 	@Override
 	public void shapeRender(ShapeRenderer shape) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void postRender(SpriteBatch batch) {
 	}
 	
 }

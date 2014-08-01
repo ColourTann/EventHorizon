@@ -8,14 +8,16 @@ import eh.assets.Font;
 import eh.assets.Gallery;
 import eh.util.Bonkject;
 import eh.util.Colours;
+import eh.util.Timer.Interp;
 
 public class HelpPanel extends Bonkject{
 	String text;
 	int y=415;
+	
 	public HelpPanel(String s, boolean high) {
 		super(null);
 		text=s;
-		fadeIn(Interp.SQUARE, 2);
+		fadeIn(2, Interp.SQUARE);
 		if(high)y=550;
 		else y=415;
 	}
@@ -32,7 +34,6 @@ public class HelpPanel extends Bonkject{
 	public void mouseClicked(boolean left) {
 	}
 
-	@Override
 	public void render(SpriteBatch batch) {
 		batch.setColor(1,1,1,alpha);
 		Texture t=Gallery.helpPanel.get();
@@ -43,7 +44,7 @@ public class HelpPanel extends Bonkject{
 	}
 	
 	public void done(){
-		fadeOut(Interp.SQUARE, 1);
+		fadeOut(1, Interp.SQUARE);
 	}
 
 	@Override

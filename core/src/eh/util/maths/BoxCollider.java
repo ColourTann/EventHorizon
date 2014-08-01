@@ -12,15 +12,14 @@ public class BoxCollider extends Collider{
 	public float h;
 	
 	public BoxCollider(float x, float y, float w, float h){
-		this.x=x;
-		this.y=y;
+		position=new Pair(x,y);
 		this.h=h;
 		this.w=w;
 	}
 	
 	@Override
-	public boolean collidePoint(Sink s) {
-		if(s.x<x||s.x>x+w||s.y<y||s.y>y+h) return false;
+	public boolean collidePoint(Pair s) {
+		if(s.x<position.x||s.x>position.x+w||s.y<position.y||s.y>position.y+h) return false;
 		return true;
 	}
 
@@ -34,7 +33,7 @@ public class BoxCollider extends Collider{
 		sr.setColor(1, 1, 1, .3f);
 		if(override!=null) sr.setColor(override);
 		
-		sr.rect(x, y, w, h);
+		sr.rect(position.x, position.y, w, h);
 		sr.end();
 		sr.dispose();
 		
@@ -44,10 +43,10 @@ public class BoxCollider extends Collider{
 	public boolean collideWith(Collider c) {
 		if(c instanceof BoxCollider){
 			BoxCollider bc =(BoxCollider) c;
-			if(bc.x>x+w) return false;
-			if(bc.x+bc.w<x) return false;
-			if(bc.y>y+h) return false;
-			if(bc.y+bc.h<y) return false;
+			if(bc.position.x>position.x+w) return false;
+			if(bc.position.x+bc.w<position.x) return false;
+			if(bc.position.y>position.y+h) return false;
+			if(bc.position.y+bc.h<position.y) return false;
 			return true;
 		}
 		if(c instanceof CircleCollider){

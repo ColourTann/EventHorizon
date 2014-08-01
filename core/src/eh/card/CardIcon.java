@@ -8,16 +8,16 @@ import eh.assets.Gallery;
 import eh.assets.Pic;
 import eh.util.Bonkject;
 import eh.util.Junk;
+import eh.util.Timer.Interp;
 import eh.util.maths.BoxCollider;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class CardIcon extends Bonkject{
-	private static ArrayList<CardIcon> icons= new ArrayList<CardIcon>();
+	public static ArrayList<CardIcon> icons= new ArrayList<CardIcon>();
 	private static int width=Gallery.blasterCard[0].get().getWidth();
 	private static int height=Gallery.blasterCard[0].get().getHeight();
-	private static Sink start=new Sink(89,646);
+	private static Pair start=new Pair(89,646);
 	private static int gap = 69;
-
 	CardGraphic cg;
 	Pic border;
 	boolean overrideAlpha;
@@ -26,9 +26,13 @@ public class CardIcon extends Bonkject{
 	public CardIcon(Card c) {
 		super(new BoxCollider(5, 5,	width,height));
 		this.cg=c.getGraphic();
-		x=cg.x+CardGraphic.positionPic.x;
-		y=cg.y+CardGraphic.positionPic.y+CardGraphic.maxSelectedHeight+CardGraphic.height/2;
+		
+		position=new Pair(cg.position.x+CardGraphic.positionPic.x,
+				cg.position.y+CardGraphic.positionPic.y+CardGraphic.maxSelectedHeight+CardGraphic.height/2);
 		border=c.getShip().player?Gallery.cardIconPlayer:Gallery.cardIconEnemy;
+		
+		mousedGraphic=new CardGraphic(cg.card, position.x+width/2-CardGraphic.width/2,position.y-270);
+		mousedGraphic.alpha=0;
 		mousectivate();
 	}
 
@@ -38,25 +42,30 @@ public class CardIcon extends Bonkject{
 		icons.add(new CardIcon(c));
 		c.getGraphic().removeTopPic();
 		while(icons.size()>14){
-			icons.remove(0).fadeOut(Interp.LINEAR, 100);;
+			icons.remove(0).fadeOut(100, Interp.LINEAR);;
 		}
 		updateCardIconPositions();
 	}
 
 	private static void updateCardIconPositions(){
-		for(int i=0;i<icons.size();i++)icons.get(i).lerptivate(new Sink(start.x+gap*(icons.size()-i), start.y), Interp.SQUARE, 1.5f);
+		for(int i=0;i<icons.size();i++)icons.get(i).slide(new Pair(start.x+gap*(icons.size()-i), start.y), 1.5f, Interp.SQUARE);
 	}
 
 	@Override
 	public void mouseDown() {
-		mousedGraphic=new CardGraphic(cg.card,x+width/2-CardGraphic.width/2,y-270);
+		System.out.println(mousedGraphic.position);
 		overrideAlpha=true;
+		mousedGraphic.setPosition(position.add(width/2-CardGraphic.width/2,-270));
+		
+		mousedGraphic.stopFading();
+		mousedGraphic.alpha=1;
 		cg.card.getShip().cardIconMoused(cg.card);
 	}
 
 	@Override
 	public void mouseUp() {
-		mousedGraphic.fadeOut(Interp.LINEAR, 3);
+		mousedGraphic.bonktivate();
+		mousedGraphic.fadeOut(3, Interp.LINEAR);
 		overrideAlpha=false;
 		cg.card.getShip().cardIconUnmoused();
 	}
@@ -67,16 +76,14 @@ public class CardIcon extends Bonkject{
 
 	@Override
 	public void update(float delta) {
-		collider.x=x;
-		collider.y=y;
+		collider.position=position.copy();
 	}
 
-	@Override
 	public void render(SpriteBatch batch) {
 		if(!overrideAlpha)batch.setColor(1,1,1,.2f+.8f*(icons.indexOf(this)+14-icons.size())/14); 	//This alpha thing took me a 20 minutes...//
-		Junk.drawTextureScaled(batch,cg.card.getImage().get(), x, y, 2, 2);
+		Junk.drawTextureScaled(batch,cg.card.getImage().get(), position.x, position.y, 2, 2);
 	
-		batch.draw(border.get(),x,y);
+		batch.draw(border.get(),position.x,position.y);
 		batch.setColor(1,1,1,1);
 	}
 

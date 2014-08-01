@@ -20,7 +20,7 @@ import eh.ship.module.weapon.Laser;
 import eh.ship.module.weapon.Pulse;
 import eh.ship.module.weapon.Ray;
 import eh.ship.module.weapon.Tesla;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class CardViewer extends Screen{
 	public ArrayList<Card> cards= new ArrayList<Card>();
@@ -34,7 +34,7 @@ public class CardViewer extends Screen{
 		cards.addAll(new Four().getCardsJustForShowing());
 		cards.addAll(new Five().getCardsJustForShowing());
 		for(int i=0;i<cards.size();i++){
-			cards.get(i).getGraphic().setPosition(new Sink(i%8*CardGraphic.width, i/8*CardGraphic.height));
+			cards.get(i).getGraphic().setPosition(new Pair(i%8*CardGraphic.width, i/8*CardGraphic.height));
 			
 		}
 	}
@@ -59,11 +59,15 @@ public class CardViewer extends Screen{
 	}
 
 	@Override
-	public void mousePressed(Sink location, boolean left) {
+	public void mousePressed(Pair location, boolean left) {
 	}
 
 	@Override
 	public void shapeRender(ShapeRenderer shape) {
+	}
+
+	@Override
+	public void postRender(SpriteBatch batch) {
 	}
 
 

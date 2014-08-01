@@ -1,11 +1,13 @@
 package eh.util;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.assets.Font;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class TextWisp extends Bonkject{
 	String text;    
@@ -13,13 +15,15 @@ public class TextWisp extends Bonkject{
 	float speed=30;
 	float fadeTime=.3f;
 	float fadeSpeed=1;
-	Sink position;
+	Pair position;
 	BitmapFont f=Font.medium;
 	Color c=Colours.light;
-	public TextWisp(String text, Sink startPosition) {
+	public static ArrayList<TextWisp> wisps= new ArrayList<TextWisp>();
+	public TextWisp(String text, Pair startPosition) {
 		super(null);
 		this.text=text;
 		this.position=startPosition;
+		wisps.add(this);
 	}
 
 	@Override
@@ -34,7 +38,7 @@ public class TextWisp extends Bonkject{
 	public void mouseClicked(boolean left) {
 	}
 
-	@Override
+
 	public void render(SpriteBatch batch) {
 		
 		f.setColor(Colours.withAlpha(Colours.dark, alpha));

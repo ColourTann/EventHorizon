@@ -31,8 +31,8 @@ import eh.ship.niche.Niche;
 import eh.ship.shipClass.*;
 import eh.util.Junk;
 import eh.util.TextWisp;
-import eh.util.Bonkject.Interp;
-import eh.util.maths.Sink;
+import eh.util.Timer.Interp;
+import eh.util.maths.Pair;
 
 public abstract class Ship {
 	//0-1 weapon 2 shield 3 gen 4 com
@@ -58,6 +58,7 @@ public abstract class Ship {
 	
 	//Enemy ai stuff//
 	public Module focusTarget;
+	public FightStats fightStats;
 	
 
 	
@@ -372,7 +373,7 @@ public abstract class Ship {
 	public void discard(Card card) {
 		hand.remove(card);
 		if(player){
-		card.getGraphic().fadeOut(CardGraphic.fadeType, CardGraphic.fadeSpeed);
+		card.getGraphic().fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
 		updateCardPositions();
 		}
 	}
@@ -385,7 +386,7 @@ public abstract class Ship {
 		if(hand.size()<=7){
 			for(int i=0;i<hand.size();i++){
 				CardGraphic c=hand.get(i).getGraphic();
-				c.lerptivate(new Sink(start+gap*(i+1)-CardGraphic.width, 0), Interp.SQUARE, 2f);
+				c.slide(new Pair(start+gap*(i+1)-CardGraphic.width, 0), 2f, Interp.SQUARE);
 			}
 		}
 		else{
@@ -393,7 +394,7 @@ public abstract class Ship {
 			gap=width/(hand.size()-1);
 			for(int i=0;i<hand.size();i++){
 				CardGraphic c=hand.get(i).getGraphic();
-				c.lerptivate(new Sink(start+gap*i, 0),Interp.SQUARE, 2);
+				c.slide(new Pair(start+gap*i, 0), 2, Interp.SQUARE);
 			}
 		}
 	}
@@ -445,7 +446,7 @@ public abstract class Ship {
 	}
 	
 	private void initFightStats() {
-		new FightStats(this);
+		fightStats=new FightStats(this);
 	}
 
 	private void initModuleStats(){
@@ -464,6 +465,15 @@ public abstract class Ship {
 
 	//Rendering junk//
 
+	public void renderAll(SpriteBatch batch){
+		renderShip(batch);
+		renderFightStats(batch);
+	}
+	
+	public void renderFightStats(SpriteBatch batch){
+		fightStats.render(batch);
+	}
+	
 	public void renderShip(SpriteBatch batch){
 		getGraphic().render(batch);
 	}
@@ -572,7 +582,7 @@ public abstract class Ship {
 		if(shieldPoints.size()>0){
 			for(Module m:modules){
 				if(m.getShieldableIncoming()>0){
-					new TextWisp("Spend all your shields first!", new Sink(Main.width/2,400));
+					new TextWisp("Spend all your shields first!", new Pair(Main.width/2,400));
 					return true;
 				}
 			}

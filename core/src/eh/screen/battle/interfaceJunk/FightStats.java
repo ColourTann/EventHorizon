@@ -13,18 +13,17 @@ import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Junk;
 import eh.util.maths.Collider;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class FightStats extends Bonkject{
 	private static float damageGap=23;
-	private static Sink damageStart= new Sink(9,9);
+	private static Pair damageStart= new Pair(9,9);
 	Ship ship;
 	boolean player;
 	public FightStats(Ship s) {
 		super(null);
 		this.ship=s;
 		player=s.player;
-		
 	}
 
 	@Override
@@ -39,7 +38,7 @@ public class FightStats extends Bonkject{
 	public void mouseClicked(boolean left) {
 	}
 
-	@Override
+
 	public void render(SpriteBatch batch) {
 		float energyX=0;
 		float damageX=0;

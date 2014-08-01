@@ -1,7 +1,8 @@
-package eh.ship.mapThings;
+package eh.ship.mapThings.mapAbility;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 import eh.assets.Gallery;
 import eh.assets.Pic;
@@ -12,12 +13,12 @@ import eh.util.Bonkject;
 import eh.util.Junk;
 import eh.util.maths.Collider;
 import eh.util.maths.PolygonCollider;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class MapAbility extends Bonkject{
 	public int cooldown;
 	public Pic abilityPic;
-	Sink location;
+	Pair location;
 	public enum MapAbilityType{
 		//Generator abilities
 		Teleport, Move, Diagonal,
@@ -26,16 +27,14 @@ public class MapAbility extends Bonkject{
 		Cloak, Beam, Forcefield
 
 	}
-	public MapAbility(Sink location) {
+	public MapAbility(Pair location) {
 		super(null);
-		this.location=location;
-		Polygon translated=new Polygon(basePolygon.getVertices());
-		collider=new PolygonCollider(translated);
-		deactivate();
+		setLocation(location);
+		debonktivate();
 		mousectivate();
 	}
 
-	public void setLocation(Sink location){
+	public void setLocation(Pair location){
 		this.location=location;
 		Polygon translated=new Polygon(basePolygon.getVertices());
 		translated.translate(location.x, location.y);
@@ -65,10 +64,25 @@ public class MapAbility extends Bonkject{
 	}
 	@Override
 	public void mouseClicked(boolean left) {
+		if(Map.getState()==MapState.PickHex){
+			deactivate(); return;
+		}
+		if(Map.getState()==MapState.PlayerTurn){
+			activate(); return;
+		}
+		
+	}
+
+	public void activate(){
 		Map.setState(MapState.PickHex);
 		Map.using=this;
 	}
-
+	
+	public void deactivate(){
+		Map.setState(MapState.PlayerTurn);
+		Map.using=null;
+	}
+	
 	public boolean isValidChoice(Hex origin, Hex target){
 		int dist=origin.getDistance(target);
 		return dist>1&&dist<=4;
@@ -88,9 +102,10 @@ public class MapAbility extends Bonkject{
 	@Override
 	public void update(float delta) {
 	}
-	@Override
+
 	public void render(SpriteBatch batch) {
-		Junk.drawTextureScaledCentered(batch, Gallery.mapAbilityTeleport.get(), location.x, location.y, 1, 1);
+		debugRender(batch);
+		//Junk.drawTextureScaledCentered(batch, abilityPic, location.x, location.y, 1, 1);
 	}
 
 }

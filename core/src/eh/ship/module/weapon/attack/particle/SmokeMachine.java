@@ -3,15 +3,15 @@ package eh.ship.module.weapon.attack.particle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.ship.module.weapon.attack.particle.Smoke.SmokeType;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 import eh.util.particleSystem.ParticleSystem;
 
 public class SmokeMachine extends ParticleSystem{
-	Sink location;
+	Pair location;
 	float freq;
 	SmokeType type;
-	public SmokeMachine(Sink startPosition, float maxLife, float frequency, SmokeType type){
+	public SmokeMachine(Pair startPosition, float maxLife, float frequency, SmokeType type){
 		this.type=type;
 		location=startPosition;
 		this.maxLife=maxLife;

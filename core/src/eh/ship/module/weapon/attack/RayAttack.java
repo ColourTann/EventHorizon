@@ -5,16 +5,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.assets.Clip;
 import eh.ship.module.weapon.attack.particle.RayParticle;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
 public class RayAttack extends AttackGraphic{
-	public Sink location;
+	public Pair location;
 	public boolean gravity;
 
-	public RayAttack(Sink origin) {
+	public RayAttack(Pair origin) {
 		super(origin);
-		location=new Sink(origin.x,origin.y);
+		location=new Pair(origin.x,origin.y);
 		frequency=35;
 	}
 
@@ -28,7 +28,7 @@ public class RayAttack extends AttackGraphic{
 			}
 			while(ticks>1&&!disabled){
 				ticks-=1;
-				Sink newVector=Sink.randomUnitVector();
+				Pair newVector=Pair.randomUnitVector();
 				newVector=newVector.multiply(25+intensity*9);
 				float mult=fired?.5f:1;
 				particles.add(new RayParticle(this,newVector,mult,true));
@@ -54,7 +54,7 @@ public class RayAttack extends AttackGraphic{
 	}
 
 	@Override
-	public void fire(Sink target) {
+	public void fire(Pair target) {
 		this.target=target;
 		fired=true;
 		vector=target.subtract(location);
@@ -78,7 +78,7 @@ public class RayAttack extends AttackGraphic{
 		
 		if(atk.activateDamage()){
 		for(int i=0;i<35;i++){
-			Sink newVector=vector.add(Sink.randomUnitVector().multiply((float)Math.random()*300)).multiply(.5f);
+			Pair newVector=vector.add(Pair.randomUnitVector().multiply((float)Math.random()*300)).multiply(.5f);
 			particles.add(new RayParticle(this, newVector,1,false));
 		}
 		}

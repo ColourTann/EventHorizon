@@ -5,21 +5,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eh.assets.Gallery;
 import eh.util.Colours;
 import eh.util.Junk;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
 public class Smoke extends Particle{
 	float rotation=(float)Math.random()*1000;
 	public enum SmokeType{Laser, Damage}
 	public SmokeType type;
-	public Smoke(Sink position, SmokeType type){
+	public Smoke(Pair position, SmokeType type){
 		this.type=type;
-		this.position=position.add(Sink.randomAnyVector().multiply(0));
+		this.position=position.add(Pair.randomAnyVector().multiply(0));
 		
 		
 		maxLife=.5f;
 		life=maxLife;
-		vector=new Sink(Particle.random(50),Particle.random(50)+200);
+		vector=new Pair(Particle.random(50),Particle.random(50)+200);
 		vector=vector.multiply(.3f);
 		
 		if(type==SmokeType.Damage){

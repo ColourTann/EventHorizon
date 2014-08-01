@@ -1,5 +1,7 @@
 package eh;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -22,7 +24,9 @@ import eh.ship.Ship;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Junk;
-import eh.util.maths.Sink;
+import eh.util.TextWisp;
+import eh.util.Timer;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.ParticleSystem;
 
 public class Main extends ApplicationAdapter  {
@@ -47,7 +51,9 @@ public class Main extends ApplicationAdapter  {
 
 	public static OrthographicCamera resetCam;
 
-	private static Sink cam=new Sink(0,0);
+	public static OrthographicCamera mainCam;
+	
+	private static Pair cam=new Pair(0,0);
 
 	//ANIMATING//
 	float ticks;
@@ -69,13 +75,15 @@ public class Main extends ApplicationAdapter  {
 		resetCam=new OrthographicCamera(Main.width, Main.height);
 		resetCam.translate(-Main.width, -Main.height/2);
 
+		mainCam=new OrthographicCamera(Main.width, Main.height);
+		mainCam.setToOrtho(true);
 		//battle=new Battle();currentScreen=battle;
 
-		//select=new Selector();currentScreen=select;
+		select=new Selector();currentScreen=select;
 
 		//viewer=new CardViewer();currentScreen=viewer;
 
-		map=new Map();currentScreen=map;
+		//map=new Map();currentScreen=map;
 
 		//currentScreen=new Test();
 	}	
@@ -93,24 +101,26 @@ public class Main extends ApplicationAdapter  {
 		shape.setProjectionMatrix(new Matrix4());
 		shape.getProjectionMatrix().setToOrtho2D((int)(cam.x), (int)(cam.y), Main.width, Main.height);
 		currentScreen.shapeRender(shape);
-		batch.getProjectionMatrix().setToOrtho2D((int)(cam.x), (int)(cam.y), Main.width, Main.height);
+		//batch.getProjectionMatrix().setToOrtho2D((int)(cam.x), (int)(cam.y), Main.width, Main.height);
+		batch.setProjectionMatrix(mainCam.combined);
 		batch.begin();
 		batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		batch.setColor(Colours.white);
 
 		currentScreen.render(batch);
-
+		for(TextWisp t:TextWisp.wisps)t.render(batch);
 		ParticleSystem.renderAll(batch);
-		Bonkject.renderBonkjs(batch);
-
-
+		
+		currentScreen.postRender(batch);
+		
+		//fading bit//
+		batch.setColor(1,1,1,ticks);
+		Junk.drawTextureScaled(batch, Gallery.darkDot.get(), 0, 0, width, height);
+		
 		if(debug){
 			batch.end();
 			batch.getProjectionMatrix().setToOrtho2D(0,0, Main.width, Main.height);
 			batch.begin();
-			//oh god I don't understand matrix4???//
-			
-			
 			Font.small.setColor(Colours.white);
 			Font.small.draw(batch, "FPS: "+(int)(1/delta), 10, 20);
 		}
@@ -125,6 +135,7 @@ public class Main extends ApplicationAdapter  {
 	}
 
 	public void update(float delta){
+		Timer.updateAll(delta);
 		ParticleSystem.updateAll(delta);
 		currentScreen.update(delta);
 		Bonkject.updateBonkjs(delta);
@@ -168,11 +179,11 @@ public class Main extends ApplicationAdapter  {
 		nextType=type;
 	}
 
-	public static Sink getCam(){
+	public static Pair getCam(){
 		return cam;
 	}
 
-	public static void setCam(Sink cam){
+	public static void setCam(Pair cam){
 		Main.cam=cam.floor();
 	}
 

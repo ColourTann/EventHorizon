@@ -13,7 +13,7 @@ import eh.screen.map.Map;
 import eh.ship.mapThings.MapShip;
 import eh.ship.shipClass.*;
 import eh.util.Colours;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 
 public class Grid {
@@ -53,7 +53,7 @@ public class Grid {
 		if(x<0||x>=Grid.size||y<0||y>=Grid.size)return null;
 		return hexes[x][y];
 	}
-	public Hex getHexUnderMouse(Sink location) {
+	public Hex getHexUnderMouse(Pair location) {
 		return getHexUnderMouse(location.x, location.y);
 	}
 	public Hex getHexUnderMouse(float x, float y) {

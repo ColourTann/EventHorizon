@@ -7,14 +7,14 @@ import eh.assets.Gallery;
 import eh.util.Colours;
 import eh.util.Junk;
 import eh.util.Junk.BlendType;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
 public class Lightning extends Particle{
-	Sink start;
-	Sink finish;
+	Pair start;
+	Pair finish;
 	float alpha;
-	public Lightning(Sink start, Sink finish, int position, float alpha){
+	public Lightning(Pair start, Pair finish, int position, float alpha){
 		this.start=start;
 		this.finish=finish;
 		this.alpha=alpha;
@@ -35,9 +35,9 @@ public class Lightning extends Particle{
 		batch.setColor(Colours.withAlpha(Colours.blueWeaponCols4[0],alpha));//Colours.make(99,187,213),alpha));
 		Texture t=Gallery.lightningEnd.get();
 		float distance=finish.subtract(start).getDistance();
-		Sink vector = finish.subtract(start);
+		Pair vector = finish.subtract(start);
 		double angle=Math.atan2(vector.y, vector.x);
-		Sink normal=vector.normalise();
+		Pair normal=vector.normalise();
 		float scale=.5f;
 		normal=normal.multiply((t.getWidth()/2+1)*scale);
 

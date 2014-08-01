@@ -14,7 +14,7 @@ public class PolygonCollider extends Collider{
 	}
 	
 	@Override
-	public boolean collidePoint(Sink s) {
+	public boolean collidePoint(Pair s) {
 		return p.contains(s.x, s.y);
 	}
 

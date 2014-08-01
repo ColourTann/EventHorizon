@@ -7,15 +7,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eh.ship.module.weapon.attack.RayAttack;
 import eh.util.Colours;
 import eh.util.Junk;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
 public class RayParticle extends Particle{
 	static Texture t=new Texture("Particle/pixel.png");
 	Color c= Colours.redWeaponCols4[(int)(Math.random()*3)+1];
-	private Sink origin;
+	private Pair origin;
 	private boolean gravity;
-	public RayParticle(RayAttack em, Sink vector, float lifeMult, boolean gravity) {
+	public RayParticle(RayAttack em, Pair vector, float lifeMult, boolean gravity) {
 		this.gravity=gravity;
 		position.x=em.location.x;
 		position.y=em.location.y;

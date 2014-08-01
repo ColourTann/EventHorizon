@@ -16,25 +16,28 @@ import eh.screen.battle.tutorial.Tutorial;
 import eh.ship.module.weapon.Weapon;
 import eh.util.Bonkject;
 import eh.util.Colours;
+import eh.util.Timer;
+import eh.util.Timer.Interp;
 import eh.util.maths.BoxCollider;
 import eh.util.maths.Collider;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class CycleButton extends Bonkject{
 	public static CycleButton button;
 	boolean active;
 	public static ArrayList<Card> choices= new ArrayList<Card>();
 	private static float gap=20+CardGraphic.width;
-	private static Sink start=new Sink(Main.width/2-CardGraphic.width/2-gap,278);
+	private static Pair start=new Pair(Main.width/2-CardGraphic.width/2-gap,278);
 	int cost=0;
+	Timer timer=new Timer(0, 0, 1, Interp.LINEAR);
 	public CycleButton(Collider col) {
 		super(new BoxCollider(160, 279, 45, 66));
+		alpha=0;
 		mousectivate();
 
 		BoxCollider b=(BoxCollider) collider;
-		x=b.x;
-		y=b.y;
-		lerpedRatio=1;
+		position=b.position.copy();
+		
 	}
 
 	public static CycleButton get(){
@@ -52,35 +55,36 @@ public class CycleButton extends Bonkject{
 
 	@Override
 	public void mouseClicked(boolean left) {
+		
 		if(Battle.tutorial&&Tutorial.stopCycle()){
 			System.out.println("tut");
 			return;
 		}
 		if(!Battle.isPlayerTurn())return;
 		if(Battle.getState()==State.Nothing){
+			timer=new Timer(0,1,3,Interp.SQUARE);
 
 			if(Battle.player.getEnergy()<cost)return;
 
 			Battle.player.addEnergy(-cost);
-			swap();
+			
 			Battle.setState(State.CycleDiscard);
 			return;
 		}
 
 		if(Battle.getState()==State.CycleDiscard){
+			timer=new Timer(timer.getFloat(),0,3,Interp.SQUARE);
 			Battle.player.addEnergy(cost);
-			swap();
+			
 			Battle.setState(State.Nothing);
 			return;
 		}
 	}
 
-	public void swap(){
-		lerptivate(Interp.SQUARE, 0, 3f);
-		active=!active;
-	}
+	
 
 	public void setupChoices(){
+		choices.clear();
 		for(Weapon w:Battle.player.getWeapons()){
 			if(w.destroyed)continue;
 			choices.add(w.getNextCard());	
@@ -93,7 +97,9 @@ public class CycleButton extends Bonkject{
 			CardGraphic cg=choices.get(i).getGraphic();
 			cg.override=true;
 			cg.mousectivate();
-			cg.setPosition(new Sink(start.x+gap*i,start.y));
+			cg.setPosition(new Pair(start.x+gap*i,start.y));
+			cg.alpha=0;
+			cg.fadeIn(3, Interp.SQUARE);
 		}
 	}
 
@@ -102,21 +108,19 @@ public class CycleButton extends Bonkject{
 		Battle.player.updateCardPositions();
 		for(Card c:choices){
 			if(c!=card){
-				c.getGraphic().fadeOut(CardGraphic.fadeType, CardGraphic.fadeSpeed);
+				c.getGraphic().fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
 			}
 		}
 		card.getGraphic().override=false;
 		Battle.setState(State.Nothing);
-		choices.clear();
 		cost++;
-		swap();
+		timer=new Timer(timer.getFloat(),0,3,Interp.SQUARE);
 	}
 
-	@Override
 	public void render(SpriteBatch batch) {
-		if(active)batch.setColor(new Color(1,1,1,lerpedRatio));
-		else batch.setColor(new Color(1,1,1,1-lerpedRatio));
-		batch.draw(Gallery.cycleButton.get(), x, y);
+	
+		batch.setColor(new Color(1,1,1,timer.getFloat()));
+		batch.draw(Gallery.cycleButton.get(), position.x, position.y);
 		batch.setColor(new Color(1,1,1,1));
 		batch.draw(Gallery.iconEnergy.get(), 168,284);
 		Font.medium.setColor(Colours.dark);

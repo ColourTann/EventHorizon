@@ -11,13 +11,13 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public abstract class ParticleSystem {
 	public static ArrayList<ParticleSystem> systems= new ArrayList<ParticleSystem>();
 	public static ArrayList<Particle> debugDontUse=new ArrayList<Particle>();
 	public float x,y,life,maxLife,ticks;
-	public Sink vector;
+	public Pair vector;
 	public ArrayList<Particle> particles = new ArrayList<Particle>();
 	public boolean disabled;
 	public abstract void update(float delta);

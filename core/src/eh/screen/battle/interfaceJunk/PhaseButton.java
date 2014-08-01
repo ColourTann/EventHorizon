@@ -13,13 +13,15 @@ import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
 import eh.util.Bonkject;
 import eh.util.Colours;
+import eh.util.Timer;
+import eh.util.Timer.Interp;
 import eh.util.maths.Collider;
 import eh.util.maths.PolygonCollider;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class PhaseButton extends Bonkject{
-	private static Sink unClickedHeight;
-	private static Sink clickedHeight;
+	private static Pair unClickedHeight;
+	private static Pair clickedHeight;
 	private float phaseChangeAlpha=0;
 	private boolean fadingIn;
 	public static PhaseButton button;
@@ -27,6 +29,7 @@ public class PhaseButton extends Bonkject{
 	static int height=Gallery.endTurnWeapon.get().getHeight();
 	private Pic before=Gallery.endTurnWeapon;
 	private Pic after=Gallery.endTurnShield;
+	Timer t;
 	public PhaseButton(Collider col) {
 		super(new PolygonCollider(new Polygon(new float[]{
 				Main.width/2-width/2,284,
@@ -35,23 +38,23 @@ public class PhaseButton extends Bonkject{
 				Main.width/2-width/2,344,
 		})));
 		mousectivate();
-		System.out.println("mousectivating");
+
 		PolygonCollider pc=(PolygonCollider) collider;
-		x=pc.p.getBoundingRectangle().x;
-		y=pc.p.getBoundingRectangle().y;
-		unClickedHeight=new Sink(x,y);
-		clickedHeight=new Sink(x,y+26);
+		position=new Pair(pc.p.getBoundingRectangle().x,pc.p.getBoundingRectangle().y);
+		unClickedHeight=position.copy();
+		clickedHeight=position.add(0,26);
+		t=new Timer(unClickedHeight, unClickedHeight, 10, Interp.LINEAR);
 	}
 
 	@Override
 	public void mouseDown() {
-		System.out.println("moused??");
-		if(Battle.getPhase()==Phase.ShieldPhase||Battle.getPhase()==Phase.WeaponPhase)lerptivate(clickedHeight, Interp.SQUARE, 4);
+		if(Battle.getPhase()==Phase.ShieldPhase||Battle.getPhase()==Phase.WeaponPhase)t=new Timer(unClickedHeight, clickedHeight, 4, Interp.SQUARE);
 	}
 
 	@Override
 	public void mouseUp() {
-		lerptivate(unClickedHeight, Interp.SQUARE, 4);
+		t=new Timer(clickedHeight, unClickedHeight, 4, Interp.SQUARE);
+	
 	}
 
 	@Override
@@ -74,10 +77,10 @@ public class PhaseButton extends Bonkject{
 		
 		sb.setColor(c);
 		sb.draw(Gallery.endTurnBottom.get(),605,277);
-		sb.draw(before.get(),x,y);
+		sb.draw(before.get(),t.getPair().x,t.getPair().y);
 		
 		sb.setColor(Colours.withAlpha(c,phaseChangeAlpha));
-		sb.draw(after.get(),x,y);
+		sb.draw(after.get(),t.getPair().x,t.getPair().y);
 		sb.setColor(1, 1, 1, 1);
 		//debugRender();
 	}

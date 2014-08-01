@@ -8,7 +8,7 @@ import eh.assets.Clip;
 import eh.ship.module.weapon.attack.particle.Lightning;
 import eh.ship.module.weapon.attack.particle.SmokeMachine;
 import eh.ship.module.weapon.attack.particle.Spark;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 import eh.util.particleSystem.ParticleSystem;
 
@@ -16,7 +16,7 @@ public class LightningAttack extends AttackGraphic{
 	static float frequency=15;
 	float alpha=1;
 	ArrayList<Lightning> lightning= new ArrayList<Lightning>();
-	public LightningAttack(Sink origin) {
+	public LightningAttack(Pair origin) {
 		super(origin);
 
 	}
@@ -27,7 +27,7 @@ public class LightningAttack extends AttackGraphic{
 
 	}*/
 	@Override
-	public void fire(Sink target) {
+	public void fire(Pair target) {
 		
 		this.target=target;
 		fired=true;
@@ -75,16 +75,16 @@ public class LightningAttack extends AttackGraphic{
 			particles.removeAll(lightning);
 			lightning.clear();
 		
-			Sink vector=target.subtract(origin);
+			Pair vector=target.subtract(origin);
 			//float distance=vector.getDistance();
 			int parts=(int) (vector.getDistance()*.04f);
 			float mult=1f/(parts+1f);
 
-			ArrayList<Sink> split = new ArrayList<Sink>();
-			Sink previous=origin.copy();
+			ArrayList<Pair> split = new ArrayList<Pair>();
+			Pair previous=origin.copy();
 			split.add(origin);
 			for(int i=1;i<=parts;i++){
-				split.add(origin.add(vector.multiply((mult*i)).add(Sink.randomUnitVector().multiply((float)Math.random()*30)))); 
+				split.add(origin.add(vector.multiply((mult*i)).add(Pair.randomUnitVector().multiply((float)Math.random()*30)))); 
 				//split.add(origin.add(vector.multiply(mult)).add(Sink.randomAnyVector().multiply(20)));
 			}
 			split.add(target);

@@ -14,19 +14,20 @@ import eh.ship.Ship;
 import eh.ship.shipClass.Aurora;
 import eh.ship.shipClass.Eclipse;
 import eh.util.Bonkject;
-import eh.util.Bonkject.Timerr;
 import eh.util.Junk;
-import eh.util.maths.Sink;
+import eh.util.Timer;
+import eh.util.Timer.Interp;
+import eh.util.maths.Pair;
 
 public class MapShip {
 
 	public Ship ship;
-	private Timerr timer;
+	private Timer timer;
 
 
-	Sink source = new Sink(0, 0);
-	Sink destination = new Sink(0, 0);
-	public Sink distance = new Sink(0, 0);
+	Pair source = new Pair(0, 0);
+	Pair destination = new Pair(0, 0);
+	public Pair distance = new Pair(0, 0);
 	public Hex hex;
 	public ArrayList<Hex> path= new ArrayList<Hex>();
 
@@ -46,7 +47,7 @@ public class MapShip {
 		if(ship.player)h.highlight=false;
 		source = hex.getPixel();
 		destination = h.getPixel();
-		timer = Bonkject.time(1/Map.phaseSpeed, null);
+		timer = new Timer(0, 1, 1/Map.phaseSpeed, Interp.LINEAR);
 		rotation = source.getAngle(destination);
 		if (hex.mapShip == this)hex.mapShip = null;
 		h.addShip(this);
@@ -54,7 +55,7 @@ public class MapShip {
 
 	public boolean isMoving() {
 		if (timer == null) 	return false;
-		if (timer.timer <= .0)	return false;
+		if (timer.getFloat() <= .0)	return false;
 		return true;
 	}
 
@@ -63,16 +64,16 @@ public class MapShip {
 			init();
 			source = hex.getPixel();
 		}
-		distance = new Sink(0, 0);
+		distance = new Pair(0, 0);
 		if (timer == null)return;
-		if (timer.timer <= 0) {
+		if (timer.getFloat() <= 0) {
 			timer = null;
 			source = hex.getPixel();
 			destination = null;
 		}
 		if (destination != null) {
 			distance = source.subtract(destination);
-			distance = distance.multiply((timer.timer/(1/Map.phaseSpeed))*(timer.timer/(1/Map.phaseSpeed)));
+			distance = distance.multiply((timer.getFloat()/(1/Map.phaseSpeed))*(timer.getFloat()/(1/Map.phaseSpeed)));
 		}			
 	}
 

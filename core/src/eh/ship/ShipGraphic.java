@@ -8,11 +8,11 @@ import eh.Main;
 import eh.screen.battle.Battle;
 import eh.ship.module.Module.ModuleType;
 import eh.ship.niche.Niche;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class ShipGraphic {
 	Ship ship;
-	public static Sink offset=new Sink(165, 340);
+	public static Pair offset=new Pair(165, 340);
 	public ShipGraphic(Ship s){
 		ship=s;
 	}

@@ -5,20 +5,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.assets.Gallery;
 import eh.util.Junk;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
 public class LaserBody extends Particle{
 	@SuppressWarnings("unused")
-	private Sink origin,target,vector;
+	private Pair origin,target,vector;
 	private float alpha=0,distance,rotation;
 	private float ticks=(float) (-Math.PI/2);
 	
-	public LaserBody(Sink origin, Sink target){
+	public LaserBody(Pair origin, Pair target){
 		
-		this.origin=new Sink(origin.x-10,origin.y);
+		this.origin=new Pair(origin.x-10,origin.y);
 		this.target=target;
-		vector=Sink.getVector(this.origin, target);
+		vector=Pair.getVector(this.origin, target);
 		rotation=(float) Math.atan2(vector.y, vector.x);
 		distance=vector.getDistance();
 		vector=vector.normalise();

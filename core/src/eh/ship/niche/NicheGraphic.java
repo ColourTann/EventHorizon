@@ -13,7 +13,7 @@ import eh.ship.module.weapon.attack.particle.SmokeMachine;
 import eh.ship.module.weapon.attack.particle.Smoke.SmokeType;
 import eh.util.Bonkject;
 import eh.util.maths.PolygonCollider;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.ParticleSystem;
 
 public class NicheGraphic extends Bonkject{
@@ -23,7 +23,7 @@ public class NicheGraphic extends Bonkject{
 	float area;
 	public NicheGraphic(Niche n) {
 		super(new PolygonCollider(n.p));
-		derendervate();
+		deTick();
 		mousectivate();
 		niche=n;
 		area=n.p.getBoundingRectangle().width*n.p.getBoundingRectangle().height;
@@ -91,7 +91,7 @@ public class NicheGraphic extends Bonkject{
 
 		if(ticks>1){
 			ticks-=Math.random();
-			Sink s=new Sink();
+			Pair s=new Pair();
 			Rectangle r =niche.p.getBoundingRectangle();
 			s.x= niche.location.x+(float) (Math.random()*r.width*.8f)+r.width*.1f;
 			s.y= niche.location.y+(float) (Math.random()*r.height*.8f)+r.height*.1f;

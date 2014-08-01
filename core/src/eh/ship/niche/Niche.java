@@ -11,7 +11,7 @@ import eh.ship.module.Module;
 import eh.ship.module.Module.ModuleType;
 import eh.ship.module.weapon.Weapon;
 import eh.util.maths.PolygonCollider;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 public class Niche{
 	Module mod;
@@ -19,7 +19,7 @@ public class Niche{
 	public ModuleType type;
 	Ship ship;
 	int index;
-	public Sink location;
+	public Pair location;
 	public NicheGraphic graphic;
 	public float width,height;
 	public Niche(Ship ship, ModuleType type) {		
@@ -48,7 +48,7 @@ public class Niche{
 		this.mod=m;
 		m.ship=ship;
 		if(type==ModuleType.WEAPON||type==ModuleType.SHIELD){
-			Sink start=new Sink(p.getTransformedVertices()[0], p.getTransformedVertices()[1]);
+			Pair start=new Pair(p.getTransformedVertices()[0], p.getTransformedVertices()[1]);
 			width=m.modulePic.get().getWidth()*(ship.player?1:-1);
 			height=m.modulePic.get().getHeight(); 
 			start.y-=height/2;
@@ -61,7 +61,7 @@ public class Niche{
 		float y=((PolygonCollider)getGraphic().collider).p.getBoundingRectangle().y;
 		width=p.getBoundingRectangle().width;
 		height=p.getBoundingRectangle().height;
-		location=new Sink(x,y);
+		location=new Pair(x,y);
 	}
 
 	public NicheGraphic getGraphic(){

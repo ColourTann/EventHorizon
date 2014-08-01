@@ -6,14 +6,14 @@ import eh.assets.Gallery;
 import eh.util.Colours;
 import eh.util.Junk;
 import eh.util.Junk.BlendType;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
 public class Spark extends Particle{
 	float switchFreq=(float) (.05+Math.random()/10);
-	public Spark(Sink origin, float bonusLife){
+	public Spark(Pair origin, float bonusLife){
 		this.position=origin;
-		vector=Sink.randomAnyVector().multiply(.3f);
+		vector=Pair.randomAnyVector().multiply(.3f);
 		maxLife=1+bonusLife;
 		life=maxLife;
 	}
@@ -27,7 +27,7 @@ public class Spark extends Particle{
 		if(ticks>switchFreq){
 			ticks=0;
 			vector=vector.multiply(.3f);
-			vector=vector.add(Sink.randomAnyVector().multiply(.3f));
+			vector=vector.add(Pair.randomAnyVector().multiply(.3f));
 		}
 		life-=delta;
 		if(life<=0)dead=true;

@@ -21,7 +21,7 @@ import eh.ship.module.weapon.Weapon;
 import eh.ship.niche.Niche;
 import eh.util.Junk;
 import eh.util.TextWisp;
-import eh.util.maths.Sink;
+import eh.util.maths.Pair;
 
 
 public abstract class Module {
@@ -201,14 +201,14 @@ public abstract class Module {
 			destroy();
 			return;
 		}
-		new TextWisp("Scrambled", getCenter().add(new Sink(0,20))); 
+		new TextWisp("Scrambled", getCenter().add(new Pair(0,20))); 
 		scramble();
 	}
 
 	private void destroy(){
 
 		destroyed=true;
-		new TextWisp("Destroyed", getCenter().add(new Sink(0,20)));
+		new TextWisp("Destroyed", getCenter().add(new Pair(0,20)));
 		for(int i=0;i<ship.hand.size();i++){
 			Card c=ship.hand.get(i);
 			if(c.mod==this){
@@ -368,18 +368,18 @@ public abstract class Module {
 		if(immune)return;
 		unshieldableIcoming.add(d);
 	}
-	public Sink getBarrel(){
+	public Pair getBarrel(){
 		float offset=12+niche.width/2;
 		float x=getCenter().x+(ship.player?offset:-offset);
 		float y=getCenter().y;
 
-		return new Sink(x,y);
+		return new Pair(x,y);
 	}
-	public Sink getCenter(){
-		return new Sink(niche.location.x+niche.width/2,niche.location.y+niche.height/2);
+	public Pair getCenter(){
+		return new Pair(niche.location.x+niche.width/2,niche.location.y+niche.height/2);
 	}
-	public Sink getHitLocation(){
-		return getCenter().add(Sink.randomAnyVector().multiply(3));
+	public Pair getHitLocation(){
+		return getCenter().add(Pair.randomAnyVector().multiply(3));
 	}
 	public int getBuffAmount(BuffType check) {
 		int total=0;
