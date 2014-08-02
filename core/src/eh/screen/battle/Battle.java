@@ -443,7 +443,7 @@ public class Battle extends Screen{
 		//debug phase text
 		if(Main.debug){
 			Font.medium.setColor(Colours.grey);
-			Font.medium.draw(batch, "Phase: "+currentPhase+", State: "+currentState, 300, 620);
+			Font.medium.draw(batch, "Phase: "+currentPhase+", State: "+currentState, 300, 80);
 		}
 
 		if(getPhase()==Phase.End){

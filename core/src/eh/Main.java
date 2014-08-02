@@ -77,7 +77,7 @@ public class Main extends ApplicationAdapter  {
 
 		mainCam=new OrthographicCamera(Main.width, Main.height);
 		mainCam.setToOrtho(true);
-		battle=new Battle(ScreenType.HardFight);currentScreen=battle;
+		battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
 		//select=new Selector();currentScreen=select;
 
