@@ -386,7 +386,7 @@ public abstract class Ship {
 		if(hand.size()<=7){
 			for(int i=0;i<hand.size();i++){
 				CardGraphic c=hand.get(i).getGraphic();
-				c.slide(new Pair(start+gap*(i+1)-CardGraphic.width, 0), 2f, Interp.SQUARE);
+				c.slide(new Pair(start+gap*(i+1)-CardGraphic.width, Main.height-CardGraphic.height), 2f, Interp.SQUARE);
 			}
 		}
 		else{
@@ -394,7 +394,7 @@ public abstract class Ship {
 			gap=width/(hand.size()-1);
 			for(int i=0;i<hand.size();i++){
 				CardGraphic c=hand.get(i).getGraphic();
-				c.slide(new Pair(start+gap*i, 0), 2, Interp.SQUARE);
+				c.slide(new Pair(start+gap*i, Main.height-CardGraphic.height), 2, Interp.SQUARE);
 			}
 		}
 	}

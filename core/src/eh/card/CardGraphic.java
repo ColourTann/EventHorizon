@@ -36,21 +36,21 @@ public class CardGraphic extends Bonkject {
 	public static float height = 250;
 	public static Pair enemyPlayStartPosition = new Pair(Main.width, 350);
 	public static Pair enemyPlayToPosition = new Pair(850, 350);
-	public static float maxSelectedHeight = 26;
+	public static float maxSelectedHeight = -26;
 	public static float fadeSpeed = 2.5f;
-	public static Pair positionPic = new Pair(43, 63);
 	public static Interp fadeType = Interp.LINEAR;
-
+	
+	public static Pair positionPic = new Pair(43, 31);
 	private static Pair positionArray[][] = new Pair[6][5];
-	private static Pair positionTitle = new Pair(70, 117);
-	private static Pair positionRules = new Pair(5, 47);
-	private static Pair positionEnergy = new Pair(13, 73);
-	private static Pair positionCooldown = new Pair(119, 73);
-	private static Pair positionShots = new Pair(12, 104);
-	private static Pair positionTargeted = new Pair(116, 103);
-	private static Pair positionEffectStart = new Pair(5, 50);
-	private static Pair positionEffectMid = new Pair(9, 50);
-	private static Pair positionEffectEnd = new Pair(110, 50);
+	private static Pair positionTitle = new Pair(70, 8);
+	private static Pair positionRules = new Pair(5, 78);
+	private static Pair positionEnergy = new Pair(13, 38);
+	private static Pair positionCooldown = new Pair(119, 38);
+	private static Pair positionShots = new Pair(12, 21);
+	private static Pair positionTargeted = new Pair(116, 22);
+	private static Pair positionEffectStart = new Pair(5, 75);
+	private static Pair positionEffectMid = new Pair(9, 75);
+	private static Pair positionEffectEnd = new Pair(110, 75);
 	private static Pair positionAugment = new Pair(Main.width / 2 - width / 2, 126);
 	private static float cooldownWidth = Gallery.iconCooldown.get().getWidth() * 3;
 	private static float cooldownGap = cooldownWidth + 6;
@@ -63,7 +63,7 @@ public class CardGraphic extends Bonkject {
 	private boolean drawTopPic = true;
 	private boolean showLower = true;
 	private boolean still;
-	float sidePositions[] = new float[] { height / 2, 0 };
+	float sidePositions[] = new float[] {0,0};
 	public boolean override;
 	public Card card;
 	public static String alphabet="!\"£$%^&*()_+_1234567890-=qwertyuiop[]QWERTYUIOP{}asdfghjkl;'#ASDFGHJKL:@~zxcvbnm,.|ZXCVBNM<>?";
@@ -114,7 +114,7 @@ public class CardGraphic extends Bonkject {
 		if(!scrambled&&card.wasScrambled&&!card.mod.ship.player)scrambled=true;
 		// Shit about flipping cards//
 		for (int i = 0; i < 2; i++) {
-			float target = card.side == i ? height / 2f : 0;
+			float target = card.side == i ?0:  height / 2f ;
 			sidePositions[i] += (target - sidePositions[i]) * delta * flipSpeed;
 			if (Math.abs(sidePositions[i] - target) < 1f)sidePositions[i] = target;
 		}
@@ -198,13 +198,16 @@ public class CardGraphic extends Bonkject {
 
 	public void renderHalf(int part, SpriteBatch batch, Color c) {
 		//Setting height and colours//
+		System.out.println(position.y);
 		float baseHeight = position.y + sidePositions[part] + selectedHeight;
+		System.out.println(baseHeight);
 		Color lightText = Colours.withAlpha(Colours.multiply(Colours.light, c),c.a);
 		Color darkText = Colours.withAlpha(Colours.dark, c.a);
 		batch.setColor(c);
 
 
 		//Card base//
+		
 		Draw.drawTexture(batch, Gallery.cardBase.get(), position.x, baseHeight);
 
 		//Card image//

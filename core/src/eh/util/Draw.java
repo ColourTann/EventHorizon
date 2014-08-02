@@ -19,6 +19,10 @@ public class Draw {
 		drawTextureRotatedScaled(batch, t, x, y, scaleX, scaleY, 0);
 	}
 	
+	public static void drawTextureScaledFlipped(SpriteBatch batch, Texture t, float x, float y, float scaleX, float scaleY, boolean xFlip, boolean yFlip){
+		batch.draw(t, x, y, 0, 0, t.getWidth(), t.getHeight(), scaleX, scaleY, 0,0,0,t.getWidth(),t.getHeight(),xFlip,yFlip);	
+	}
+	
 	public static void drawTextureRotatedScaled(SpriteBatch batch, Texture t, float x, float y, float scaleX, float scaleY, float radianRotation){
 		batch.draw(t, x, y, 0, 0, t.getWidth(), t.getHeight(), scaleX, scaleY, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),false,true);
 	}

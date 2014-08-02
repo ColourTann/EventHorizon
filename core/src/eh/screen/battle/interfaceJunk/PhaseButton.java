@@ -83,14 +83,12 @@ public class PhaseButton extends Bonkject{
 		batch.setColor(Colours.withAlpha(c,phaseChangeAlpha));
 		Draw.drawTexture(batch, after.get(),t.getPair().x,t.getPair().y);
 		batch.setColor(1, 1, 1, 1);
-		//debugRender();
 	}
 	
 	public static PhaseButton get(){
 		if(button==null){
 			button=new PhaseButton(null);
 		}
-		Draw.
 		return button;
 	}
 

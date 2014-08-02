@@ -35,30 +35,18 @@ public class NicheGraphic extends Bonkject{
 
 	public void render(SpriteBatch batch){
 
-		//if(niche.type==ModuleType.WEAPON||niche.type==ModuleType.SHIELD){
 		batch.setColor(1,1,1,1);
-			Texture t=niche.mod.modulePic.get();
-			if(niche.mod.currentThreshold==3){
-				t=niche.mod.modulePic.getMonochrome();
-			}
-			if(niche.mod.ship.player){
-				Draw.drawTextureScaled(batch, t, niche.location.x, niche.location.y, niche.ship.player?1:-1, 1);
-				if(intensity>0){
-					batch.setColor(1,1,1,intensity);
-					Draw.drawTextureScaled(batch, niche.mod.modulePic.getGlow(), niche.location.x, niche.location.y, niche.ship.player?1:-1, 1);
-				}
-			}
-			else{
+		Texture t=niche.mod.modulePic.get();
+		if(niche.mod.currentThreshold==3){
+			t=niche.mod.modulePic.getMonochrome();
+		}
 
-				Draw.drawTextureScaled(batch, t, niche.location.x+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, niche.location.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity, niche.ship.player?1:-1, 1);
-				if(intensity>0){
-					batch.setColor(1,1,1,intensity);
-					Draw.drawTextureScaled(batch, niche.mod.modulePic.getGlow(), niche.location.x+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, niche.location.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity,niche.ship.player?1:-1, 1);
-				}
-			}
-			//debugRender(batch);
-			batch.setColor(1,1,1,1);
-		//}
+		Draw.drawTextureScaledFlipped(batch, t, niche.location.x, niche.location.y,1, 1, !niche.mod.ship.player, false);
+		if(intensity>0){
+			batch.setColor(1,1,1,intensity);
+			Draw.drawTextureScaledFlipped(batch, niche.mod.modulePic.getGlow(), niche.location.x, niche.location.y, 1, 1, !niche.mod.ship.player, false);
+		}
+		batch.setColor(1,1,1,1);
 	}
 
 	public String toString(){
@@ -77,12 +65,12 @@ public class NicheGraphic extends Bonkject{
 
 	@Override
 	public void update(float delta) {
-		
+
 		if(niche.mod.currentThreshold==3){
 			intensity=0;
 			return;
 		}
-		
+
 		ticks+=delta*area*.00025f*niche.mod.currentThreshold;
 		int shield=Math.min(3,niche.mod.getShield());
 

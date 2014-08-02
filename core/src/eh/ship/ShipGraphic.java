@@ -13,7 +13,7 @@ import eh.util.maths.Pair;
 
 public class ShipGraphic {
 	Ship ship;
-	public static Pair offset=new Pair(165, 340);
+	public static Pair offset=new Pair(165, 90);
 	public ShipGraphic(Ship s){
 		ship=s;
 	}
@@ -36,7 +36,8 @@ public class ShipGraphic {
 		}
 		else{
 			Texture t=ship.getPic().get();
-			Draw.drawTextureScaled(batch, t, Main.width-offset.x-t.getWidth()+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, offset.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity,1,-1);
+			// maybe need to stop player from shaking with enemy
+			Draw.drawTextureScaledFlipped(batch, t, Main.width-offset.x-t.getWidth()+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, offset.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity,1,1,true, false);
 		}
 		for(Niche n:ship.niches){
 			if(n.type!=ModuleType.WEAPON){
