@@ -7,7 +7,7 @@ import eh.assets.Font;
 import eh.assets.Gallery;
 import eh.util.Bonkject;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.maths.Collider;
 
 public class Checklist extends Bonkject{
@@ -49,9 +49,9 @@ public class Checklist extends Bonkject{
 
 	public void render(SpriteBatch batch) {
 		batch.setColor(Colours.withAlpha(Colours.white,alpha));
-		Junk.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y, 3, 3);
-		Junk.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 3, height);
-		Junk.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-height, 3, -3);
+		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y, 3, 3);
+		Draw.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 3, height);
+		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-height, 3, -3);
 		float heightAdd=0;
 		for(Task t:tasks){
 			if(t.isDone())Font.medium.setColor(Colours.withAlpha(Colours.player2[1],alpha));

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eh.assets.Gallery;
 import eh.assets.Pic;
 import eh.util.Bonkject;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.Timer.Interp;
 import eh.util.maths.BoxCollider;
 import eh.util.maths.Pair;
@@ -81,7 +81,7 @@ public class CardIcon extends Bonkject{
 
 	public void render(SpriteBatch batch) {
 		if(!overrideAlpha)batch.setColor(1,1,1,.2f+.8f*(icons.indexOf(this)+14-icons.size())/14); 	//This alpha thing took me a 20 minutes...//
-		Junk.drawTextureScaled(batch,cg.card.getImage().get(), position.x, position.y, 2, 2);
+		Draw.drawTextureScaled(batch,cg.card.getImage().get(), position.x, position.y, 2, 2);
 	
 		batch.draw(border.get(),position.x,position.y);
 		batch.setColor(1,1,1,1);

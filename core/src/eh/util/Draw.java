@@ -7,23 +7,36 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Junk {
+import eh.util.maths.Pair;
+
+public class Draw {
 	//Drawing Junk//
-	public static void drawTextureScaled(SpriteBatch batch, Texture t, float x, float y, float scaleX, float scaleY){
-		batch.draw(t, x, y, 0, 0, t.getWidth(), t.getHeight(), scaleX, scaleY, 0, 0,0,t.getWidth(),t.getHeight(),false,false);
+	public static void drawTexture(SpriteBatch batch, Texture t, float x, float y){
+		drawTextureRotatedScaled(batch, t, x, y, 1, 1, 0);
 	}
-	public static void drawTextureScaledCentered(SpriteBatch batch, Texture t, float x, float y, float xScale, float yScale){
-		batch.draw(t, x-t.getWidth()/2*xScale, y-t.getHeight()/2*yScale, 0, 0, t.getWidth(), t.getHeight(), xScale, yScale, 0, 0,0,t.getWidth(),t.getHeight(),false,false);
+	
+	public static void drawTextureScaled(SpriteBatch batch, Texture t, float x, float y, float scaleX, float scaleY){
+		drawTextureRotatedScaled(batch, t, x, y, scaleX, scaleY, 0);
+	}
+	
+	public static void drawTextureRotatedScaled(SpriteBatch batch, Texture t, float x, float y, float scaleX, float scaleY, float radianRotation){
+		batch.draw(t, x, y, 0, 0, t.getWidth(), t.getHeight(), scaleX, scaleY, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),false,true);
+	}
+	
+	public static void drawTextureCentered(SpriteBatch batch, Texture t, float x, float y){
+		drawTextureRotatedScaledCentered(batch, t, x, y, 1, 1, 0);
+	}
+	
+	public static void drawTextureScaledCentered(SpriteBatch batch, Texture t, float x, float y, float scaleX, float scaleY){
+		drawTextureRotatedScaledCentered(batch, t, x, y, scaleX, scaleY, 0);
 	}
 	public static void drawTextureRotatedCentered(SpriteBatch batch, Texture t, float x, float y, float radianRotation){
-		batch.draw(t, x-t.getWidth()/2, y-t.getHeight()/2, t.getWidth()/2, t.getHeight()/2, t.getWidth(), t.getHeight(), 1, 1, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),false,false);
+		drawTextureRotatedScaledCentered(batch, t, x, y, 1, 1, radianRotation);
 	}
 	public static void drawTextureRotatedScaledCentered(SpriteBatch batch, Texture t, float x, float y, float xScale, float yScale, float radianRotation){
-		batch.draw(t, x-t.getWidth()/2, y-t.getHeight()/2, t.getWidth()/2, t.getHeight()/2, t.getWidth(), t.getHeight(), xScale, yScale, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),false,false);
+		batch.draw(t, x-t.getWidth()/2, y-t.getHeight()/2, t.getWidth()/2, t.getHeight()/2, t.getWidth(), t.getHeight(), xScale, yScale, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),false,true);
 	}
-	public static void drawTextureRotatedScaled(SpriteBatch batch, Texture t, float x, float y, float xScale, float yScale, float radianRotation){
-		batch.draw(t, x, y, 0, 0, t.getWidth(), t.getHeight(), xScale, yScale, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),false,false);
-	}
+	
 
 	//Blending Junk
 	public enum BlendType{Normal, Additive, Max}

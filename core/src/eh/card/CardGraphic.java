@@ -25,7 +25,7 @@ import eh.ship.module.utils.Buff.BuffType;
 import eh.ship.module.weapon.Weapon;
 import eh.util.Bonkject;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.Timer.Interp;
 import eh.util.maths.BoxCollider;
 import eh.util.maths.Pair;
@@ -187,7 +187,7 @@ public class CardGraphic extends Bonkject {
 			Texture cd = Gallery.iconCooldown.get();
 
 			for (float i = 0; i < number; i++) {
-				Junk.drawTextureScaled(batch, cd, 
+				Draw.drawTextureScaled(batch, cd, 
 						position.x + width / 2 - cooldownWidth / 2 + cooldownGap* (i) - cooldownGap * (number - 1) / 2,
 						position.y + height / 2 - cd.getHeight() / 2 * 3, 3, 3);
 			}
@@ -205,13 +205,13 @@ public class CardGraphic extends Bonkject {
 
 
 		//Card base//
-		batch.draw(Gallery.cardBase.get(), position.x, baseHeight);
+		Draw.drawTexture(batch, Gallery.cardBase.get(), position.x, baseHeight);
 
 		//Card image//
 		if (drawTopPic || part != card.side)
-			Junk.drawTextureScaled(batch, card.getImage(part).get(), position.x + positionPic.x, baseHeight
+			Draw.drawTextureScaled(batch, card.getImage(part).get(), position.x + positionPic.x, baseHeight
 					+ positionPic.y, 2, 2);
-		/*batch.draw(card.getImage(part).get(), x + positionPic.x, baseHeight
+		/*Draw.drawTexture(batch, card.getImage(part).get(), x + positionPic.x, baseHeight
 					+ positionPic.y);*/
 
 		//Name//
@@ -242,14 +242,14 @@ public class CardGraphic extends Bonkject {
 			if(effect>7){
 				for (int i = 0; i < effect-5; i++) {
 					if (i == 0) {
-						batch.draw(effectPics[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
+						Draw.drawTexture(batch, effectPics[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
 						continue;
 					}
 					if (i == 6) {
-						batch.draw(effectPics[2].get(), position.x+ positionEffectEnd.x, baseHeight+ positionEffectEnd.y);
+						Draw.drawTexture(batch, effectPics[2].get(), position.x+ positionEffectEnd.x, baseHeight+ positionEffectEnd.y);
 						continue;
 					}
-					batch.draw(effectPics[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
+					Draw.drawTexture(batch, effectPics[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
 				}
 				Font.small.setColor(Colours.withAlpha(Colours.white, alpha));
 				Font.small.draw(batch, "+5", position.x+ positionEffectStart.x+3, baseHeight+ positionEffectStart.y+11);
@@ -257,14 +257,14 @@ public class CardGraphic extends Bonkject {
 			else{
 				for (int i = 0; i < effect; i++) {
 					if (i == 0) {
-						batch.draw(effectPics[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
+						Draw.drawTexture(batch, effectPics[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
 						continue;
 					}
 					if (i == 6) {
-						batch.draw(effectPics[2].get(), position.x+ positionEffectEnd.x, baseHeight+ positionEffectEnd.y);
+						Draw.drawTexture(batch, effectPics[2].get(), position.x+ positionEffectEnd.x, baseHeight+ positionEffectEnd.y);
 						continue;
 					}
-					batch.draw(effectPics[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
+					Draw.drawTexture(batch, effectPics[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
 				}
 			}
 		}
@@ -274,17 +274,17 @@ public class CardGraphic extends Bonkject {
 		if (card.mod instanceof Weapon&&!scrambled&&!card.wasScrambled) {
 			int shots = card.getShots(part);
 			if (shots > 1) {
-				batch.draw(Gallery.iconShots.get(), position.x + positionShots.x, baseHeight + positionShots.y);
+				Draw.drawTexture(batch, Gallery.iconShots.get(), position.x + positionShots.x, baseHeight + positionShots.y);
 				Font.small.setColor(darkText);
 				Font.small.draw(batch, "" + shots, position.x + positionShots.x - 6, baseHeight + positionShots.y + 12);
 			}
-			if (card.hasSpecial(Special.Targeted, part))batch.draw(Gallery.iconTargeted.get(), position.x + positionTargeted.x, baseHeight + positionTargeted.y);
+			if (card.hasSpecial(Special.Targeted, part))Draw.drawTexture(batch, Gallery.iconTargeted.get(), position.x + positionTargeted.x, baseHeight + positionTargeted.y);
 		}
 
 		//Cost//
 		if(scrambled){
 			if(!card.wasScrambled&&card.mod.ship.player){
-				batch.draw(Gallery.iconJammed.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
+				Draw.drawTexture(batch, Gallery.iconJammed.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
 			}
 		}
 		else{
@@ -292,10 +292,10 @@ public class CardGraphic extends Bonkject {
 			if(card.wasScrambled)cost=0;
 			Font.medium.setColor(darkText);
 			if (cost < 5) {
-				for (int i = 0; i < cost; i++)	batch.draw(Gallery.iconEnergy.get(), position.x + positionEnergy.x+ positionArray[cost][i].x, baseHeight+ positionEnergy.y + positionArray[cost][i].y);
+				for (int i = 0; i < cost; i++)	Draw.drawTexture(batch, Gallery.iconEnergy.get(), position.x + positionEnergy.x+ positionArray[cost][i].x, baseHeight+ positionEnergy.y + positionArray[cost][i].y);
 			} 
 			else {
-				batch.draw(Gallery.iconEnergy.get(), position.x + positionEnergy.x+ positionArray[5][0].x, baseHeight + positionEnergy.y+ positionArray[5][0].y);
+				Draw.drawTexture(batch, Gallery.iconEnergy.get(), position.x + positionEnergy.x+ positionArray[5][0].x, baseHeight + positionEnergy.y+ positionArray[5][0].y);
 				Font.medium.draw(batch, "" + cost, position.x + positionEnergy.x + 6,baseHeight + positionEnergy.y + positionArray[5][0].y + 18);
 			}
 		}
@@ -303,16 +303,16 @@ public class CardGraphic extends Bonkject {
 		//Cooldown//
 		if(scrambled){
 			if(!card.wasScrambled&&card.mod.ship.player){
-				batch.draw(Gallery.iconJammed.get(),position.x+positionCooldown.x+positionArray[1][0].x-4,baseHeight+positionCooldown.y+positionArray[1][0].y-3);
+				Draw.drawTexture(batch, Gallery.iconJammed.get(),position.x+positionCooldown.x+positionArray[1][0].x-4,baseHeight+positionCooldown.y+positionArray[1][0].y-3);
 			}
 		}
 		else{
 			int cooldown = card.getCoodlown(part);
 			if (cooldown < 3) {
-				for (int i = 0; i < cooldown; i++) batch.draw(Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[cooldown][i].x, baseHeight+ positionCooldown.y + positionArray[cooldown][i].y);
+				for (int i = 0; i < cooldown; i++) Draw.drawTexture(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[cooldown][i].x, baseHeight+ positionCooldown.y + positionArray[cooldown][i].y);
 			} 
 			else {
-				batch.draw(Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[5][0].x, baseHeight + positionCooldown.y+ positionArray[5][0].y);
+				Draw.drawTexture(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[5][0].x, baseHeight + positionCooldown.y+ positionArray[5][0].y);
 				Font.medium.draw(batch, "" + cooldown, position.x + positionCooldown.x + 6,baseHeight + positionCooldown.y + positionArray[5][0].y+ 18);
 			}
 		}

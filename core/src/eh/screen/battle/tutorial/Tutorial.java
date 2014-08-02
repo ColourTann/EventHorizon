@@ -18,7 +18,7 @@ import eh.ship.Ship;
 import eh.ship.module.Module;
 import eh.util.Bonkject;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.Timer.Interp;
 import eh.util.maths.Collider;
 import eh.util.maths.Pair;
@@ -96,12 +96,12 @@ public class Tutorial extends Bonkject{
 		if(str.equals(""))return;
 		batch.setColor(1,1,1,alpha);
 		if(target!=null){
-			Junk.drawTextureRotatedScaled(batch, Gallery.tutPoint.get(), origin.x, origin.y, distance, 1, rotation);
+			Draw.drawTextureRotatedScaled(batch, Gallery.tutPoint.get(), origin.x, origin.y, distance, 1, rotation);
 
 		}
-		Junk.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y, 3, 3);
-		Junk.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 3, height);
-		Junk.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-height, 3, -3);
+		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y, 3, 3);
+		Draw.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 3, height);
+		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-height, 3, -3);
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		Font.medium.drawWrapped(batch, str, x+offset, y-2, width-offset*2, HAlignment.CENTER);
 		

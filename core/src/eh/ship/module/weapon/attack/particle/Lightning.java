@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.assets.Gallery;
 import eh.util.Colours;
-import eh.util.Junk;
-import eh.util.Junk.BlendType;
+import eh.util.Draw;
+import eh.util.Draw.BlendType;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
@@ -30,7 +30,7 @@ public class Lightning extends Particle{
 	@Override
 	public void render(SpriteBatch batch) {
 		
-		Junk.setBlend(batch, BlendType.Additive);
+		Draw.setBlend(batch, BlendType.Additive);
 		
 		batch.setColor(Colours.withAlpha(Colours.blueWeaponCols4[0],alpha));//Colours.make(99,187,213),alpha));
 		Texture t=Gallery.lightningEnd.get();
@@ -42,14 +42,14 @@ public class Lightning extends Particle{
 		normal=normal.multiply((t.getWidth()/2+1)*scale);
 
 		//batch.setColor(1,1,1,.4f);
-		Junk.drawTextureRotatedScaledCentered(batch, Gallery.lightning.get(), start.x, start.y, distance, scale, (float)angle);
+		Draw.drawTextureRotatedScaledCentered(batch, Gallery.lightning.get(), start.x, start.y, distance, scale, (float)angle);
 		//batch.setColor(1,1,1,1);
-		Junk.drawTextureRotatedScaledCentered(batch, t, start.x-normal.x, start.y-normal.y, scale,scale, (float)angle);
+		Draw.drawTextureRotatedScaledCentered(batch, t, start.x-normal.x, start.y-normal.y, scale,scale, (float)angle);
 		
-		Junk.drawTextureRotatedScaledCentered(batch, t, finish.x+normal.x, finish.y+normal.y, -scale,scale, (float)angle);
+		Draw.drawTextureRotatedScaledCentered(batch, t, finish.x+normal.x, finish.y+normal.y, -scale,scale, (float)angle);
 		
 		
-		Junk.setBlend(batch, BlendType.Normal);
+		Draw.setBlend(batch, BlendType.Normal);
 		
 	}
 

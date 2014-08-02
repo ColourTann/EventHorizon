@@ -19,7 +19,7 @@ import eh.ship.module.utils.Buff.BuffType;
 import eh.ship.module.weapon.Tesla;
 import eh.ship.module.weapon.Weapon;
 import eh.ship.niche.Niche;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.TextWisp;
 import eh.util.maths.Pair;
 
@@ -88,7 +88,7 @@ public abstract class Module {
 		for(int i=1;i<=variants;i++){
 			cardOrder.add(i);
 		}
-		Junk.shuffle(cardOrder);
+		Draw.shuffle(cardOrder);
 		for(int i=0;i<code.length;i++){
 			code[i]=new CardCode();
 		}

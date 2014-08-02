@@ -10,7 +10,7 @@ import eh.grid.hex.Hex;
 import eh.screen.map.Map;
 import eh.screen.map.Map.MapState;
 import eh.util.Bonkject;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.maths.Collider;
 import eh.util.maths.PolygonCollider;
 import eh.util.maths.Pair;

@@ -11,7 +11,7 @@ import eh.assets.Pic;
 import eh.ship.Ship;
 import eh.util.Bonkject;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.maths.Collider;
 import eh.util.maths.Pair;
 
@@ -62,7 +62,7 @@ public class FightStats extends Bonkject{
 		current.setColor(c);
 		String s=""+ship.getEnergy();
 		current.draw(batch, s, energyX-current.getBounds(s).width/2+(ship.getEnergy()>9?45:47), y+41+current.getBounds(s).height/2);
-		Junk.drawTextureScaled(batch, Gallery.iconEnergy.get(),energyX+5,y+23, 2,2);
+		Draw.drawTextureScaled(batch, Gallery.iconEnergy.get(),energyX+5,y+23, 2,2);
 		Font.medium.setColor(c);
 		String inc="+"+ship.getIncome();
 		Font.medium.draw(batch, inc, energyX-Font.medium.getBounds(inc).width/2+32, y+25);

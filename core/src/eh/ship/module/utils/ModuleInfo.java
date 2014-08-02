@@ -16,7 +16,7 @@ import eh.ship.module.Module.ModuleType;
 import eh.ship.module.computer.Computer;
 import eh.util.Bonkject;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.Timer.Interp;
 import eh.util.maths.Pair;
 
@@ -90,7 +90,7 @@ public class ModuleInfo extends Bonkject{
 		
 		batch.setColor(1,1,1,alpha);
 
-		Junk.drawTextureScaled(batch, Gallery.darkDot.get(), position.x, position.y, width, height);
+		Draw.drawTextureScaled(batch, Gallery.darkDot.get(), position.x, position.y, width, height);
 
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		String s=mod.moduleName;

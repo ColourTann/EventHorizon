@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.assets.Gallery;
 import eh.util.Colours;
-import eh.util.Junk;
-import eh.util.Junk.BlendType;
+import eh.util.Draw;
+import eh.util.Draw.BlendType;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
@@ -29,10 +29,10 @@ public class LaserCharge extends Particle{
 
 	@Override
 	public void render(SpriteBatch sb) {
-		Junk.setBlend(sb, BlendType.Additive);
+		Draw.setBlend(sb, BlendType.Additive);
 		sb.setColor(Colours.withAlpha(colour,life/maxLife));
-		Junk.drawTextureScaledCentered(sb, Gallery.fuzzBall.get(), position.x, position.y, .7f*(1-life/maxLife),.7f*(1-life/maxLife));
-		Junk.setBlend(sb, BlendType.Normal);
+		Draw.drawTextureScaledCentered(sb, Gallery.fuzzBall.get(), position.x, position.y, .7f*(1-life/maxLife),.7f*(1-life/maxLife));
+		Draw.setBlend(sb, BlendType.Normal);
 	
 	}
 

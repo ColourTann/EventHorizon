@@ -23,7 +23,7 @@ import eh.screen.menu.Selector;
 import eh.ship.Ship;
 import eh.util.Bonkject;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.TextWisp;
 import eh.util.Timer;
 import eh.util.maths.Pair;
@@ -115,7 +115,7 @@ public class Main extends ApplicationAdapter  {
 		
 		//fading bit//
 		batch.setColor(1,1,1,ticks);
-		Junk.drawTextureScaled(batch, Gallery.darkDot.get(), 0, 0, width, height);
+		Draw.drawTextureScaled(batch, Gallery.darkDot.get(), 0, 0, width, height);
 		
 		if(debug){
 			batch.end();

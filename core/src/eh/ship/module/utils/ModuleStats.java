@@ -12,7 +12,7 @@ import eh.ship.module.Module;
 import eh.ship.module.Module.ModuleType;
 import eh.util.Bonkject;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.maths.BoxCollider;
 import eh.util.maths.Collider;
 import eh.util.maths.Pair;
@@ -83,7 +83,7 @@ public class ModuleStats extends Bonkject{
 
 		if(mod.type==ModuleType.WEAPON){
 			batch.setColor(1, 1, 1, .5f);
-			Junk.drawTextureScaledCentered(batch, mod.modulePic.get(), collider.position.x+37, collider.position.y+29, 2f/3f,2f/3f);
+			Draw.drawTextureScaledCentered(batch, mod.modulePic.get(), collider.position.x+37, collider.position.y+29, 2f/3f,2f/3f);
 			batch.setColor(1, 1, 1, 1);
 			//batch.draw(mod.modulePic.get(),collider.x+5,collider.y+5);
 		}

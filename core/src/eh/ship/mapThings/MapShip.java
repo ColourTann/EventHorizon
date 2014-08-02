@@ -14,7 +14,7 @@ import eh.ship.Ship;
 import eh.ship.shipClass.Aurora;
 import eh.ship.shipClass.Eclipse;
 import eh.util.Bonkject;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.Timer;
 import eh.util.Timer.Interp;
 import eh.util.maths.Pair;
@@ -80,7 +80,7 @@ public class MapShip {
 	public void render(SpriteBatch batch) {
 		if (ship == null)	return;
 		batch.setColor(1, 1, 1, 1);
-		Junk.drawTextureRotatedScaledCentered(batch, ship.shipPic.get(),
+		Draw.drawTextureRotatedScaledCentered(batch, ship.shipPic.get(),
 				(int) (hex.getPixel().x + distance.x),
 				(int) (hex.getPixel().y + distance.y), Hex.size / 300,
 				Hex.size / 300, rotation);

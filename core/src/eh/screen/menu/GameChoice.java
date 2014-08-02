@@ -9,7 +9,7 @@ import eh.assets.Font;
 import eh.assets.Gallery;
 import eh.util.Bonkject;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.maths.BoxCollider;
 import eh.util.maths.Collider;
 
@@ -48,9 +48,9 @@ public class GameChoice extends Bonkject{
 
 
 	public void render(SpriteBatch batch) {
-		Junk.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y, 2f, 2f);
-		Junk.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 2f, height);
-		Junk.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-height, 2f, -2f);
+		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y, 2f, 2f);
+		Draw.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 2f, height);
+		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-height, 2f, -2f);
 		Font.big.setColor(Colours.withAlpha(Colours.light,alpha));
 		Font.big.drawWrapped(batch, str, x, y-2, width, HAlignment.CENTER);
 	}

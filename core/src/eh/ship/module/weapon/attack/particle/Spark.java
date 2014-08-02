@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.assets.Gallery;
 import eh.util.Colours;
-import eh.util.Junk;
-import eh.util.Junk.BlendType;
+import eh.util.Draw;
+import eh.util.Draw.BlendType;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
@@ -36,11 +36,11 @@ public class Spark extends Particle{
 	@Override
 	public void render(SpriteBatch batch) {
 		if(dead)return;
-		Junk.setBlend(batch, BlendType.Additive);
+		Draw.setBlend(batch, BlendType.Additive);
 		double angle = Math.atan2(vector.y, vector.x);
 		batch.setColor(Colours.withAlpha(Colours.light,.3f*(life/maxLife)));
-		Junk.drawTextureRotatedScaledCentered(batch, Gallery.lightning.get(), position.x, position.y, 5, .1f, (float)angle);
-		Junk.setBlend(batch, BlendType.Normal);
+		Draw.drawTextureRotatedScaledCentered(batch, Gallery.lightning.get(), position.x, position.y, 5, .1f, (float)angle);
+		Draw.setBlend(batch, BlendType.Normal);
 		//batch.draw(Gallery.square2.get(), position.x, position.y);
 	}
 

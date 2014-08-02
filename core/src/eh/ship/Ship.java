@@ -29,7 +29,7 @@ import eh.ship.module.weapon.Weapon;
 import eh.ship.module.weapon.attack.Attack;
 import eh.ship.niche.Niche;
 import eh.ship.shipClass.*;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.TextWisp;
 import eh.util.Timer.Interp;
 import eh.util.maths.Pair;
@@ -431,7 +431,7 @@ public abstract class Ship {
 			if(m.destroyed)continue;
 			for(int i=0;i<m.numCards;i++)deck.add(m);
 		}
-		Junk.shuffle(deck);
+		Draw.shuffle(deck);
 	}
 
 	public void startFight(boolean goingFirst){
@@ -499,7 +499,7 @@ public abstract class Ship {
 		for(int i=0;i<5;i++){
 			ints.add(i);
 		}
-		Junk.shuffle(ints);
+		Draw.shuffle(ints);
 		for(int i:ints){
 			if(modules[i].currentThreshold<3){
 				return modules[i];
@@ -530,7 +530,7 @@ public abstract class Ship {
 		for(Module m:modules){
 			if(m.currentThreshold<2)result.add(m);
 		}
-		Junk.shuffle(result);
+		Draw.shuffle(result);
 		return result;
 	}
 	public Module getModule(int index){return modules[index];}

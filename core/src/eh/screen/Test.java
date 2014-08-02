@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import eh.Main;
 import eh.assets.Gallery;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.maths.Pair;
 
 public class Test extends Screen{
@@ -31,7 +31,7 @@ public class Test extends Screen{
 	@Override
 	public void render(SpriteBatch batch) {
 		batch.draw(Gallery.star.get(), 200+camera.x, 200+camera.y);
-		Junk.drawTextureRotatedScaledCentered(batch, Gallery.shipAurora.get(), (int)camera.x, (int)camera.y,.2f,.2f, new Pair(Main.width/2,Main.height/2).getAngle(camera));
+		Draw.drawTextureRotatedScaledCentered(batch, Gallery.shipAurora.get(), (int)camera.x, (int)camera.y,.2f,.2f, new Pair(Main.width/2,Main.height/2).getAngle(camera));
 		
 	}
 

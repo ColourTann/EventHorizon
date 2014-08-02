@@ -25,7 +25,7 @@ import eh.ship.module.utils.DamagePoint;
 import eh.ship.module.utils.ShieldPoint;
 import eh.ship.module.utils.Buff.BuffType;
 import eh.ship.module.weapon.Weapon;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.Timer.Interp;
 
 public class Card {
@@ -415,7 +415,7 @@ public class Card {
 				if(c.validAugmentTarget(this))possible.add(c);
 			}
 			if(possible.size()>0){
-				Card c=Junk.getRandom(possible);
+				Card c=Draw.getRandom(possible);
 				c.augmentThis(this);
 			}
 			else{

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eh.assets.Gallery;
 import eh.grid.hex.Hex;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.maths.Pair;
 
 public class Star extends HexContent{
@@ -20,7 +20,7 @@ public class Star extends HexContent{
 		batch.setColor(1,1,1,1);
 		Pair loc=hex.getPixel();
 		Texture t=Gallery.star.get();
-		Junk.drawTextureScaledCentered(batch, t, loc.x, loc.y, Hex.size/30f, Hex.size/30f);
+		Draw.drawTextureScaledCentered(batch, t, loc.x, loc.y, Hex.size/30f, Hex.size/30f);
 		
 		
 	}

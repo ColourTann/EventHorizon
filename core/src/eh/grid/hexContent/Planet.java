@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eh.assets.Gallery;
 import eh.grid.hex.Hex;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
@@ -21,7 +21,7 @@ public class Planet extends HexContent{
 	public void render(SpriteBatch batch) {
 		batch.setColor(color);
 		Pair loc=hex.getPixel();
-		Junk.drawTextureScaledCentered(batch, Gallery.circle32.get(), loc.x+offset.x, loc.y+offset.y, scale*Hex.size/30f, scale*Hex.size/30f);
+		Draw.drawTextureScaledCentered(batch, Gallery.circle32.get(), loc.x+offset.x, loc.y+offset.y, scale*Hex.size/30f, scale*Hex.size/30f);
 	}
 
 }

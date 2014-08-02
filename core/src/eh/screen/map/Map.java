@@ -21,7 +21,7 @@ import eh.ship.mapThings.MapShip;
 import eh.ship.mapThings.mapAbility.MapAbility;
 import eh.ship.shipClass.*;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.maths.Pair;
 
 public class Map extends Screen{
@@ -183,7 +183,7 @@ public class Map extends Screen{
 		//batch2 is for interface stuff//
 		batch2.begin();
 		batch2.draw(Gallery.mapslice.get(), 0, 0);
-		Junk.drawTextureScaled(batch2, Gallery.mapsliceRight.get(), Main.width, Main.height	, -1, -1);
+		Draw.drawTextureScaled(batch2, Gallery.mapsliceRight.get(), Main.width, Main.height	, -1, -1);
 		batch2.setColor(Colours.light);
 		Font.medium.draw(batch2, ""+getState(), Main.width-300, Main.height);
 		abil.render(batch2);

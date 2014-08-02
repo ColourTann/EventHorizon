@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.ship.module.weapon.attack.RayAttack;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
@@ -47,7 +47,7 @@ public class RayParticle extends Particle{
 		}
 		sb.setColor(Colours.withAlpha(Colours.redWeaponCols4[(int)(life/maxLife*4)], life/maxLife));
 		//Junk.drawTexture(sb, t, x, y, life/maxLife*5f, life/maxLife*3f);
-		Junk.drawTextureScaled(sb, t, position.x, position.y, life/maxLife*5f, life/maxLife*3f);
+		Draw.drawTextureScaled(sb, t, position.x, position.y, life/maxLife*5f, life/maxLife*3f);
 	}
 
 }

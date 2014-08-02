@@ -17,7 +17,7 @@ import eh.screen.map.Map.MapState;
 import eh.ship.Ship;
 import eh.ship.mapThings.MapShip;
 import eh.util.Colours;
-import eh.util.Junk;
+import eh.util.Draw;
 import eh.util.maths.Pair;
 
 public class Hex {
@@ -184,7 +184,7 @@ public class Hex {
 			h.solarSystemWithin16=true;
 		}
 		ArrayList<Hex> possibles=getHexesWithin(6, false);
-		Junk.shuffle(possibles);
+		Draw.shuffle(possibles);
 		int planets=(int) (3+Math.random()*4);
 		for(int i=0;i<planets;i++){
 			Hex h=possibles.remove(0);
@@ -394,7 +394,7 @@ public class Hex {
 
 	public Hex getRandomAdjacentUnblocked() {
 		ArrayList<Hex> hexes=getHexesWithin(1, false);
-		Junk.shuffle(hexes);
+		Draw.shuffle(hexes);
 		for(Hex h:hexes){
 			if(!h.isBlocked())return h;
 		}
