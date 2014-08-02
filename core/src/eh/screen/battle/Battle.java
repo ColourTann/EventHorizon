@@ -36,6 +36,7 @@ import eh.ship.module.weapon.attack.LightningAttack;
 import eh.ship.niche.Niche;
 import eh.ship.shipClass.*;
 import eh.util.Colours;
+import eh.util.Draw;
 import eh.util.TextWisp;
 import eh.util.maths.Pair;
 
@@ -256,9 +257,9 @@ public class Battle extends Screen{
 
 
 	public void debugRender(SpriteBatch batch){
-		batch.draw(Gallery.laser.get(), 500, 500);
-		batch.draw(Gallery.laser.getMonochrome(), 500, 600);
-		batch.draw(Gallery.blaster.getOutline(), 500, 700);
+		Draw.drawTexture(batch, Gallery.laser.get(), 500, 500);
+		Draw.drawTexture(batch, Gallery.laser.getMonochrome(), 500, 600);
+		Draw.drawTexture(batch, Gallery.blaster.getOutline(), 500, 700);
 	}
 
 
@@ -410,8 +411,8 @@ public class Battle extends Screen{
 
 		batch.getProjectionMatrix().setToOrtho2D((float)Math.sin(ticks*sinSpeed)*playerShakeIntensity, (float)Math.cos((ticks-2.5f)*sinSpeed)*playerShakeIntensity, Main.width, Main.height);
 
-		batch.draw(Star.pixTex, 160, 280);
-		batch.draw(Gallery.battleScreen.get(), 128, 0);
+		Draw.drawTexture(batch, Star.pixTex, 160, 280);
+		Draw.drawTexture(batch, Gallery.battleScreen.get(), 128, 0);
 
 		//Rendering ships, statblocks and misc interface//
 		player.renderAll(batch);

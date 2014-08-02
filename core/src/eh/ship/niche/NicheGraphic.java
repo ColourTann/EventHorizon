@@ -12,6 +12,7 @@ import eh.ship.module.weapon.attack.particle.Smoke;
 import eh.ship.module.weapon.attack.particle.SmokeMachine;
 import eh.ship.module.weapon.attack.particle.Smoke.SmokeType;
 import eh.util.Bonkject;
+import eh.util.Draw;
 import eh.util.maths.PolygonCollider;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.ParticleSystem;
@@ -41,18 +42,18 @@ public class NicheGraphic extends Bonkject{
 				t=niche.mod.modulePic.getMonochrome();
 			}
 			if(niche.mod.ship.player){
-				batch.draw(t, niche.location.x, niche.location.y, t.getWidth(), t.getHeight(), 0, 0, t.getWidth(), t.getHeight(), niche.ship.player?false:true, false);
+				Draw.drawTextureScaled(batch, t, niche.location.x, niche.location.y, niche.ship.player?1:-1, 1);
 				if(intensity>0){
 					batch.setColor(1,1,1,intensity);
-					batch.draw(niche.mod.modulePic.getGlow(), niche.location.x, niche.location.y, t.getWidth(), t.getHeight(), 0, 0, t.getWidth(), t.getHeight(), niche.ship.player?false:true, false);
+					Draw.drawTextureScaled(batch, niche.mod.modulePic.getGlow(), niche.location.x, niche.location.y, niche.ship.player?1:-1, 1);
 				}
 			}
 			else{
 
-				batch.draw(t, niche.location.x+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, niche.location.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity, t.getWidth(), t.getHeight(), 0, 0, t.getWidth(), t.getHeight(), niche.ship.player?false:true, false);
+				Draw.drawTextureScaled(batch, t, niche.location.x+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, niche.location.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity, niche.ship.player?1:-1, 1);
 				if(intensity>0){
 					batch.setColor(1,1,1,intensity);
-					batch.draw(niche.mod.modulePic.getGlow(), niche.location.x+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, niche.location.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity, t.getWidth(), t.getHeight(), 0, 0, t.getWidth(), t.getHeight(), niche.ship.player?false:true, false);
+					Draw.drawTextureScaled(batch, niche.mod.modulePic.getGlow(), niche.location.x+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, niche.location.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity,niche.ship.player?1:-1, 1);
 				}
 			}
 			//debugRender(batch);

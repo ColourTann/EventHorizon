@@ -106,8 +106,8 @@ public class Tutorial extends Bonkject{
 		Font.medium.drawWrapped(batch, str, x+offset, y-2, width-offset*2, HAlignment.CENTER);
 		
 		if(special==1){
-			batch.draw(Gallery.greenHP[1].get(), 752, 568);
-			batch.draw(Gallery.greenHP[2].get(), 582, 550);
+			Draw.drawTexture(batch, Gallery.greenHP[1].get(), 752, 568);
+			Draw.drawTexture(batch, Gallery.greenHP[2].get(), 582, 550);
 		}
 		//756 515
 		//572 756

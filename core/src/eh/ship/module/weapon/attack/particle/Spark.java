@@ -41,7 +41,7 @@ public class Spark extends Particle{
 		batch.setColor(Colours.withAlpha(Colours.light,.3f*(life/maxLife)));
 		Draw.drawTextureRotatedScaledCentered(batch, Gallery.lightning.get(), position.x, position.y, 5, .1f, (float)angle);
 		Draw.setBlend(batch, BlendType.Normal);
-		//batch.draw(Gallery.square2.get(), position.x, position.y);
+		//Draw.drawTexture(batch, Gallery.square2.get(), position.x, position.y);
 	}
 
 }

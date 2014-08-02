@@ -48,15 +48,15 @@ public class FightStats extends Bonkject{
 			c=Colours.player2[1];
 			energyX=265;
 			damageX=345;
-			batch.draw(Gallery.playerEnergy.get(), energyX, y);
-			batch.draw(Gallery.majorDamagePlayer.get(), damageX, y);
+			Draw.drawTexture(batch, Gallery.playerEnergy.get(), energyX, y);
+			Draw.drawTexture(batch, Gallery.majorDamagePlayer.get(), damageX, y);
 		}
 		else{
 			c=Colours.enemy2[1];
 			energyX=846;
 			damageX=925;
-			batch.draw(Gallery.enemyEnergy.get(),energyX,y);
-			batch.draw(Gallery.majorDamageEnemy.get(),damageX,y);
+			Draw.drawTexture(batch, Gallery.enemyEnergy.get(),energyX,y);
+			Draw.drawTexture(batch, Gallery.majorDamageEnemy.get(),damageX,y);
 		}
 		BitmapFont current = (ship.getEnergy()>9?Font.medium:Font.big);
 		current.setColor(c);
@@ -72,7 +72,7 @@ public class FightStats extends Bonkject{
 		}*/
 		Texture icon=(player?Gallery.greenHP[1].get():Gallery.redHP[1].get());
 		for(int i=0;i<ship.getMajorDamage()&&i<5;i++){
-			batch.draw(icon, damageX+damageStart.x+damageGap*i, y+damageStart.y);
+			Draw.drawTexture(batch, icon, damageX+damageStart.x+damageGap*i, y+damageStart.y);
 		}
 	}
 

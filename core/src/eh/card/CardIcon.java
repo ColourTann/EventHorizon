@@ -83,7 +83,7 @@ public class CardIcon extends Bonkject{
 		if(!overrideAlpha)batch.setColor(1,1,1,.2f+.8f*(icons.indexOf(this)+14-icons.size())/14); 	//This alpha thing took me a 20 minutes...//
 		Draw.drawTextureScaled(batch,cg.card.getImage().get(), position.x, position.y, 2, 2);
 	
-		batch.draw(border.get(),position.x,position.y);
+		Draw.drawTexture(batch, border.get(),position.x,position.y);
 		batch.setColor(1,1,1,1);
 	}
 

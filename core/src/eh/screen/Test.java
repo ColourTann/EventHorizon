@@ -30,7 +30,7 @@ public class Test extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch) {
-		batch.draw(Gallery.star.get(), 200+camera.x, 200+camera.y);
+		Draw.drawTexture(batch, Gallery.star.get(), 200+camera.x, 200+camera.y);
 		Draw.drawTextureRotatedScaledCentered(batch, Gallery.shipAurora.get(), (int)camera.x, (int)camera.y,.2f,.2f, new Pair(Main.width/2,Main.height/2).getAngle(camera));
 		
 	}

@@ -16,6 +16,7 @@ import eh.screen.battle.tutorial.Tutorial;
 import eh.ship.module.weapon.Weapon;
 import eh.util.Bonkject;
 import eh.util.Colours;
+import eh.util.Draw;
 import eh.util.Timer;
 import eh.util.Timer.Interp;
 import eh.util.maths.BoxCollider;
@@ -120,9 +121,9 @@ public class CycleButton extends Bonkject{
 	public void render(SpriteBatch batch) {
 	
 		batch.setColor(new Color(1,1,1,timer.getFloat()));
-		batch.draw(Gallery.cycleButton.get(), position.x, position.y);
+		Draw.drawTexture(batch, Gallery.cycleButton.get(), position.x, position.y);
 		batch.setColor(new Color(1,1,1,1));
-		batch.draw(Gallery.iconEnergy.get(), 168,284);
+		Draw.drawTexture(batch, Gallery.iconEnergy.get(), 168,284);
 		Font.medium.setColor(Colours.dark);
 		String s=cost+"";
 		Font.medium.draw(batch, s, 191-Font.medium.getBounds(s).width/2, 302);

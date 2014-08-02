@@ -13,6 +13,7 @@ import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
 import eh.util.Bonkject;
 import eh.util.Colours;
+import eh.util.Draw;
 import eh.util.Timer;
 import eh.util.Timer.Interp;
 import eh.util.maths.Collider;
@@ -69,19 +70,19 @@ public class PhaseButton extends Bonkject{
 		mouseUp();
 	}
 	
-	public void render(SpriteBatch sb){
+	public void render(SpriteBatch batch){
 		Color c = Colours.white;
 		if(Battle.getPhase()!=Phase.ShieldPhase&&Battle.getPhase()!=Phase.WeaponPhase){
 			c=Colours.faded;
 		}
 		
-		sb.setColor(c);
-		sb.draw(Gallery.endTurnBottom.get(),605,277);
-		sb.draw(before.get(),t.getPair().x,t.getPair().y);
+		batch.setColor(c);
+		Draw.drawTexture(batch, Gallery.endTurnBottom.get(),605,277);
+		Draw.drawTexture(batch, before.get(),t.getPair().x,t.getPair().y);
 		
-		sb.setColor(Colours.withAlpha(c,phaseChangeAlpha));
-		sb.draw(after.get(),t.getPair().x,t.getPair().y);
-		sb.setColor(1, 1, 1, 1);
+		batch.setColor(Colours.withAlpha(c,phaseChangeAlpha));
+		Draw.drawTexture(batch, after.get(),t.getPair().x,t.getPair().y);
+		batch.setColor(1, 1, 1, 1);
 		//debugRender();
 	}
 	
@@ -89,6 +90,7 @@ public class PhaseButton extends Bonkject{
 		if(button==null){
 			button=new PhaseButton(null);
 		}
+		Draw.
 		return button;
 	}
 

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eh.Main;
 import eh.assets.Gallery;
 import eh.util.Colours;
+import eh.util.Draw;
 import eh.util.maths.Pair;
 
 public class Star{
@@ -31,8 +32,8 @@ public class Star{
 	}
 
 	public void render(SpriteBatch batch){
-		if(size>.7f)batch.draw(Gallery.square2.get(), location.x, location.y);
-		else batch.draw(Gallery.square1.get(), location.x, location.y);
+		if(size>.7f)Draw.drawTexture(batch, Gallery.square2.get(), location.x, location.y);
+		else Draw.drawTexture(batch, Gallery.square1.get(), location.x, location.y);
 
 	}
 

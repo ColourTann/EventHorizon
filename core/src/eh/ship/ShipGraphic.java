@@ -8,6 +8,7 @@ import eh.Main;
 import eh.screen.battle.Battle;
 import eh.ship.module.Module.ModuleType;
 import eh.ship.niche.Niche;
+import eh.util.Draw;
 import eh.util.maths.Pair;
 
 public class ShipGraphic {
@@ -31,11 +32,11 @@ public class ShipGraphic {
 		}
 
 		if(ship.player){
-			batch.draw(ship.getPic().get(), offset.x, offset.y);
+			Draw.drawTexture(batch, ship.getPic().get(), offset.x, offset.y);
 		}
 		else{
 			Texture t=ship.getPic().get();
-			batch.draw(t, Main.width-offset.x-t.getWidth()+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, offset.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity, t.getWidth(), t.getHeight(), 0, 0, t.getWidth(), t.getHeight(), true, false);
+			Draw.drawTextureScaled(batch, t, Main.width-offset.x-t.getWidth()+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, offset.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity,1,-1);
 		}
 		for(Niche n:ship.niches){
 			if(n.type!=ModuleType.WEAPON){

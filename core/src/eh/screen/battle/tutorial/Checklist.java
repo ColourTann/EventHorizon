@@ -60,7 +60,7 @@ public class Checklist extends Bonkject{
 			heightAdd-=Font.medium.getWrappedBounds(t.s+"\n\n", width-offset*2).height;
 		}
 		if(drawDam){
-			batch.draw(Gallery.orangeHP[1].get(), 608,559);
+			Draw.drawTexture(batch, Gallery.orangeHP[1].get(), 608,559);
 		}
 		//599 560
 		
