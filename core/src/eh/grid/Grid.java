@@ -81,6 +81,7 @@ public class Grid {
 	}
 	private Hex pixelToHex(int x, int y){
 		//Pretty horrible//
+		
 		float gradient=1.732f;
 		//the estimated hexY//
 		int hy=(int)((y+Hex.size)/Hex.yGap);
@@ -103,9 +104,11 @@ public class Grid {
 	}
 
 	public void update(float delta){
+		
 		viewDist=(int) (Main.height/Hex.yGap/2);
 		Hex start =pixelToHex((int)Main.getCam().x+Main.width/2, (int)Main.getCam().y+Main.height/2);
 		drawableHexes=null;
+		start=Map.player.hex;
 		if(start!=null)drawableHexes=start.getHexesWithin(viewDist+2, true);
 		if(drawableHexes==null)return;
 		for(Hex h:drawableHexes){
@@ -130,7 +133,7 @@ public class Grid {
 		if(drawableHexes==null)return;
 		for(Hex h:drawableHexes)	h.renderBackGround(batch);
 		for(Hex h:drawableHexes)	h.renderContents(batch);
-		//for(Hex h:drawableHexes) h.renderLocation(batch);
+		for(Hex h:drawableHexes) h.renderLocation(batch);
 	}
 
 

@@ -52,7 +52,7 @@ public class GameChoice extends Bonkject{
 		Draw.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 2f, height);
 		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-height, 2f, -2f);
 		Font.big.setColor(Colours.withAlpha(Colours.light,alpha));
-		Font.big.drawWrapped(batch, str, x, y-2, width, HAlignment.CENTER);
+		Font.big.drawWrapped(batch, str, x, y-36, width, HAlignment.CENTER);
 	}
 
 }

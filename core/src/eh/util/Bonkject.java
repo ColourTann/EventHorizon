@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 
 import eh.Main;
 import eh.util.Timer.Interp;
@@ -132,9 +133,12 @@ public abstract class Bonkject {
 	public void debugRender(SpriteBatch batch){
 
 		if(collider==null)return;
+		
 		batch.end();
 		collider.debugDraw();
+		batch.setProjectionMatrix(Main.mainCam.combined);
 		batch.begin();
+		
 	}
 
 

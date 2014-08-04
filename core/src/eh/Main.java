@@ -1,7 +1,5 @@
 package eh;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -10,12 +8,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
 
 import eh.assets.Font;
 import eh.assets.Gallery;
 import eh.card.CardGraphic;
 import eh.screen.Screen;
-import eh.screen.Test;
 import eh.screen.battle.Battle;
 import eh.screen.cardView.CardViewer;
 import eh.screen.map.Map;
@@ -49,7 +47,7 @@ public class Main extends ApplicationAdapter  {
 	public static Selector select;
 	public static Map map;
 
-	public static OrthographicCamera resetCam;
+	public static OrthographicCamera uiCam;
 
 	public static OrthographicCamera mainCam;
 	
@@ -72,18 +70,21 @@ public class Main extends ApplicationAdapter  {
 		shape=new ShapeRenderer();
 		Color c=Colours.dark;
 		Gdx.gl.glClearColor(c.r,c.g,c.b,1);
-		resetCam=new OrthographicCamera(Main.width, Main.height);
-		resetCam.translate(-Main.width, -Main.height/2);
+		uiCam=new OrthographicCamera(Main.width, Main.height);
+		uiCam.setToOrtho(true);
+		uiCam.translate(-Main.width, -Main.height/2);
 
 		mainCam=new OrthographicCamera(Main.width, Main.height);
 		mainCam.setToOrtho(true);
-		battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
+		
+		
+		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
 		//select=new Selector();currentScreen=select;
 
 		//viewer=new CardViewer();currentScreen=viewer;
 
-		//map=new Map();currentScreen=map;
+		map=new Map();currentScreen=map;
 
 		//currentScreen=new Test();
 	}	
@@ -98,8 +99,7 @@ public class Main extends ApplicationAdapter  {
 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		//for some reason I need to reset the projection matrix//
-		shape.setProjectionMatrix(new Matrix4());
-		shape.getProjectionMatrix().setToOrtho2D((int)(cam.x), (int)(cam.y), Main.width, Main.height);
+		shape.setProjectionMatrix(mainCam.combined);
 		currentScreen.shapeRender(shape);
 		//batch.getProjectionMatrix().setToOrtho2D((int)(cam.x), (int)(cam.y), Main.width, Main.height);
 		batch.setProjectionMatrix(mainCam.combined);
@@ -118,11 +118,9 @@ public class Main extends ApplicationAdapter  {
 		Draw.drawTextureScaled(batch, Gallery.darkDot.get(), 0, 0, width, height);
 		
 		if(debug){
-			batch.end();
-			batch.getProjectionMatrix().setToOrtho2D(0,0, Main.width, Main.height);
-			batch.begin();
+		
 			Font.small.setColor(Colours.white);
-			Font.small.draw(batch, "FPS: "+(int)(1/delta), 10, 20);
+			Font.small.draw(batch, "FPS: "+(int)(1/delta), 0, 0);
 		}
 
 
@@ -172,6 +170,9 @@ public class Main extends ApplicationAdapter  {
 			ticks-=delta*2;
 			ticks=Math.max(0, ticks);
 		}
+		mainCam.update();
+		
+		
 	}
 
 	public enum ScreenType{EasyFight, MediumFight, HardFight, TutorialFight, Menu}
@@ -185,6 +186,8 @@ public class Main extends ApplicationAdapter  {
 
 	public static void setCam(Pair cam){
 		Main.cam=cam.floor();
+		//mainCam.translate(-1, 0);
+		mainCam.position.set(cam.x, cam.y, 0);
 	}
 
 

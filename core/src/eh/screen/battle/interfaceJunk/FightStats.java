@@ -17,7 +17,7 @@ import eh.util.maths.Pair;
 
 public class FightStats extends Bonkject{
 	private static float damageGap=23;
-	private static Pair damageStart= new Pair(9,9);
+	private static Pair damageStart= new Pair(8,27);
 	Ship ship;
 	boolean player;
 	public FightStats(Ship s) {
@@ -42,7 +42,7 @@ public class FightStats extends Bonkject{
 	public void render(SpriteBatch batch) {
 		float energyX=0;
 		float damageX=0;
-		float y=283;
+		float y=360;
 		Color c=null;
 		if(player){
 			c=Colours.player2[1];
@@ -61,11 +61,11 @@ public class FightStats extends Bonkject{
 		BitmapFont current = (ship.getEnergy()>9?Font.medium:Font.big);
 		current.setColor(c);
 		String s=""+ship.getEnergy();
-		current.draw(batch, s, energyX-current.getBounds(s).width/2+(ship.getEnergy()>9?45:47), y+41+current.getBounds(s).height/2);
-		Draw.drawTextureScaled(batch, Gallery.iconEnergy.get(),energyX+5,y+23, 2,2);
+		current.draw(batch, s, energyX-current.getBounds(s).width/2+(ship.getEnergy()>9?45:47), y+15-current.getBounds(s).height/2);
+		Draw.drawTextureScaled(batch, Gallery.iconEnergy.get(),energyX+5,y+6, 2,2);
 		Font.medium.setColor(c);
 		String inc="+"+ship.getIncome();
-		Font.medium.draw(batch, inc, energyX-Font.medium.getBounds(inc).width/2+32, y+25);
+		Font.medium.draw(batch, inc, energyX-Font.medium.getBounds(inc).width/2+32, y+30);
 		/*if(!player){
 			String hs=""+ship.hand.size();
 			Font.big.draw(batch, hs, energyX-Font.big.getBounds(hs).width/2+122, y+45);

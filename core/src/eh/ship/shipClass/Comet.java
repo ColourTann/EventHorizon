@@ -26,20 +26,20 @@ public class Comet extends Ship{
 
 	@Override
 	public void placeNiches() {
-		Polygon weapon1= new Polygon(new float[]{216,187,0,0,0,0});
-		Polygon weapon2= new Polygon(new float[]{216,82,0,0,0,0});
-		Polygon shield = new Polygon(new float[]{138,171,0,0,0,0});
+		Polygon weapon1= new Polygon(new float[]{216,83,0,0,0,0});
+		Polygon weapon2= new Polygon(new float[]{216,188,0,0,0,0});
+		Polygon shield = new Polygon(new float[]{138,99,0,0,0,0});
 		Polygon generator = new Polygon(new float[]{
-				39,247,
-				108,241,
-				108,30,
-				39,30});
+				39,23,
+				108,29,
+				108,240,
+				39,240});
 		Polygon computer = new Polygon(new float[]{
-				182,132,
-				200,132,
-				216,110,
-				210,75,
-				180,75			
+				182,138,
+				200,138,
+				216,160,
+				210,195,
+				180,195			
 				});
 
 		niches[0].setup(weapon1);

@@ -16,7 +16,7 @@ public class CardIcon extends Bonkject{
 	public static ArrayList<CardIcon> icons= new ArrayList<CardIcon>();
 	private static int width=Gallery.blasterCard[0].get().getWidth();
 	private static int height=Gallery.blasterCard[0].get().getHeight();
-	private static Pair start=new Pair(89,646);
+	private static Pair start=new Pair(89,22);
 	private static int gap = 69;
 	CardGraphic cg;
 	Pic border;
@@ -55,7 +55,7 @@ public class CardIcon extends Bonkject{
 	public void mouseDown() {
 		System.out.println(mousedGraphic.position);
 		overrideAlpha=true;
-		mousedGraphic.setPosition(position.add(width/2-CardGraphic.width/2,-270));
+		mousedGraphic.setPosition(position.add(width/2-CardGraphic.width/2,start.y+16));
 		
 		mousedGraphic.stopFading();
 		mousedGraphic.alpha=1;

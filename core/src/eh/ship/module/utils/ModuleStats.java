@@ -22,12 +22,12 @@ public class ModuleStats extends Bonkject{
 	static int width=128;
 	Module mod;
 	public ModuleInfo info;
-	static Pair hpLoc=new Pair(14, 111);
+	static Pair hpLoc=new Pair(14, 9);
 	static Pair hpGap=new Pair(16,15);
 	static int row=6;
 
 	public ModuleStats(Module m) {
-		super(new BoxCollider(m.ship.player?0:Main.width-width, Main.height-height*m.getIndex()-height, width, height));
+		super(new BoxCollider(m.ship.player?0:Main.width-width, height*m.getIndex(), width, height));
 		mousectivate();
 		mod=m;
 		info=new ModuleInfo(m);
@@ -83,7 +83,7 @@ public class ModuleStats extends Bonkject{
 
 		if(mod.type==ModuleType.WEAPON){
 			batch.setColor(1, 1, 1, .5f);
-			Draw.drawTextureScaledCentered(batch, mod.modulePic.get(), collider.position.x+37, collider.position.y+29, 2f/3f,2f/3f);
+			Draw.drawTextureScaledCentered(batch, mod.modulePic.get(), collider.position.x+37, collider.position.y+110, 2f/3f,2f/3f);
 			batch.setColor(1, 1, 1, 1);
 			//Draw.drawTexture(batch, mod.modulePic.get(),collider.x+5,collider.y+5);
 		}
@@ -121,7 +121,7 @@ public class ModuleStats extends Bonkject{
 			}
 			if(mod.thresholds[0]==i+1||mod.thresholds[1]==i+1)index=1;
 			if(i==mod.maxHP-1)index=2;
-			Draw.drawTexture(batch, p[index].get(),collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y-hpGap.y*(i/row));
+			Draw.drawTexture(batch, p[index].get(),collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y+hpGap.y*(i/row));
 			if(moused){
 				Draw.drawTexture(batch, Gallery.mousedHP.get(), collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y-hpGap.y*(i/row));
 			}
@@ -134,12 +134,12 @@ public class ModuleStats extends Bonkject{
 			ext=Gallery.blueHP[3];
 		}
 		if(damage+unshieldable+incoming>mod.maxHP){
-			Draw.drawTexture(batch, ext.get(),collider.position.x+hpLoc.x+hpGap.x*(mod.maxHP%row),collider.position.y+hpLoc.y-hpGap.y*(mod.maxHP/row));
+			Draw.drawTexture(batch, ext.get(), collider.position.x+hpLoc.x+hpGap.x*(mod.maxHP%row),collider.position.y+hpLoc.y+hpGap.y*(mod.maxHP/row));
 			//Off the edge number//
 			if(ext==Gallery.orangeHP[3]){
 				Font.small.setColor(Colours.weaponCols8[6]);
 				String s=damage+unshieldable+incoming-shields-mod.maxHP+"";
-				Font.small.draw(batch, s, collider.position.x+hpLoc.x+hpGap.x*(mod.maxHP%row)+8, collider.position.y+hpLoc.y-hpGap.y*(mod.maxHP/row)+15);
+				Font.small.draw(batch, s, collider.position.x+hpLoc.x+hpGap.x*(mod.maxHP%row)+12-Font.small.getBounds(s).width/2,  collider.position.y+hpLoc.y+hpGap.y*(mod.maxHP/row)+4);
 			}
 		}
 
@@ -151,7 +151,7 @@ public class ModuleStats extends Bonkject{
 			if(mod.buffs.get(i).getPic()==null){
 				continue;
 			}
-			Draw.drawTexture(batch, mod.buffs.get(i).getPic().get(), collider.position.x+8+pos*gap, collider.position.y+49);
+			Draw.drawTexture(batch, mod.buffs.get(i).getPic().get(), collider.position.x+8+pos*gap, collider.position.y+70);
 			pos++;
 		}
 

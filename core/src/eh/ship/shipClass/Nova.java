@@ -29,7 +29,7 @@ public class Nova extends Ship{
 		
 		Polygon weapon1= new Polygon(new float[]{330,196,0,0,0,0});
 		Polygon weapon2= new Polygon(new float[]{330,76,0,0,0,0});
-		Polygon shield = new Polygon(new float[]{175,225,0,0,0,0});
+		Polygon shield = new Polygon(new float[]{175,45,0,0,0,0});
 		Polygon generator = new Polygon(new float[]{
 				78,182,
 				108,182,

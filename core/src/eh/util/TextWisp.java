@@ -54,7 +54,7 @@ public class TextWisp extends Bonkject{
 			return;
 		}
 		if(alpha>0){
-			position.y+=delta*speed;
+			position.y-=delta*speed;
 			alpha-=delta*fadeSpeed;
 		}
 		else{

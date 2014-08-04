@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -39,9 +40,9 @@ public class Map extends Screen{
 	public static float phaseSpeed=3;
 	public static MapAbility using;
 	static MapAbility abil;
-	
+
 	public static ArrayList<Hex> path= new ArrayList<Hex>();
-	
+
 	public Map(){
 		init();
 	}
@@ -50,7 +51,7 @@ public class Map extends Screen{
 		grid=Grid.MakeGrid();
 		Hex.init();
 		//player=new MapShip(new Nova(true), grid.getHex(50, 50));
-		player=new MapShip(new Nova(true), grid.getHex(60, 60));
+		player=new MapShip(new Nova(true), grid.getHex(0, 0));
 
 		Map.explosion=grid.getHex(45, 48);
 		MapAbility.init();
@@ -116,7 +117,7 @@ public class Map extends Screen{
 		updateState(delta);		
 		grid.update(delta);		
 		moveCam();
-		Hex h=grid.getHexUnderMouse(Gdx.input.getX(),Main.height-Gdx.input.getY());
+		Hex h=grid.getHexUnderMouse(Gdx.input.getX()-Main.width/2,Gdx.input.getY()-Main.height/2);
 		if(h!=null)h.mouse();
 	}
 
@@ -129,8 +130,12 @@ public class Map extends Screen{
 		case (Input.Keys.PERIOD):
 			zoom(1);
 		case Input.Keys.SPACE:
+			break;
+		case Input.Keys.LEFT:
 			
-		break;
+			Main.setCam(Main.getCam().add(-1, 0));
+			
+			break;
 		}
 	}
 
@@ -140,7 +145,7 @@ public class Map extends Screen{
 
 	@Override
 	public void mousePressed(Pair location, boolean left) {
-		Hex h=grid.getHexUnderMouse(location.x,location.y);
+		Hex h=grid.getHexUnderMouse(location.x-Main.width/2,location.y-Main.height/2);
 		if(h!=null){
 			if(left)h.click();
 			if(!left)h.rightClick();
@@ -157,7 +162,8 @@ public class Map extends Screen{
 		if(getState()==MapState.PlayerMoving){
 			bonus=player.distance;
 		}
-		Main.setCam(player.hex.getPixel().add(bonus).subtract(new Pair(Main.width/2,Main.height/2)));
+		//Main.setCam(new Pair(0,0));
+		//Main.setCam(player.hex.getPixel().add(bonus).add(new Pair(-500,-50)));
 	}
 
 	@Override
@@ -169,6 +175,7 @@ public class Map extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch) {
+
 		grid.render(batch);
 		batch.end();
 
@@ -180,9 +187,14 @@ public class Map extends Screen{
 		Main.shape.circle(explosion.getPixel().x,explosion.getPixel().y, (explosionSize+progress*(growthRate/2))*Hex.size);
 		Main.shape.end();
 
+		
+		
+		
 		//batch2 is for interface stuff//
+		batch2.setProjectionMatrix(Main.uiCam.combined);
 		batch2.begin();
 		batch2.draw(Gallery.mapslice.get(), 0, 0);
+		
 		Draw.drawTextureScaled(batch2, Gallery.mapsliceRight.get(), Main.width, Main.height	, -1, -1);
 		batch2.setColor(Colours.light);
 		Font.medium.draw(batch2, ""+getState(), Main.width-300, Main.height);

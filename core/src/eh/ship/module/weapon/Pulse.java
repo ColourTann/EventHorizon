@@ -8,7 +8,7 @@ import eh.card.CardCode.Special;
 public class Pulse extends Weapon{
 
 	public Pulse(){
-		super("Pulser",Gallery.pulse,8,0, new int[]{7,10,12});
+		super("Pulse",Gallery.pulse,8,0, new int[]{7,10,12});
 		for(int i=0;i<=variants;i++){
 			cardPic[i]=Gallery.pulseCard[i];
 		}

@@ -32,7 +32,7 @@ public class CycleButton extends Bonkject{
 	int cost=0;
 	Timer timer=new Timer(0, 0, 1, Interp.LINEAR);
 	public CycleButton(Collider col) {
-		super(new BoxCollider(160, 279, 45, 66));
+		super(new BoxCollider(160, 355, 45, 66));
 		alpha=0;
 		mousectivate();
 
@@ -123,10 +123,10 @@ public class CycleButton extends Bonkject{
 		batch.setColor(new Color(1,1,1,timer.getFloat()));
 		Draw.drawTexture(batch, Gallery.cycleButton.get(), position.x, position.y);
 		batch.setColor(new Color(1,1,1,1));
-		Draw.drawTexture(batch, Gallery.iconEnergy.get(), 168,284);
+		Draw.drawTexture(batch, Gallery.iconEnergy.get(), 168,402);
 		Font.medium.setColor(Colours.dark);
 		String s=cost+"";
-		Font.medium.draw(batch, s, 191-Font.medium.getBounds(s).width/2, 302);
+		Font.medium.draw(batch, s, 191-Font.medium.getBounds(s).width/2, 398);
 	}
 
 	@Override

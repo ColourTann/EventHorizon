@@ -19,8 +19,8 @@ public class HelpPanel extends Bonkject{
 		super(null);
 		text=s;
 		fadeIn(2, Interp.SQUARE);
-		if(high)y=550;
-		else y=415;
+		if(high)y=150;
+		else y=265;
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class HelpPanel extends Bonkject{
 		Texture t=Gallery.helpPanel.get();
 		Draw.drawTexture(batch, t,Main.width/2-t.getWidth()/2,y);
 		Font.medium.setColor(Colours.withAlpha(Colours.dark,alpha));
-		Font.medium.draw(batch, text, Main.width/2-Font.medium.getBounds(text).width/2, y+30);
+		Font.medium.draw(batch, text, Main.width/2-Font.medium.getBounds(text).width/2, y+9);
 		batch.setColor(1,1,1,1);
 	}
 	

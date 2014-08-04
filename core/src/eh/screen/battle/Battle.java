@@ -257,13 +257,10 @@ public class Battle extends Screen{
 
 
 	public void debugRender(SpriteBatch batch){
-		Draw.drawTexture(batch, Gallery.laser.get(), 500, 500);
-		Draw.drawTexture(batch, Gallery.laser.getMonochrome(), 500, 600);
-		Draw.drawTexture(batch, Gallery.blaster.getOutline(), 500, 700);
 	}
 
 
-	private void drawInterface(SpriteBatch batch){
+	private void drawInterfaceOverlay(SpriteBatch batch){
 		PhaseButton.get().render(batch);
 		CycleButton.get().render(batch);
 	}
@@ -307,6 +304,9 @@ public class Battle extends Screen{
 				if(c!=null)c.playerSelect();
 			}
 			break;
+		
+	
+
 
 
 
@@ -409,15 +409,15 @@ public class Battle extends Screen{
 	@Override
 	public void render(SpriteBatch batch) {
 
-		batch.getProjectionMatrix().setToOrtho2D((float)Math.sin(ticks*sinSpeed)*playerShakeIntensity, (float)Math.cos((ticks-2.5f)*sinSpeed)*playerShakeIntensity, Main.width, Main.height);
+	//	batch.getProjectionMatrix().setToOrtho2D((float)Math.sin(ticks*sinSpeed)*playerShakeIntensity, (float)Math.cos((ticks-2.5f)*sinSpeed)*playerShakeIntensity, Main.width, Main.height);
 
-		Draw.drawTexture(batch, Star.pixTex, 160, 280);
+		Draw.drawTexture(batch, Star.pixTex, 160, 70);
 		Draw.drawTexture(batch, Gallery.battleScreen.get(), 128, 0);
 
 		//Rendering ships, statblocks and misc interface//
 		player.renderAll(batch);
 		enemy.renderAll(batch);
-		drawInterface(batch);
+		drawInterfaceOverlay(batch);
 		
 		for(CardIcon icon:CardIcon.icons){
 			icon.render(batch);
@@ -449,9 +449,9 @@ public class Battle extends Screen{
 		if(getPhase()==Phase.End){
 			String s=victor.player?"You win!":"You lose.";
 			Font.big.setColor(Colours.light);
-			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 500);
+			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 200);
 			s="(esc to return)";
-			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 420);
+			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 240);
 		}
 		CardGraphic.renderOffCuts(batch);
 		//	debugRender(batch);

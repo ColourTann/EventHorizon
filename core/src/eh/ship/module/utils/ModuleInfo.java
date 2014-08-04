@@ -38,11 +38,11 @@ public class ModuleInfo extends Bonkject{
 		if(mod.type==ModuleType.WEAPON||mod.type==ModuleType.SHIELD){
 			for(int i=0;i<=3;i++){
 				CardGraphic cg=mod.getCard(i+1).getHalfGraphic(true);
-				cg.setPosition(new Pair(position.x+(i/2)*139, position.y+(i%2)*124));
+				cg.setPosition(new Pair(position.x+(i/2)*139, position.y+((i%2)+1)*124));
 				graphics.add(cg);
 			}
 			CardGraphic cg=mod.getCard(0).getHalfGraphic(false);
-			cg.setPosition(new Pair(position.x+139,position.y+124));
+			cg.setPosition(new Pair(position.x+139,0));
 			graphics.add(cg);
 		}
 		else{
@@ -52,7 +52,7 @@ public class ModuleInfo extends Bonkject{
 			cg.setPosition(new Pair(position.x+139, position.y));
 			graphics.add(cg);
 
-			CardGraphic cg1=mod.getCard(1).getHalfGraphic(false);
+			CardGraphic cg1=mod.getCard(1).getHalfGraphic(true);
 			cg1.setPosition(new Pair(position.x+139,position.y+CardGraphic.height/2));
 			graphics.add(cg1);
 		}
@@ -86,7 +86,7 @@ public class ModuleInfo extends Bonkject{
 
 
 	public void render(SpriteBatch batch) {
-		
+		if (alpha<=0)return;
 		batch.setColor(1,1,1,alpha);
 
 		Draw.drawTextureScaled(batch, Gallery.darkDot.get(), position.x, position.y, width, height);
@@ -101,19 +101,19 @@ public class ModuleInfo extends Bonkject{
 		
 		if(mod.type==ModuleType.GENERATOR){
 			s="Energy";
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+height+150);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+150);
 			s="Income:";
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+height+175);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+175);
 			s=""+mod.ship.getIncome();
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+height+200);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+200);
 		}
 		if(mod.type==ModuleType.COMPUTER){
 			s="Hand";
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+height+150);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+150);
 			s="Size:";
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+height+175);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+175);
 			s=""+((Computer)mod).maxCards;
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+height+200);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+200);
 		}
 		//Font.medium.drawWrapped(batch, s, 0, y+height, 500, HAlignment.CENTER);
 		//Font.medium.drawWrapped(batch, s, width/4, 20, 500, HAlignment.CENTER);

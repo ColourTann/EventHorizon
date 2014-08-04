@@ -15,10 +15,10 @@ public class Selector extends Screen{
 	public static Selector me;
 	ArrayList<GameChoice> choices= new ArrayList<GameChoice>();
 	public Selector(){
-		choices.add(new GameChoice(Main.width/2, 505, "tutorial", ScreenType.TutorialFight));
-		choices.add(new GameChoice(Main.width/2, 405, "easy", ScreenType.EasyFight));
-		choices.add(new GameChoice(Main.width/2, 305, "medium", ScreenType.MediumFight));
-		choices.add(new GameChoice(Main.width/2, 205, "hard", ScreenType.HardFight));
+		choices.add(new GameChoice(Main.width/2, 205, "tutorial", ScreenType.TutorialFight));
+		choices.add(new GameChoice(Main.width/2, 305, "easy", ScreenType.EasyFight));
+		choices.add(new GameChoice(Main.width/2, 405, "medium", ScreenType.MediumFight));
+		choices.add(new GameChoice(Main.width/2, 505, "hard", ScreenType.HardFight));
 	}
 	@Override
 	public void update(float delta) {

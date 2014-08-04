@@ -24,19 +24,19 @@ public class Eclipse extends Ship{
 
 	@Override
 	public void placeNiches() {
-		Polygon weapon1= new Polygon(new float[]{280,25,0,0,0,0});
-		Polygon weapon2= new Polygon(new float[]{335,216,0,0,0,0});
-		Polygon shield = new Polygon(new float[]{122,109,0,0,0,0});
+		Polygon weapon1= new Polygon(new float[]{280,245,0,0,0,0});
+		Polygon weapon2= new Polygon(new float[]{335,40,0,0,0,0});
+		Polygon shield = new Polygon(new float[]{122,161,0,0,0,0});
 		Polygon generator = new Polygon(new float[]{
-				120,153,
-				183,170,
-				176,205,
-				105,185});
+				120,117,
+				183,100,
+				176,65,
+				105,85});
 		Polygon computer = new Polygon(new float[]{
-				192,138,
-				220,120,
-				243,140,
-				228,175});
+				192,132,
+				220,150,
+				243,130,
+				228,95});
 
 		niches[0].setup(weapon1);
 		niches[1].setup(weapon2);

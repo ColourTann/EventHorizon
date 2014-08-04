@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 
+import eh.Main;
+
 public class PolygonCollider extends Collider{
 	public Polygon p;
 	
@@ -27,6 +29,7 @@ public class PolygonCollider extends Collider{
 	@Override
 	public void debugDraw() {
 		ShapeRenderer sr = new ShapeRenderer();
+		sr.setProjectionMatrix(Main.mainCam.combined);
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		sr.begin(ShapeType.Line);

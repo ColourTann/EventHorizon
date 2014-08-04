@@ -14,6 +14,7 @@ import eh.util.maths.Pair;
 public class ShipGraphic {
 	Ship ship;
 	public static Pair offset=new Pair(165, 90);
+	public static int height=270;
 	public ShipGraphic(Ship s){
 		ship=s;
 	}

@@ -28,7 +28,7 @@ public class Tutorial extends Bonkject{
 	static float width=300;
 	static float offset=6;
 	float x=Main.width/2-width/2;
-	float y=550;
+	float y=173;
 	float height;
 	String str;
 	Pair target;
@@ -54,7 +54,7 @@ public class Tutorial extends Bonkject{
 		height=Font.medium.getWrappedBounds(str, width-offset*2).height+9;
 		trig=t;
 		eff=e;
-		y+=height/2;
+		y-=height/2;
 	}
 
 	public Tutorial(String message, float x){
@@ -62,7 +62,7 @@ public class Tutorial extends Bonkject{
 		demousectivate();
 		this.str=message;
 		height=Font.medium.getWrappedBounds(str, width-offset*2).height+9;
-		y+=height/2;
+		y-=height/2;
 		this.x=x-width/2;
 	}
 
@@ -73,22 +73,22 @@ public class Tutorial extends Bonkject{
 		height=Font.medium.getWrappedBounds(str, width-offset*2).height+9;
 		this.target=point;
 		if(point.x<x){
-			origin=new Pair(x,y-height/2);
+			origin=new Pair(x,y+height/2);
 		}
 		else if(point.x>x+width){
-			origin=new Pair(x+width,y-height/2);
+			origin=new Pair(x+width,y+height/2);
 		}
 		else if(point.y<y){
 			origin=new Pair(x+width/2,y);
 		}
 		else{
-			origin=new Pair(x+width/2,y+height);
+			origin=new Pair(x+width/2,y+height/2);
 		}
 		vector=Pair.getVector(this.origin, target);
 		rotation=(float) Math.atan2(vector.y, vector.x);
 		distance=vector.getDistance();
 		vector=vector.normalise();
-		y+=height/2;
+		y-=height/2;
 	}
 
 
@@ -99,19 +99,17 @@ public class Tutorial extends Bonkject{
 			Draw.drawTextureRotatedScaled(batch, Gallery.tutPoint.get(), origin.x, origin.y, distance, 1, rotation);
 
 		}
-		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y, 3, 3);
-		Draw.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 3, height);
-		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-height, 3, -3);
+		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, 3, 3);
+		Draw.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y, 3, height);
+		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, 3, -3);
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
-		Font.medium.drawWrapped(batch, str, x+offset, y-2, width-offset*2, HAlignment.CENTER);
+		Font.medium.drawWrapped(batch, str, x+offset, y, width-offset*2, HAlignment.CENTER);
 		
 		if(special==1){
-			Draw.drawTexture(batch, Gallery.greenHP[1].get(), 752, 568);
-			Draw.drawTexture(batch, Gallery.greenHP[2].get(), 582, 550);
+			Draw.drawTexture(batch, Gallery.greenHP[1].get(), 752, 134);
+			Draw.drawTexture(batch, Gallery.greenHP[2].get(), 582, 152);
 		}
-		//756 515
-		//572 756
-		
+
 		batch.setColor(1,1,1,1);
 	}
 
@@ -141,22 +139,22 @@ public class Tutorial extends Bonkject{
 		enemy=Battle.enemy;
 		player=Battle.player;
 
-		add("This is your ship\n(click to continue)", new Pair(429,482));
-		add("It has two weapons,", new Pair(130,562));
-		add("a shield,", new Pair(130,342));
-		add("a generator", new Pair(130,206));
-		add("and a computer", new Pair(130,64));
+		add("This is your ship\n(click to continue)", new Pair(429,218));
+		add("It has two weapons,", new Pair(130,238));
+		add("a shield,", new Pair(130,358));
+		add("a generator", new Pair(130,494));
+		add("and a computer", new Pair(130,636));
 		add("They make up a deck of cards that you use to fight!");
 		add("The enemy ship is playing weapon cards to attack you! \n(click them to continue)", Trigger.PlayerShieldPhase, Effect.EnemyPlayCards);
-		add("These orange blips show that you have incoming damage on your generator", new Pair(43,260));
+		add("These orange blips show that you have incoming damage on your generator", new Pair(43,440));
 		add("Shield cards give you shield points to spend when you play them", Effect.AllowedToPlay);
-		add("This card gives two shield points", new Pair(Main.width/2, 249));
+		add("This card gives two shield points", new Pair(Main.width/2, 451));
 		add("", Trigger.CheckList, Effect.ShieldGenList);
 		add("", Trigger.PlayerWeaponPhase);
 		add("Now it's your turn to fight back", Effect.FirstWeaponDraw);
-		add("Cards have an energy cost", new Pair(305,216));
-		add("And some cards have a cooldown, which means you must wait before playing another card from this module",new Pair(409,216));
-		add("Weapon and shield cards have bars which show how much damage or shielding they provide", new Pair(358,179));
+		add("Cards have an energy cost", new Pair(305,484));
+		add("And some cards have a cooldown, which means you must wait before playing another card from this module",new Pair(409,484));
+		add("Weapon and shield cards have bars which show how much damage or shielding they provide", new Pair(358,521));
 		add("", Trigger.CheckList, Effect.PlayWeaponList);
 		add("", Trigger.PlayerShieldPhase);
 		add("If you take enough damage to cover a [   ] or a [   ], you take a major damage and something bad happens!", 1);
@@ -177,7 +175,7 @@ public class Tutorial extends Bonkject{
 		add("", Trigger.CheckList, Effect.UnscrambleList);
 		add("", Trigger.PlayerShieldPhase);
 		add("At the beginning of each turn, you draw to your maximum hand size");
-		add("And gain your income in energy",new Pair(320,296));
+		add("And gain your income in energy",new Pair(320,404));
 		add("You're good to go! If there's anything else you don't understand, press tab");
 		add("", Effect.End);
 		for(Tutorial p:tutorials){
@@ -385,9 +383,9 @@ public class Tutorial extends Bonkject{
 		return !overrideStopCycle;
 	}
 	public static void makeThree(){
-		three.add(new Tutorial("The cycle button is for getting rid of cards you don't want to get ones you need. It costs more and more energy each time you use it", new Pair(197,335)));
-		three.add(new Tutorial("Absorb: [effect]- if the shield is used, you gain the effect", Main.width/5f));
-		three.add(new Tutorial("Augment [cardtype]: [effect]- you play this to add the effect to another card of the right cardtype",Main.width/5f*4f));
+		three.add(new Tutorial("The cycle button is for getting rid of cards you don't want to get ones you need. It costs more and more energy each time you use it", new Pair(197,365)));
+		three.add(new Tutorial("Absorb: [effect] means if the shield is used, you gain the effect", Main.width/5f));
+		three.add(new Tutorial("Augment [cardtype]: [effect] means you play this to add the effect to another card of the right cardtype",Main.width/5f*4f));
 	}
 
 	public static void renderAll(SpriteBatch batch) {
@@ -395,6 +393,10 @@ public class Tutorial extends Bonkject{
 		
 		if(tutorials.size()>0){
 			tutorials.get(0).render(batch);
+		}
+		
+		for(Tutorial t:three){
+			t.render(batch);
 		}
 	}
 }

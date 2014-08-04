@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+import eh.Main;
+
 
 public class CircleCollider extends Collider{
 	float r;
@@ -25,6 +27,7 @@ public class CircleCollider extends Collider{
 	@Override
 	public void debugDraw() {
 		ShapeRenderer sr = new ShapeRenderer();
+		sr.setProjectionMatrix(Main.mainCam.combined);
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		sr.begin(ShapeType.Filled);

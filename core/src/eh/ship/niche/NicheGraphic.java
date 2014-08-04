@@ -47,7 +47,7 @@ public class NicheGraphic extends Bonkject{
 			Draw.drawTextureScaledFlipped(batch, niche.mod.modulePic.getGlow(), niche.location.x, niche.location.y, 1, 1, !niche.mod.ship.player, false);
 		}
 		batch.setColor(1,1,1,1);
-	}
+		}
 
 	public String toString(){
 		return "Graphic of "+niche;

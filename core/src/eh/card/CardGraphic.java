@@ -1,9 +1,5 @@
 package eh.card;
 
-import java.util.ArrayList;
-
-import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -34,8 +30,8 @@ public class CardGraphic extends Bonkject {
 	// POSITIONS//
 	public static float width = 140;
 	public static float height = 250;
-	public static Pair enemyPlayStartPosition = new Pair(Main.width, 350);
-	public static Pair enemyPlayToPosition = new Pair(850, 350);
+	public static Pair enemyPlayStartPosition = new Pair(Main.width, 150);
+	public static Pair enemyPlayToPosition = new Pair(850, 150);
 	public static float maxSelectedHeight = -26;
 	public static float fadeSpeed = 2.5f;
 	public static Interp fadeType = Interp.LINEAR;
@@ -51,7 +47,7 @@ public class CardGraphic extends Bonkject {
 	private static Pair positionEffectStart = new Pair(5, 65);
 	private static Pair positionEffectMid = new Pair(9, 67);
 	private static Pair positionEffectEnd = new Pair(110, 65);
-	private static Pair positionAugment = new Pair(Main.width / 2 - width / 2, 126);
+	private static Pair positionAugment = new Pair(Main.width / 2 - width / 2, 334);
 	private static float cooldownWidth = Gallery.iconCooldown.get().getWidth() * 3;
 	private static float cooldownGap = cooldownWidth + 6;
 	private static float effectGap = 17;
@@ -77,7 +73,7 @@ public class CardGraphic extends Bonkject {
 
 	public CardGraphic(Card c) {
 		super(new BoxCollider(0, 0, width, height));
-		position=new Pair(Main.width/2 - width/2, -height -10);
+		position=new Pair(Main.width/2 - width/2, Main.height+height+10);
 		this.card = c;
 	}
 
@@ -104,7 +100,7 @@ public class CardGraphic extends Bonkject {
 
 	public void finishFlipping(){
 		for(int i=0;i<2;i++){
-			sidePositions[i] = card.side == i ? height / 2f : 0;
+			sidePositions[i] =  card.side == i ?0:  height / 2f ;
 		}
 	}
 
@@ -126,8 +122,6 @@ public class CardGraphic extends Bonkject {
 		//Updating collider position//
 		collider.position=position.copy().add(0,selectedHeight);
 
-		//Compensating the collider position// (I could have the card shown in the lower part and move it there if it's wrong but I think this is simpler//
-		if(!showLower){collider.position.y+=height/2;}
 	}
 
 	public void render(SpriteBatch batch) {

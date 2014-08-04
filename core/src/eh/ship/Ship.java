@@ -582,7 +582,7 @@ public abstract class Ship {
 		if(shieldPoints.size()>0){
 			for(Module m:modules){
 				if(m.getShieldableIncoming()>0){
-					new TextWisp("Spend all your shields first!", new Pair(Main.width/2,400));
+					new TextWisp("Spend all your shields first!", new Pair(Main.width/2,300));
 					return true;
 				}
 			}

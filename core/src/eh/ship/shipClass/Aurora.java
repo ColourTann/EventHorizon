@@ -21,22 +21,22 @@ public class Aurora extends Ship{
 
 	@Override
 	public void placeNiches() {
-		Polygon weapon1= new Polygon(new float[]{306,157,0,0,0,0});
-		Polygon weapon2= new Polygon(new float[]{260,214,0,0,0,0});
-		Polygon shield = new Polygon(new float[]{280,80,0,0,0,0});
+		Polygon weapon1= new Polygon(new float[]{306,113,0,0,0,0});
+		Polygon weapon2= new Polygon(new float[]{260,56,0,0,0,0});
+		Polygon shield = new Polygon(new float[]{280,190,0,0,0,0});
 		Polygon generator = new Polygon(new float[]{
-				187,152,
-				227,139,
-				237,117,
-				205,117,
-				183,139,
+				187,118,
+				227,131,
+				237,153,
+				205,153,
+				183,131,
 				});
 		Polygon computer = new Polygon(new float[]{
-				8,255,
-				69,214,
-				68,204,
-				32,212,
-				0,240
+				8,18,
+				69,56,
+				68,66,
+				32,58,
+				0,20
 				});
 		
 		niches[0].setup(weapon1);

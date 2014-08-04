@@ -33,17 +33,17 @@ public class PhaseButton extends Bonkject{
 	Timer t;
 	public PhaseButton(Collider col) {
 		super(new PolygonCollider(new Polygon(new float[]{
-				Main.width/2-width/2,284,
-				Main.width/2+width/2,284,
-				Main.width/2+width/2,344,
-				Main.width/2-width/2,344,
+				Main.width/2-width/2,416,
+				Main.width/2+width/2,416,
+				Main.width/2+width/2,356,
+				Main.width/2-width/2,356,
 		})));
 		mousectivate();
 
 		PolygonCollider pc=(PolygonCollider) collider;
 		position=new Pair(pc.p.getBoundingRectangle().x,pc.p.getBoundingRectangle().y);
-		unClickedHeight=position.copy();
-		clickedHeight=position.add(0,26);
+		unClickedHeight=position.add(0,-2);
+		clickedHeight=position.add(0,-29);
 		t=new Timer(unClickedHeight, unClickedHeight, 10, Interp.LINEAR);
 	}
 
@@ -77,7 +77,7 @@ public class PhaseButton extends Bonkject{
 		}
 		
 		batch.setColor(c);
-		Draw.drawTexture(batch, Gallery.endTurnBottom.get(),605,277);
+		Draw.drawTexture(batch, Gallery.endTurnBottom.get(),605,353);
 		Draw.drawTexture(batch, before.get(),t.getPair().x,t.getPair().y);
 		
 		batch.setColor(Colours.withAlpha(c,phaseChangeAlpha));

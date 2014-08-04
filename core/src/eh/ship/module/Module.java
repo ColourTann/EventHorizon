@@ -201,14 +201,14 @@ public abstract class Module {
 			destroy();
 			return;
 		}
-		new TextWisp("Scrambled", getCenter().add(new Pair(0,20))); 
+		new TextWisp("Scrambled", getCenter().add(new Pair(0,-40))); 
 		scramble();
 	}
 
 	private void destroy(){
 
 		destroyed=true;
-		new TextWisp("Destroyed", getCenter().add(new Pair(0,20)));
+		new TextWisp("Destroyed", getCenter().add(new Pair(0,-40)));
 		for(int i=0;i<ship.hand.size();i++){
 			Card c=ship.hand.get(i);
 			if(c.mod==this){

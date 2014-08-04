@@ -151,6 +151,7 @@ public class Hex {
 	}
 
 	public void click(){
+		System.out.println(this);
 		if(getDistance(Map.player.hex)>Grid.viewDist)return;
 		if(Map.using!=null){
 			Map.using.pickHex(this);
