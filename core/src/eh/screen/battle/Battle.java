@@ -61,8 +61,7 @@ public class Battle extends Screen{
 	public static float enemyShakeIntensity;
 	public static float sinSpeed=60;
 	public static float playerScreenShakeDrag=60;
-	public static float enemyScreenShakeDrag=19;
-	float intensity=0;
+	public static float enemyScreenShakeDrag=15;
 	public static boolean tutorial=false;
 	private ArrayList<CardGraphic> enemyHandList=new ArrayList<CardGraphic>();
 
@@ -141,7 +140,7 @@ public class Battle extends Screen{
 
 	public static void debug(){
 
-		
+
 
 		/*player.analyseDeck();
 		enemy.analyseDeck();*/
@@ -304,9 +303,11 @@ public class Battle extends Screen{
 				if(c!=null)c.playerSelect();
 			}
 			break;
-		
-	
 
+
+		case Input.Keys.S:
+			shake(false, true);
+			break;
 
 
 
@@ -409,7 +410,7 @@ public class Battle extends Screen{
 	@Override
 	public void render(SpriteBatch batch) {
 
-	//	batch.getProjectionMatrix().setToOrtho2D((float)Math.sin(ticks*sinSpeed)*playerShakeIntensity, (float)Math.cos((ticks-2.5f)*sinSpeed)*playerShakeIntensity, Main.width, Main.height);
+		Main.setCam(new Pair((float)Math.sin(ticks*sinSpeed)*playerShakeIntensity+Main.width/2, (float)Math.cos((ticks-2.5f)*sinSpeed)*playerShakeIntensity+Main.height/2));
 
 		Draw.drawTexture(batch, Star.pixTex, 160, 70);
 		Draw.drawTexture(batch, Gallery.battleScreen.get(), 128, 0);
@@ -418,28 +419,26 @@ public class Battle extends Screen{
 		player.renderAll(batch);
 		enemy.renderAll(batch);
 		drawInterfaceOverlay(batch);
-		
+
 		for(CardIcon icon:CardIcon.icons){
 			icon.render(batch);
 		}
-		
+
 		for(Module m:player.modules){
 			m.getStats().render(batch);
 		}
 		for(Module m:enemy.modules){
 			m.getStats().render(batch);
 		}
-		
+
 		for(Card c:player.hand){
 			c.getGraphic().render(batch);
 		}
-		
-		
+
+
 		CycleButton.get().render(batch);
 		if(help!=null)help.render(batch);
-		
-		
-		
+
 		//debug phase text
 		if(Main.debug){
 			Font.medium.setColor(Colours.grey);
@@ -457,7 +456,7 @@ public class Battle extends Screen{
 		//	debugRender(batch);
 
 	}
-	
+
 	@Override
 	public void postRender(SpriteBatch batch) {
 		Tutorial.renderAll(batch);

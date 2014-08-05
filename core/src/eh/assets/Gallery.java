@@ -102,7 +102,14 @@ public class Gallery {
 	public static Pic star=new Pic("Map/star");
 	
 	//Map Abilities//
+	//Gen//
 	public static Pic mapAbilityTeleport=new Pic("Map/Abilities/teleport");
+	public static Pic mapAbilityDoubleMove=new Pic("Map/Abilities/doublemove");
+	public static Pic mapAbilityDiagonalMove=new Pic("Map/Abilities/diagonalmove");
+	//Com//
+	public static Pic mapAbilityForceField=new Pic("Map/Abilities/forcefield");
+	public static Pic mapAbilityTractorBeam=new Pic("Map/Abilities/tractor");
+	public static Pic mapAbilityCloak=new Pic("Map/Abilities/cloak");
 	
 	//PARTICLE STUFF//
 	public static Pic circle32=new Pic("Particle/circle32");

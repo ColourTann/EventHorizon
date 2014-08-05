@@ -47,7 +47,7 @@ public class MapShip {
 		if(ship.player)h.highlight=false;
 		source = hex.getPixel();
 		destination = h.getPixel();
-		timer = new Timer(0, 1, 1/Map.phaseSpeed, Interp.LINEAR);
+		timer = new Timer(1, 0, Map.phaseSpeed, Interp.SQUARE);
 		rotation = source.getAngle(destination);
 		if (hex.mapShip == this)hex.mapShip = null;
 		h.addShip(this);
@@ -73,7 +73,7 @@ public class MapShip {
 		}
 		if (destination != null) {
 			distance = source.subtract(destination);
-			distance = distance.multiply((timer.getFloat()/(1/Map.phaseSpeed))*(timer.getFloat()/(1/Map.phaseSpeed)));
+			distance = distance.multiply(timer.getFloat());
 		}			
 	}
 
@@ -98,9 +98,9 @@ public class MapShip {
 
 	public Hex decideBest(){
 		Hex best=hex;
-		float value=-9999;
+		float value=hex.howGood(this)-.1f;
 		for(Hex h:hex.getHexesWithin(1, false)){
-			if(h!=hex&&h.isBlocked())continue;
+			if(h!=hex&&h.isBlocked(false))continue;
 			float hexVal=h.howGood(this);
 			if(hexVal>value){
 				best=h;
@@ -111,7 +111,7 @@ public class MapShip {
 	}
 		
 	public void playerStartTurn() {
-		
+		Map.explosionSize+=Map.growthRate/2;
 		if (path != null && path.size() > 0) {
 			Map.setState(MapState.PlayerMoving);
 			moveTo(path.remove(path.size()-1));
@@ -120,6 +120,7 @@ public class MapShip {
 	}
 
 	public void resetPath() {
+		if(path==null)return;
 		for(Hex h:path){
 			h.highlight=false;
 		}

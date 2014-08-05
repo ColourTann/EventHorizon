@@ -48,7 +48,6 @@ public class Tutorial extends Bonkject{
 	public static ArrayList<Tutorial> three= new ArrayList<Tutorial>();
 	int special=0;
 	public Tutorial(String message, Trigger t, Effect e) {
-		super(null);
 		demousectivate();
 		this.str=message;
 		height=Font.medium.getWrappedBounds(str, width-offset*2).height+9;
@@ -58,7 +57,6 @@ public class Tutorial extends Bonkject{
 	}
 
 	public Tutorial(String message, float x){
-		super(null);
 		demousectivate();
 		this.str=message;
 		height=Font.medium.getWrappedBounds(str, width-offset*2).height+9;
@@ -67,7 +65,6 @@ public class Tutorial extends Bonkject{
 	}
 
 	public Tutorial(String message, Pair point) {
-		super(null);
 		demousectivate();
 		this.str=message;
 		height=Font.medium.getWrappedBounds(str, width-offset*2).height+9;
@@ -179,7 +176,7 @@ public class Tutorial extends Bonkject{
 		add("You're good to go! If there's anything else you don't understand, press tab");
 		add("", Effect.End);
 		for(Tutorial p:tutorials){
-			p.deTick();
+			p.debonktivate();
 		}
 		tutorials.get(0).bonktivate();
 	}

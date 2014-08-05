@@ -51,7 +51,7 @@ public class Main extends ApplicationAdapter  {
 
 	public static OrthographicCamera mainCam;
 	
-	private static Pair cam=new Pair(0,0);
+
 
 	//ANIMATING//
 	float ticks;
@@ -118,7 +118,9 @@ public class Main extends ApplicationAdapter  {
 		Draw.drawTextureScaled(batch, Gallery.darkDot.get(), 0, 0, width, height);
 		
 		if(debug){
-		
+			batch.end();
+			batch.setProjectionMatrix(uiCam.combined);
+			batch.begin();
 			Font.small.setColor(Colours.white);
 			Font.small.draw(batch, "FPS: "+(int)(1/delta), 0, 0);
 		}
@@ -181,12 +183,10 @@ public class Main extends ApplicationAdapter  {
 	}
 
 	public static Pair getCam(){
-		return cam;
+		return new Pair(mainCam.position.x,mainCam.position.y);
 	}
 
 	public static void setCam(Pair cam){
-		Main.cam=cam.floor();
-		//mainCam.translate(-1, 0);
 		mainCam.position.set(cam.x, cam.y, 0);
 	}
 

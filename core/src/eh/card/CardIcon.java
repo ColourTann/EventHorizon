@@ -24,7 +24,7 @@ public class CardIcon extends Bonkject{
 	public CardGraphic mousedGraphic;
 
 	public CardIcon(Card c) {
-		super(new BoxCollider(5, 5,	width,height));
+	
 		this.cg=c.getGraphic();
 		
 		position=new Pair(cg.position.x+CardGraphic.positionPic.x,
@@ -33,7 +33,7 @@ public class CardIcon extends Bonkject{
 		
 		mousedGraphic=new CardGraphic(cg.card, position.x+width/2-CardGraphic.width/2,position.y-270);
 		mousedGraphic.alpha=0;
-		mousectivate();
+		mousectivate(new BoxCollider(5, 5,	width,height));
 	}
 
 	//Add icon to list and shuffle it all lovelily//

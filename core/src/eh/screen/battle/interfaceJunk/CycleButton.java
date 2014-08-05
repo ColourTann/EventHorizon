@@ -32,9 +32,8 @@ public class CycleButton extends Bonkject{
 	int cost=0;
 	Timer timer=new Timer(0, 0, 1, Interp.LINEAR);
 	public CycleButton(Collider col) {
-		super(new BoxCollider(160, 355, 45, 66));
 		alpha=0;
-		mousectivate();
+		mousectivate(new BoxCollider(160, 355, 45, 66));
 
 		BoxCollider b=(BoxCollider) collider;
 		position=b.position.copy();
@@ -97,7 +96,7 @@ public class CycleButton extends Bonkject{
 		for(int i=0;i<choices.size();i++){
 			CardGraphic cg=choices.get(i).getGraphic();
 			cg.override=true;
-			cg.mousectivate();
+			cg.mousectivate(new BoxCollider(0,0,0,0));
 			cg.setPosition(new Pair(start.x+gap*i,start.y));
 			cg.alpha=0;
 			cg.fadeIn(3, Interp.SQUARE);

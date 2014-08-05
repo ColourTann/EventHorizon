@@ -18,6 +18,8 @@ import eh.ship.Ship;
 import eh.ship.mapThings.MapShip;
 import eh.util.Colours;
 import eh.util.Draw;
+import eh.util.Timer;
+import eh.util.Timer.Interp;
 import eh.util.maths.Pair;
 
 public class Hex {
@@ -40,16 +42,18 @@ public class Hex {
 	public boolean moused; 
 	public static Hex mousedHex;
 
-	int x;
-	int y;
+	public int x;
+	public int y;
 
 	public MapShip mapShip;
+	public int forceField;
 	private boolean blocked;
-
+	float ticks=0;
 	//Pathfinding stuff//
 	Hex parent;
 	float idealDist=-1;
 	float moves=-1;
+	Timer mapAbilityFadeTimer;
 
 
 	public static void init(){
@@ -114,33 +118,28 @@ public class Hex {
 		return (float) (Math.sqrt(distance.x*distance.x+distance.y*distance.y))/Hex.size;
 	}
 	public void mouse() {
-		if(getDistance(Map.player.hex)>grid.viewDist){
+		if(getDistance(Map.player.hex)>Grid.viewDist){
 			mousedHex.unMouse();
 			return;
 		}
 		if(moused)return;
-		
-
 		moused=true;
-		
-		
-
 		mousedHex.unMouse();
 		mousedHex=this;
 		if(Map.getState()==MapState.PlayerTurn){
-		ArrayList<Hex> path=Map.player.hex.pathFind(this);
-		Map.path=path;
-		if(path!=null){
-			for (Hex h: path){
-				h.highlight=true;
+			ArrayList<Hex> path=Map.player.hex.pathFind(this);
+			Map.path=path;
+			if(path!=null){
+				for (Hex h: path){
+					h.highlight=true;
+				}
 			}
-		}
 		}
 
 	}
 
 	private void unMouse() {
-		
+
 		moused=false;
 		if(Map.getState()!=MapState.PlayerTurn)return;
 		if(Map.path!=null){
@@ -151,7 +150,7 @@ public class Hex {
 	}
 
 	public void click(){
-		System.out.println(this);
+
 		if(getDistance(Map.player.hex)>Grid.viewDist)return;
 		if(Map.using!=null){
 			Map.using.pickHex(this);
@@ -195,9 +194,14 @@ public class Hex {
 		return true;
 	}
 	public void update(float delta){
+		ticks+=delta ;
 		if(mapShip!=null){
 			mapShip.update(delta);
 		}
+	}
+
+	public void hexTurn(){
+		forceField--;
 	}
 
 	public void makeMapShip(){
@@ -206,8 +210,8 @@ public class Hex {
 	}
 
 	public ArrayList<Hex> pathFind(Hex target){
-		
-		if(target.isBlocked()||this==target)return null;
+
+		if(target.isBlocked(false)||this==target)return null;
 
 		ArrayList<Hex> open=new ArrayList<Hex>();
 		ArrayList<Hex> closed=new ArrayList<Hex>();
@@ -235,7 +239,7 @@ public class Hex {
 			closed.add(check);
 			for(Hex h:check.getHexesWithin(1, false)){
 
-				if(h.isBlocked())continue;
+				if(h.isBlocked(false))continue;
 
 				if(closed.contains(h)||open.contains(h)){
 					if(check.moves+1<=h.moves){
@@ -269,13 +273,13 @@ public class Hex {
 					h.parent=null;
 					closed.clear();
 					open.clear();
-					
+
 					return result;
 				}
 				h.idealDist=h.getDistance(target);
 				h.parent=check;
 				h.moves=check.moves+1f;
-				
+
 				open.add(h);
 			}			
 		}
@@ -296,7 +300,7 @@ public class Hex {
 		return(getLineDistance(Map.explosion)<Map.explosionSize+.5f);
 	}
 
-	
+
 
 	public float howGood(MapShip ship){
 		float result=0;
@@ -346,13 +350,27 @@ public class Hex {
 		return result;
 	}
 
+	public void mapAbilityChoiceFadein(){
+		mapAbilityFadeTimer=new Timer(0, 1, 2, Interp.SQUARE);
+	}
+
+	public void mapAbilityChoiceFadeout(){
+		mapAbilityFadeTimer=new Timer(mapAbilityFadeTimer.getFloat(), 0, 2, Interp.SQUARE);
+	}
+
+
+
 	public void renderFilled(ShapeRenderer shape){
 		shape.setColor(Colours.dark);
-		if(Map.using!=null){
-			if(Map.using.isValidChoice(Map.player.hex, this))shape.setColor(Colours.blueWeaponCols4[2]);
+
+		if(mapAbilityFadeTimer!=null&&mapAbilityFadeTimer.getFloat()>0){
+			shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[2],mapAbilityFadeTimer.getFloat()));
 		}
+		//if(Map.using.isValidChoice(Map.player.hex, this))shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[2],ticks%1));
+
 		if(highlight)shape.setColor(Colours.blueWeaponCols4[2]);
 		if(moused)shape.setColor(Colours.light);	
+		if(forceField>0)shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[0], forceField/3f));
 		/*if(closed.contains(this))shape.setColor(1, 0, 0, 1);
 		if(open.contains(this))shape.setColor(0, 1, 0, 1);*/
 		if(isSwallowed())shape.setColor(Colours.redWeaponCols4[0]);
@@ -363,7 +381,7 @@ public class Hex {
 		shape.triangle(s.x+points[8], s.y+points[9], s.x+points[10], s.y+points[11], s.x+points[0], s.y+points[1]);
 		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[4], s.y+points[5], s.x+points[8], s.y+points[9]);
 	}
-	
+
 	public void renderBorder(ShapeRenderer shape) {
 		Pair s=getPixel();
 		p.setPosition(s.x, s.y);
@@ -384,8 +402,9 @@ public class Hex {
 		Font.small.draw(batch, this.toString(), getPixel().x-Font.small.getBounds(s).width/2, getPixel().y-Font.small.getBounds(s).height/2);
 	}
 
-	public boolean isBlocked(){
-		//if(mapShip!=null)return true;
+	public boolean isBlocked(boolean shipsBlock){
+		if(shipsBlock&&mapShip!=null)return true;
+		if(forceField>0)return true;
 		return blocked;
 	}
 
@@ -397,7 +416,7 @@ public class Hex {
 		ArrayList<Hex> hexes=getHexesWithin(1, false);
 		Draw.shuffle(hexes);
 		for(Hex h:hexes){
-			if(!h.isBlocked())return h;
+			if(!h.isBlocked(false))return h;
 		}
 		return this;
 	}

@@ -72,14 +72,13 @@ public class CardGraphic extends Bonkject {
 	private static CardGraphic augmentPicker;
 
 	public CardGraphic(Card c) {
-		super(new BoxCollider(0, 0, width, height));
 		position=new Pair(Main.width/2 - width/2, Main.height+height+10);
 		this.card = c;
+		mousectivate(new BoxCollider(0, 0, width, height));
 	}
 
 	// HALF CARD CONSTRUCTOR//
 	public CardGraphic(Card staticHalfCard, float x, float y) {
-		super(null);
 		this.card = staticHalfCard;
 		still = true;
 		showLower=false;				//Static half cards have no collider and can't be moused//
@@ -188,6 +187,7 @@ public class CardGraphic extends Bonkject {
 		}
 		Font.small.setColor(Colours.white);
 		batch.setColor(Colours.white);
+
 	}
 
 	public void renderHalf(int part, SpriteBatch batch, Color c) {

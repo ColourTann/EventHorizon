@@ -20,8 +20,6 @@ public class Checklist extends Bonkject{
 	static float offset=8;
 	boolean drawDam;
 	public Checklist(Task[] tasks) {
-		super(null);
-		demousectivate();
 		this.tasks=tasks;
 		for(Task t:tasks){
 			height+=Font.medium.getWrappedBounds(t.s+"\n\n",width-offset*2).height;

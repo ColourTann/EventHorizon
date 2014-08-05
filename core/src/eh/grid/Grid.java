@@ -20,7 +20,7 @@ public class Grid {
 	public static int size=400;
 
 	private Hex[][] hexes;
-	ArrayList<Hex> drawableHexes;
+	public ArrayList<Hex> drawableHexes;
 	public static int viewDist;
 	public static int activeDist=10;
 	
@@ -116,6 +116,10 @@ public class Grid {
 		}
 	}
 
+	public void gridTurn(){
+		for(Hex h:drawableHexes)h.hexTurn();
+	}
+	
 	public void shapeRender(ShapeRenderer shape){
 		shape.begin(ShapeType.Filled);
 		shape.setColor(0, 0, 0, 1);
@@ -133,7 +137,7 @@ public class Grid {
 		if(drawableHexes==null)return;
 		for(Hex h:drawableHexes)	h.renderBackGround(batch);
 		for(Hex h:drawableHexes)	h.renderContents(batch);
-		for(Hex h:drawableHexes) h.renderLocation(batch);
+		//for(Hex h:drawableHexes) h.renderLocation(batch);
 	}
 
 

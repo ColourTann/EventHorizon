@@ -28,7 +28,6 @@ public class ModuleInfo extends Bonkject{
 	public ArrayList<CardGraphic> graphics = new ArrayList<CardGraphic>();
 	public static ModuleInfo top;
 	public ModuleInfo(Module m) {
-		super(null);
 		
 		mod=m;
 		

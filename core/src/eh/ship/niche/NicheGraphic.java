@@ -1,14 +1,10 @@
 package eh.ship.niche;
 
-import sun.net.www.content.text.plain;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 import eh.screen.battle.Battle;
-import eh.ship.module.Module.ModuleType;
-import eh.ship.module.weapon.attack.particle.Smoke;
 import eh.ship.module.weapon.attack.particle.SmokeMachine;
 import eh.ship.module.weapon.attack.particle.Smoke.SmokeType;
 import eh.util.Bonkject;
@@ -23,9 +19,8 @@ public class NicheGraphic extends Bonkject{
 	float ticks;
 	float area;
 	public NicheGraphic(Niche n) {
-		super(new PolygonCollider(n.p));
-		deTick();
-		mousectivate();
+		debonktivate();
+		mousectivate(new PolygonCollider(n.p));
 		niche=n;
 		area=n.p.getBoundingRectangle().width*n.p.getBoundingRectangle().height;
 	}
@@ -40,10 +35,16 @@ public class NicheGraphic extends Bonkject{
 		if(niche.mod.currentThreshold==3){
 			t=niche.mod.modulePic.getMonochrome();
 		}
-
-		Draw.drawTextureScaledFlipped(batch, t, niche.location.x, niche.location.y,1, 1, !niche.mod.ship.player, false);
+		
+		Pair bonus=new Pair();
+		if(!niche.ship.player){
+			bonus=new Pair((float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, (float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity);
+		}
+		
+		Draw.drawTextureScaledFlipped(batch, t, niche.location.x+bonus.x, niche.location.y+bonus.y, 1, 1, !niche.mod.ship.player, false);
 		if(intensity>0){
 			batch.setColor(1,1,1,intensity);
+			
 			Draw.drawTextureScaledFlipped(batch, niche.mod.modulePic.getGlow(), niche.location.x, niche.location.y, 1, 1, !niche.mod.ship.player, false);
 		}
 		batch.setColor(1,1,1,1);

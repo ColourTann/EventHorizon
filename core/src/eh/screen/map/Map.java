@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -20,6 +17,11 @@ import eh.grid.hex.Hex;
 import eh.screen.Screen;
 import eh.ship.mapThings.MapShip;
 import eh.ship.mapThings.mapAbility.MapAbility;
+import eh.ship.mapThings.mapAbility.comAbility.ForceField;
+import eh.ship.mapThings.mapAbility.comAbility.TractorBeam;
+import eh.ship.mapThings.mapAbility.genAbility.DiagonalMove;
+import eh.ship.mapThings.mapAbility.genAbility.DoubleMove;
+import eh.ship.mapThings.mapAbility.genAbility.Teleport;
 import eh.ship.shipClass.*;
 import eh.util.Colours;
 import eh.util.Draw;
@@ -39,7 +41,6 @@ public class Map extends Screen{
 	public static float progress=0;
 	public static float phaseSpeed=3;
 	public static MapAbility using;
-	static MapAbility abil;
 
 	public static ArrayList<Hex> path= new ArrayList<Hex>();
 
@@ -48,15 +49,26 @@ public class Map extends Screen{
 	}
 
 	public static void init(){
-		grid=Grid.MakeGrid();
+		Main.setCam(new Pair(0,0));
 		Hex.init();
-		//player=new MapShip(new Nova(true), grid.getHex(50, 50));
-		player=new MapShip(new Nova(true), grid.getHex(0, 0));
-
-		Map.explosion=grid.getHex(45, 48);
 		MapAbility.init();
-
-		abil=new MapAbility(new Pair(5+MapAbility.width/2,Main.height-MapAbility.height/2-5));
+		
+		grid=Grid.MakeGrid();
+		player=new MapShip(new Nova(true), grid.getHex(55, 50));
+		Map.explosion=grid.getHex(45, 48);
+		
+		
+		player.ship.addMapAbility(new Teleport());
+		player.ship.addMapAbility(new DoubleMove());
+		player.ship.addMapAbility(new DiagonalMove());
+		player.ship.addMapAbility(new ForceField());
+		player.ship.addMapAbility(new TractorBeam());
+		
+		for(int i=0;i<player.ship.getMapAbilities().size();i++){
+			MapAbility a=player.ship.getMapAbilities().get(i);
+			a.showAt(new Pair(5+MapAbility.width/2, 5+MapAbility.height/2+i*MapAbility.gap));
+		
+		}
 	}
 
 
@@ -64,6 +76,11 @@ public class Map extends Screen{
 		return state;
 	}
 
+	public static void returnToPlayerTurn(){
+		using=null;
+		Map.state=MapState.PlayerTurn;
+	}
+	
 	public static void setState(MapState state){
 		progress=0;
 		Map.state=state;
@@ -74,7 +91,7 @@ public class Map extends Screen{
 			break;
 		case PlayerTurn:
 			Hex.mousedHex.moused=false;
-			explosionSize+=growthRate/2;
+			grid.gridTurn();
 			player.playerStartTurn();
 			break;
 		case PlayerMoving:
@@ -112,14 +129,7 @@ public class Map extends Screen{
 		for(MapShip enemy:grid.getActiveEnemies())enemy.takeTurn();
 	}
 
-	@Override
-	public void update(float delta) {
-		updateState(delta);		
-		grid.update(delta);		
-		moveCam();
-		Hex h=grid.getHexUnderMouse(Gdx.input.getX()-Main.width/2,Gdx.input.getY()-Main.height/2);
-		if(h!=null)h.mouse();
-	}
+	
 
 	@Override
 	public void keyPress(int keycode) {
@@ -131,11 +141,7 @@ public class Map extends Screen{
 			zoom(1);
 		case Input.Keys.SPACE:
 			break;
-		case Input.Keys.LEFT:
-			
-			Main.setCam(Main.getCam().add(-1, 0));
-			
-			break;
+		
 		}
 	}
 
@@ -157,15 +163,31 @@ public class Map extends Screen{
 		Hex.resize(Hex.size-amount);
 	}
 
-	public static void moveCam() {
+	public static void updateCamPosition() {
 		Pair bonus=new Pair(0,0);
 		if(getState()==MapState.PlayerMoving){
-			bonus=player.distance;
+			bonus=new Pair().add(player.distance);
 		}
-		//Main.setCam(new Pair(0,0));
-		//Main.setCam(player.hex.getPixel().add(bonus).add(new Pair(-500,-50)));
+		
+		Main.setCam(player.hex.getPixel().add(bonus));
 	}
 
+	@Override
+	public void update(float delta) {
+		updateState(delta);		
+		grid.update(delta);		
+		updateCamPosition();
+		Hex h=grid.getHexUnderMouse(Gdx.input.getX()-Main.width/2,Gdx.input.getY()-Main.height/2);
+		if(h!=null)h.mouse();
+		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+			Main.setCam(Main.getCam().add(1, 0));
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+		Main.setCam(Main.getCam().add(-1, 0));
+		
+		}
+	}
+	
 	@Override
 	public void shapeRender(ShapeRenderer shape) {		
 		Gdx.gl20.glEnable(GL20.GL_BLEND);
@@ -197,8 +219,8 @@ public class Map extends Screen{
 		
 		Draw.drawTextureScaled(batch2, Gallery.mapsliceRight.get(), Main.width, Main.height	, -1, -1);
 		batch2.setColor(Colours.light);
-		Font.medium.draw(batch2, ""+getState(), Main.width-300, Main.height);
-		abil.render(batch2);
+		Font.medium.draw(batch2, ""+getState(), 300, 0);
+		for(MapAbility a:player.ship.getMapAbilities())a.render(batch2);
 		batch2.end();
 
 

@@ -32,13 +32,12 @@ public class PhaseButton extends Bonkject{
 	private Pic after=Gallery.endTurnShield;
 	Timer t;
 	public PhaseButton(Collider col) {
-		super(new PolygonCollider(new Polygon(new float[]{
+		mousectivate(new PolygonCollider(new Polygon(new float[]{
 				Main.width/2-width/2,416,
 				Main.width/2+width/2,416,
 				Main.width/2+width/2,356,
 				Main.width/2-width/2,356,
 		})));
-		mousectivate();
 
 		PolygonCollider pc=(PolygonCollider) collider;
 		position=new Pair(pc.p.getBoundingRectangle().x,pc.p.getBoundingRectangle().y);
@@ -100,7 +99,7 @@ public class PhaseButton extends Bonkject{
 				phaseChangeAlpha=0;
 				fadingIn=false;
 				swap();
-				mousectivate();
+				mousectivate(null);
 			}
 		}
 	}

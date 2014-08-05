@@ -21,11 +21,10 @@ public class GameChoice extends Bonkject{
 	String str;
 	ScreenType type;
 	public GameChoice(int x, int y, String title, ScreenType type) {
-		super(new BoxCollider(x-width/2, y-height/2, width, height));
 		this.x=x-width/2;
 		this.y=y+height/2;
 		str=title;
-		mousectivate();
+		mousectivate(new BoxCollider(x-width/2, y-height/2, width, height));
 		this.type=type;
 	}
 

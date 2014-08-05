@@ -20,7 +20,6 @@ public class TextWisp extends Bonkject{
 	Color c=Colours.light;
 	public static ArrayList<TextWisp> wisps= new ArrayList<TextWisp>();
 	public TextWisp(String text, Pair startPosition) {
-		super(null);
 		this.text=text;
 		this.position=startPosition;
 		wisps.add(this);

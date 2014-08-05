@@ -27,8 +27,7 @@ public class ModuleStats extends Bonkject{
 	static int row=6;
 
 	public ModuleStats(Module m) {
-		super(new BoxCollider(m.ship.player?0:Main.width-width, height*m.getIndex(), width, height));
-		mousectivate();
+		mousectivate(new BoxCollider(m.ship.player?0:Main.width-width, height*m.getIndex(), width, height));
 		mod=m;
 		info=new ModuleInfo(m);
 	}

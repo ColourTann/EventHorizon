@@ -16,7 +16,6 @@ public class HelpPanel extends Bonkject{
 	int y=415;
 	
 	public HelpPanel(String s, boolean high) {
-		super(null);
 		text=s;
 		fadeIn(2, Interp.SQUARE);
 		if(high)y=150;

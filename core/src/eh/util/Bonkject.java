@@ -21,16 +21,13 @@ public abstract class Bonkject {
 	//Updating//
 
 	public static void updateBonkjs(float delta) {
-		updateMoused();
 		updateActives(delta);
+		updateMoused();
 		if(debug){
 			System.out.println("Mouseable count: "+mousers.size());
 			System.out.println("Ticker count: "+tickers.size());
 		}
 	}
-
-
-	
 
 	public static void updateMoused(){
 		updateMousePosition();
@@ -62,18 +59,20 @@ public abstract class Bonkject {
 	public static Pair currentMoused;
 
 
-	public Bonkject(Collider col) {
-		this.collider=col;
+	public Bonkject() {
 		bonktivate();
 	}
 
 
 
-	public void mousectivate(){
+	public void mousectivate(Collider collider){
+		if(collider!=null)this.collider=collider;
+		mousers.remove(this);
 		mousers.add(this);
 	}
 
 	public void bonktivate(){
+		tickers.remove(this);
 		tickers.add(this);
 	}
 
@@ -91,12 +90,7 @@ public abstract class Bonkject {
 		moused=false;
 	}
 
-	public void deTick(){
-		if(tickers.contains(this)){
-			tickers.remove(this);
-		}
-		else System.out.println(this+" being deactivated and not in update list.");
-	}
+
 
 	private boolean checkMoused(Pair s){
 		if(collider.collidePoint(s)){
@@ -136,7 +130,7 @@ public abstract class Bonkject {
 		
 		batch.end();
 		collider.debugDraw();
-		batch.setProjectionMatrix(Main.mainCam.combined);
+		//batch.setProjectionMatrix(Main.mainCam.combined);
 		batch.begin();
 		
 	}
@@ -215,6 +209,17 @@ public abstract class Bonkject {
 		tickers.clear();
 		timers.clear();
 		ParticleSystem.clearAll();
+	}
+
+
+
+
+	public static void debugRenderAll(SpriteBatch batch) {
+		batch.end();
+		for(Bonkject b:mousers){
+			b.collider.debugDraw();
+		}
+		batch.begin();
 	}
 
 }

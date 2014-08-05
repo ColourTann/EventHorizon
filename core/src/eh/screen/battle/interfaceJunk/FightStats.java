@@ -21,7 +21,6 @@ public class FightStats extends Bonkject{
 	Ship ship;
 	boolean player;
 	public FightStats(Ship s) {
-		super(null);
 		this.ship=s;
 		player=s.player;
 	}

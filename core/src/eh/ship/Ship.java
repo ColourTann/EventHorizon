@@ -18,6 +18,7 @@ import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
 import eh.screen.battle.interfaceJunk.FightStats;
 import eh.ship.mapThings.MapShip;
+import eh.ship.mapThings.mapAbility.MapAbility;
 import eh.ship.module.Module;
 import eh.ship.module.Module.ModuleType;
 import eh.ship.module.computer.Computer;
@@ -40,8 +41,6 @@ public abstract class Ship {
 	public Niche[] niches= new Niche[5]; 
 	public Module[] modules= new Module[5];
 	private ShipGraphic battleGraphic;
-	private MapShip mapGraphic;
-	
 	public Pic shipPic;
 	//Deck is stored as a list of modules so you can generate nice and easily!!//
 	public ArrayList<Module> deck = new ArrayList<Module>();
@@ -60,7 +59,8 @@ public abstract class Ship {
 	public Module focusTarget;
 	public FightStats fightStats;
 	
-
+	//Map stuff//
+	private ArrayList<MapAbility> mapAbilities = new ArrayList<MapAbility>();
 	
 	public enum ShipType{Aurora,Comet,Eclipse,Nova}
 	public abstract void placeNiches();
@@ -306,7 +306,7 @@ public abstract class Ship {
 
 			//Priority checking//
 			if(priority){
-				int shieldsReq=m.getShieldsRequiredToAvoidMajor();
+				m.getShieldsRequiredToAvoidMajor();
 				while(m.getShieldsRequiredToAvoidMajor()<=shieldPoints.size()){ //not a hopeless cause// //Only shield until it's barely surviving//
 					System.out.println("found priority shield");
 					System.out.println("Going to shield "+m+" because requires "+m.getShieldsRequiredToAvoidMajor()+" and I have "+shieldPoints.size());
@@ -366,7 +366,7 @@ public abstract class Ship {
 
 	public void drawCard(Card card) {
 		hand.add(card);
-		card.getGraphic().mousectivate();
+		card.getGraphic().mousectivate(null);
 		if(player)updateCardPositions();
 	}
 	
@@ -644,6 +644,14 @@ public abstract class Ship {
 		
 		powerLevel=handPower;
 		return powerLevel;
+	}
+	
+	public void addMapAbility(MapAbility mapAbility){
+		mapAbilities.add(mapAbility);
+	}
+	
+	public ArrayList<MapAbility> getMapAbilities(){
+		return mapAbilities;
 	}
 
 
