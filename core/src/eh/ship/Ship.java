@@ -17,8 +17,10 @@ import eh.grid.hex.Hex;
 import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
 import eh.screen.battle.interfaceJunk.FightStats;
+import eh.screen.map.Map;
 import eh.ship.mapThings.MapShip;
 import eh.ship.mapThings.mapAbility.MapAbility;
+import eh.ship.mapThings.mapAbility.genAbility.Teleport;
 import eh.ship.module.Module;
 import eh.ship.module.Module.ModuleType;
 import eh.ship.module.computer.Computer;
@@ -60,7 +62,8 @@ public abstract class Ship {
 	public FightStats fightStats;
 	
 	//Map stuff//
-	private ArrayList<MapAbility> mapAbilities = new ArrayList<MapAbility>();
+	private MapShip mapShip;
+	
 	
 	public enum ShipType{Aurora,Comet,Eclipse,Nova}
 	public abstract void placeNiches();
@@ -541,10 +544,9 @@ public abstract class Ship {
 		if(battleGraphic==null)battleGraphic=new ShipGraphic(this);
 		return battleGraphic;
 	}
-	/*public MapShip getMapShip(){
-		if(mapGraphic==null)mapGraphic=new MapShip(this, hex);
-		return mapGraphic;
-	}*/
+	public MapShip getMapShip(){
+		return mapShip;
+	}
 	public void setWeapon(Weapon w, int i){
 		if(i!=0&&i!=1){
 			System.out.println("bad set weapon index");
@@ -646,15 +648,15 @@ public abstract class Ship {
 		return powerLevel;
 	}
 	
-	public void addMapAbility(MapAbility mapAbility){
-		mapAbilities.add(mapAbility);
+
+	
+	public abstract ArrayList<MapAbility> getMapAbilities();
+	
+	public void setMapShip(MapShip mapShip) {
+		this.mapShip=mapShip;
 	}
 	
-	public ArrayList<MapAbility> getMapAbilities(){
-		return mapAbilities;
-	}
-
-
+	
 	
 
 		

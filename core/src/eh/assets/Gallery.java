@@ -108,7 +108,8 @@ public class Gallery {
 	public static Pic mapAbilityDiagonalMove=new Pic("Map/Abilities/diagonalmove");
 	//Com//
 	public static Pic mapAbilityForceField=new Pic("Map/Abilities/forcefield");
-	public static Pic mapAbilityTractorBeam=new Pic("Map/Abilities/tractor");
+	public static Pic mapAbilityPull=new Pic("Map/Abilities/pull");
+	public static Pic mapAbilityPush=new Pic("Map/Abilities/push");
 	public static Pic mapAbilityCloak=new Pic("Map/Abilities/cloak");
 	
 	//PARTICLE STUFF//

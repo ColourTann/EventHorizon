@@ -3,6 +3,7 @@ package eh.ship.mapThings.mapAbility.genAbility;
 import eh.assets.Gallery;
 import eh.assets.Pic;
 import eh.grid.hex.Hex;
+import eh.grid.hex.HexChoice;
 import eh.screen.map.*;
 import eh.screen.map.Map.*;
 import eh.ship.mapThings.mapAbility.MapAbility;
@@ -10,25 +11,33 @@ import eh.ship.mapThings.mapAbility.MapAbility;
 public class Teleport extends MapAbility{
 
 	public Teleport() {
-		super(Gallery.mapAbilityTeleport);
+		super(Gallery.mapAbilityTeleport,4,.02f);
 	}
-	
-	
-	
-	
+
 	@Override
-	public boolean isValidChoice(Hex origin, Hex target) {
+	public boolean isValidChoice(Hex target) {
+		Hex origin=mapShip.hex;
 		int dist=origin.getDistance(target);
-		if(target.mapShip!=null)return false;
-		return dist>1&&dist<=4;
+		if(target.isBlocked(true))return false;
+		return dist>1&&dist<=range;
 	}
 	@Override
 	public void pickHex(Hex hex) {
-		if(!isValidChoice(Map.player.hex, hex))return;
-		fadeHexesOut();
-		Map.setState(MapState.PlayerMoving);
-		Map.player.moveTo(hex);
-		Map.using=null;
-		choosing=false;
+		if(!isValidChoice(hex))return;
+		afterPlayerUse();
+		mapShip.moveTo(hex);
 	}
+
+	@Override
+	public HexChoice getBestTarget() {
+		HexChoice result = new HexChoice();
+		for (Hex h:mapShip.hex.getHexesWithin(range, false)){
+			if(!isValidChoice(h))continue;
+			HexChoice current=new HexChoice(h, h.howGood(mapShip));
+			if(current.isBetterThan(result))result=current;
+		}
+		result.value-=effort;
+		return result;
 	}
+	
+}

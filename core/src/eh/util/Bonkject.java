@@ -18,8 +18,14 @@ public abstract class Bonkject {
 	public static ArrayList<Bonkject> mousers = new ArrayList<Bonkject>();
 	public static ArrayList<Bonkject> tickers = new ArrayList<Bonkject>();
 	public static ArrayList<Timer> timers = new ArrayList<Timer>();
-	//Updating//
 
+	//Bonkjects are automatically added to update list but not mouse list//
+	public Bonkject() {
+		bonktivate();
+	}
+
+
+	//Must call in your main loop//
 	public static void updateBonkjs(float delta) {
 		updateActives(delta);
 		updateMoused();
@@ -29,6 +35,32 @@ public abstract class Bonkject {
 		}
 	}
 
+	//Must call from InputListener as it deals with polled events//
+	public static void updateClicked(boolean left){
+		updateMousePosition();
+		for(int i=0;i<mousers.size();i++){
+			if(mousers.get(i).checkClicked(currentMoused, left))return;
+		}
+	}
+
+	// MOUSING SHIT //
+	
+	public Collider collider;
+	public boolean moused=false;
+	public static Pair currentMoused;
+
+	//Call this to add something to the mouse list//
+	public void mousectivate(Collider collider){
+		if(collider!=null)this.collider=collider;
+		mousers.remove(this);
+		mousers.add(this);
+	}
+	
+	public void demousectivate(){
+		mousers.remove(this);
+		moused=false;
+	}
+	
 	public static void updateMoused(){
 		updateMousePosition();
 		boolean found=false;
@@ -44,54 +76,7 @@ public abstract class Bonkject {
 	private static void updateMousePosition(){
 		currentMoused=new Pair(Gdx.input.getX()/(float)Gdx.graphics.getWidth()*(float)Main.width,(Gdx.input.getY()/(float)Gdx.graphics.getHeight()*(float)Main.height));
 	}
-
-	public static void updateClicked(boolean left){
-		updateMousePosition();
-		for(int i=0;i<mousers.size();i++){
-			if(mousers.get(i).checkClicked(currentMoused, left))return;
-		}
-	}
-
-	// MOUSING SHIT //
-
-	public Collider collider;
-	public boolean moused=false;
-	public static Pair currentMoused;
-
-
-	public Bonkject() {
-		bonktivate();
-	}
-
-
-
-	public void mousectivate(Collider collider){
-		if(collider!=null)this.collider=collider;
-		mousers.remove(this);
-		mousers.add(this);
-	}
-
-	public void bonktivate(){
-		tickers.remove(this);
-		tickers.add(this);
-	}
-
-	public void deactivate(){
-		debonktivate();
-		demousectivate();
-	}
 	
-	public void debonktivate(){
-		tickers.remove(this);
-	}
-
-	public void demousectivate(){
-		mousers.remove(this);
-		moused=false;
-	}
-
-
-
 	private boolean checkMoused(Pair s){
 		if(collider.collidePoint(s)){
 			if(!moused){
@@ -105,8 +90,8 @@ public abstract class Bonkject {
 			moused=false;
 		}
 		return false;
-
 	}
+	
 	private void deMouse(){
 		if(moused){
 			mouseUp();
@@ -121,67 +106,36 @@ public abstract class Bonkject {
 		}
 		return false;
 	}
+
+	public void moveToTop() {
+		if(Bonkject.mousers.remove(this))Bonkject.mousers.add(0,this);
+	}
+	
 	public abstract void mouseDown();
 	public abstract void mouseUp();
 	public abstract void mouseClicked(boolean left);
-	public void debugRender(SpriteBatch batch){
 
-		if(collider==null)return;
-		
-		batch.end();
-		collider.debugDraw();
-		//batch.setProjectionMatrix(Main.mainCam.combined);
-		batch.begin();
-		
-	}
-
-
-
-
-	// LERPING SHIT //
-
-
-
-
-	public float alpha=1;
-	public Pair position=new Pair(0,0);
-
-	Timer fader;
-	Timer slider;
-
-
-
-	public void fadeIn(float speed, Interp type){
-		bonktivate();
-		fader=new Timer(alpha, 1, speed, type);
-	}
-
-	public void fadeOut(float speed, Interp type){
-		bonktivate();
-		demousectivate();
-		fader=new Timer(alpha, 0, speed, type);
+	// UPDATING SHIT //
+	
+	//Call to re-add to update list//
+	public void bonktivate(){
+		tickers.remove(this);
+		tickers.add(this);
 	}
 	
-	public void stopFading(){
-		
-		fader=null;
-		alpha=1;
+	public void debonktivate(){
+		tickers.remove(this);
 	}
 
-	public void slide(Pair target, float speed, Interp type){
-		slider=new Timer(position, target, speed, type);
-	}
-
-	// Updating shit//
 	public static void updateActives(float delta){
 		for(Bonkject b:tickers){
 			b.update(delta);
 			if(b.fader!=null){
 				b.alpha=b.fader.getFloat();
 			}
-			
+
 			if(b.slider!=null){
-				
+
 				b.position=b.slider.getPair();
 			}
 		}
@@ -196,10 +150,45 @@ public abstract class Bonkject {
 	}
 	public abstract void update(float delta);
 
-	public void moveToTop() {
-		if(Bonkject.mousers.remove(this))Bonkject.mousers.add(0,this);
-		if(Bonkject.tickers.remove(this))Bonkject.tickers.add(this);
+	public void debugRender(SpriteBatch batch){
+		if(collider==null)return;
+		batch.end();
+		collider.debugDraw();
+		batch.begin();
 	}
+
+
+
+
+	// Helper methods //
+
+	//If you want to use the default fading and lerping, you use these inside any bonkject//
+	public float alpha=1;
+	public Pair position=new Pair(0,0);
+
+	Timer fader;
+	Timer slider;
+
+	public void fadeIn(float speed, Interp type){
+		bonktivate();
+		fader=new Timer(alpha, 1, speed, type);
+	}
+
+	public void fadeOut(float speed, Interp type){
+		bonktivate();
+		demousectivate();
+		fader=new Timer(alpha, 0, speed, type);
+	}
+
+	public void stopFading(){
+		fader=null;
+		alpha=1;
+	}
+
+	public void slide(Pair target, float speed, Interp type){
+		slider=new Timer(position, target, speed, type);
+	}
+	
 	public interface Finisher {
 		public void finish();
 	}
@@ -213,7 +202,7 @@ public abstract class Bonkject {
 
 
 
-
+	//debug render is very laggy and will mess up if you're using cameras, might fix if can be bothered//
 	public static void debugRenderAll(SpriteBatch batch) {
 		batch.end();
 		for(Bonkject b:mousers){

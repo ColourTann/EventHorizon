@@ -36,7 +36,7 @@ public class Smoke extends Particle{
 		rotation+=delta;
 		if(life<=0)dead=true;
 		position.x+=delta*vector.x;
-		position.y+=delta*vector.y;
+		position.y-=delta*vector.y;
 	}
 
 	@Override

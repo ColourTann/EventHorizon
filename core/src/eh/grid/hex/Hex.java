@@ -150,7 +150,7 @@ public class Hex {
 	}
 
 	public void click(){
-
+		mouse();
 		if(getDistance(Map.player.hex)>Grid.viewDist)return;
 		if(Map.using!=null){
 			Map.using.pickHex(this);
@@ -168,8 +168,7 @@ public class Hex {
 	}
 
 	public void rightClick(){
-		//System.out.println(howGood(Map.player));
-
+		System.out.println(howGood(Map.player));
 	}
 
 	public void addShip(MapShip ship) {
@@ -320,10 +319,10 @@ public class Hex {
 		//Nearby Ships//
 		float ignoreRange=.01f;
 		int distanceCutoff=4;			//Past this distance will be ignored//
-		float playerMultiplier=.04f;	//player is not more important//
-		float enemyMultiplier=.04f;
-		float playerAttack=5;			//except for attacking//
-		float enemyAttack=10;
+		float playerAttack=500;			//except for attacking//
+		float enemyAttack=700;
+		float attackMultuplier=.02f;
+		float fleeMultiplier=-.04f;
 
 		for(Hex h:getHexesWithin(distanceCutoff, true)){
 			MapShip hexShip= h.mapShip;
@@ -334,16 +333,18 @@ public class Hex {
 			//Flee decision//
 			float fleeMult=0;
 			if(Math.abs(theirPower-myPower)<ignoreRange)fleeMult=0;
-			else fleeMult=myPower>theirPower?1:-1;	//Run away or not?
+			else fleeMult=myPower>theirPower?attackMultuplier:fleeMultiplier;	//Run away or not?
 			float shipDistance=h.getDistance(this);
+			
+			
 			if(shipDistance==0){
-				if(fleeMult<1)return -9;			//Don't attack ships you can't take on
+				if(fleeMult<0)return -9;			//Don't attack ships you can't take on
 				result+=fleeMult*(player?playerAttack:enemyAttack);
 			}
 
 
 
-			result+=fleeMult*(1/shipDistance*(player?playerMultiplier:enemyMultiplier));
+			result+=fleeMult*(1/shipDistance);
 		}
 
 
@@ -366,13 +367,12 @@ public class Hex {
 		if(mapAbilityFadeTimer!=null&&mapAbilityFadeTimer.getFloat()>0){
 			shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[2],mapAbilityFadeTimer.getFloat()));
 		}
-		//if(Map.using.isValidChoice(Map.player.hex, this))shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[2],ticks%1));
+	//	if(Map.using.isValidChoice(Map.player.hex, this))shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[2],ticks%1));
 
 		if(highlight)shape.setColor(Colours.blueWeaponCols4[2]);
 		if(moused)shape.setColor(Colours.light);	
 		if(forceField>0)shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[0], forceField/3f));
-		/*if(closed.contains(this))shape.setColor(1, 0, 0, 1);
-		if(open.contains(this))shape.setColor(0, 1, 0, 1);*/
+		
 		if(isSwallowed())shape.setColor(Colours.redWeaponCols4[0]);
 
 		Pair s=getPixel();
@@ -399,7 +399,7 @@ public class Hex {
 
 	public void renderLocation(SpriteBatch batch){
 		String s=this.toString();
-		Font.small.draw(batch, this.toString(), getPixel().x-Font.small.getBounds(s).width/2, getPixel().y-Font.small.getBounds(s).height/2);
+		Font.small.draw(batch, s, getPixel().x-Font.small.getBounds(s).width/2, getPixel().y-Font.small.getBounds(s).height/2);
 	}
 
 	public boolean isBlocked(boolean shipsBlock){

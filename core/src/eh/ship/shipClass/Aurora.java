@@ -1,9 +1,13 @@
 package eh.ship.shipClass;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.math.Polygon;
 
 import eh.assets.Gallery;
 import eh.ship.Ship;
+import eh.ship.mapThings.mapAbility.MapAbility;
+import eh.ship.mapThings.mapAbility.genAbility.Teleport;
 import eh.ship.module.computer.Alpha;
 import eh.ship.module.generator.Three;
 import eh.ship.module.shield.Deflector;
@@ -52,4 +56,10 @@ public class Aurora extends Ship{
 		setComputer(new Alpha());
 	}
 
+	@Override
+	public ArrayList<MapAbility> getMapAbilities() {
+		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
+		result.add(new Teleport());
+		return result;
+	}
 }

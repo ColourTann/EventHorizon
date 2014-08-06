@@ -1,9 +1,13 @@
 package eh.ship.shipClass;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.math.Polygon;
 
 import eh.assets.Gallery;
 import eh.ship.Ship;
+import eh.ship.mapThings.mapAbility.MapAbility;
+import eh.ship.mapThings.mapAbility.genAbility.Teleport;
 import eh.ship.module.computer.Alpha;
 import eh.ship.module.computer.Gamma;
 import eh.ship.module.generator.Five;
@@ -49,5 +53,12 @@ public class Eclipse extends Ship{
 		setShield(new  Deflector());
 		setGenerator(new Five());
 		setComputer(new Gamma());
+	}
+
+	@Override
+	public ArrayList<MapAbility> getMapAbilities() {
+		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
+		result.add(new Teleport());
+		return result;
 	}
 }

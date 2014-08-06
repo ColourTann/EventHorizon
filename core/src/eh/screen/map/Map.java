@@ -15,13 +15,12 @@ import eh.assets.Gallery;
 import eh.grid.Grid;
 import eh.grid.hex.Hex;
 import eh.screen.Screen;
+import eh.ship.Ship;
 import eh.ship.mapThings.MapShip;
-import eh.ship.mapThings.mapAbility.MapAbility;
-import eh.ship.mapThings.mapAbility.comAbility.ForceField;
-import eh.ship.mapThings.mapAbility.comAbility.TractorBeam;
-import eh.ship.mapThings.mapAbility.genAbility.DiagonalMove;
-import eh.ship.mapThings.mapAbility.genAbility.DoubleMove;
-import eh.ship.mapThings.mapAbility.genAbility.Teleport;
+import eh.ship.mapThings.mapAbility.*;
+import eh.ship.mapThings.mapAbility.comAbility.*;
+import eh.ship.mapThings.mapAbility.genAbility.*;
+
 import eh.ship.shipClass.*;
 import eh.util.Colours;
 import eh.util.Draw;
@@ -52,22 +51,13 @@ public class Map extends Screen{
 		Main.setCam(new Pair(0,0));
 		Hex.init();
 		MapAbility.init();
-		
 		grid=Grid.MakeGrid();
 		player=new MapShip(new Nova(true), grid.getHex(55, 50));
 		Map.explosion=grid.getHex(45, 48);
 		
-		
-		player.ship.addMapAbility(new Teleport());
-		player.ship.addMapAbility(new DoubleMove());
-		player.ship.addMapAbility(new DiagonalMove());
-		player.ship.addMapAbility(new ForceField());
-		player.ship.addMapAbility(new TractorBeam());
-		
-		for(int i=0;i<player.ship.getMapAbilities().size();i++){
-			MapAbility a=player.ship.getMapAbilities().get(i);
+		for(int i=0;i<player.mapAbilities.size();i++){
+			MapAbility a=player.mapAbilities.get(i);
 			a.showAt(new Pair(5+MapAbility.width/2, 5+MapAbility.height/2+i*MapAbility.gap));
-		
 		}
 	}
 
@@ -220,7 +210,7 @@ public class Map extends Screen{
 		Draw.drawTextureScaled(batch2, Gallery.mapsliceRight.get(), Main.width, Main.height	, -1, -1);
 		batch2.setColor(Colours.light);
 		Font.medium.draw(batch2, ""+getState(), 300, 0);
-		for(MapAbility a:player.ship.getMapAbilities())a.render(batch2);
+		for(MapAbility a:player.mapAbilities)a.render(batch2);
 		batch2.end();
 
 
