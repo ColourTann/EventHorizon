@@ -24,6 +24,7 @@ import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.TextWisp;
 import eh.util.Timer;
+import eh.util.Timer.Interp;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.ParticleSystem;
 
@@ -78,13 +79,13 @@ public class Main extends ApplicationAdapter  {
 		mainCam.setToOrtho(true);
 		
 		
-		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
+		battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
 		//select=new Selector();currentScreen=select;
 
 		//viewer=new CardViewer();currentScreen=viewer;
 
-		map=new Map();currentScreen=map;
+		//map=new Map();currentScreen=map;
 
 		//currentScreen=new Test();
 	}	

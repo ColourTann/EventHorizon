@@ -6,7 +6,7 @@ import eh.util.Bonkject.Finisher;
 import eh.util.maths.Pair;
 
 public class Timer {
-	public enum Interp{SQUARE, CUBE, INVERSESQUARED, LINEAR, SANTIBOUNCE}
+	public enum Interp{SQUARE, CUBE, INVERSESQUARED, LINEAR, SANTIBOUNCE, SIN}
 
 	public static ArrayList<Timer> lerpables = new ArrayList<Timer>();
 
@@ -18,11 +18,12 @@ public class Timer {
 	Pair currentPosition;
 	float fromFloat;
 	float toFloat;
-	float ratio;
+	public float ratio;
 
 	Finisher f;
 
 	public Timer() {
+		ratio=0;
 	}
 	
 	public Timer(float from, float to, float speed, Interp type){
@@ -108,7 +109,7 @@ public class Timer {
 		return fromFloat+((toFloat-fromFloat)*get(ratio,lerpType));
 	}
 
-	private static float get(float ratio, Interp type){
+	public static float get(float ratio, Interp type){
 		if(ratio>1)ratio=1;
 		switch (type){
 		case SQUARE: return 1-(1-ratio)*(1-ratio);
@@ -116,6 +117,7 @@ public class Timer {
 		case INVERSESQUARED: return ratio*ratio;
 		case LINEAR: return ratio;
 		case SANTIBOUNCE: return (float) Math.sin(ratio*Math.PI)/((1+ratio)*3)+(1-(ratio-1)*(ratio-1));
+		case SIN: return (float)Math.sin(ratio*Math.PI);
 		default: return 0;
 		}
 	}

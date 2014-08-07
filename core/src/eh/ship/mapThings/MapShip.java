@@ -29,9 +29,8 @@ public class MapShip {
 	public Hex hex;
 	public ArrayList<Hex> path= new ArrayList<Hex>();
 	public float rotation = 0;
-	
 	public ArrayList<MapAbility> mapAbilities = new ArrayList<MapAbility>();
-	
+	public Timer stretch=new Timer();
 	
 
 	public MapShip(Ship ship, Hex hex) {
@@ -55,7 +54,6 @@ public class MapShip {
 		ArrayList<MapAbility> abilities=ship.getMapAbilities();
 		for(MapAbility a:abilities)a.mapShip=this;
 		mapAbilities=abilities;
-		
 	}
 	
 	private void setShip(Ship ship) {
@@ -82,7 +80,12 @@ public class MapShip {
 			if(abilChoice.isBetterThan(best))	best=abilChoice;
 		}
 		
-		moveTo(best.hex);
+		if(best.source==null){
+			moveTo(best.hex);
+			return;
+		}
+		
+		best.source.pickHex(best.hex);		
 				
 	}
 
@@ -138,19 +141,20 @@ public class MapShip {
 
 	public void render(SpriteBatch batch) {
 		if (ship == null)	return;
-		batch.setColor(1, 1, 1, 1);
+		System.out.println(stretch.getFloat());
+		batch.setColor(1-stretch.getFloat(), 1-stretch.getFloat()/2, 1, 1);
 		Draw.drawTextureRotatedScaledCentered(batch, ship.shipPic.get(),
 				(int) (hex.getPixel().x + distance.x),
-				(int) (hex.getPixel().y + distance.y), Hex.size / 300,
-				Hex.size / 300, rotation);
+				(int) (hex.getPixel().y + distance.y), 
+				(Hex.size / 300)*(1+stretch.getFloat()/1.3f),
+				(Hex.size / 300)*(1-stretch.getFloat()/1.3f), 
+				rotation);
 	}
 
 	public void setPath(ArrayList<Hex> path) {
 		this.path = path;
 		if (path.size() > 0) moveTo(path.remove(path.size()-1));
 	}
-	
-			
 	
 	public void resetPath() {
 		if(path==null)return;

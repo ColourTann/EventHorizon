@@ -1,5 +1,7 @@
 package eh.ship.mapThings.mapAbility.genAbility;
 
+
+
 import eh.assets.Gallery;
 import eh.assets.Pic;
 import eh.grid.hex.Hex;
@@ -7,6 +9,8 @@ import eh.grid.hex.HexChoice;
 import eh.screen.map.*;
 import eh.screen.map.Map.*;
 import eh.ship.mapThings.mapAbility.MapAbility;
+import eh.util.Timer;
+import eh.util.Timer.Interp;
 
 public class Teleport extends MapAbility{
 
@@ -24,7 +28,8 @@ public class Teleport extends MapAbility{
 	@Override
 	public void pickHex(Hex hex) {
 		if(!isValidChoice(hex))return;
-		afterPlayerUse();
+		if(mapShip.ship.player) afterPlayerUse();
+		mapShip.stretch=new Timer(0,1, Map.phaseSpeed, Interp.SIN);
 		mapShip.moveTo(hex);
 	}
 
@@ -37,6 +42,7 @@ public class Teleport extends MapAbility{
 			if(current.isBetterThan(result))result=current;
 		}
 		result.value-=effort;
+		result.source=this;
 		return result;
 	}
 	

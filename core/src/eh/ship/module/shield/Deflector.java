@@ -23,7 +23,7 @@ public class Deflector extends Shield{
 		cost[1]=1;
 		cooldown[1]=0;
 		effect[1]=0;
-		rules[1]="+1 effect to all shield cards this turn";
+		rules[1]="+1 shield to all shield cards this turn";
 		code[1].add(Special.IncreaseEffect, 1);
 		code[1].add(AI.OtherCardsThisSystem,2);
 		code[1].add(AI.TotalIncoming,4);
