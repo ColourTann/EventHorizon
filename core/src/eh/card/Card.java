@@ -2,10 +2,6 @@ package eh.card;
 
 import java.util.ArrayList;
 
-import javax.smartcardio.CardPermission;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import eh.assets.Clip;
 import eh.assets.Pic;
 import eh.card.CardCode.AI;
@@ -26,7 +22,6 @@ import eh.ship.module.utils.ShieldPoint;
 import eh.ship.module.utils.Buff.BuffType;
 import eh.ship.module.weapon.Weapon;
 import eh.util.Draw;
-import eh.util.Timer.Interp;
 
 public class Card {
 	public Module mod;
@@ -49,7 +44,7 @@ public class Card {
 	public boolean selected;
 	private CardGraphic cg;
 	private int previousIndexInHand;
-	public static ArrayList<CardGraphic> enemyCardsToRender=new ArrayList<CardGraphic>();
+	public static ArrayList<CardGraphic> extraCardsToRender=new ArrayList<CardGraphic>();
 	
 	public boolean wasScrambled;
 	
@@ -78,9 +73,6 @@ public class Card {
 	public void click(){
 		if(getShip().player){
 			playerClick();
-		}
-		else{
-			enemyClick();
 		}
 	}
 
@@ -186,12 +178,6 @@ public class Card {
 
 
 
-	//Clicking on an enemy card to speed it up//
-	public void enemyClick(){
-		enemyPlay();				//Causes the enemy to play//
-		getShip().enemyPickCard();	//And pick another card//
-		mod.moused=false;
-	}
 
 	//General Select method for player and enemy//
 	private void select() {
@@ -323,16 +309,15 @@ public class Card {
 
 
 	//Special select method for enenmy. Just deals with graphical junk and targeting//
-	public void enemySelect() {
+	public void enemySelectAndPlay() {
 		
-		enemyCardsToRender.add(getGraphic());
+		extraCardsToRender.add(getGraphic());
 		
 		CardCode code = getCode();
 		Ship ship=getShip();
 		getGraphic().hideLower();
 		getGraphic().moveToTop();
 		getGraphic().setPosition(CardGraphic.enemyPlayStartPosition);
-		getGraphic().slide(CardGraphic.enemyPlayToPosition, 1.5f, Interp.SQUARE);
 		getGraphic().finishFlipping();
 		if(mod.getBuffAmount(BuffType.Scrambled)>0){
 			scrambSelect();
@@ -433,7 +418,7 @@ public class Card {
 		}
 
 		select();
-
+		play();
 		//if(!(mod.type==ModuleType.SHIELD&&getEffect()>0))Clip.cardSelect.play();
 
 	}
@@ -516,7 +501,7 @@ public class Card {
 		CardCode code=getCode();
 		Ship ship = getShip();
 		ship.hand.remove(this);
-		getGraphic().fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
+		
 
 		//Enemies play cards normally, players play discardwhenclickeds immediately//
 		for(int i=0;i<code.getAmount(Special.SelfScramble);i++)mod.scramble();
@@ -524,19 +509,23 @@ public class Card {
 
 		if(((getCode().contains(Special.DiscardWhenPlayed)||getCode().contains(Special.Augment))&&getShip().player))
 			return;
+		
+	}
+	
+	public void fadeAndAddIcon(){
+		System.out.println("adding");
+		extraCardsToRender.add(getGraphic());
+		getGraphic().fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
 		CardIcon.addIcon(this);
 	}
 
 	//The Player plays when you end your turn//
 	public void playerPlay(){
 		play();
+		fadeAndAddIcon();
 	}
 
-	//The enemy plays when you click on their card or after a period(not in yet)//
-	public void enemyPlay(){
-		play();
-	}
-
+	
 
 
 	private void scrambSelect() {

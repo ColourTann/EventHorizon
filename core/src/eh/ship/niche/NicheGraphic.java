@@ -8,6 +8,7 @@ import eh.screen.battle.Battle;
 import eh.ship.module.weapon.attack.particle.SmokeMachine;
 import eh.ship.module.weapon.attack.particle.Smoke.SmokeType;
 import eh.util.Bonkject;
+import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.maths.PolygonCollider;
 import eh.util.maths.Pair;
@@ -43,7 +44,7 @@ public class NicheGraphic extends Bonkject{
 		
 		Draw.drawTextureScaledFlipped(batch, t, niche.location.x+bonus.x, niche.location.y+bonus.y, 1, 1, !niche.mod.ship.player, false);
 		if(intensity>0){
-			batch.setColor(1,1,1,intensity);
+			batch.setColor(Colours.withAlpha(Colours.shieldCols6[2],intensity));
 			
 			Draw.drawTextureScaledFlipped(batch, niche.mod.modulePic.getGlow(), niche.location.x, niche.location.y, 1, 1, !niche.mod.ship.player, false);
 		}

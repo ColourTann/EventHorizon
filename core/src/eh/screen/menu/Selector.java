@@ -27,7 +27,7 @@ public class Selector extends Screen{
 	@Override
 	public void render(SpriteBatch batch) {
 		Font.small.setColor(1,1,1,1);
-		Font.small.draw(batch, ""+Main.version, 3, Main.height);
+		Font.small.draw(batch, ""+Main.version, 0, 0);
 		for(GameChoice c:choices){
 			c.render(batch);
 		}

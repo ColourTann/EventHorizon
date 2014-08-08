@@ -25,6 +25,8 @@ public class InputHandler implements InputProcessor {
 	}
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		
+		
 		Bonkject.updateClicked(button==0);
 		Main.currentScreen.mousePressed(new Pair((float)screenX/(float)Gdx.graphics.getWidth()*Main.width, ((float)screenY/(float)Gdx.graphics.getHeight()*Main.height)),button==0);
 		return false;
@@ -43,7 +45,8 @@ public class InputHandler implements InputProcessor {
 	}
 	@Override
 	public boolean scrolled(int amount) {
-		Main.map.zoom(amount);
+		if(Main.currentScreen==Main.map)Main.map.zoom(amount);
+		
 		return false;
 	}
 

@@ -92,27 +92,27 @@ public class ModuleInfo extends Bonkject{
 
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		String s=mod.moduleName;
-		Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+12);
+		Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+17);
 		s="Cards:";
-		Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+58);
+		Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+63);
 		s=""+mod.numCards+"/"+mod.ship.getTotalDeckSize();
-		Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+83);
+		Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+88);
 		
 		if(mod.type==ModuleType.GENERATOR){
 			s="Energy";
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+150);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+155);
 			s="Income:";
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+175);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+180);
 			s=""+mod.ship.getIncome();
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+200);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+205);
 		}
 		if(mod.type==ModuleType.COMPUTER){
 			s="Hand";
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+150);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+155);
 			s="Size:";
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+175);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+180);
 			s=""+((Computer)mod).maxCards;
-			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+200);
+			Font.medium.draw(batch, s, position.x+width/4-Font.medium.getBounds(s).width/2, position.y+205);
 		}
 		//Font.medium.drawWrapped(batch, s, 0, y+height, 500, HAlignment.CENTER);
 		//Font.medium.drawWrapped(batch, s, width/4, 20, 500, HAlignment.CENTER);

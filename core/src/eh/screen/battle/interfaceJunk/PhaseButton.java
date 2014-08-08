@@ -32,6 +32,7 @@ public class PhaseButton extends Bonkject{
 	private Pic after=Gallery.endTurnShield;
 	Timer t;
 	public PhaseButton(Collider col) {
+		System.out.println(Main.width/2-width/2+":"+416);
 		mousectivate(new PolygonCollider(new Polygon(new float[]{
 				Main.width/2-width/2,416,
 				Main.width/2+width/2,416,
@@ -53,7 +54,7 @@ public class PhaseButton extends Bonkject{
 
 	@Override
 	public void mouseUp() {
-		t=new Timer(clickedHeight, unClickedHeight, 4, Interp.SQUARE);
+		t=new Timer(t.getPair(), unClickedHeight, 4, Interp.SQUARE);
 	
 	}
 

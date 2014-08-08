@@ -35,7 +35,7 @@ public class PulseAttack extends AttackGraphic{
 		frequency=700;
 		gravity=6;
 		fired=true;
-		t=new Timer(0,(float)(Math.random()/4), 1, Interp.LINEAR);
+		t=new Timer(0,(float)(Math.random()/40), (float) (Math.random()*3+8), Interp.LINEAR);
 		t.addFinisher(new Finisher() {
 			@Override
 			public void finish() {

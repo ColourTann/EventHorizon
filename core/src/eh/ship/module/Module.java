@@ -2,6 +2,7 @@ package eh.ship.module;
 
 import java.util.ArrayList;
 
+import eh.assets.Font;
 import eh.assets.Pic;
 import eh.assets.Clip;
 import eh.card.Card;
@@ -21,6 +22,7 @@ import eh.ship.module.weapon.Weapon;
 import eh.ship.niche.Niche;
 import eh.util.Draw;
 import eh.util.TextWisp;
+import eh.util.TextWisp.WispType;
 import eh.util.maths.Pair;
 
 
@@ -180,14 +182,11 @@ public abstract class Module {
 			return;
 		}
 		damage.add(damagePoint);
+		
 		if(getDamage()>=thresholds[currentThreshold]){
 			majorDamage();
-
-			Battle.shake(ship.player,true);
-			Clip.damageMajor.play();
-
+			
 		}
-
 
 		Battle.shake(ship.player,false);
 		if(damagePoint.card!=null&&damagePoint.card.mod instanceof Tesla) return;
@@ -201,14 +200,14 @@ public abstract class Module {
 			destroy();
 			return;
 		}
-		new TextWisp("Scrambled", getCenter().add(new Pair(0,-40))); 
+		new TextWisp("Scrambled", Font.medium, getCenter().add(new Pair(0,-40)), WispType.Regular); 
 		scramble();
 	}
 
 	private void destroy(){
 
 		destroyed=true;
-		new TextWisp("Destroyed", getCenter().add(new Pair(0,-40)));
+		new TextWisp("Destroyed", Font.medium, getCenter().add(new Pair(0,-40)), WispType.Regular);
 		for(int i=0;i<ship.hand.size();i++){
 			Card c=ship.hand.get(i);
 			if(c.mod==this){

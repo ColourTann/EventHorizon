@@ -38,6 +38,7 @@ import eh.ship.shipClass.*;
 import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.TextWisp;
+import eh.util.TextWisp.WispType;
 import eh.util.maths.Pair;
 
 public class Battle extends Screen{
@@ -64,7 +65,7 @@ public class Battle extends Screen{
 	public static float enemyScreenShakeDrag=15;
 	public static boolean tutorial=false;
 	private ArrayList<CardGraphic> enemyHandList=new ArrayList<CardGraphic>();
-
+	ArrayList<TextWisp> wisps = new ArrayList<TextWisp>();
 	public Battle(Main.ScreenType type){
 		init(type);
 	}
@@ -99,34 +100,32 @@ public class Battle extends Screen{
 			player.addEnergy(5);
 			enemy.addEnergy(2);
 		}
-		for(int i=0;i<12;i++){
-			//	enemy.modules[0].addIncoming(new DamagePoint(null));
-		}
-
-		for(int i=0;i<5;i++){
-			//
-		}
 	}
 
 	private void resetStatics() {
+		TextWisp.wisps.clear();
 		currentState=State.Nothing;
 		currentPhase=Phase.WeaponPhase;
 		augmentSource=null;
 		targetSource=null;
 		moduleChooser=null;
+		ticks=0;
+		victor=null;
+		tutorial=false;
 		Tutorial.overrideStopClick=false;
 		Tutorial.overrideStopCycle=false;
 		Tutorial.overrideStopFlip=false;
 		Tutorial.overrideStopEnd=false;
-		ticks=0;
-		victor=null;
-		tutorial=false;
 		Tutorial.player=null;
 		Tutorial.enemy=null;
 		Tutorial.three.clear();
 		Tutorial.tutorials.clear();
 		CycleButton.button=null;
+		CycleButton.choices.clear();;
 		PhaseButton.button=null;
+		Card.extraCardsToRender.clear();
+		CardIcon.icons.clear();
+		help=null;
 	}
 
 	private void initTutorial() {
@@ -153,6 +152,9 @@ public class Battle extends Screen{
 
 
 	}
+	public static void zSet(Phase s){
+		currentPhase=s;
+	}
 
 	public static void setPhase(Phase s){
 		if(getPhase()==Phase.End)return;
@@ -161,6 +163,7 @@ public class Battle extends Screen{
 		player.checkDefeat();
 		System.out.println();
 		System.out.println("State change to "+s);
+		
 		switch(s){
 		case EnemyShieldPhase:
 			player.notifyIncoming();
@@ -178,12 +181,13 @@ public class Battle extends Screen{
 			player.fireAll();
 			break;
 		case ShieldPhase:
+			new TextWisp("Shield Phase", Font.big, new Pair(Main.width/2,330), TextWisp.WispType.Regular);
 			PhaseButton.get().nextPhase();
 			enemy.enemyEndTurn();
 			player.playerStartTurn();
 			break;
 		case WeaponPhase:
-
+			new TextWisp("Weapon Phase", Font.big, new Pair(Main.width/2,330), TextWisp.WispType.Regular);
 			break;
 		default:
 			break;
@@ -306,7 +310,7 @@ public class Battle extends Screen{
 
 
 		case Input.Keys.S:
-			shake(false, true);
+		
 			break;
 
 
@@ -326,9 +330,11 @@ public class Battle extends Screen{
 			}
 
 			break;
+			
 		case Input.Keys.ESCAPE:
 			Main.changeScreen(ScreenType.Menu);
 			break;
+		
 		}
 
 
@@ -348,6 +354,7 @@ public class Battle extends Screen{
 			enemyHandList.clear();
 
 			break;
+		
 		}
 	}
 
@@ -399,8 +406,17 @@ public class Battle extends Screen{
 
 	@Override
 	public void mousePressed(Pair location, boolean left) {
-		Tutorial.next();
+		if(tutorial)Tutorial.next();
+		else{
+			advance();	
+		}
+		
+
 		System.out.println(location);
+	}
+
+	public static void advance() {
+		if(getPhase()==Phase.EnemyShieldPhase||getPhase()==Phase.EnemyWeaponPhase) enemy.enemyFadeAll();
 	}
 
 	@Override
@@ -448,9 +464,9 @@ public class Battle extends Screen{
 		if(getPhase()==Phase.End){
 			String s=victor.player?"You win!":"You lose.";
 			Font.big.setColor(Colours.light);
-			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 200);
+			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 205);
 			s="(esc to return)";
-			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 240);
+			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 245);
 		}
 		CardGraphic.renderOffCuts(batch);
 		//	debugRender(batch);
@@ -459,10 +475,10 @@ public class Battle extends Screen{
 
 	@Override
 	public void postRender(SpriteBatch batch) {
-		Tutorial.renderAll(batch);
-		for(CardGraphic cg:Card.enemyCardsToRender)cg.render(batch);
+		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
 		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
 		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
+		Tutorial.renderAll(batch);
 	}
 
 

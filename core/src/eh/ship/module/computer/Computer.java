@@ -16,12 +16,15 @@ public abstract class Computer extends Module{
 		cost[0]=0;
 		cooldown[0]=0;
 		effect[0]=0;
-		rules[0]="Augment card: Targeted.\nThen draw a card";
+		rules[0]="Augment weapon card: Targeted.\nThen draw a card";
 		code[0].add(Special.Augment);
 		code[0].add(Augment.AugmentWeapon);
 		code[0].add(Augment.AugmentTargeted);
 		code[0].add(Augment.AugmentDrawCard, 1);
 		code[0].setPriority(2);
 		code[0].add(AI.OverrideIfOtherSideIgnore);
+	}
+	public int getMaximumHandSize() {
+		return (int) (destroyed?Math.ceil(maxCards/2f):maxCards);
 	}
 }

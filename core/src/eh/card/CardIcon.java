@@ -53,13 +53,13 @@ public class CardIcon extends Bonkject{
 
 	@Override
 	public void mouseDown() {
-		System.out.println(mousedGraphic.position);
+		if(position.y!=22)return;
 		overrideAlpha=true;
 		mousedGraphic.setPosition(position.add(width/2-CardGraphic.width/2,start.y+16));
 		
 		mousedGraphic.stopFading();
 		mousedGraphic.alpha=1;
-		cg.card.getShip().cardIconMoused(cg.card);
+		cg.card.getShip().cardOrIconMoused(cg.card);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class CardIcon extends Bonkject{
 		mousedGraphic.bonktivate();
 		mousedGraphic.fadeOut(3, Interp.LINEAR);
 		overrideAlpha=false;
-		cg.card.getShip().cardIconUnmoused();
+		cg.card.getShip().cardOrIconUnmoused();
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class CardIcon extends Bonkject{
 	}
 
 	public void render(SpriteBatch batch) {
-		if(!overrideAlpha)batch.setColor(1,1,1,.2f+.8f*(icons.indexOf(this)+14-icons.size())/14); 	//This alpha thing took me a 20 minutes...//
+		if(!overrideAlpha)batch.setColor(1,1,1,.2f+.8f*(icons.indexOf(this)+14-icons.size())/14); 	//This alpha thing took me 20 minutes...//
 		Draw.drawTextureScaled(batch,cg.card.getImage().get(), position.x, position.y, 2, 2);
 	
 		Draw.drawTexture(batch, border.get(),position.x,position.y);

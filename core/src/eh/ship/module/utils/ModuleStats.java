@@ -13,19 +13,24 @@ import eh.ship.module.Module.ModuleType;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
+import eh.util.TextWisp;
+import eh.util.TextWisp.WispType;
 import eh.util.maths.BoxCollider;
 import eh.util.maths.Collider;
 import eh.util.maths.Pair;
 
 public class ModuleStats extends Bonkject{
 	static int height=Main.height/5;
-	static int width=128;
+	public static int width=128;
 	Module mod;
 	public ModuleInfo info;
 	static Pair hpLoc=new Pair(14, 9);
 	static Pair hpGap=new Pair(16,15);
 	static int row=6;
 
+	//Just for tutorial//
+	TextWisp nameWisp;
+	
 	public ModuleStats(Module m) {
 		mousectivate(new BoxCollider(m.ship.player?0:Main.width-width, height*m.getIndex(), width, height));
 		mod=m;
@@ -54,6 +59,13 @@ public class ModuleStats extends Bonkject{
 	public void update(float delta) {
 	}
 
+	public void showNameWisp(){
+		nameWisp=new TextWisp(mod.getClass().getSuperclass().getSimpleName(), Font.test, collider.position.add(63, 73), WispType.HoldUntilFade);
+	}
+	
+	public void hideNameWisp(){
+		nameWisp.release();
+	}
 
 	public void render(SpriteBatch batch) {
 		Pic base=null;
@@ -122,7 +134,7 @@ public class ModuleStats extends Bonkject{
 			if(i==mod.maxHP-1)index=2;
 			Draw.drawTexture(batch, p[index].get(),collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y+hpGap.y*(i/row));
 			if(moused){
-				Draw.drawTexture(batch, Gallery.mousedHP.get(), collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y-hpGap.y*(i/row));
+				Draw.drawTexture(batch, Gallery.mousedHP.get(), collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y+hpGap.y*(i/row));
 			}
 		}
 

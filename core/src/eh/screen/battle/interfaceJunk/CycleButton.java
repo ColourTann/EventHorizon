@@ -28,7 +28,7 @@ public class CycleButton extends Bonkject{
 	boolean active;
 	public static ArrayList<Card> choices= new ArrayList<Card>();
 	private static float gap=20+CardGraphic.width;
-	private static Pair start=new Pair(Main.width/2-CardGraphic.width/2-gap,278);
+	private static Pair start=new Pair(Main.width/2-CardGraphic.width/2-gap,193);
 	int cost=0;
 	Timer timer=new Timer(0, 0, 1, Interp.LINEAR);
 	public CycleButton(Collider col) {
@@ -95,8 +95,9 @@ public class CycleButton extends Bonkject{
 
 		for(int i=0;i<choices.size();i++){
 			CardGraphic cg=choices.get(i).getGraphic();
+			cg.finishFlipping();
 			cg.override=true;
-			cg.mousectivate(new BoxCollider(0,0,0,0));
+			cg.mousectivate(new BoxCollider(0,0,CardGraphic.width,CardGraphic.height));
 			cg.setPosition(new Pair(start.x+gap*i,start.y));
 			cg.alpha=0;
 			cg.fadeIn(3, Interp.SQUARE);
@@ -125,7 +126,7 @@ public class CycleButton extends Bonkject{
 		Draw.drawTexture(batch, Gallery.iconEnergy.get(), 168,402);
 		Font.medium.setColor(Colours.dark);
 		String s=cost+"";
-		Font.medium.draw(batch, s, 191-Font.medium.getBounds(s).width/2, 398);
+		Font.medium.draw(batch, s, 191-Font.medium.getBounds(s).width/2, 403);
 	}
 
 	@Override

@@ -6,6 +6,8 @@ import java.util.Arrays;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.Main;
+import eh.assets.Clip;
+import eh.assets.Font;
 import eh.assets.Pic;
 import eh.card.Card;
 import eh.card.CardCode;
@@ -34,8 +36,11 @@ import eh.ship.niche.Niche;
 import eh.ship.shipClass.*;
 import eh.util.Draw;
 import eh.util.TextWisp;
+import eh.util.Timer;
+import eh.util.TextWisp.WispType;
 import eh.util.Timer.Interp;
 import eh.util.maths.Pair;
+import eh.util.particleSystem.Particle;
 
 public abstract class Ship {
 	//0-1 weapon 2 shield 3 gen 4 com
@@ -50,21 +55,21 @@ public abstract class Ship {
 	public ArrayList<Card> playList= new ArrayList<Card>();
 	public ArrayList<ShieldPoint> shieldPoints= new ArrayList<ShieldPoint>();
 	public boolean player;
-	int energyIncome;
+	//int energyIncome;
 	private int currentEnergy;
 	int maxCards;
 	private int majorDamageTaken=0;
 	private int energyAtEndOfPhase=0;
 	private float powerLevel=0;
-	
+
 	//Enemy ai stuff//
 	public Module focusTarget;
 	public FightStats fightStats;
-	
+
 	//Map stuff//
 	private MapShip mapShip;
-	
-	
+
+	public Timer timer = new Timer();
 	public enum ShipType{Aurora,Comet,Eclipse,Nova}
 	public abstract void placeNiches();
 	public Ship(boolean player, Pic shipPic, Pic genPic, Pic comPic){
@@ -82,7 +87,7 @@ public abstract class Ship {
 			w.attacks.clear();
 		}	
 		if(player)drawToMaximum();
-		currentEnergy+=energyIncome;
+		currentEnergy+=getGenerator().getIncome();
 	}
 
 	public void enemyStartTurn(){	
@@ -96,13 +101,13 @@ public abstract class Ship {
 	public void enemyStartPhase(){
 		if(Battle.getPhase()==Phase.End)return;
 		if(Battle.getPhase()==Phase.EnemyShieldPhase)enemyStartTurn();
-		enemyPickCard();
+		enemyPickAllCards(Battle.getPhase());
 	}
 
 	private void endTurn(){
 		focusTarget=null;
 		for(Module m:modules)m.endAdmin();
-		
+
 		shieldPoints.clear();
 	}
 
@@ -111,11 +116,12 @@ public abstract class Ship {
 			Battle.battleWon(getEnemy());
 		}
 	}
-	
+
 	public void playCards() {
 		for(Card c:playList){
 			hand.remove(c);
-			c.play();
+			if(player)c.playerPlay();
+
 		}
 		playList.clear();
 		if(player)updateCardPositions();
@@ -143,7 +149,7 @@ public abstract class Ship {
 	}
 
 	public void endPhase() {	
-		
+
 		addEnergy(energyAtEndOfPhase);
 		energyAtEndOfPhase=0;
 		switch (Battle.getPhase()){
@@ -165,9 +171,9 @@ public abstract class Ship {
 		case EnemyWeaponsFiring:
 			Battle.setPhase(Phase.WeaponPhase);
 			break;
-		
-		
-		
+
+
+
 		default:
 			break;
 		}
@@ -196,29 +202,53 @@ public abstract class Ship {
 			discardHand();
 			drawToMaximum();
 		}
-	
+
 	}
 
 	public void discardHand(){
 		while(hand.size()>0)discard(hand.get(0));
 	}
-	
+
 	//Enemy AI stuff//
 
-	public void enemyPickCard(){
-		//Method called at start enemy phase and when you click an enemy card//
-		System.out.println("picking");
-		Card c=pickCard(Battle.getPhase());
-		if(c==null){
-			endPhase();
-			return;
+
+
+	public void enemyPickAllCards(Phase p){
+
+
+		Card c=pickCard(p);
+		int i=0;
+		while(c!=null){
+			c.enemySelectAndPlay();
+			if(c.getCode().contains(AI.RegularShield)){
+				enemySpendShields(true);
+				enemySpendShields(false);
+			}
+			float gap=20;
+			c.getGraphic().slide(new Pair(
+					975-(i/2)*(gap+CardGraphic.width),
+					80+(i%2)*(CardGraphic.height/2+gap)),
+					1.5f, 
+					Interp.SQUARE);
+
+			c=pickCard(p);
+			i++;
 		}
-		c.enemySelect();
-		if(c.getCode().contains(AI.RegularShield)){
-			enemySpendShields(true);
-			enemySpendShields(false);
+		if(i==0){
+			endPhase();
 		}
 		notifyIncoming();
+
+		timer=new Timer(1, 0, 10, Interp.LINEAR);
+
+	}
+
+
+	public void enemyFadeAll(){
+		if(timer.getFloat()>0)return;
+		for(Card c:playList) c.fadeAndAddIcon();
+		playList.clear();
+		endPhase();
 	}
 
 	public Card pickCard(Phase p){
@@ -228,17 +258,16 @@ public abstract class Ship {
 		boolean weapon=true;
 		if(p==Phase.EnemyShieldPhase||p==Phase.ShieldPhase) weapon=false;
 		if(p==Phase.EnemyWeaponPhase||p==Phase.WeaponPhase) shield=false;
-
 		//First play any scrambled cards//
 		for(Card c:hand){
 			if(c.mod.getBuffAmount(BuffType.Scrambled)>0){
 				return c;
 			}
 		}
-		
+
 		//Check the cards in order and pass to the enemyDecide method//
 
-		
+
 		//First check the alternate side//
 		Card c;
 		for(int pri=2;pri>=-1;pri--){
@@ -254,7 +283,7 @@ public abstract class Ship {
 	}
 
 	private Card decideBest(int priority, boolean weapon, boolean shield, boolean targetedOnly){
-		
+
 		//if priority == 0, check targeted then normal//
 		if(priority==0&&targetedOnly==false){
 			System.out.println("checking targeted");
@@ -262,7 +291,7 @@ public abstract class Ship {
 			if(c!=null)return c;
 			System.out.println("checking others");
 		}
-		
+
 		for(Card c:hand){
 			if(c.selected)continue; //Probably just for debugging//
 			if(c.mod.type==ModuleType.WEAPON&&!weapon) continue;
@@ -271,11 +300,11 @@ public abstract class Ship {
 
 			for(int side=1;side>=0;side--){
 				CardCode code= c.getCode(side);
-				
+
 				//cancelling due to targeted//
 				if(targetedOnly&&!code.contains(Special.Targeted))break;
-				
-				
+
+
 				if(code.getPriority()==priority){
 					if(c.enemyDecide(side)) return c;
 					System.out.println();	
@@ -317,7 +346,7 @@ public abstract class Ship {
 				}
 				continue;
 			}
-			
+
 			//Non-priority//
 			while(m.getShieldableIncoming()>0&&shieldPoints.size()>0){
 				m.shield(shieldPoints.remove(0),false);
@@ -356,7 +385,7 @@ public abstract class Ship {
 
 	public void drawToMaximum(){
 		if(Battle.tutorial)return;
-		drawCard(maxCards-hand.size());
+		drawCard(getComputer().getMaximumHandSize()-hand.size());
 	}
 
 	public void drawCard(int number){
@@ -372,12 +401,12 @@ public abstract class Ship {
 		card.getGraphic().mousectivate(null);
 		if(player)updateCardPositions();
 	}
-	
+
 	public void discard(Card card) {
 		hand.remove(card);
 		if(player){
-		card.getGraphic().fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
-		updateCardPositions();
+			card.getGraphic().fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
+			updateCardPositions();
 		}
 	}
 
@@ -402,7 +431,7 @@ public abstract class Ship {
 		}
 	}
 
-	public void cardIconMoused(Card card) {
+	public void cardOrIconMoused(Card card) {
 		for(Module m:modules){
 			m.cardIconMoused(card);
 		}
@@ -411,7 +440,7 @@ public abstract class Ship {
 		}
 	}
 
-	public void cardIconUnmoused() {
+	public void cardOrIconUnmoused() {
 		for(Module m:modules){
 			m.cardIconUnmoused();
 		}
@@ -419,7 +448,7 @@ public abstract class Ship {
 			m.cardIconUnmoused();
 		}
 	}
-	
+
 	//Setup junk//
 
 	public static void init(){
@@ -443,11 +472,11 @@ public abstract class Ship {
 		if(!Battle.tutorial)		drawCard(maxCards);
 
 		if(!goingFirst){
-			currentEnergy=(int) Math.ceil(energyIncome/2f);
+			currentEnergy=(int) Math.ceil(getGenerator().getIncome()/2f);
 		}
-		else currentEnergy=energyIncome;
+		else currentEnergy=getGenerator().getIncome();
 	}
-	
+
 	private void initFightStats() {
 		fightStats=new FightStats(this);
 	}
@@ -472,11 +501,11 @@ public abstract class Ship {
 		renderShip(batch);
 		renderFightStats(batch);
 	}
-	
+
 	public void renderFightStats(SpriteBatch batch){
 		fightStats.render(batch);
 	}
-	
+
 	public void renderShip(SpriteBatch batch){
 		getGraphic().render(batch);
 	}
@@ -485,6 +514,8 @@ public abstract class Ship {
 	//Setters and getters//
 	public void addToEnergyAtEndOfPhase(int amount){energyAtEndOfPhase+=amount;}
 	public void majorDamage() {
+		Battle.shake(player,true);
+		Clip.damageMajor.play();
 		majorDamageTaken++;
 	}
 	public int getMajorDamage(){
@@ -538,8 +569,8 @@ public abstract class Ship {
 	}
 	public Module getModule(int index){return modules[index];}
 	public Module getShield(){return modules[2];}
-	public Module getGenerator(){return modules[3];}
-	public Module getComputer(){return modules[4];}
+	public Generator getGenerator(){return (Generator) modules[3];}
+	public Computer getComputer(){return (Computer) modules[4];}
 	public ShipGraphic getGraphic(){
 		if(battleGraphic==null)battleGraphic=new ShipGraphic(this);
 		return battleGraphic;
@@ -559,7 +590,6 @@ public abstract class Ship {
 		niches[2].install(s);
 	}
 	public void setGenerator(Generator g){
-		energyIncome=g.energyIncome;
 		niches[3].install(g);
 	}
 	public void setComputer(Computer c){
@@ -570,38 +600,38 @@ public abstract class Ship {
 		return shipPic;
 	}
 	public int getIncome(){
-		return energyIncome;
+		return getGenerator().getIncome();
 	}
 	public String toString(){
 		return "Ship, player:"+player;
 	}
 
 	public void addIncome(int amount) {
-		energyIncome+=amount;
+		getGenerator().addIncome(amount);
 	}
-	
+
 	public boolean hasSpendableShields() {
 		if(shieldPoints.size()>0){
 			for(Module m:modules){
 				if(m.getShieldableIncoming()>0){
-					new TextWisp("Spend all your shields first!", new Pair(Main.width/2,300));
+					new TextWisp("Spend all your shields first!", Font.medium, new Pair(Main.width/2,300), WispType.Regular);
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	public int getTotalDeckSize(){
 		int result=0;
-		
+
 		for(Module m:modules){
 			result+=m.numCards;
 		}
-		
+
 		return result;
 	}
-	
+
 	public float getPowerLevel(){
 		if(powerLevel!=0)return powerLevel;
 		deck.clear();
@@ -612,52 +642,52 @@ public abstract class Ship {
 		for(Module m:deck){
 			Card c=m.getNextCard();
 			CardCode code=c.getCode();
-			
+
 			totalEffect+=c.getEffect();
 			totalCost+=c.getCost();
-			
+
 			deckSize-=code.getAmount(Augment.AugmentDrawCard);
 			deckSize-=code.getAmount(Special.DrawCard);
 			totalCost-=code.getAmount(Special.GainEnergy);
 		}
-		
+
 		float averageCardCost=totalCost/deckSize;
 		float averageCardEffect=totalEffect/deckSize;
-		
+
 		float handCost=averageCardCost*maxCards;
 		float handEffect=averageCardEffect*maxCards;
-		
-		float ratio=energyIncome/handCost;
-		
+
+		float ratio=getGenerator().getIncome()/handCost;
+
 		float handPower=handEffect*ratio;
 		boolean debug=false;
 		if(debug){
-		System.out.println("Power levels for "+this);
-		System.out.println("Total effect: "+totalEffect);
-		System.out.println("Total cost: "+totalCost);
-		System.out.println("Deck size: "+deckSize);
-		System.out.println("Average Card cost: "+averageCardCost);
-		System.out.println("Average Card effect: "+averageCardEffect);
-		System.out.println("Hand cost: "+handCost);
-		System.out.println("Hand effect: "+handEffect);
-		System.out.println("Proportion of hand played: "+ratio);
-		System.out.println("Final power level: "+handPower);
+			System.out.println("Power levels for "+this);
+			System.out.println("Total effect: "+totalEffect);
+			System.out.println("Total cost: "+totalCost);
+			System.out.println("Deck size: "+deckSize);
+			System.out.println("Average Card cost: "+averageCardCost);
+			System.out.println("Average Card effect: "+averageCardEffect);
+			System.out.println("Hand cost: "+handCost);
+			System.out.println("Hand effect: "+handEffect);
+			System.out.println("Proportion of hand played: "+ratio);
+			System.out.println("Final power level: "+handPower);
 		}
-		
+
 		powerLevel=handPower;
 		return powerLevel;
 	}
-	
 
-	
+
+
 	public abstract ArrayList<MapAbility> getMapAbilities();
-	
+
 	public void setMapShip(MapShip mapShip) {
 		this.mapShip=mapShip;
 	}
-	
-	
-	
 
-		
+
+
+
+
 }

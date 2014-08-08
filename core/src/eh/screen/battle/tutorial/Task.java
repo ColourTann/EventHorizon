@@ -2,6 +2,9 @@ package eh.screen.battle.tutorial;
 
 
 
+import java.awt.BufferCapabilities.FlipContents;
+
+import eh.assets.Pic;
 import eh.card.Card;
 import eh.card.CardCode.Special;
 import eh.screen.battle.Battle;
@@ -12,15 +15,24 @@ import eh.ship.module.Module;
 import eh.ship.module.Module.ModuleType;
 import eh.ship.module.utils.Buff;
 import eh.ship.module.utils.Buff.BuffType;
+import eh.util.maths.Pair;
 
 public class Task {
 	String s;
 	TaskType t;
 	Ship player = Battle.player;
-	public enum TaskType{PlayShield, ShieldGen, EndShieldPhase, PlayWeapon, EndWeaponPhase, PreventAllMajor, TargetGenerator, PlayerAlternateSide, NoneScrambled, WeaponPlayed, WeirdPrevent}
+	public Pic pic;
+	public Pair location;
+	public enum TaskType{PlayShield, ShieldGen, EndShieldPhase, PlayWeapon, EndWeaponPhase, PreventAllMajor, TargetGenerator, PlayerAlternateSide, NoneScrambled, WeaponPlayed, WeirdPrevent, FlipCard}
 	public Task(String s, TaskType t){
 		this.s=s;
 		this.t=t;
+	}
+	public Task(String s, TaskType t, Pic pic, Pair location){
+		this.s=s;
+		this.t=t;
+		this.pic=pic;
+		this.location=location;
 	}
 	public boolean isDone(){
 		switch(t){
@@ -68,9 +80,13 @@ public class Task {
 			break;
 		case WeirdPrevent:
 			if(player.getModule(0).getShieldableIncoming()<=player.getModule(0).thresholds[0]&&player.getModule(1).getShieldableIncoming()<=player.getModule(1).thresholds[1])return true;
+			break;
+		case FlipCard:
+			if(player.hand.size()>0)return player.hand.get(0).side==1;
+			return player.playList.get(0).side==1;
 			
-		
 		}
+		
 		return false;
 
 	}

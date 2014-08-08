@@ -23,6 +23,7 @@ import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.TextWisp;
+import eh.util.TextWisp.WispType;
 import eh.util.Timer;
 import eh.util.Timer.Interp;
 import eh.util.maths.Pair;
@@ -30,8 +31,8 @@ import eh.util.particleSystem.ParticleSystem;
 
 public class Main extends ApplicationAdapter  {
 
-	public static float version=0.15f;
-	public static boolean debug=true;
+	public static float version=0.2f;
+	public static boolean debug=false;
 
 	public static int height=700;
 	public static int width=1280;
@@ -79,9 +80,10 @@ public class Main extends ApplicationAdapter  {
 		mainCam.setToOrtho(true);
 		
 		
-		battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
+		
+		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-		//select=new Selector();currentScreen=select;
+		select=new Selector();currentScreen=select;
 
 		//viewer=new CardViewer();currentScreen=viewer;
 
@@ -180,6 +182,7 @@ public class Main extends ApplicationAdapter  {
 
 	public enum ScreenType{EasyFight, MediumFight, HardFight, TutorialFight, Menu}
 	public static void changeScreen(ScreenType type){
+		TextWisp.wisps.clear();
 		nextType=type;
 	}
 

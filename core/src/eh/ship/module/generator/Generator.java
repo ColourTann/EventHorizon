@@ -18,4 +18,10 @@ public abstract class Generator extends Module{
 		code[0].add(Special.GainEnergy,1);
 		code[0].setPriority(2);
 	}
+	public int getIncome(){
+		return (int) (destroyed?Math.ceil(energyIncome/2f):energyIncome);
+	}
+	public void addIncome(int amount){
+		energyIncome+=amount;
+	}
 }

@@ -12,14 +12,14 @@ import eh.util.Colours;
 import eh.util.maths.Pair;
 
 public class Pic {
-	
+
 	String path;
 	static Color checked=new Color(.5f,.1f,.99f,1);
 	private Texture t;
 	private Texture putline;
 	private Texture glowOutline;
 	private Texture monoChrome;
-	
+
 	public Pic(String path){
 		this.path=path+".png";
 	}
@@ -46,14 +46,14 @@ public class Pic {
 		//result.dispose();
 		return putline;
 	}
-	
+
 	public Texture getGlow(){
-		
+
 		if(glowOutline!=null)return glowOutline;
 		Texture temp=getOutline();
 		int width=temp.getWidth();
 		int height=temp.getHeight();
-		
+
 		Pixmap base=temp.getTextureData().consumePixmap();
 		Pixmap result=new Pixmap(width, height, Format.RGBA8888);
 		for(int x=0;x<width;x++){			
@@ -66,7 +66,7 @@ public class Pic {
 		//result.dispose();
 		return glowOutline;
 	}
-	
+
 	public Texture getMonochrome(){
 		get();
 		if(monoChrome!=null)return monoChrome;
@@ -88,7 +88,7 @@ public class Pic {
 		//result.dispose();
 		return monoChrome;
 	}
-	
+
 	private void outlinePath(Pixmap pixmap, Pixmap result, int x, int y, int iteration){
 		if(x<0||y<0||x>pixmap.getWidth()||y>pixmap.getHeight())return;
 		int col=pixmap.getPixel(x, y);
@@ -106,35 +106,35 @@ public class Pic {
 			}
 		}
 	}
-	
+
 	private void glow(Pixmap pixmap, Pixmap result, int x, int y, int iteration){
 		if(x<0||y<0||x>pixmap.getWidth()||y>pixmap.getHeight())return;
 		int col=pixmap.getPixel(x, y);
 		if(getAlpha(col)==0)return;
-		
 
-	float dist=2;
-new Pair(dist,dist).getDistance();
+
+		float dist=2;
+		new Pair(dist,dist).getDistance();
 		for(float dx=-dist;dx<=dist;dx++){	
 			for(float dy=-dist;dy<=dist;dy++){
-				Color setter=Colours.withAlpha(Colours.shieldCols6[2],.25f);
+				Color setter=Colours.withAlpha(Colours.white,.25f);
 				col=result.getPixel((int)(x+dx), (int)(y+dy));
-				
+
 				//if(getAlpha(col)<=getAlpha(Color.rgba8888(setter))){
-					
-					result.setColor(setter);
-					result.drawPixel((int)(x+dx), (int)(y+dy));
+
+				result.setColor(setter);
+				result.drawPixel((int)(x+dx), (int)(y+dy));
 				//}
-			
-				
+
+
 			}
 		}
-		
-		
+
+
 	}
 
-	
-	
+
+
 	static float getAlpha(int col){
 		return (col& 0x000000ff)/ 255f;
 	}

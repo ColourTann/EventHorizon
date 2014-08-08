@@ -75,7 +75,6 @@ public class Gallery {
 	
 	//INTERFACE STUFF//
 	public static Pic battleScreen= new Pic("Interface/mainscreen");
-	public static Pic endTurnButton= new Pic("Interface/endturnbutton");
 	public static Pic endTurnWeapon= new Pic("Interface/endturnweapon");
 	public static Pic endTurnShield= new Pic("Interface/endturnshield");
 	public static Pic endTurnBottom= new Pic("Interface/endturnbottom");
