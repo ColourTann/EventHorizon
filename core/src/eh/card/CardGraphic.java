@@ -188,10 +188,14 @@ public class CardGraphic extends Bonkject {
 		Font.small.setColor(Colours.white);
 		batch.setColor(Colours.white);
 	}
+	
+	public float getBaseHeight(int part){
+		return  position.y + sidePositions[part] + selectedHeight;
+	}
 
 	public void renderHalf(int part, SpriteBatch batch, Color c) {
 		//Setting height and colours//
-		float baseHeight = position.y + sidePositions[part] + selectedHeight;
+		float baseHeight = getBaseHeight(part);
 		Color lightText = Colours.withAlpha(Colours.multiply(Colours.light, c),c.a);
 		Color darkText = Colours.withAlpha(Colours.dark, c.a);
 		batch.setColor(c);
@@ -317,6 +321,9 @@ public class CardGraphic extends Bonkject {
 				Font.medium.draw(batch, "" + cooldown, position.x + positionCooldown.x + 6,baseHeight + positionCooldown.y + positionArray[5][0].y+ 23);
 			}
 		}
+		
+
+		
 		batch.setColor(Colours.white);
 	}
 
@@ -392,7 +399,6 @@ public class CardGraphic extends Bonkject {
 		card.getShip().cardOrIconUnmoused();
 		card.mod.moused=false;
 	}
-
 
 
 	public static void setAugmentOrTarget(CardGraphic augmenter){

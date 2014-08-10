@@ -2,8 +2,6 @@ package eh.screen.battle.tutorial;
 
 
 
-import java.awt.BufferCapabilities.FlipContents;
-
 import eh.assets.Pic;
 import eh.card.Card;
 import eh.card.CardCode.Special;
@@ -13,7 +11,6 @@ import eh.screen.battle.Battle.State;
 import eh.ship.Ship;
 import eh.ship.module.Module;
 import eh.ship.module.Module.ModuleType;
-import eh.ship.module.utils.Buff;
 import eh.ship.module.utils.Buff.BuffType;
 import eh.util.maths.Pair;
 
@@ -23,6 +20,9 @@ public class Task {
 	Ship player = Battle.player;
 	public Pic pic;
 	public Pair location;
+	public Card card;
+	public int side;
+	public boolean phaseButton;
 	public enum TaskType{PlayShield, ShieldGen, EndShieldPhase, PlayWeapon, EndWeaponPhase, PreventAllMajor, TargetGenerator, PlayerAlternateSide, NoneScrambled, WeaponPlayed, WeirdPrevent, FlipCard}
 	public Task(String s, TaskType t){
 		this.s=s;
@@ -33,6 +33,19 @@ public class Task {
 		this.t=t;
 		this.pic=pic;
 		this.location=location;
+	}
+
+	public Task(String s, TaskType t, Card card, int side){
+		this.s=s;
+		this.t=t;
+		this.card=card;
+		this.side=side;
+	}
+
+	public Task(String s, TaskType t, boolean phaseButton){
+		this.s=s;
+		this.t=t;
+		this.phaseButton=true;
 	}
 	public boolean isDone(){
 		switch(t){
@@ -84,10 +97,16 @@ public class Task {
 		case FlipCard:
 			if(player.hand.size()>0)return player.hand.get(0).side==1;
 			return player.playList.get(0).side==1;
-			
+
 		}
-		
+
 		return false;
 
+	}
+	public PicLoc getPicLoc() {
+		if(location!=null)	return new PicLoc(pic, location, this);
+		if(card!=null)		return new PicLoc(card, side, this);
+		if(phaseButton)		return new PicLoc(this);
+		return null;
 	}
 }

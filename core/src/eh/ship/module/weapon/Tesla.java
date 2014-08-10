@@ -23,11 +23,10 @@ public class Tesla extends Weapon{
 		cooldown[1]=0;
 		effect[1]=0;
 		shots[1]=0;
-		rules[1]="Augment tesla card: Targeted, +2 damage";
+		rules[1]="Augment tesla card: +2 damage";
 		code[1].add(Special.Augment);
 		code[1].add(Augment.AugmentThis);
 		code[1].add(Augment.AugmentDamage,2);
-		code[1].add(Augment.AugmentTargeted);
 		code[1].add(AI.OtherCardsThisSystem,1);
 		code[1].setPriority(1);
 		

@@ -55,6 +55,9 @@ public class Tutorial extends Bonkject{
 	int special=0;
 	PicLoc myGlow;
 	
+	public static Card firstShieldCard;
+	public static Card firstWeaponCard;
+	
 	//Highlight stuff//
 	public static ArrayList<PicLoc> glows= new ArrayList<PicLoc>();
 	
@@ -140,7 +143,7 @@ public class Tutorial extends Bonkject{
 
 
 	public enum Trigger{PlayerShieldPhase, CheckList, PlayerWeaponPhase}
-	public enum Effect{EnemyPlayCards, ShieldGenList, AllowedToPlay, PlayWeaponList, ShieldMajorList, FirstWeaponDrawAndHideNames, TargetGeneratorList, DrawTargeted, drawTwoShields, LotsShieldList, End, UnscrambleList, DrawThreeTesla, ShowPlayerNames}
+	public enum Effect{EnemyPlayCards, ShieldGenList, DrawFirstShieldAndAllowedToPlay, PlayWeaponList, ShieldMajorList, hideNameWisps, TargetGeneratorList, DrawTargeted, drawTwoShields, LotsShieldList, End, UnscrambleList, DrawThreeTesla, ShowPlayerNames}
 	public static ArrayList<Tutorial> tutorials=new ArrayList<Tutorial>();
 	public static void init(){
 
@@ -151,11 +154,11 @@ public class Tutorial extends Bonkject{
 		add("They make up a deck of cards that you use to fight!");
 		add("The enemy ship is playing a weapon card to attack you!", Trigger.PlayerShieldPhase, Effect.EnemyPlayCards);
 		add("These orange blips show that you have incoming damage on your generator", new Pair(43,440));
-		add("Shield cards give you shield points to spend when you play them", Effect.AllowedToPlay);
+		add("Shield cards give you shield points to spend when you play them", Effect.DrawFirstShieldAndAllowedToPlay);
 		add("This card gives two shield points", new Pair(Main.width/2, 451));
 		add("", Trigger.CheckList, Effect.ShieldGenList);
 		add("", Trigger.PlayerWeaponPhase);
-		add("Now it's your turn to fight back", Effect.FirstWeaponDrawAndHideNames);
+		add("Now it's your turn to fight back", Effect.hideNameWisps);
 		add("Cards have an energy cost", new Pair(305,484));
 		add("And some cards have a cooldown, which means you must wait before playing another card from this module",new Pair(409,484));
 		add("Weapon and shield cards have bars which show how much damage or shielding they provide", new Pair(358,521));
@@ -307,9 +310,9 @@ public class Tutorial extends Bonkject{
 				break;
 			case ShieldGenList:
 				currentList=new Checklist(new Task[]{
-						new Task("Play the shield card\n(click to play)",TaskType.PlayShield, Gallery.cardBase, new Pair(570,450)), 
+						new Task("Play the shield card\n(click to play)",TaskType.PlayShield, firstShieldCard, 0), 
 						new Task("Use both shield points on your generator by clicking on it twice",TaskType.ShieldGen, Gallery.statsGenerator, new Pair(0,420)),
-						new Task("Click the blue shield button to confirm", TaskType.EndShieldPhase, Gallery.endTurnWeapon, new Pair(605,356))
+						new Task("Click the blue shield button to confirm", TaskType.EndShieldPhase, true)
 				});
 				break;
 			case PlayWeaponList:
@@ -333,14 +336,16 @@ public class Tutorial extends Bonkject{
 				Battle.player.drawCard(Battle.player.getShield().getCard(5));
 				break;
 				
-			case AllowedToPlay:
-				Battle.player.drawCard(Battle.player.getShield().getCard(5));
+			case DrawFirstShieldAndAllowedToPlay:
+				firstShieldCard=Battle.player.getShield().getCard(5);
+				firstWeaponCard=player.getModule(1).getCard(5);
+				player.drawCard(firstWeaponCard);
+				player.drawCard(player.getModule(1).getCard(5));
+				Battle.player.drawCard(firstShieldCard);
+				player.drawCard(player.getModule(0).getCard(5));
 				break;
 				
-			case FirstWeaponDrawAndHideNames:
-				player.drawCard(player.getModule(1).getCard(5));
-				player.drawCard(player.getModule(1).getCard(5));
-				player.drawCard(player.getModule(0).getCard(5));
+			case hideNameWisps:
 				for(Module m:player.modules)m.getStats().hideNameWisp();
 				break;
 

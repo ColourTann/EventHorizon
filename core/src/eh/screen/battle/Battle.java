@@ -434,26 +434,12 @@ public class Battle extends Screen{
 		//Rendering ships, statblocks and misc interface//
 		player.renderAll(batch);
 		enemy.renderAll(batch);
-		drawInterfaceOverlay(batch);
+		
 
-		for(CardIcon icon:CardIcon.icons){
-			icon.render(batch);
-		}
-
-		for(Module m:player.modules){
-			m.getStats().render(batch);
-		}
-		for(Module m:enemy.modules){
-			m.getStats().render(batch);
-		}
-
-		for(Card c:player.hand){
-			c.getGraphic().render(batch);
-		}
+	
 
 
-		CycleButton.get().render(batch);
-		if(help!=null)help.render(batch);
+	
 
 		//debug phase text
 		if(Main.debug){
@@ -468,7 +454,7 @@ public class Battle extends Screen{
 			s="(esc to return)";
 			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 245);
 		}
-		CardGraphic.renderOffCuts(batch);
+		
 		//	debugRender(batch);
 
 	}
@@ -478,6 +464,27 @@ public class Battle extends Screen{
 		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
 		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
 		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
+		
+		for(CardIcon icon:CardIcon.icons){
+			icon.render(batch);
+		}
+
+		for(Module m:player.modules){
+			m.getStats().render(batch);
+		}
+		for(Module m:enemy.modules){
+			m.getStats().render(batch);
+		}
+
+		for(Card c:player.hand){
+			c.getGraphic().render(batch);
+		}
+		CardGraphic.renderOffCuts(batch);
+		CycleButton.get().render(batch);
+		
+		if(help!=null)help.render(batch);
+		
+		drawInterfaceOverlay(batch);
 		Tutorial.renderAll(batch);
 	}
 

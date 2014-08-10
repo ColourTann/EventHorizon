@@ -72,10 +72,9 @@ public class Checklist extends Bonkject{
 				}
 
 				Tutorial.glows.clear();
-				if(t.pic!=null){
-					
-					Tutorial.glows.add(new PicLoc(t.pic, t.location, t));
-				}
+				PicLoc pl=t.getPicLoc();
+				if(pl!=null)	Tutorial.glows.add(pl);
+				
 				return;
 
 			}

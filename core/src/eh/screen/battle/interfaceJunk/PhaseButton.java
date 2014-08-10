@@ -21,7 +21,7 @@ import eh.util.maths.PolygonCollider;
 import eh.util.maths.Pair;
 
 public class PhaseButton extends Bonkject{
-	private static Pair unClickedHeight;
+	public static Pair unClickedHeight;
 	private static Pair clickedHeight;
 	private float phaseChangeAlpha=0;
 	private boolean fadingIn;
@@ -31,6 +31,7 @@ public class PhaseButton extends Bonkject{
 	private Pic before=Gallery.endTurnWeapon;
 	private Pic after=Gallery.endTurnShield;
 	Timer t;
+	private boolean glow;
 	public PhaseButton(Collider col) {
 		System.out.println(Main.width/2-width/2+":"+416);
 		mousectivate(new PolygonCollider(new Polygon(new float[]{
@@ -63,6 +64,11 @@ public class PhaseButton extends Bonkject{
 		Battle.turnButtonClicked();
 	}
 	
+	public boolean isDown(){
+		return Math.abs(t.getPair().y-unClickedHeight.y)<6;
+		
+	}
+	
 	public void nextPhase(){
 		if(fadingIn)swap();
 		fadingIn=true;
@@ -70,20 +76,6 @@ public class PhaseButton extends Bonkject{
 		mouseUp();
 	}
 	
-	public void render(SpriteBatch batch){
-		Color c = Colours.white;
-		if(Battle.getPhase()!=Phase.ShieldPhase&&Battle.getPhase()!=Phase.WeaponPhase){
-			c=Colours.faded;
-		}
-		
-		batch.setColor(c);
-		Draw.drawTexture(batch, Gallery.endTurnBottom.get(),605,353);
-		Draw.drawTexture(batch, before.get(),t.getPair().x,t.getPair().y);
-		
-		batch.setColor(Colours.withAlpha(c,phaseChangeAlpha));
-		Draw.drawTexture(batch, after.get(),t.getPair().x,t.getPair().y);
-		batch.setColor(1, 1, 1, 1);
-	}
 	
 	public static PhaseButton get(){
 		if(button==null){
@@ -110,5 +102,32 @@ public class PhaseButton extends Bonkject{
 		before=after;
 		after=temp;
 	}
+	
+	//horrible tutorial stuff//
+	public void setGlow(boolean on){
+		glow=on;
+	}
+	
+	
+	
+	public void render(SpriteBatch batch){
+		Color c = Colours.white;
+		if(Battle.getPhase()!=Phase.ShieldPhase&&Battle.getPhase()!=Phase.WeaponPhase){
+			c=Colours.faded;
+		}
+		
+		batch.setColor(c);
+		Draw.drawTexture(batch, Gallery.endTurnBottom.get(),605,353);
+		Draw.drawTexture(batch, before.get(),t.getPair().x,t.getPair().y);
+		
+		batch.setColor(Colours.withAlpha(c,phaseChangeAlpha));
+		Draw.drawTexture(batch, after.get(),t.getPair().x,t.getPair().y);
+		batch.setColor(1, 1, 1, 1);
+		
+		if(glow&&!moused){
+			
+		}
+	}
+	
 
 }
