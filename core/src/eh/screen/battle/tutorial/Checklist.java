@@ -19,9 +19,12 @@ public class Checklist extends Bonkject{
 	static float fontHeight=Font.medium.getBounds("a").height;
 	static float offset=8;
 	boolean drawDam;
-	public Checklist(Task[] tasks) {
+	Tutorial tutorial;
+	public Checklist(Tutorial tutorial, Task[] tasks) {
+		this.tutorial=tutorial;
 		this.tasks=tasks;
 		for(Task t:tasks){
+			if(t.s.equals(""))continue;
 			height+=Font.medium.getWrappedBounds(t.s+"\n\n",width-offset*2).height;
 		}
 		height-=fontHeight;
@@ -29,16 +32,7 @@ public class Checklist extends Bonkject{
 		y-=height/2;
 	}
 	
-	public Checklist(Task[] tasks, int bonusY) {
-		this.tasks=tasks;
-		for(Task t:tasks){
-			height+=Font.medium.getWrappedBounds(t.s+"\n\n",width-offset*2).height;
-		}
-		height-=fontHeight;
-		height+=5;
-		y-=height/2;
-		y+=bonusY;
-	}
+	
 
 	@Override
 	public void mouseDown() {
@@ -81,7 +75,12 @@ public class Checklist extends Bonkject{
 		}
 	}
 
+	public boolean isCurrent(){
+		return Tutorial.getCurrentTutorial()==tutorial;
+	}
+	
 	public void render(SpriteBatch batch) {
+		if(!isCurrent())return;
 		batch.setColor(Colours.withAlpha(Colours.white,alpha));
 		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, 3, 3);
 		Draw.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y, 3, height);
@@ -94,7 +93,7 @@ public class Checklist extends Bonkject{
 			heightAdd+=Font.medium.getWrappedBounds(t.s+"\n\n", width-offset*2).height;
 		}
 		if(drawDam){
-			Draw.drawTexture(batch, Gallery.orangeHP[1].get(), 613,148);
+			Draw.drawTexture(batch, Gallery.orangeHP[1].get(), 614,148);
 		}
 		//599 560
 

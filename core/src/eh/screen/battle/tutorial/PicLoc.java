@@ -48,18 +48,20 @@ public class PicLoc {
 		for(int x=-2;x<=2;x++){
 			for(int y=-2;y<=2;y++){
 				if(location!=null)Draw.drawTexture(batch, pic.getOutline(), location.x+x, location.y+y);
-				if(card!=null)Draw.drawTexture(batch, Gallery.cardBase.getOutline(), card.getGraphic().position.x+x, card.getGraphic().getBaseHeight(side)+y);
-				if(phaseButton){
-					
-					if(PhaseButton.get().isDown()){
-						System.out.println(PhaseButton.get().position.subtract(PhaseButton.unClickedHeight).getDistance());
-		
-						Draw.drawTexture(batch, Gallery.endTurnWeapon.getOutline(), 605+x,356+y);
-					}
+				if(card!=null){
+					System.out.println("drawing at "+card.getGraphic().getBaseHeight(side));
+					Draw.drawTexture(batch, Gallery.cardBase.getOutline(), card.getGraphic().position.x+x, card.getGraphic().getBaseHeight(side)+y);
 				}
+
 			}
 		}
-
-
+	}
+	public void renderFuckingPhaseButtonStupidTutorial(SpriteBatch batch){
+		batch.setColor(Colours.withAlpha(Colours.light, (float)Math.sin(Battle.ticks*4)/5+.3f));
+		for(int x=-2;x<=2;x++){
+			for(int y=-2;y<=2;y++){
+				if(phaseButton)if(PhaseButton.get().isDown())Draw.drawTexture(batch, Gallery.endTurnWeapon.getOutline(), 605+x,356+y);	
+			}
+		}
 	}
 }

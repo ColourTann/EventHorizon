@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 
 import eh.Main;
+import eh.module.Module.ModuleType;
 import eh.screen.battle.Battle;
-import eh.ship.module.Module.ModuleType;
 import eh.ship.niche.Niche;
 import eh.util.Draw;
 import eh.util.maths.Pair;

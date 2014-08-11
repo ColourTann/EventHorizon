@@ -8,19 +8,19 @@ import eh.card.CardCode.AI;
 import eh.card.CardCode.AIclass;
 import eh.card.CardCode.Augment;
 import eh.card.CardCode.Special;
+import eh.module.Module;
+import eh.module.Module.ModuleType;
+import eh.module.utils.Buff;
+import eh.module.utils.DamagePoint;
+import eh.module.utils.ShieldPoint;
+import eh.module.utils.Buff.BuffType;
+import eh.module.weapon.Weapon;
 import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
 import eh.screen.battle.Battle.State;
 import eh.screen.battle.interfaceJunk.CycleButton;
 import eh.screen.battle.tutorial.Tutorial;
 import eh.ship.Ship;
-import eh.ship.module.Module;
-import eh.ship.module.Module.ModuleType;
-import eh.ship.module.utils.Buff;
-import eh.ship.module.utils.DamagePoint;
-import eh.ship.module.utils.ShieldPoint;
-import eh.ship.module.utils.Buff.BuffType;
-import eh.ship.module.weapon.Weapon;
 import eh.util.Draw;
 
 public class Card {
@@ -69,6 +69,25 @@ public class Card {
 		type=m.type;
 	}
 
+	public void remakeCard(int side){
+		specialSide=side;
+		for(int i=0;i<2;i++){
+			names[i]=mod.getName(i*specialSide);
+			cardPics[i]=mod.getPic(i*specialSide);
+			baseCost[i]=mod.getCost(i*specialSide);
+			baseEffect[i]=mod.getEffect(i*specialSide);
+			baseCooldown[i]=mod.getCooldown(i*specialSide);
+			rules[i]=mod.getRules(i*specialSide);
+			code[i]=mod.getCode(i*specialSide);
+		}
+		if(mod instanceof Weapon){
+			for(int i=0;i<2;i++){
+				shots[i]=((Weapon)mod).getShots(i*specialSide);	
+			}
+		}
+		type=mod.type;
+	}
+	
 	//Checking whose card clicked on//
 	public void click(){
 		if(getShip().player){

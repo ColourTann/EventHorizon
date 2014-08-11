@@ -5,11 +5,11 @@ import java.util.Arrays;
 import com.badlogic.gdx.math.Polygon;
 
 import eh.Main;
+import eh.module.Module;
+import eh.module.Module.ModuleType;
+import eh.module.weapon.Weapon;
 import eh.ship.Ship;
 import eh.ship.ShipGraphic;
-import eh.ship.module.Module;
-import eh.ship.module.Module.ModuleType;
-import eh.ship.module.weapon.Weapon;
 import eh.util.maths.PolygonCollider;
 import eh.util.maths.Pair;
 

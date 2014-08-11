@@ -2,41 +2,58 @@ package eh.screen.cardView;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import eh.card.Card;
 import eh.card.CardGraphic;
+import eh.module.Module;
+import eh.module.computer.Alpha;
+import eh.module.computer.Beta;
+import eh.module.computer.Gamma;
+import eh.module.generator.Five;
+import eh.module.generator.Four;
+import eh.module.generator.Three;
+import eh.module.shield.Deflector;
+import eh.module.shield.Repeller;
+import eh.module.weapon.Laser;
+import eh.module.weapon.Pulse;
+import eh.module.weapon.Ray;
+import eh.module.weapon.Tesla;
 import eh.screen.Screen;
-import eh.ship.module.computer.Alpha;
-import eh.ship.module.computer.Beta;
-import eh.ship.module.computer.Gamma;
-import eh.ship.module.generator.Five;
-import eh.ship.module.generator.Four;
-import eh.ship.module.generator.Three;
-import eh.ship.module.shield.Deflector;
-import eh.ship.module.shield.Repeller;
-import eh.ship.module.weapon.Laser;
-import eh.ship.module.weapon.Pulse;
-import eh.ship.module.weapon.Ray;
-import eh.ship.module.weapon.Tesla;
 import eh.util.maths.Pair;
 
 public class CardViewer extends Screen{
+	public ArrayList<Module> modules = new ArrayList<Module>();
 	public ArrayList<Card> cards= new ArrayList<Card>();
+	int tier=0;
 	public CardViewer(){
-		cards.addAll(new Deflector().getCardsJustForShowing());
-		cards.addAll(new Repeller().getCardsJustForShowing());
-		cards.addAll(new Alpha().getCardsJustForShowing());
-		cards.addAll(new Beta().getCardsJustForShowing());
-		cards.addAll(new Gamma().getCardsJustForShowing());
-		cards.addAll(new Three().getCardsJustForShowing());
-		cards.addAll(new Four().getCardsJustForShowing());
-		cards.addAll(new Five().getCardsJustForShowing());
+		
+		
+		init();
+	}
+	
+	public void init(){
+		modules.clear();
+		
+		modules.add(new Laser(tier));
+		modules.add(new Pulse(tier));
+		modules.add(new Tesla(tier));
+		modules.add(new Ray(tier));
+		
+		
+		cards.clear();
+		for(Module m:modules){
+			System.out.println(m.tier);
+			cards.addAll(m.getCardsJustForShowing());
+		}
 		for(int i=0;i<cards.size();i++){
 			cards.get(i).getGraphic().setPosition(new Pair(i%8*CardGraphic.width, i/8*CardGraphic.height));
-			
+			cards.get(i).getGraphic().demousectivate();
 		}
+		
 	}
 	
 	@Override
@@ -52,6 +69,18 @@ public class CardViewer extends Screen{
 
 	@Override
 	public void keyPress(int keycode) {
+		switch(keycode){
+		case Input.Keys.RIGHT:
+			tier++;
+			init();
+			break;
+		case Input.Keys.LEFT:
+			tier--;
+			init();
+			break;
+			
+			
+		}
 	}
 
 	@Override

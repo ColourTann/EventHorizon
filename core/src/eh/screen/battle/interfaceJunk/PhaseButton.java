@@ -11,6 +11,8 @@ import eh.assets.Gallery;
 import eh.assets.Pic;
 import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
+import eh.screen.battle.tutorial.PicLoc;
+import eh.screen.battle.tutorial.Tutorial;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
@@ -124,9 +126,7 @@ public class PhaseButton extends Bonkject{
 		Draw.drawTexture(batch, after.get(),t.getPair().x,t.getPair().y);
 		batch.setColor(1, 1, 1, 1);
 		
-		if(glow&&!moused){
-			
-		}
+		for(PicLoc pl:Tutorial.glows)pl.renderFuckingPhaseButtonStupidTutorial(batch);
 	}
 	
 

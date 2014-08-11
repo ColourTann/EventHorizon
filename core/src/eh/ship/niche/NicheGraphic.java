@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
+import eh.module.weapon.attack.particle.SmokeMachine;
+import eh.module.weapon.attack.particle.Smoke.SmokeType;
 import eh.screen.battle.Battle;
-import eh.ship.module.weapon.attack.particle.SmokeMachine;
-import eh.ship.module.weapon.attack.particle.Smoke.SmokeType;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;

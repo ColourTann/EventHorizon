@@ -29,6 +29,7 @@ public class Gallery {
 	public static Pic iconIncreasedEffect=new Pic("Icon/increasedeffect");
 	public static Pic damageIcon[] = new Pic[3];
 	public static Pic shieldIcon[] = new Pic[3];
+	public static Pic fiveIcon[]= new Pic[2];
 	
 	//WEAPONS//
 	public static Pic blaster=new Pic("Module/Weapon/Blaster/module");
@@ -91,6 +92,7 @@ public class Gallery {
 	public static Pic tutPanelBorder= new Pic("Interface/tutpanelborder");
 	public static Pic tutPanelMain= new Pic("Interface/tutpanelmain");
 	public static Pic tutPoint= new Pic("Interface/tutpoint");
+	public static Pic tutUndo= new Pic("Interface/undo");
 	
 	public static Pic nothing= new Pic("Interface/nothing");
 	public static Pic darkDot= new Pic("Interface/darkdot");
@@ -124,6 +126,9 @@ public class Gallery {
 
 	
 	public static void init(){
+		for(int i=0;i<2;i++){
+			fiveIcon[i]=new Pic("Icon/fiveiconoverlay"+i);
+		}
 		for(int i=0;i<3;i++){
 			damageIcon[i]=new Pic("Icon/damageicon"+i);
 			shieldIcon[i]=new Pic("Icon/shieldicon"+i);

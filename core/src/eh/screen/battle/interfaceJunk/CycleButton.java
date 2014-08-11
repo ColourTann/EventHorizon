@@ -10,10 +10,11 @@ import eh.assets.Font;
 import eh.assets.Gallery;
 import eh.card.Card;
 import eh.card.CardGraphic;
+import eh.module.weapon.Weapon;
 import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.State;
+import eh.screen.battle.tutorial.PicLoc;
 import eh.screen.battle.tutorial.Tutorial;
-import eh.ship.module.weapon.Weapon;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
@@ -127,6 +128,7 @@ public class CycleButton extends Bonkject{
 		Font.medium.setColor(Colours.dark);
 		String s=cost+"";
 		Font.medium.draw(batch, s, 191-Font.medium.getBounds(s).width/2, 403);
+		
 	}
 
 	@Override

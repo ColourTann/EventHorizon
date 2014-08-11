@@ -5,13 +5,13 @@ package eh.screen.battle.tutorial;
 import eh.assets.Pic;
 import eh.card.Card;
 import eh.card.CardCode.Special;
+import eh.module.Module;
+import eh.module.Module.ModuleType;
+import eh.module.utils.Buff.BuffType;
 import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
 import eh.screen.battle.Battle.State;
 import eh.ship.Ship;
-import eh.ship.module.Module;
-import eh.ship.module.Module.ModuleType;
-import eh.ship.module.utils.Buff.BuffType;
 import eh.util.maths.Pair;
 
 public class Task {
@@ -45,6 +45,11 @@ public class Task {
 	public Task(String s, TaskType t, boolean phaseButton){
 		this.s=s;
 		this.t=t;
+		this.phaseButton=true;
+	}
+	public Task(TaskType phaseTrigger) {
+		s="";
+		t=phaseTrigger;
 		this.phaseButton=true;
 	}
 	public boolean isDone(){
@@ -95,15 +100,18 @@ public class Task {
 			if(player.getModule(0).getShieldableIncoming()<=player.getModule(0).thresholds[0]&&player.getModule(1).getShieldableIncoming()<=player.getModule(1).thresholds[1])return true;
 			break;
 		case FlipCard:
-			if(player.hand.size()>0)return player.hand.get(0).side==1;
-			return player.playList.get(0).side==1;
-
+			return Tutorial.targetedWeaponCard.side==1;
 		}
 
 		return false;
 
 	}
 	public PicLoc getPicLoc() {
+		if(Tutorial.currentList!=null){
+			if(!Tutorial.currentList.isCurrent()){
+				return null;
+			}
+		}
 		if(location!=null)	return new PicLoc(pic, location, this);
 		if(card!=null)		return new PicLoc(card, side, this);
 		if(phaseButton)		return new PicLoc(this);

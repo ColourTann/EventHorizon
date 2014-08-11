@@ -44,7 +44,7 @@ public class HelpPanel extends Bonkject{
 	}
 	
 	public void done(){
-		fadeOut(1, Interp.SQUARE);
+		fadeOut(2, Interp.SQUARE);
 	}
 
 	@Override

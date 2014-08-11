@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
-
 import eh.assets.Font;
 import eh.grid.Grid;
 import eh.grid.hexContent.HexContent;
@@ -14,7 +12,6 @@ import eh.grid.hexContent.Planet;
 import eh.grid.hexContent.Star;
 import eh.screen.map.Map;
 import eh.screen.map.Map.MapState;
-import eh.ship.Ship;
 import eh.ship.mapThings.MapShip;
 import eh.util.Colours;
 import eh.util.Draw;

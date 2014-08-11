@@ -31,7 +31,7 @@ import eh.util.particleSystem.ParticleSystem;
 
 public class Main extends ApplicationAdapter  {
 
-	public static float version=0.2f;
+	public static float version=0.22f;
 	public static boolean debug=false;
 
 	public static int height=700;
@@ -111,10 +111,12 @@ public class Main extends ApplicationAdapter  {
 		batch.setColor(Colours.white);
 
 		currentScreen.render(batch);
-		for(TextWisp t:TextWisp.wisps)t.render(batch);
+		
 		ParticleSystem.renderAll(batch);
 		
 		currentScreen.postRender(batch);
+		
+		for(TextWisp t:TextWisp.wisps)t.render(batch);
 		
 		//fading bit//
 		batch.setColor(1,1,1,ticks);

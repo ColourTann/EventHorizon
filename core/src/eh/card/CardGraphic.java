@@ -10,15 +10,15 @@ import eh.assets.Font;
 import eh.assets.Gallery;
 import eh.assets.Pic;
 import eh.card.CardCode.Special;
+import eh.module.Module.ModuleType;
+import eh.module.shield.Shield;
+import eh.module.utils.Buff;
+import eh.module.utils.Buff.BuffType;
+import eh.module.weapon.Weapon;
 import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
 import eh.screen.battle.Battle.State;
 import eh.screen.battle.interfaceJunk.CycleButton;
-import eh.ship.module.Module.ModuleType;
-import eh.ship.module.shield.Shield;
-import eh.ship.module.utils.Buff;
-import eh.ship.module.utils.Buff.BuffType;
-import eh.ship.module.weapon.Weapon;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
@@ -35,7 +35,7 @@ public class CardGraphic extends Bonkject {
 	public static float maxSelectedHeight = -26;
 	public static float fadeSpeed = 2.5f;
 	public static Interp fadeType = Interp.LINEAR;
-	
+
 	public static Pair positionPic = new Pair(43, 31);
 	private static Pair positionArray[][] = new Pair[6][5];
 	private static Pair positionTitle = new Pair(70, 8);
@@ -62,14 +62,14 @@ public class CardGraphic extends Bonkject {
 	float sidePositions[] = new float[] {0,0};
 	public boolean override;
 	public Card card;
-	public static String alphabet="!\"£$%^&*()_+_1234567890-=qwertyuiop[]QWERTYUIOP{}asdfghjkl;'#ASDFGHJKL:@~zxcvbnm,.|ZXCVBNM<>?";
+	public static String alphabet="!$%^&*()_+1234567890-=qwertyuiop[]QWERTYUIOP{}asdfghjkl;'#ASDFGHJKL:@zxcvbnm,.|ZXCVBNM<>?";
 	String topScrambledRules=randomString(70);
 	String botScrambledRules=randomString(70);
 	float scrambleTicks=0;
 	boolean scrambled;
 
 	//offcuts//
-	private static CardGraphic augmentPicker;
+	public static CardGraphic augmentPicker;
 
 	public CardGraphic(Card c) {
 		position=new Pair(Main.width/2 - width/2, Main.height+height+10);
@@ -115,6 +115,7 @@ public class CardGraphic extends Bonkject {
 		}
 
 		//Animating selected card//
+		if(card.getShip()==null)return;
 		if(card.getShip().player)selectedHeight += ((card.selected ? maxSelectedHeight : 0) - selectedHeight)* delta * selectSpeed;
 
 
@@ -188,7 +189,7 @@ public class CardGraphic extends Bonkject {
 		Font.small.setColor(Colours.white);
 		batch.setColor(Colours.white);
 	}
-	
+
 	public float getBaseHeight(int part){
 		return  position.y + sidePositions[part] + selectedHeight;
 	}
@@ -202,9 +203,9 @@ public class CardGraphic extends Bonkject {
 
 
 		//Card base//
-		
+
 		Draw.drawTexture(batch, Gallery.cardBase.get(), position.x, baseHeight);
-		
+
 
 		//Card image//
 		if (drawTopPic || part != card.side)
@@ -236,38 +237,36 @@ public class CardGraphic extends Bonkject {
 		if (card.mod instanceof Shield)	effectPics=Gallery.shieldIcon;
 		if (effectPics!=null) {
 
-			if(effect>7){
-				for (int i = 0; i < effect-5; i++) {
-					if (i == 0) {
-						Draw.drawTexture(batch, effectPics[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
-						continue;
+
+
+			for (int i = 0; i < effect; i++) {
+				if (i == 0) {
+
+					Draw.drawTexture(batch, effectPics[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
+					if(effect>7){
+						Draw.drawTexture(batch, Gallery.fiveIcon[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
+						effect-=4;
 					}
-					if (i == 6) {
-						Draw.drawTexture(batch, effectPics[2].get(), position.x+ positionEffectEnd.x, baseHeight+ positionEffectEnd.y);
-						continue;
-					}
-					Draw.drawTexture(batch, effectPics[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
+					continue;
 				}
-				Font.small.setColor(Colours.withAlpha(Colours.white, alpha));
-				Font.small.draw(batch, "+5", position.x+ positionEffectStart.x+3, baseHeight+ positionEffectStart.y-11);
-			}
-			else{
-				for (int i = 0; i < effect; i++) {
-					if (i == 0) {
-						Draw.drawTexture(batch, effectPics[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
-						continue;
-					}
-					if (i == 6) {
-						Draw.drawTexture(batch, effectPics[2].get(), position.x+ positionEffectEnd.x, baseHeight+ positionEffectEnd.y);
-						continue;
-					}
-					Draw.drawTexture(batch, effectPics[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
+				if (i == 6) {
+					Draw.drawTexture(batch, effectPics[2].get(), position.x+ positionEffectEnd.x, baseHeight+ positionEffectEnd.y);
+
+					continue;
+				}
+				
+				Draw.drawTexture(batch, effectPics[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
+				//7-i spots remaining
+				if(effect>7){
+					Draw.drawTexture(batch, Gallery.fiveIcon[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
+					effect-=4;
 				}
 			}
 		}
 
 
-		
+
+
 		// Weapon Junk//
 		if (card.mod instanceof Weapon&&!scrambled&&!card.wasScrambled) {
 			int shots = card.getShots(part);
@@ -321,9 +320,9 @@ public class CardGraphic extends Bonkject {
 				Font.medium.draw(batch, "" + cooldown, position.x + positionCooldown.x + 6,baseHeight + positionCooldown.y + positionArray[5][0].y+ 23);
 			}
 		}
-		
 
-		
+
+
 		batch.setColor(Colours.white);
 	}
 
@@ -390,14 +389,14 @@ public class CardGraphic extends Bonkject {
 	@Override
 	public void mouseDown() {
 		card.getShip().cardOrIconMoused(card);
-		card.mod.moused=true;
+		//card.mod.moused=true;
 		moveToTop();
 	}
 
 	@Override
 	public void mouseUp() {
 		card.getShip().cardOrIconUnmoused();
-		card.mod.moused=false;
+		//card.mod.moused=false;
 	}
 
 

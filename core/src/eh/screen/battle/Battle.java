@@ -20,6 +20,10 @@ import eh.card.CardCode;
 import eh.card.CardGraphic;
 import eh.card.CardIcon;
 import eh.card.CardCode.Special;
+import eh.module.Module;
+import eh.module.utils.DamagePoint;
+import eh.module.utils.ModuleInfo;
+import eh.module.weapon.attack.LightningAttack;
 import eh.screen.Screen;
 import eh.screen.battle.interfaceJunk.CycleButton;
 import eh.screen.battle.interfaceJunk.HelpPanel;
@@ -27,12 +31,9 @@ import eh.screen.battle.interfaceJunk.PhaseButton;
 import eh.screen.battle.interfaceJunk.Star;
 import eh.screen.battle.tutorial.Checklist;
 import eh.screen.battle.tutorial.Tutorial;
+import eh.screen.battle.tutorial.UndoButton;
 import eh.screen.battle.tutorial.Tutorial.Trigger;
 import eh.ship.Ship;
-import eh.ship.module.Module;
-import eh.ship.module.utils.DamagePoint;
-import eh.ship.module.utils.ModuleInfo;
-import eh.ship.module.weapon.attack.LightningAttack;
 import eh.ship.niche.Niche;
 import eh.ship.shipClass.*;
 import eh.util.Colours;
@@ -120,11 +121,15 @@ public class Battle extends Screen{
 		Tutorial.enemy=null;
 		Tutorial.three.clear();
 		Tutorial.tutorials.clear();
+		Tutorial.currentList=null;
+		Tutorial.glows.clear();
+		Tutorial.index=0;
 		CycleButton.button=null;
 		CycleButton.choices.clear();;
 		PhaseButton.button=null;
 		Card.extraCardsToRender.clear();
 		CardIcon.icons.clear();
+		CardGraphic.augmentPicker=null;
 		help=null;
 	}
 
@@ -254,7 +259,7 @@ public class Battle extends Screen{
 
 		//tutorishit//
 		if(!Battle.tutorial)return;
-		Tutorial t= Tutorial.tutorials.get(0);
+		Tutorial t= Tutorial.tutorials.get(Tutorial.index);
 		if(t.trig==Trigger.PlayerWeaponPhase&&Battle.getPhase()==Phase.WeaponPhase)Tutorial.next();
 	}
 
@@ -314,8 +319,7 @@ public class Battle extends Screen{
 			break;
 
 
-
-
+		
 
 		case Input.Keys.TAB:
 
@@ -406,6 +410,10 @@ public class Battle extends Screen{
 
 	@Override
 	public void mousePressed(Pair location, boolean left) {
+		if(Tutorial.undoVisible()&&UndoButton.get().collider.collidePoint(location)){
+			Tutorial.goBack();
+			return;
+		}
 		if(tutorial)Tutorial.next();
 		else{
 			advance();	
@@ -461,20 +469,21 @@ public class Battle extends Screen{
 
 	@Override
 	public void postRender(SpriteBatch batch) {
-		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
-		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
-		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
 		
+		drawInterfaceOverlay(batch);
 		for(CardIcon icon:CardIcon.icons){
 			icon.render(batch);
 		}
-
 		for(Module m:player.modules){
 			m.getStats().render(batch);
 		}
 		for(Module m:enemy.modules){
 			m.getStats().render(batch);
 		}
+		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
+		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
+		
+		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
 
 		for(Card c:player.hand){
 			c.getGraphic().render(batch);
@@ -484,7 +493,7 @@ public class Battle extends Screen{
 		
 		if(help!=null)help.render(batch);
 		
-		drawInterfaceOverlay(batch);
+		
 		Tutorial.renderAll(batch);
 	}
 
