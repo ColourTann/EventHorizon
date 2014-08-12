@@ -97,6 +97,8 @@ public class Gallery {
 	public static Pic nothing= new Pic("Interface/nothing");
 	public static Pic darkDot= new Pic("Interface/darkdot");
 	
+	public static Pic shitButton= new Pic("Interface/shitbutton"); 
+	
 	//Map stuff//
 	public static Pic mapslice= new Pic("Interface/mapslice");
 	public static Pic mapsliceRight= new Pic("Interface/mapsliceright");

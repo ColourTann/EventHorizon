@@ -98,7 +98,7 @@ public class Battle extends Screen{
 		player.startFight(true);
 		enemy.startFight(false);
 		if(type==ScreenType.TutorialFight){
-			player.addEnergy(5);
+			player.addEnergy(6);
 			enemy.addEnergy(2);
 		}
 	}

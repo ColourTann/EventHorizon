@@ -14,7 +14,7 @@ public class Tesla extends Weapon{
 		name[0]="Tesla";
 		cost[0]=3;
 		cooldown[0]=1;
-		effect[0]=4;
+		effect[0]=calc(3);
 		shots[0]=1;
 		rules[0]="";
 		
@@ -23,27 +23,27 @@ public class Tesla extends Weapon{
 		cooldown[1]=0;
 		effect[1]=0;
 		shots[1]=0;
-		rules[1]="Augment tesla card: +2 damage";
+		rules[1]="Augment tesla card: +"+calc(1)+" damage";
 		code[1].add(Special.Augment);
 		code[1].add(Augment.AugmentThis);
-		code[1].add(Augment.AugmentDamage,2);
+		code[1].add(Augment.AugmentDamage,calc(1));
 		code[1].add(AI.OtherCardsThisSystem,1);
 		code[1].setPriority(1);
 		
 		name[2]="Thunder";
 		cost[2]=4;
 		cooldown[2]=1;
-		effect[2]=7;
+		effect[2]=calc(4,1)+1;
 		shots[2]=1;
-		rules[2]="Damages this module for 3";
-		code[2].add(Special.selfDamage, 3);
-		code[2].add(AI.DamageSelf, 3);
+		rules[2]="Damages this module for "+calc(1);
+		code[2].add(Special.selfDamage,calc(5)/2);
+		code[2].add(AI.DamageSelf, calc(5)/2);
 		code[2].add(AI.EvenChance);
 		
 		name[3]="Lightning";
 		cost[3]=2;
 		cooldown[3]=1;
-		effect[3]=5;
+		effect[3]=calc(4);
 		shots[3]=1;
 		rules[3]="Play only if this module has taken major damage";
 		code[3].add(Special.MustBeMajorDamaged);
@@ -51,7 +51,7 @@ public class Tesla extends Weapon{
 		name[4]="Fork";
 		cost[4]=7;
 		cooldown[4]=1;
-		effect[4]=4;
+		effect[4]=calc(3);
 		shots[4]=2;
 		rules[4]="";
 		code[4].add(AI.SurplusEnergy,1);

@@ -470,13 +470,17 @@ public abstract class Module {
 		return currentThreshold==3;
 	}
 
+	private double calcDouble(int cost){
+		return ((1+cost)*(tier/2d+1));
+	}
+	
 	public int calc(int cost){
 		// 1+ because a card is worth a similar amount to an energy //
-		return (int) ((1+cost)*(tier/2d+1));
+		return (int) calcDouble(cost);
 	}
 	
 	public int calc(int baseCost, int extraCost){
-		double base= (1+baseCost)*(tier/2d+1);
+		double base= calcDouble(baseCost);
 		base+=(extraCost*(tier/2d+1))/2d;
 		return (int) base;
 	}

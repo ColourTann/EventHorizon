@@ -31,7 +31,7 @@ import eh.util.particleSystem.ParticleSystem;
 
 public class Main extends ApplicationAdapter  {
 
-	public static float version=0.22f;
+	public static float version=0.221f;
 	public static boolean debug=false;
 
 	public static int height=700;

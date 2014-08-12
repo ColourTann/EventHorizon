@@ -318,7 +318,7 @@ public class Tutorial extends Bonkject{
 				}
 				for(Card c:player.hand){
 					if(c.getName(1).equals("")){
-						c.remakeCard(c.mod.getNextCardSide());
+						c.remakeCard(3);
 					}
 				}
 

@@ -15,7 +15,7 @@ public class Repeller extends Shield{
 		name[0]="Deflect";
 		cost[0]=1;
 		cooldown[0]=0;
-		effect[0]=2;
+		effect[0]=calc(1);
 		rules[0]="";
 		code[0].add(Special.AddShieldPoints);
 		code[0].add(AI.RegularShield);
@@ -23,7 +23,7 @@ public class Repeller extends Shield{
 		name[1]="Consume";
 		cost[1]=0;
 		cooldown[1]=0;
-		effect[1]=1;
+		effect[1]=calc(0);
 		rules[1]="Shields generator\nAbsorb: +1 energy";
 		code[1].add(Special.AbsorbEnergy,1);
 		code[1].add(Special.ShieldGenerator);
@@ -41,7 +41,7 @@ public class Repeller extends Shield{
 		name[3]="Precision";
 		cost[3]=1;
 		cooldown[3]=0;
-		effect[3]=3;
+		effect[3]=calc(2);
 		rules[3]="Play only if your shield is undamaged";
 		code[3].add(Special.AddShieldPoints);
 		code[3].add(AI.RegularShield);
@@ -50,10 +50,10 @@ public class Repeller extends Shield{
 		name[4]="Prioritise";
 		cost[4]=2;
 		cooldown[4]=0;
-		effect[4]=2;
+		effect[4]=calc(1);
 		rules[4]="Shields both your weapons";
 		code[4].add(Special.ShieldWeapons);
-		code[4].add(AI.IncomingWeapons,3);
+		code[4].add(AI.IncomingWeapons,calc(2));
 		code[4].setPriority(1);
 		
 		//tutorishit//
