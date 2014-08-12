@@ -18,6 +18,7 @@ import eh.screen.battle.Battle;
 import eh.screen.cardView.CardViewer;
 import eh.screen.map.Map;
 import eh.screen.menu.Selector;
+import eh.screen.test.Test;
 import eh.ship.Ship;
 import eh.util.Bonkject;
 import eh.util.Colours;
@@ -83,13 +84,13 @@ public class Main extends ApplicationAdapter  {
 		
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-		select=new Selector();currentScreen=select;
+		//select=new Selector();currentScreen=select;
 
 		//viewer=new CardViewer();currentScreen=viewer;
 
 		//map=new Map();currentScreen=map;
 
-		//currentScreen=new Test();
+		currentScreen=new Test();
 	}	
 
 

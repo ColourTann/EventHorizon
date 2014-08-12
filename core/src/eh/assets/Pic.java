@@ -1,5 +1,6 @@
 package eh.assets;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -20,12 +21,55 @@ public class Pic {
 	private Texture glowOutline;
 	private Texture monoChrome;
 
+
+	private Pic basePic;
+	private Color[] replacers;
+
 	public Pic(String path){
 		this.path=path+".png";
 	}
+
+	public Pic(Pic basePic, Color... replacers){
+		this.basePic=basePic;
+		this.replacers=replacers;
+	}
+
 	public Texture get(){
-		if(t==null)t=new Texture(Gdx.files.internal(path));
+		if(t==null){
+			if(path!=null){
+				t=new Texture(Gdx.files.internal(path));
+			}
+			if(basePic!=null){
+				t=basePic.paletteSwap(replacers);
+			}
+		}
+
+
 		return t;
+	}
+
+	private Texture paletteSwap(Color[] replacers) {
+		get();
+		int width=t.getWidth();
+		int height=t.getHeight();
+		t.getTextureData().prepare();
+		Pixmap base=t.getTextureData().consumePixmap();
+		Pixmap pixMap=new Pixmap(width, height, Format.RGBA8888);
+
+		HashMap<Color, Color> map = new HashMap<Color, Color>();
+		for(int i=0;i<replacers.length;i+=2)map.put(replacers[i], replacers[i+1]);
+
+		for(int x=0;x<width;x++){			
+			for(int y=0;y<height;y++){
+				Color replace=map.get(new Color(base.getPixel(x, y)));
+				if(replace!=null)	pixMap.setColor(replace);
+				else				pixMap.setColor(base.getPixel(x, y));
+				pixMap.drawPixel(x, y);
+			}
+		}
+		Texture result=new Texture(pixMap);
+		base.dispose();
+		return result;
 	}
 
 	public Texture getOutline(){

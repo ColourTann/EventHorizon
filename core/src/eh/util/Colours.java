@@ -12,6 +12,9 @@ public class Colours {
 	public static Color light=Colours.make(236,250,212);
 	public static Color grey=Colours.make(92,107,110);
 	
+	public static Color[] baseReplacers =new Color[]{make(0,0,0), make(127,127,127), make(255,255,255)};
+	public static Color[] greenHPCols =new Color[]{make(47,186,131), make(86,224,147), make(165,230,161)};
+	
 	public static Color[] player2 = new Color[]{make(0,128,78),make(43,171,120)};
 	public static Color[] enemy2 = new Color[]{make(144,62,54),make(191,94,79)};
 	

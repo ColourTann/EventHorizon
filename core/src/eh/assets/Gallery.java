@@ -1,5 +1,9 @@
 package eh.assets;
 
+import com.badlogic.gdx.graphics.Color;
+
+import eh.util.Colours;
+
 public class Gallery {
 	
 	//SHIPS//
@@ -72,7 +76,13 @@ public class Gallery {
 	public static Pic redHP[]= new Pic[3];
 	public static Pic blueHP[]= new Pic[4];
 	public static Pic greyHP[]= new Pic[3];
+	public static Pic baseHP= new Pic("Icon/hpbase0");
+
+	private static Color[] greenHPReplace= new Color[]{Colours.baseReplacers[0], Colours.greenHPCols[0], Colours.baseReplacers[1], Colours.greenHPCols[1], Colours.baseReplacers[2], Colours.greenHPCols[2]};
 	
+	public static Pic replacedHP=new Pic(baseHP, greenHPReplace);
+	
+
 	
 	//INTERFACE STUFF//
 	public static Pic battleScreen= new Pic("Interface/mainscreen");
