@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 
 import eh.Main;
 import eh.Main.ScreenType;
-import eh.assets.Font;
-import eh.assets.Gallery;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
+import eh.util.assets.Font;
+import eh.util.assets.Gallery;
 import eh.util.maths.BoxCollider;
 import eh.util.maths.Collider;
 

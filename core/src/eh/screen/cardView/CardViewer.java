@@ -88,5 +88,9 @@ public class CardViewer extends Screen{
 	public void postRender(SpriteBatch batch) {
 	}
 
+	@Override
+	public void scroll(int amount) {
+	}
+
 
 }

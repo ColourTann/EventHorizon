@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.Main;
-import eh.assets.Font;
-import eh.assets.Gallery;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.Timer.Interp;
+import eh.util.assets.Font;
+import eh.util.assets.Gallery;
 
 public class HelpPanel extends Bonkject{
 	String text;

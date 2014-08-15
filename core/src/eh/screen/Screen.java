@@ -14,4 +14,5 @@ public abstract class Screen {
 	public abstract void keyPress(int keycode);
 	public abstract void keyUp(int keyCode);
 	public abstract void mousePressed(Pair location, boolean left);
+	public abstract void scroll(int amount);
 }

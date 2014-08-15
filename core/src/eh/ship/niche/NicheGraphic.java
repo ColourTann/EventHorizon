@@ -39,8 +39,11 @@ public class NicheGraphic extends Bonkject{
 		
 		Pair bonus=new Pair();
 		if(!niche.ship.player){
-			bonus=new Pair((float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, (float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity);
+			//bonus=new Pair(500+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, (float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity);
+			bonus=new Pair(500, 0);
 		}
+		bonus=bonus.floor();
+		//bonus=bonus.add(niche.ship.getGraphic().bonus);
 		
 		Draw.drawTextureScaledFlipped(batch, t, niche.location.x+bonus.x, niche.location.y+bonus.y, 1, 1, !niche.mod.ship.player, false);
 		if(intensity>0){

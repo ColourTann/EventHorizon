@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import eh.Main;
-import eh.assets.Font;
-import eh.assets.Gallery;
 import eh.grid.Grid;
 import eh.grid.hex.Hex;
 import eh.screen.Screen;
@@ -20,10 +18,11 @@ import eh.ship.mapThings.MapShip;
 import eh.ship.mapThings.mapAbility.*;
 import eh.ship.mapThings.mapAbility.comAbility.*;
 import eh.ship.mapThings.mapAbility.genAbility.*;
-
 import eh.ship.shipClass.*;
 import eh.util.Colours;
 import eh.util.Draw;
+import eh.util.assets.Font;
+import eh.util.assets.Gallery;
 import eh.util.maths.Pair;
 
 public class Map extends Screen{
@@ -221,6 +220,10 @@ public class Map extends Screen{
 
 	@Override
 	public void postRender(SpriteBatch batch) {
+	}
+
+	@Override
+	public void scroll(int amount) {
 	}
 
 

@@ -1,8 +1,8 @@
 package eh.module.generator;
 
-import eh.assets.Gallery;
 import eh.card.CardCode.AI;
 import eh.card.CardCode.Special;
+import eh.util.assets.Gallery;
 
 public class Four extends Generator{
 	public Four(){

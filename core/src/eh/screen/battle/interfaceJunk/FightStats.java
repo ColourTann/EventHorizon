@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.assets.Font;
-import eh.assets.Gallery;
-import eh.assets.Pic;
 import eh.ship.Ship;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
+import eh.util.assets.Font;
+import eh.util.assets.Gallery;
+import eh.util.assets.Pic;
 import eh.util.maths.Collider;
 import eh.util.maths.Pair;
 

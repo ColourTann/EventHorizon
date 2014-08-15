@@ -2,19 +2,22 @@ package eh.screen.battle;
 
 import java.util.ArrayList;
 
+import javafx.scene.control.SplitPane.Divider;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Frustum;
+import com.badlogic.gdx.math.Vector3;
 
 import eh.Main;
 import eh.Main.ScreenType;
-import eh.assets.Font;
-import eh.assets.Gallery;
 import eh.card.Card;
 import eh.card.CardCode;
 import eh.card.CardGraphic;
@@ -38,9 +41,15 @@ import eh.ship.niche.Niche;
 import eh.ship.shipClass.*;
 import eh.util.Colours;
 import eh.util.Draw;
+import eh.util.PerleyBabes;
 import eh.util.TextWisp;
 import eh.util.TextWisp.WispType;
+import eh.util.Timer.Interp;
+import eh.util.Timer;
+import eh.util.assets.Font;
+import eh.util.assets.Gallery;
 import eh.util.maths.Pair;
+import eh.util.particleSystem.ParticleSystem;
 
 public class Battle extends Screen{
 	public enum Phase{ShieldPhase, EnemyWeaponsFiring, WeaponPhase, EnemyShieldPhase, PlayerWeaponsFiring, EnemyWeaponPhase, End};
@@ -59,19 +68,42 @@ public class Battle extends Screen{
 	float debug;
 	static Ship victor;
 	public static float ticks;
-	static float playerShakeIntensity;
-	public static float enemyShakeIntensity;
-	public static float sinSpeed=60;
-	public static float playerScreenShakeDrag=60;
-	public static float enemyScreenShakeDrag=15;
+	static Pair playerKnockBack=new Pair();
+	static Pair playerKnockBackTarget=new Pair();
+	
+	static Pair enemyKnockBack=new Pair();
+	static Pair enemyKnockBackTarget=new Pair();
+
 	public static boolean tutorial=false;
 	private ArrayList<CardGraphic> enemyHandList=new ArrayList<CardGraphic>();
 	ArrayList<TextWisp> wisps = new ArrayList<TextWisp>();
+	
+	public static int dividerWidth=12;
+	public static Pair viewport=new Pair(480-dividerWidth/2, 340);
+	
+	public static OrthographicCamera playerCam=new OrthographicCamera();
+	public static OrthographicCamera enemyCam=new OrthographicCamera();
+
+	public static Pair basePlayerCamPosition= new Pair(Main.width/2-480+viewport.x/2, 80+viewport.y/2);
+	public static Pair baseEnemyCamPosition= new Pair(Main.width/2+500+dividerWidth/2+viewport.x/2, 80+viewport.y/2);
+	
+	public static Pair playerBonus= new Pair();
+	public static Pair enemyBonus= new Pair();
+	
 	public Battle(Main.ScreenType type){
 		init(type);
 	}
 
 	public void init(ScreenType type){
+		System.out.println(viewport);
+		playerCam.setToOrtho(true, viewport.x, viewport.y);
+		enemyCam.setToOrtho(true, viewport.x, viewport.y);
+		//playerCam.lookAt(basePlayerCamPosition.x,basePlayerCamPosition.y, 0);
+	
+		//playerCam.translate(Main.width/2-480, 80);
+		
+
+
 		resetStatics();
 		Star.init();
 		switch(type){
@@ -168,7 +200,7 @@ public class Battle extends Screen{
 		player.checkDefeat();
 		System.out.println();
 		System.out.println("State change to "+s);
-		
+
 		switch(s){
 		case EnemyShieldPhase:
 			player.notifyIncoming();
@@ -225,43 +257,7 @@ public class Battle extends Screen{
 	}
 
 
-	@Override
-	public void update(float delta) {
-		//Just used for checking if the phase is finished//
-		for(Niche n:player.niches){
-			n.graphic.update(delta);
-		}
-		for(Niche n:enemy.niches){
-			n.graphic.update(delta);
-		}
-		ticks+=delta;
-		playerShakeIntensity-=delta*playerScreenShakeDrag;
-		playerShakeIntensity=Math.max(0, playerShakeIntensity);
-		enemyShakeIntensity-=delta*enemyScreenShakeDrag;
-		enemyShakeIntensity=Math.max(0, enemyShakeIntensity);
-
-		switch(currentPhase){
-		case WeaponPhase: break;
-		case ShieldPhase: break;
-		case EnemyShieldPhase:break;
-		case EnemyWeaponPhase:	break;
-		case EnemyWeaponsFiring:
-
-			if(enemy.finishedAttacking())enemy.endPhase();
-			break;
-		case PlayerWeaponsFiring:
-
-			if(player.finishedAttacking())player.endPhase();
-			break;
-		case End:
-			break;
-		}
-
-		//tutorishit//
-		if(!Battle.tutorial)return;
-		Tutorial t= Tutorial.tutorials.get(Tutorial.index);
-		if(t.trig==Trigger.PlayerWeaponPhase&&Battle.getPhase()==Phase.WeaponPhase)Tutorial.next();
-	}
+	
 
 
 	public void debugRender(SpriteBatch batch){
@@ -315,11 +311,11 @@ public class Battle extends Screen{
 
 
 		case Input.Keys.S:
-		
+			shake(false, 2);
 			break;
 
 
-		
+
 
 		case Input.Keys.TAB:
 
@@ -334,11 +330,11 @@ public class Battle extends Screen{
 			}
 
 			break;
-			
+
 		case Input.Keys.ESCAPE:
 			Main.changeScreen(ScreenType.Menu);
 			break;
-		
+
 		}
 
 
@@ -358,16 +354,20 @@ public class Battle extends Screen{
 			enemyHandList.clear();
 
 			break;
-		
+
 		}
 	}
 
-	public static void shake(boolean player, boolean major){
+	public static void shake(boolean player, float amount){
+		System.out.println("shaking for "+amount);
+		//amount is energy cost of card
+		Star.shake(player, amount);
+		Pair shakeAdd=new Pair(amount*4, (float)(Math.random()-.5)*amount);
 		if(player){
-			playerShakeIntensity=Math.max(playerShakeIntensity, major?19:11);
+			playerKnockBackTarget=playerKnockBackTarget.add(shakeAdd);
 		}
 		if(!player){
-			enemyShakeIntensity=Math.max(enemyShakeIntensity, major?8:5);
+			enemyKnockBackTarget=enemyKnockBackTarget.add(shakeAdd.multiply(new Pair(-1,1)));
 		}
 	}
 
@@ -418,13 +418,65 @@ public class Battle extends Screen{
 		else{
 			advance();	
 		}
-		
+
 
 		System.out.println(location);
 	}
 
 	public static void advance() {
 		if(getPhase()==Phase.EnemyShieldPhase||getPhase()==Phase.EnemyWeaponPhase) enemy.enemyFadeAll();
+	}
+	
+	@Override
+	public void update(float delta) {
+		playerBonus=new Pair(PerleyBabes.noise(Battle.ticks/4, 100), PerleyBabes.noise(Battle.ticks/4, 300)).multiply(new Pair(15,3)).add(playerKnockBack);
+		playerBonus=playerBonus.floor();
+
+		playerKnockBackTarget=playerKnockBackTarget.multiply((float) Math.pow(.2f, delta));
+		playerKnockBack=playerKnockBack.add(playerKnockBackTarget.subtract(playerKnockBack).multiply(delta*50));
+		
+		playerCam.position.set(basePlayerCamPosition.x ,basePlayerCamPosition.y, 0);
+		
+		enemyBonus=new Pair(PerleyBabes.noise(Battle.ticks/4, 1100), PerleyBabes.noise(Battle.ticks/4, 1300)).multiply(new Pair(15,3)).add(enemyKnockBack);
+		enemyBonus=enemyBonus.floor();
+		
+		enemyKnockBackTarget=enemyKnockBackTarget.multiply((float) Math.pow(.2f, delta));
+		enemyKnockBack=enemyKnockBack.add(enemyKnockBackTarget.subtract(enemyKnockBack).multiply(delta*50));
+		
+		enemyCam.position.set(baseEnemyCamPosition.x ,baseEnemyCamPosition.y, 0);
+		
+		//Just used for checking if the phase is finished//
+		for(Niche n:player.niches){
+			n.graphic.update(delta);
+		}
+		for(Niche n:enemy.niches){
+			n.graphic.update(delta);
+		}
+		Star.update(delta);
+		ticks+=delta;
+		
+
+		switch(currentPhase){
+		case WeaponPhase: break;
+		case ShieldPhase: break;
+		case EnemyShieldPhase:break;
+		case EnemyWeaponPhase:	break;
+		case EnemyWeaponsFiring:
+
+			if(enemy.finishedAttacking())enemy.endPhase();
+			break;
+		case PlayerWeaponsFiring:
+
+			if(player.finishedAttacking())player.endPhase();
+			break;
+		case End:
+			break;
+		}
+
+		//tutorishit//
+		if(!Battle.tutorial)return;
+		Tutorial t= Tutorial.tutorials.get(Tutorial.index);
+		if(t.trig==Trigger.PlayerWeaponPhase&&Battle.getPhase()==Phase.WeaponPhase)Tutorial.next();
 	}
 
 	@Override
@@ -433,22 +485,49 @@ public class Battle extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch) {
-
-		Main.setCam(new Pair((float)Math.sin(ticks*sinSpeed)*playerShakeIntensity+Main.width/2, (float)Math.cos((ticks-2.5f)*sinSpeed)*playerShakeIntensity+Main.height/2));
-
-		Draw.drawTexture(batch, Star.pixTex, 160, 70);
-		Draw.drawTexture(batch, Gallery.battleScreen.get(), 128, 0);
-
-		//Rendering ships, statblocks and misc interface//
-		player.renderAll(batch);
-		enemy.renderAll(batch);
+		batch.end();
 		
+		
+		Gdx.gl.glViewport(Main.width/2-480, 282, (int)viewport.x, (int)viewport.y);
+		playerCam.update();
+		batch.setProjectionMatrix(playerCam.combined);
+		batch.begin();
+		batch.setColor(1,1,1,1);
+		Star.renderStars(batch, true);
+		batch.end();
+		
+		playerCam.translate(playerBonus.x, playerBonus.y);
+		playerCam.update();
+		batch.setProjectionMatrix(playerCam.combined);
+		batch.begin();
+		player.renderShip(batch);
+		ParticleSystem.renderAll(batch);
+		batch.end();
 
-	
 
+		Gdx.gl.glViewport(Main.width/2+dividerWidth/2, 282, (int)viewport.x, (int)viewport.y);
+		enemyCam.update();
+		batch.setProjectionMatrix(enemyCam.combined);
+		batch.begin();
+		batch.setColor(1,1,1,1);
+		Star.renderStars(batch, false);//Draw.drawTexture(batch, Star.pixTex, 500-pixTexTimer.getPair().x, pixTexTimer.getPair().y);
+		batch.end();
+		
+		enemyCam.translate(enemyBonus.x, enemyBonus.y);
+		enemyCam.update();
+		batch.setProjectionMatrix(enemyCam.combined);
+		batch.begin();
+		enemy.renderShip(batch);
+		ParticleSystem.renderAll(batch);
+		batch.end();
 
-	
-
+		Gdx.gl.glViewport(0, 0, Main.width, Main.height);
+		batch.setProjectionMatrix(Main.mainCam.combined);
+		batch.begin();
+		batch.setColor(1,1,1,1);
+		player.renderFightStats(batch);
+		enemy.renderFightStats(batch);
+		Draw.drawTexture(batch, Gallery.battleScreen.get(), 128, 0);
 		//debug phase text
 		if(Main.debug){
 			Font.medium.setColor(Colours.grey);
@@ -462,14 +541,13 @@ public class Battle extends Screen{
 			s="(esc to return)";
 			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 245);
 		}
-		
 		//	debugRender(batch);
 
 	}
 
 	@Override
 	public void postRender(SpriteBatch batch) {
-		
+
 		drawInterfaceOverlay(batch);
 		for(CardIcon icon:CardIcon.icons){
 			icon.render(batch);
@@ -482,7 +560,7 @@ public class Battle extends Screen{
 		}
 		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
 		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
-		
+
 		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
 
 		for(Card c:player.hand){
@@ -490,11 +568,16 @@ public class Battle extends Screen{
 		}
 		CardGraphic.renderOffCuts(batch);
 		CycleButton.get().render(batch);
-		
+
 		if(help!=null)help.render(batch);
+
 		
-		
+
 		Tutorial.renderAll(batch);
+	}
+
+	@Override
+	public void scroll(int amount) {
 	}
 
 

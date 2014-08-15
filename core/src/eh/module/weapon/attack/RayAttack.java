@@ -3,8 +3,8 @@ package eh.module.weapon.attack;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.assets.Clip;
 import eh.module.weapon.attack.particle.RayParticle;
+import eh.util.assets.Clip;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 

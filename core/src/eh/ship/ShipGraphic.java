@@ -8,13 +8,16 @@ import eh.Main;
 import eh.module.Module.ModuleType;
 import eh.screen.battle.Battle;
 import eh.ship.niche.Niche;
+import eh.util.Bonkject;
 import eh.util.Draw;
+import eh.util.PerleyBabes;
 import eh.util.maths.Pair;
 
-public class ShipGraphic {
+public class ShipGraphic extends Bonkject{
 	Ship ship;
-	public static Pair offset=new Pair(165, 90);
+	public static Pair offset=new Pair(175, 90);
 	public static int height=270;
+
 	public ShipGraphic(Ship s){
 		ship=s;
 	}
@@ -38,7 +41,15 @@ public class ShipGraphic {
 		else{
 			Texture t=ship.getPic().get();
 			// maybe need to stop player from shaking with enemy
-			Draw.drawTextureScaledFlipped(batch, t, Main.width-offset.x-t.getWidth()+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, offset.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity,1,1,true, false);
+		/*	Draw.drawTextureScaledFlipped(batch, t, 
+					500+Main.width-offset.x-t.getWidth()+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, 
+					offset.y+(float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity,
+					1,1,true, false);
+		}*/
+			Draw.drawTextureScaledFlipped(batch, t, 
+					500+Main.width-offset.x-t.getWidth(), 
+					offset.y,
+					1,1,true, false);
 		}
 		for(Niche n:ship.niches){
 			if(n.type!=ModuleType.WEAPON){
@@ -46,5 +57,30 @@ public class ShipGraphic {
 			}
 		}
 
+	}
+
+
+
+	@Override
+	public void mouseDown() {
+	}
+
+
+
+	@Override
+	public void mouseUp() {
+	}
+
+
+
+	@Override
+	public void mouseClicked(boolean left) {
+	}
+
+
+
+	@Override
+	public void update(float delta) {
+		
 	}
 }

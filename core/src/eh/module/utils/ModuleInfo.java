@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 
 import eh.Main;
-import eh.assets.Font;
-import eh.assets.Gallery;
 import eh.card.CardGraphic;
 import eh.module.Module;
 import eh.module.Module.ModuleType;
@@ -18,6 +16,8 @@ import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.Timer.Interp;
+import eh.util.assets.Font;
+import eh.util.assets.Gallery;
 import eh.util.maths.Pair;
 
 public class ModuleInfo extends Bonkject{
@@ -31,7 +31,7 @@ public class ModuleInfo extends Bonkject{
 		
 		mod=m;
 		
-		position=new Pair(mod.ship.player?132:Main.width-132-width, 0);
+		position=new Pair(mod.ship.player?130:Main.width-130-width, 0);
 		
 
 		if(mod.type==ModuleType.WEAPON||mod.type==ModuleType.SHIELD){
@@ -76,7 +76,7 @@ public class ModuleInfo extends Bonkject{
 	}
 
 	public void fadeAll(){
-		System.out.println("fading");
+		
 		for(CardGraphic cg: graphics){
 			cg.fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
 		}
@@ -88,7 +88,13 @@ public class ModuleInfo extends Bonkject{
 		if (alpha<=0)return;
 		batch.setColor(1,1,1,alpha);
 
-		Draw.drawTextureScaled(batch, Gallery.darkDot.get(), position.x, position.y, width, height);
+		if(mod.type==ModuleType.SHIELD||mod.type==ModuleType.WEAPON){
+			Draw.drawTexture(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y);
+		}
+		else{
+			Draw.drawTexture(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y);
+			Draw.drawTexture(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y+CardGraphic.height/2);
+		}
 
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		String s=mod.moduleName;

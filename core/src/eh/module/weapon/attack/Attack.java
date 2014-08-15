@@ -21,12 +21,15 @@ public class Attack {
 	public Module target;
 	boolean finished;
 	boolean activated;
+	public float order;
+	public int damage;
+	public boolean unshieldable;
 	public Attack(Card c){
 		this.card=c;
 		this.mod=c.mod;
 		if(mod instanceof Laser)atkgrphc=new LaserAttack(mod.getBarrel());
 		if(mod instanceof Ray)atkgrphc=new RayAttack(mod.getBarrel());
-		if(mod instanceof Pulse)atkgrphc=new PulseAttack(mod.getBarrel());
+		if(mod instanceof Pulse)atkgrphc=new PulseAttack(mod.getBarrel(), order);
 		if(mod instanceof Tesla)atkgrphc=new LightningAttack(mod.getBarrel());
 		atkgrphc.atk=this;
 	}
@@ -63,10 +66,12 @@ public class Attack {
 		for(int i=0;i<effect;i++){
 			if(code.contains(Special.Unshieldable)){
 				target.addUnshieldable(new DamagePoint(card));
+				unshieldable=true;
 			}
 			else{
 				target.addIncoming(new DamagePoint(card));
 			}
+			damage++;
 		}
 
 		if(code.contains(Special.MakeVulnerable)){
@@ -77,7 +82,7 @@ public class Attack {
 
 	public boolean activateDamage(){
 		int pre =target.getDamage();
-		target.calculateDamage();
+		target.calculateDamage(damage, unshieldable);
 		finished=true;
 		return pre!=target.getDamage();
 	}

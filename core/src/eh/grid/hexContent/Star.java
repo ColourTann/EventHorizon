@@ -3,10 +3,10 @@ package eh.grid.hexContent;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.assets.Gallery;
 import eh.grid.hex.Hex;
 import eh.util.Colours;
 import eh.util.Draw;
+import eh.util.assets.Gallery;
 import eh.util.maths.Pair;
 
 public class Star extends HexContent{

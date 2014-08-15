@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Polygon;
 
-import eh.assets.Gallery;
 import eh.module.computer.Alpha;
 import eh.module.computer.Gamma;
 import eh.module.generator.Five;
@@ -19,6 +18,7 @@ import eh.module.weapon.Tesla;
 import eh.ship.Ship;
 import eh.ship.mapThings.mapAbility.MapAbility;
 import eh.ship.mapThings.mapAbility.genAbility.Teleport;
+import eh.util.assets.Gallery;
 
 public class Eclipse extends Ship{
 

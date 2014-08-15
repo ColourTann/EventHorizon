@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Polygon;
 
-import eh.assets.Gallery;
 import eh.module.computer.Alpha;
 import eh.module.generator.Three;
 import eh.module.shield.Deflector;
@@ -16,6 +15,7 @@ import eh.module.weapon.Tesla;
 import eh.ship.Ship;
 import eh.ship.mapThings.mapAbility.MapAbility;
 import eh.ship.mapThings.mapAbility.genAbility.Teleport;
+import eh.util.assets.Gallery;
 
 public class Aurora extends Ship{
 
@@ -49,7 +49,7 @@ public class Aurora extends Ship{
 		niches[3].setup(generator);
 		niches[4].setup(computer);
 
-		setWeapon(new Ray(0), 0);
+		setWeapon(new Pulse(0), 0);
 		setWeapon(new Laser(0), 1);
 		setShield(new Repeller(0));
 		setGenerator(new Three());

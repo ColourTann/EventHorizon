@@ -1,4 +1,4 @@
-package eh.assets;
+package eh.util.assets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;

@@ -2,11 +2,11 @@ package eh.module.weapon;
 
 import java.util.ArrayList;
 
-import eh.assets.Pic;
 import eh.card.Card;
 import eh.module.Module;
 import eh.module.utils.Buff.BuffType;
 import eh.module.weapon.attack.Attack;
+import eh.util.assets.Pic;
 import eh.util.particleSystem.ParticleSystem;
 
 public abstract class Weapon extends Module{
@@ -30,6 +30,8 @@ public abstract class Weapon extends Module{
 	public void addAttack(Card card, Module target){addAttack(new Attack(card,target));}
 
 	private void addAttack(Attack a){
+		a.atkgrphc.order=attacks.size();
+		
 		attacks.add(a);
 		ParticleSystem.systems.add(a.atkgrphc);
 		updateIntensity();

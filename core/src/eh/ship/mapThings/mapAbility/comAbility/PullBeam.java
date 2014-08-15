@@ -1,12 +1,12 @@
 package eh.ship.mapThings.mapAbility.comAbility;
 
-import eh.assets.Gallery;
 import eh.grid.hex.Hex;
 import eh.grid.hex.HexChoice;
 import eh.screen.map.Map;
 import eh.screen.map.Map.MapState;
 import eh.ship.mapThings.MapShip;
 import eh.ship.mapThings.mapAbility.MapAbility;
+import eh.util.assets.Gallery;
 
 public class PullBeam extends MapAbility{
 

@@ -62,6 +62,7 @@ public class Niche{
 		width=p.getBoundingRectangle().width;
 		height=p.getBoundingRectangle().height;
 		location=new Pair(x,y);
+		location=location.floor();
 	}
 
 	public NicheGraphic getGraphic(){

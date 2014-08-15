@@ -2,12 +2,12 @@ package eh.module.weapon.attack;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.assets.Clip;
 import eh.module.weapon.attack.particle.LaserBody;
 import eh.module.weapon.attack.particle.LaserCharge;
 import eh.module.weapon.attack.particle.SmokeMachine;
 import eh.module.weapon.attack.particle.Smoke.SmokeType;
 import eh.screen.battle.Battle;
+import eh.util.assets.Clip;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 import eh.util.particleSystem.ParticleSystem;
@@ -50,9 +50,9 @@ public class LaserAttack extends AttackGraphic{
 		for(Particle p:particles){
 			p.update(delta);
 		}
-		if(fired&&ticks>.2f){
+		/*if(fired&&ticks>.2f){
 			impact();
-		}
+		}*/
 	}
 
 	@Override

@@ -6,9 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 
 import eh.Main;
-import eh.assets.Font;
-import eh.assets.Gallery;
-import eh.assets.Pic;
 import eh.card.CardCode.Special;
 import eh.module.Module.ModuleType;
 import eh.module.shield.Shield;
@@ -23,6 +20,9 @@ import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.Timer.Interp;
+import eh.util.assets.Font;
+import eh.util.assets.Gallery;
+import eh.util.assets.Pic;
 import eh.util.maths.BoxCollider;
 import eh.util.maths.Pair;
 

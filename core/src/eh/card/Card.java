@@ -2,8 +2,6 @@ package eh.card;
 
 import java.util.ArrayList;
 
-import eh.assets.Clip;
-import eh.assets.Pic;
 import eh.card.CardCode.AI;
 import eh.card.CardCode.AIclass;
 import eh.card.CardCode.Augment;
@@ -22,6 +20,8 @@ import eh.screen.battle.interfaceJunk.CycleButton;
 import eh.screen.battle.tutorial.Tutorial;
 import eh.ship.Ship;
 import eh.util.Draw;
+import eh.util.assets.Clip;
+import eh.util.assets.Pic;
 
 public class Card {
 	public Module mod;
@@ -1224,7 +1224,7 @@ public class Card {
 
 			}	
 		}
-		System.out.println("Ok to play");
+		System.out.println("Ok to play "+this.mod);
 		return true;
 	}
 

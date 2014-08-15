@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
-import eh.assets.Font;
+
 import eh.grid.Grid;
 import eh.grid.hexContent.HexContent;
 import eh.grid.hexContent.Planet;
@@ -17,6 +17,7 @@ import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.Timer;
 import eh.util.Timer.Interp;
+import eh.util.assets.Font;
 import eh.util.maths.Pair;
 
 public class Hex {

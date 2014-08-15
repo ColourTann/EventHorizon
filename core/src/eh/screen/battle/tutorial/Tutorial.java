@@ -7,13 +7,11 @@ import java.util.ArrayList;
 
 
 
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 
 import eh.Main;
-import eh.assets.Font;
-import eh.assets.Gallery;
-import eh.assets.Pic;
 import eh.card.Card;
 import eh.card.CardCode.AI;
 import eh.card.CardCode.Special;
@@ -29,6 +27,9 @@ import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.Timer;
 import eh.util.Timer.Interp;
+import eh.util.assets.Font;
+import eh.util.assets.Gallery;
+import eh.util.assets.Pic;
 import eh.util.maths.Collider;
 import eh.util.maths.Pair;
 

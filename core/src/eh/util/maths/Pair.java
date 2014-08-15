@@ -24,6 +24,12 @@ public class Pair {
 		y=-x;
 		x=tempy;
 	}
+	
+	public Pair rotate(double radians){
+		float newX=(float) (x*Math.cos(radians)-y*Math.sin(radians));
+		float newY=(float) (x*Math.sin(radians)+y*Math.cos(radians));
+		return new Pair(newX, newY);
+	}
 	public Pair multiply(float amount){
 		return new Pair(x*amount,y*amount);
 	}

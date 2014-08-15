@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.Main;
-import eh.assets.Font;
-import eh.assets.Gallery;
 import eh.card.Card;
 import eh.card.CardGraphic;
 import eh.module.weapon.Weapon;
@@ -20,6 +18,8 @@ import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.Timer;
 import eh.util.Timer.Interp;
+import eh.util.assets.Font;
+import eh.util.assets.Gallery;
 import eh.util.maths.BoxCollider;
 import eh.util.maths.Collider;
 import eh.util.maths.Pair;

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.assets.Font;
+import eh.util.assets.Font;
 import eh.util.maths.Pair;
 
 public class TextWisp extends Bonkject{

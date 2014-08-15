@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import eh.Main;
 import eh.Main.ScreenType;
-import eh.assets.Font;
 import eh.screen.Screen;
+import eh.util.assets.Font;
 import eh.util.maths.Pair;
 
 public class Selector extends Screen{
@@ -27,7 +27,7 @@ public class Selector extends Screen{
 	@Override
 	public void render(SpriteBatch batch) {
 		Font.small.setColor(1,1,1,1);
-		Font.small.draw(batch, ""+Main.version, 0, 0);
+		Font.small.draw(batch, ""+Main.version, Main.width-Font.small.getBounds(""+Main.version).width, 0);
 		for(GameChoice c:choices){
 			c.render(batch);
 		}
@@ -49,6 +49,9 @@ public class Selector extends Screen{
 	}
 	@Override
 	public void postRender(SpriteBatch batch) {
+	}
+	@Override
+	public void scroll(int amount) {
 	}
 	
 }

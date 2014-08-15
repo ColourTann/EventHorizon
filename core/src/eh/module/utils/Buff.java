@@ -1,8 +1,8 @@
 package eh.module.utils;
 
-import eh.assets.Gallery;
-import eh.assets.Pic;
 import eh.card.Card;
+import eh.util.assets.Gallery;
+import eh.util.assets.Pic;
 
 public class Buff {
 	public enum BuffType{TakesExtraDamage, BonusEffeect, BonusShot, ReduceCost, Scrambled}

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.assets.Gallery;
-import eh.assets.Pic;
 import eh.util.Bonkject;
 import eh.util.Draw;
 import eh.util.Timer.Interp;
+import eh.util.assets.Gallery;
+import eh.util.assets.Pic;
 import eh.util.maths.BoxCollider;
 import eh.util.maths.Pair;
 

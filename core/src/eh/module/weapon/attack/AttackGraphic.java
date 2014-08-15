@@ -10,6 +10,7 @@ public abstract class AttackGraphic extends ParticleSystem{
 	public Pair target;
 	public float intensity=0;
 	public Attack atk;
+	public int order;
 	public AttackGraphic(Pair origin){
 		this.origin=origin;
 	}

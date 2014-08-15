@@ -2,7 +2,6 @@ package eh.util;
 
 import java.util.ArrayList;
 
-import eh.util.Bonkject.Finisher;
 import eh.util.maths.Pair;
 
 public class Timer {
@@ -20,8 +19,12 @@ public class Timer {
 	float toFloat;
 	public float ratio;
 
+	public interface Finisher {
+		public void finish();
+	}
 	Finisher f;
 
+	
 	public Timer() {
 		ratio=0;
 	}

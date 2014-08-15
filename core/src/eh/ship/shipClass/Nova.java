@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Polygon;
 
-import eh.assets.Gallery;
 import eh.module.computer.Alpha;
 import eh.module.computer.Beta;
 import eh.module.computer.Gamma;
@@ -21,6 +20,7 @@ import eh.module.weapon.Tesla;
 import eh.ship.Ship;
 import eh.ship.mapThings.mapAbility.MapAbility;
 import eh.ship.mapThings.mapAbility.genAbility.Teleport;
+import eh.util.assets.Gallery;
 
 public class Nova extends Ship{
 

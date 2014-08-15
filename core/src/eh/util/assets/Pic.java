@@ -1,4 +1,4 @@
-package eh.assets;
+package eh.util.assets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
 import eh.util.Colours;
+import eh.util.PerleyBabes;
 import eh.util.maths.Pair;
 
 public class Pic {
@@ -20,8 +21,8 @@ public class Pic {
 	private Texture putline;
 	private Texture glowOutline;
 	private Texture monoChrome;
-
-
+	private Texture mask;
+	private Texture cut;
 	private Pic basePic;
 	private Color[] replacers;
 
@@ -62,6 +63,7 @@ public class Pic {
 		for(int x=0;x<width;x++){			
 			for(int y=0;y<height;y++){
 				Color replace=map.get(new Color(base.getPixel(x, y)));
+
 				if(replace!=null)	pixMap.setColor(replace);
 				else				pixMap.setColor(base.getPixel(x, y));
 				pixMap.drawPixel(x, y);
@@ -69,7 +71,36 @@ public class Pic {
 		}
 		Texture result=new Texture(pixMap);
 		base.dispose();
+
 		return result;
+	}
+
+	public Texture getMask(Color color){
+		if(mask!=null)return mask;
+		get();
+		int width=t.getWidth();
+		int height=t.getHeight();
+		t.getTextureData().prepare();
+		Pixmap base=t.getTextureData().consumePixmap();
+		Pixmap pixMap=new Pixmap(width, height, Format.RGBA8888);
+
+
+
+		pixMap.setColor(color);
+		for(int x=0;x<width;x++){			
+			for(int y=0;y<height;y++){
+				Color c=new Color(base.getPixel(x, y));
+
+				if(c.a!=0){
+					pixMap.drawPixel(x, y);
+				}
+			}
+		}
+		Texture result=new Texture(pixMap);
+		base.dispose();
+		mask=result;
+
+		return mask;
 	}
 
 	public Texture getOutline(){
@@ -133,6 +164,78 @@ public class Pic {
 		return monoChrome;
 	}
 
+	public Texture getCut(){
+		if(cut!=null)return cut;
+
+		get();
+		int width=t.getWidth();
+		int height=t.getHeight();
+		t.getTextureData().prepare();
+		Pixmap pixMap=t.getTextureData().consumePixmap();
+
+
+
+
+
+		pixMap.setColor(Colours.dark);
+
+
+		int cuts=7;
+
+		for(int i=0;i<3;i++){
+			double randWidth=width/3+(width/5*i);
+			double randHeight=height/3+(height/5*i);
+			Pair vector=Pair.randomUnitVector();
+			for(int j=0;j<cuts;j++){
+				cut(pixMap, (int) (randWidth), (int) (randHeight), vector);
+				vector=vector.rotate(Math.PI*2/cuts+(Math.random()-.5));
+			}
+		}
+
+
+		Texture result=new Texture(pixMap);
+		pixMap.dispose();
+		cut=result;
+
+
+
+		return cut;
+	}
+
+	private void cut(Pixmap result, int startX, int startY, Pair startVector){
+		Pair vector= startVector.copy();
+		ArrayList<String> strings=new ArrayList<String>();
+		double rotation=Math.random()*Math.random()*.005;
+		float x=startX;
+		float y=startY;
+		strings.add((int)x+":"+(int)y);
+		result.setColor(Colours.dark);
+		while(true){
+			if(Math.abs(x-startX)+Math.abs(y-startY)<5){}//is ok!
+			else if(strings.contains((int)x+":"+(int)y)){}//is ok!
+			else if(new Color(result.getPixel((int)x, (int)y)).a==0){
+				break;
+			}
+			else if(Colours.equals(Colours.dark, new Color(result.getPixel((int)x, (int)y)))){
+				if(Math.random()>.3)break;
+			}
+			strings.add((int)x+":"+(int)y);
+			result.drawPixel((int)x, (int)y);
+			x+=vector.x;
+			y+=vector.y;
+
+			vector=vector.add(Pair.randomUnitVector().multiply(0.05f));
+			vector=vector.normalise();
+			vector=vector.rotate(rotation);
+			if(Math.abs(startX-x)+Math.abs(startY-y)>20&&Math.random()>.995){
+				cut(result, (int)x, (int)y, Pair.randomUnitVector());
+				startX=(int)x;
+				startY=(int)y;
+			}
+		}
+		
+	}
+
 	private void outlinePath(Pixmap pixmap, Pixmap result, int x, int y, int iteration){
 		if(x<0||y<0||x>pixmap.getWidth()||y>pixmap.getHeight())return;
 		int col=pixmap.getPixel(x, y);
@@ -181,6 +284,10 @@ public class Pic {
 
 	static float getAlpha(int col){
 		return (col& 0x000000ff)/ 255f;
+	}
+
+	public void reset() {
+		cut=null;
 	}
 
 }

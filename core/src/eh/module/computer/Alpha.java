@@ -1,8 +1,8 @@
 package eh.module.computer;
 
-import eh.assets.Gallery;
 import eh.card.CardCode.AI;
 import eh.card.CardCode.Special;
+import eh.util.assets.Gallery;
 
 public class Alpha extends Computer{
 	public Alpha(){

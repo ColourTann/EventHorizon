@@ -10,12 +10,12 @@ public class InputHandler implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		Main.currentScreen.keyPress(keycode);
+		Main.keyPress(keycode);
 		return false;
 	}
 	@Override
 	public boolean keyUp(int keycode) {
-		Main.currentScreen.keyUp(keycode);
+		Main.keyUp(keycode);
 		return false;
 	}
 	@Override
@@ -28,7 +28,7 @@ public class InputHandler implements InputProcessor {
 		
 		
 		Bonkject.updateClicked(button==0);
-		Main.currentScreen.mousePressed(new Pair((float)screenX/(float)Gdx.graphics.getWidth()*Main.width, ((float)screenY/(float)Gdx.graphics.getHeight()*Main.height)),button==0);
+		Main.touchDown(new Pair((float)screenX/(float)Gdx.graphics.getWidth()*Main.width, ((float)screenY/(float)Gdx.graphics.getHeight()*Main.height)),button==0);
 		return false;
 	}
 	@Override
@@ -45,8 +45,7 @@ public class InputHandler implements InputProcessor {
 	}
 	@Override
 	public boolean scrolled(int amount) {
-		if(Main.currentScreen==Main.map)Main.map.zoom(amount);
-		
+		Main.scrolled(amount);
 		return false;
 	}
 

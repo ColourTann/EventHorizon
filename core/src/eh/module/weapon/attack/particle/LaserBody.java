@@ -3,8 +3,8 @@ package eh.module.weapon.attack.particle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.assets.Gallery;
 import eh.util.Draw;
+import eh.util.assets.Gallery;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 

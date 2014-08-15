@@ -1,8 +1,8 @@
 package eh.module.generator;
 
-import eh.assets.Pic;
 import eh.card.CardCode.Special;
 import eh.module.Module;
+import eh.util.assets.Pic;
 
 public abstract class Generator extends Module{
 	public int energyIncome;

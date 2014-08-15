@@ -6,9 +6,6 @@ import java.util.Arrays;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.Main;
-import eh.assets.Clip;
-import eh.assets.Font;
-import eh.assets.Pic;
 import eh.card.Card;
 import eh.card.CardCode;
 import eh.card.CardCode.AI;
@@ -39,6 +36,9 @@ import eh.util.TextWisp;
 import eh.util.Timer;
 import eh.util.TextWisp.WispType;
 import eh.util.Timer.Interp;
+import eh.util.assets.Clip;
+import eh.util.assets.Font;
+import eh.util.assets.Pic;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 
@@ -497,10 +497,7 @@ public abstract class Ship {
 
 	//Rendering junk//
 
-	public void renderAll(SpriteBatch batch){
-		renderShip(batch);
-		renderFightStats(batch);
-	}
+	
 
 	public void renderFightStats(SpriteBatch batch){
 		fightStats.render(batch);
@@ -514,7 +511,7 @@ public abstract class Ship {
 	//Setters and getters//
 	public void addToEnergyAtEndOfPhase(int amount){energyAtEndOfPhase+=amount;}
 	public void majorDamage() {
-		Battle.shake(player,true);
+		Battle.shake(player,3);
 		Clip.damageMajor.play();
 		majorDamageTaken++;
 	}

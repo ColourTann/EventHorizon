@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.assets.Clip;
 import eh.module.weapon.attack.particle.Lightning;
 import eh.module.weapon.attack.particle.SmokeMachine;
 import eh.module.weapon.attack.particle.Spark;
+import eh.util.assets.Clip;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
 import eh.util.particleSystem.ParticleSystem;

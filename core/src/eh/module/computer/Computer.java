@@ -1,10 +1,10 @@
 package eh.module.computer;
 
-import eh.assets.Pic;
 import eh.card.CardCode.AI;
 import eh.card.CardCode.Augment;
 import eh.card.CardCode.Special;
 import eh.module.Module;
+import eh.util.assets.Pic;
 
 public abstract class Computer extends Module{
 	public int maxCards;

@@ -2,7 +2,6 @@ package eh.screen.battle.tutorial;
 
 
 
-import eh.assets.Pic;
 import eh.card.Card;
 import eh.card.CardCode.Special;
 import eh.module.Module;
@@ -12,6 +11,7 @@ import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
 import eh.screen.battle.Battle.State;
 import eh.ship.Ship;
+import eh.util.assets.Pic;
 import eh.util.maths.Pair;
 
 public class Task {

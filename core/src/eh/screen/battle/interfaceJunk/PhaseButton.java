@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
 
 import eh.Main;
-import eh.assets.Gallery;
-import eh.assets.Pic;
 import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
 import eh.screen.battle.tutorial.PicLoc;
@@ -18,6 +16,8 @@ import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.Timer;
 import eh.util.Timer.Interp;
+import eh.util.assets.Gallery;
+import eh.util.assets.Pic;
 import eh.util.maths.Collider;
 import eh.util.maths.PolygonCollider;
 import eh.util.maths.Pair;

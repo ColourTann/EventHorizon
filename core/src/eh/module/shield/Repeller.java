@@ -1,9 +1,9 @@
 package eh.module.shield;
 
 
-import eh.assets.Gallery;
 import eh.card.CardCode.AI;
 import eh.card.CardCode.Special;
+import eh.util.assets.Gallery;
 
 public class Repeller extends Shield{
 	public Repeller(int tier){

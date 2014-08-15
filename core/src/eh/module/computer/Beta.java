@@ -1,9 +1,9 @@
 package eh.module.computer;
 
-import eh.assets.Gallery;
-import eh.assets.Pic;
 import eh.card.CardCode.AI;
 import eh.card.CardCode.Special;
+import eh.util.assets.Gallery;
+import eh.util.assets.Pic;
 
 public class Beta extends Computer{
 

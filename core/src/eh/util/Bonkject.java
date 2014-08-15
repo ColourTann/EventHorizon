@@ -13,14 +13,20 @@ import eh.util.maths.Pair;
 import eh.util.particleSystem.ParticleSystem;
 
 public abstract class Bonkject {
+	
+	public enum Layer{Default, Escape}
+	public static Layer currentLayer=Layer.Default;
+	
 	public boolean dead;
+	public Layer layer;
 	static boolean debug=false;
 	public static ArrayList<Bonkject> mousers = new ArrayList<Bonkject>();
 	public static ArrayList<Bonkject> tickers = new ArrayList<Bonkject>();
-	public static ArrayList<Timer> timers = new ArrayList<Timer>();
+	
 
 	//Bonkjects are automatically added to update list but not mouse list//
 	public Bonkject() {
+		layer=currentLayer;
 		bonktivate();
 	}
 
@@ -39,7 +45,9 @@ public abstract class Bonkject {
 	public static void updateClicked(boolean left){
 		updateMousePosition();
 		for(int i=0;i<mousers.size();i++){
-			if(mousers.get(i).checkClicked(currentMoused, left))return;
+			Bonkject checkMoused=mousers.get(i);
+			if(checkMoused.layer!=currentLayer)continue;
+			if(checkMoused.checkClicked(currentMoused, left))return;
 		}
 	}
 
@@ -65,11 +73,15 @@ public abstract class Bonkject {
 		updateMousePosition();
 		boolean found=false;
 		for(int i=0;i<mousers.size();i++){
+			
+			Bonkject mouseCheck= mousers.get(i);
+			if(mouseCheck.layer!=currentLayer)continue;
+			
 			if(found){
-				mousers.get(i).deMouse();
+				mouseCheck.deMouse();
 				continue;
 			}
-			found=mousers.get(i).checkMoused(currentMoused);
+			found=mouseCheck.checkMoused(currentMoused);
 		}
 	}	
 
@@ -129,6 +141,7 @@ public abstract class Bonkject {
 
 	public static void updateActives(float delta){
 		for(Bonkject b:tickers){
+			if(b.layer!=currentLayer)continue;
 			b.update(delta);
 			if(b.fader!=null){
 				b.alpha=b.fader.getFloat();
@@ -148,6 +161,7 @@ public abstract class Bonkject {
 		}
 
 	}
+	
 	public abstract void update(float delta);
 
 	public void debugRender(SpriteBatch batch){
@@ -156,8 +170,6 @@ public abstract class Bonkject {
 		collider.debugDraw();
 		batch.begin();
 	}
-
-
 
 
 	// Helper methods //
@@ -189,19 +201,30 @@ public abstract class Bonkject {
 		slider=new Timer(position, target, speed, type);
 	}
 	
-	public interface Finisher {
-		public void finish();
-	}
+	
 
-	public static void clearAll() {
-		mousers.clear();
-		tickers.clear();
-		timers.clear();
+	public static void clearAllDefaults() {
+		for(int i=0;i<mousers.size();i++){
+			Bonkject b=mousers.get(i);
+			if(b.layer==Layer.Default){
+				mousers.remove(b);
+				i--;
+			}
+		}
+		for(int i=0;i<tickers.size();i++){
+			Bonkject b=tickers.get(i);
+			if(b.layer==Layer.Default){
+				tickers.remove(b);
+				i--;
+			}
+		}
 		ParticleSystem.clearAll();
 	}
 
-
-
+	public static void setLayer(Layer layer){
+		currentLayer=layer;
+	}
+	
 	//debug render is very laggy and will mess up if you're using cameras, might fix if can be bothered//
 	public static void debugRenderAll(SpriteBatch batch) {
 		batch.end();

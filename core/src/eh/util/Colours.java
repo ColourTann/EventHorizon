@@ -14,6 +14,13 @@ public class Colours {
 	
 	public static Color[] baseReplacers =new Color[]{make(0,0,0), make(127,127,127), make(255,255,255)};
 	public static Color[] greenHPCols =new Color[]{make(47,186,131), make(86,224,147), make(165,230,161)};
+	public static Color[] blueHPCols =new Color[]{make(31,162,206), make(107,202,230), make(131,226,226)};
+	
+	public static Color[] orangeHPCols =new Color[]{make(255,101,36), make(251,154,32), make(255,178,73)};
+	public static Color[] greyHPCols =new Color[]{make(77,62,54), make(150,137,126), make(182,171,154)};
+	public static Color[] redHPCols =new Color[]{make(98,43,79), make(138,43,49), make(191,94,79)};
+	
+	
 	
 	public static Color[] player2 = new Color[]{make(0,128,78),make(43,171,120)};
 	public static Color[] enemy2 = new Color[]{make(144,62,54),make(191,94,79)};
@@ -25,6 +32,7 @@ public class Colours {
 	
 	public static Color[] redWeaponCols4 = new Color[]{make(157,26,27),make(245,25,37),make(253,101,38), make(248,154,32)};
 	public static Color[] blueWeaponCols4 = new Color[]{make(47,137,131),make(86,224,147),make(165,230,161), make(196,224,204)};
+	
 	public static Color shiftedTowards(Color source, Color target, float amount){
 		if(amount>1) amount=1;
 		if(amount<0) amount=0;
@@ -49,5 +57,9 @@ public class Colours {
 	public static Color monochrome(Color c){
 		float brightness=(c.r+c.g+c.b)/3;
 		return new Color(brightness,brightness,brightness,c.a);
+	}
+	public static boolean equals(Color a, Color b){
+		
+		return a.a==b.a&&a.r==b.r&&a.g==b.g&&a.b==b.b;
 	}
 }

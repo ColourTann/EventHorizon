@@ -3,11 +3,11 @@ package eh.screen.battle.tutorial;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.Main;
-import eh.assets.Font;
-import eh.assets.Gallery;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
+import eh.util.assets.Font;
+import eh.util.assets.Gallery;
 import eh.util.maths.Collider;
 
 public class Checklist extends Bonkject{

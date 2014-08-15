@@ -2,6 +2,7 @@ package eh;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,12 +11,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
-import eh.assets.Font;
-import eh.assets.Gallery;
 import eh.card.CardGraphic;
 import eh.screen.Screen;
 import eh.screen.battle.Battle;
 import eh.screen.cardView.CardViewer;
+import eh.screen.escape.EscapeMenu;
 import eh.screen.map.Map;
 import eh.screen.menu.Selector;
 import eh.screen.test.Test;
@@ -27,13 +27,15 @@ import eh.util.TextWisp;
 import eh.util.TextWisp.WispType;
 import eh.util.Timer;
 import eh.util.Timer.Interp;
+import eh.util.assets.Font;
+import eh.util.assets.Gallery;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.ParticleSystem;
 
 public class Main extends ApplicationAdapter  {
 
 	public static float version=0.221f;
-	public static boolean debug=false;
+	public static boolean debug=true;
 
 	public static int height=700;
 	public static int width=1280;
@@ -54,11 +56,13 @@ public class Main extends ApplicationAdapter  {
 
 	public static OrthographicCamera mainCam;
 	
+	public static Timer fadeTimer=new Timer();
+	
+	
+	
 
-
-	//ANIMATING//
-	float ticks;
-	boolean goingUp=true;
+	//Escape menu//
+	
 	@Override
 	public void create () {
 		init();
@@ -105,6 +109,7 @@ public class Main extends ApplicationAdapter  {
 		//for some reason I need to reset the projection matrix//
 		shape.setProjectionMatrix(mainCam.combined);
 		currentScreen.shapeRender(shape);
+		//EscapeMenu.get().shapeRender(shape);
 		//batch.getProjectionMatrix().setToOrtho2D((int)(cam.x), (int)(cam.y), Main.width, Main.height);
 		batch.setProjectionMatrix(mainCam.combined);
 		batch.begin();
@@ -113,15 +118,16 @@ public class Main extends ApplicationAdapter  {
 
 		currentScreen.render(batch);
 		
-		ParticleSystem.renderAll(batch);
+		//ParticleSystem.renderAll(batch);
 		
 		currentScreen.postRender(batch);
 		
 		for(TextWisp t:TextWisp.wisps)t.render(batch);
 		
 		//fading bit//
-		batch.setColor(1,1,1,ticks);
-		Draw.drawTextureScaled(batch, Gallery.darkDot.get(), 0, 0, width, height);
+		batch.setColor(Colours.withAlpha(Colours.dark, fadeTimer.getFloat()
+				));
+		Draw.drawTextureScaled(batch, Gallery.square1.get(), 0, 0, width, height);
 		
 		if(debug){
 			batch.end();
@@ -131,7 +137,10 @@ public class Main extends ApplicationAdapter  {
 			Font.small.draw(batch, "FPS: "+(int)(1/delta), 0, 0);
 		}
 
-
+		EscapeMenu.get().render(batch);
+		EscapeMenu.get().postRender(batch);
+		
+		
 		batch.end();
 
 
@@ -141,15 +150,18 @@ public class Main extends ApplicationAdapter  {
 	}
 
 	public void update(float delta){
+		
 		Timer.updateAll(delta);
 		ParticleSystem.updateAll(delta);
 		currentScreen.update(delta);
 		Bonkject.updateBonkjs(delta);
 
 		if(nextType!=null){
-			ticks+=delta*2;
-			if(ticks>=1){
-				Bonkject.clearAll();
+			if(fadeTimer.getFloat()==1){
+				TextWisp.wisps.clear();
+				Bonkject.clearAllDefaults();
+				fadeTimer=new Timer(1, 0, 2, Interp.LINEAR);
+				
 				switch(nextType){
 				case EasyFight:
 					battle=new Battle(ScreenType.EasyFight);currentScreen=battle;
@@ -167,17 +179,14 @@ public class Main extends ApplicationAdapter  {
 					battle=new Battle(ScreenType.TutorialFight);currentScreen=battle;
 					break;			
 				}
-				ticks=.9f;
-				goingUp=false;
+			
+				
 				nextType=null;
+				
 			}
 			return;
 		}
-		if(ticks>0){
-
-			ticks-=delta*2;
-			ticks=Math.max(0, ticks);
-		}
+		
 		mainCam.update();
 		
 		
@@ -185,8 +194,10 @@ public class Main extends ApplicationAdapter  {
 
 	public enum ScreenType{EasyFight, MediumFight, HardFight, TutorialFight, Menu}
 	public static void changeScreen(ScreenType type){
+		if(type==ScreenType.Menu&&currentScreen==select)return;
 		TextWisp.wisps.clear();
 		nextType=type;
+		fadeTimer=new Timer(fadeTimer.getFloat(), 1, 2, Interp.LINEAR);
 	}
 
 	public static Pair getCam(){
@@ -195,6 +206,29 @@ public class Main extends ApplicationAdapter  {
 
 	public static void setCam(Pair cam){
 		mainCam.position.set(cam.x, cam.y, 0);
+	}
+	
+	public static Screen getCurrentInputScreen(){
+		if(EscapeMenu.get().active)return EscapeMenu.get();
+		return currentScreen;
+	}
+	
+	public static void keyPress(int keycode) {
+		if(keycode==Input.Keys.ESCAPE){
+			EscapeMenu.get().cycle();
+			return;
+		}
+		getCurrentInputScreen().keyPress(keycode);
+	}
+	
+	public static void keyUp(int keyCode) {
+		getCurrentInputScreen().keyUp(keyCode);
+	}
+	public static void touchDown(Pair location, boolean left) {
+		getCurrentInputScreen().mousePressed(location, left);
+	}
+	public static void scrolled(int amount){
+		getCurrentInputScreen().scroll(amount);
 	}
 
 

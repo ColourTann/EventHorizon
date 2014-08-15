@@ -1,4 +1,4 @@
-package eh.assets;
+package eh.util.assets;
 
 import com.badlogic.gdx.graphics.Color;
 
@@ -76,11 +76,14 @@ public class Gallery {
 	public static Pic redHP[]= new Pic[3];
 	public static Pic blueHP[]= new Pic[4];
 	public static Pic greyHP[]= new Pic[3];
-	public static Pic baseHP= new Pic("Icon/hpbase0");
+	public static Pic baseHP[]= new Pic[3];
 
 	private static Color[] greenHPReplace= new Color[]{Colours.baseReplacers[0], Colours.greenHPCols[0], Colours.baseReplacers[1], Colours.greenHPCols[1], Colours.baseReplacers[2], Colours.greenHPCols[2]};
+	private static Color[] orangeHPReplace= new Color[]{Colours.baseReplacers[0], Colours.orangeHPCols[0], Colours.baseReplacers[1], Colours.orangeHPCols[1], Colours.baseReplacers[2], Colours.orangeHPCols[2]};
+	private static Color[] redHPReplace= new Color[]{Colours.baseReplacers[0], Colours.redHPCols[0], Colours.baseReplacers[1], Colours.redHPCols[1], Colours.baseReplacers[2], Colours.redHPCols[2]};
+	private static Color[] greyHPReplace= new Color[]{Colours.baseReplacers[0], Colours.greyHPCols[0], Colours.baseReplacers[1], Colours.greyHPCols[1], Colours.baseReplacers[2], Colours.greyHPCols[2]};
+	private static Color[] blueHPReplace= new Color[]{Colours.baseReplacers[0], Colours.blueHPCols[0], Colours.baseReplacers[1], Colours.blueHPCols[1], Colours.baseReplacers[2], Colours.blueHPCols[2]};
 	
-	public static Pic replacedHP=new Pic(baseHP, greenHPReplace);
 	
 
 	
@@ -136,25 +139,32 @@ public class Gallery {
 	public static Pic lightning= new Pic("Particle/lightning");
 	public static Pic lightningEnd= new Pic("Particle/lightningend");
 
+	//Pause stuff//
+	public static Pic pauseBase= new Pic("Interface/pausebase");
+	
+	//Shit//
+	public static Pic apple= new Pic("Shit/apple");
 	
 	public static void init(){
 		for(int i=0;i<2;i++){
 			fiveIcon[i]=new Pic("Icon/fiveiconoverlay"+i);
 		}
 		for(int i=0;i<3;i++){
+			baseHP[i]=new Pic("Icon/hpbase"+i);
+			greenHP[i]=new Pic(baseHP[i], greenHPReplace);
+			redHP[i]=new Pic(baseHP[i], redHPReplace);
+			greyHP[i]=new Pic(baseHP[i], greyHPReplace);
+			orangeHP[i]=new Pic(baseHP[i], orangeHPReplace);
+			blueHP[i]=new Pic(baseHP[i], blueHPReplace);
+			
+			laserBody[i]=new Pic("Particle/laserbody"+i);
 			damageIcon[i]=new Pic("Icon/damageicon"+i);
 			shieldIcon[i]=new Pic("Icon/shieldicon"+i);
-			greenHP[i]=new Pic("Icon/hpgreen"+i);
-			redHP[i]=new Pic("Icon/hpred"+i);
-			greyHP[i]=new Pic("Icon/hpgrey"+i);
-			laserBody[i]=new Pic("Particle/laserbody"+i);
 		}
 		
 		for(int i=0;i<4;i++){
 			cardComputer[i]= new Pic("Module/Computer/card"+i);
 			cardGenerator[i]= new Pic("Module/Generator/card"+i);
-			orangeHP[i]=new Pic("Icon/hporange"+i);
-			blueHP[i]=new Pic("Icon/hpblue"+i);
 		}
 		
 		for(int i=0;i<5;i++){
@@ -169,7 +179,13 @@ public class Gallery {
 			repellerCard[i]=new Pic("Module/Shield/Repeller/card"+i);
 		}
 		
+		blueHP[3]=new Pic("Icon/hpblue3");
+		orangeHP[3]=new Pic("Icon/hporange3");
+		redHP[2]=new Pic("Icon/hpred2");
+		
 	}
+	
+	
 	
 }
 

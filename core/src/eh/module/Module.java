@@ -2,9 +2,6 @@ package eh.module;
 
 import java.util.ArrayList;
 
-import eh.assets.Font;
-import eh.assets.Pic;
-import eh.assets.Clip;
 import eh.card.Card;
 import eh.card.CardCode;
 import eh.card.CardCode.Special;
@@ -23,6 +20,9 @@ import eh.ship.niche.Niche;
 import eh.util.Draw;
 import eh.util.TextWisp;
 import eh.util.TextWisp.WispType;
+import eh.util.assets.Clip;
+import eh.util.assets.Font;
+import eh.util.assets.Pic;
 import eh.util.maths.Pair;
 
 
@@ -194,7 +194,7 @@ public abstract class Module {
 			
 		}
 
-		Battle.shake(ship.player,false);
+		Battle.shake(ship.player,(float)(damagePoint.card.getCost()/2+2)/(float)damagePoint.card.getShots());
 		if(damagePoint.card!=null&&damagePoint.card.mod instanceof Tesla) return;
 		Clip.damageMinor.play();
 	}
@@ -230,7 +230,28 @@ public abstract class Module {
 		}
 	}
 
-	public void calculateDamage() {
+	
+	public void calculateDamage(int damage, boolean unshieldable) {
+		if(unshieldable){
+			for(int i=0;i<damage;i++){
+				DamagePoint p = unshieldableIcoming.remove(0);
+				damage(p);
+			}
+		}
+		if(!unshieldable){
+			for(int i=0;i<damage;i++){
+				DamagePoint p = incomingDamage.remove(0);
+				if(shieldPoints.size()>0){
+					activatShield(shieldPoints.remove(0));
+					continue;
+				}
+				damage(p);
+			}
+
+		}
+	}
+	
+	private void calculateDamage() {
 		for(DamagePoint p: incomingDamage){
 			if(shieldPoints.size()>0){
 				activatShield(shieldPoints.remove(0));
@@ -382,7 +403,9 @@ public abstract class Module {
 		return new Pair(x,y);
 	}
 	public Pair getCenter(){
-		return new Pair(niche.location.x+niche.width/2,niche.location.y+niche.height/2);
+		return new Pair
+				((ship.player?0:500)+niche.location.x+niche.width/2,
+				niche.location.y+niche.height/2);
 	}
 	public Pair getHitLocation(){
 		return getCenter().add(Pair.randomAnyVector().multiply(3));
