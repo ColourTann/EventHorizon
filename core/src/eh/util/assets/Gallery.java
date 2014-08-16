@@ -143,7 +143,7 @@ public class Gallery {
 	public static Pic pauseBase= new Pic("Interface/pausebase");
 	
 	//Shit//
-	public static Pic apple= new Pic("Shit/apple");
+	public static Pic tomato= new Pic("Shit/tomato");
 	
 	public static void init(){
 		for(int i=0;i<2;i++){
