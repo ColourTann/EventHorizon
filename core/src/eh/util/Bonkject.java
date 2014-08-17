@@ -41,6 +41,52 @@ public abstract class Bonkject {
 		}
 	}
 
+	// UPDATING SHIT //
+	
+	//Call to re-add to update list//
+	public void bonktivate(){
+		tickers.remove(this);
+		tickers.add(this);
+	}
+	
+	public void debonktivate(){
+		tickers.remove(this);
+	}
+
+	public static void updateActives(float delta){
+		for(Bonkject b:tickers){
+			if(b.layer!=currentLayer)continue;
+			b.update(delta);
+			if(b.fader!=null){
+				b.alpha=b.fader.getFloat();
+			}
+
+			if(b.slider!=null){
+
+				b.position=b.slider.getPair();
+			}
+		}
+		for(int i=0;i<tickers.size();i++){
+			Bonkject b = tickers.get(i);
+			if(b.dead||b.alpha<=0){
+				b.debonktivate();
+				i--;
+			}
+		}
+
+	}
+	
+	public abstract void update(float delta);
+
+	public void debugRender(SpriteBatch batch){
+		if(collider==null)return;
+		batch.end();
+		collider.debugDraw();
+		batch.begin();
+	}
+
+	
+	
 	//Must call from InputListener as it deals with polled events//
 	public static void updateClicked(boolean left){
 		updateMousePosition();
@@ -127,49 +173,6 @@ public abstract class Bonkject {
 	public abstract void mouseUp();
 	public abstract void mouseClicked(boolean left);
 
-	// UPDATING SHIT //
-	
-	//Call to re-add to update list//
-	public void bonktivate(){
-		tickers.remove(this);
-		tickers.add(this);
-	}
-	
-	public void debonktivate(){
-		tickers.remove(this);
-	}
-
-	public static void updateActives(float delta){
-		for(Bonkject b:tickers){
-			if(b.layer!=currentLayer)continue;
-			b.update(delta);
-			if(b.fader!=null){
-				b.alpha=b.fader.getFloat();
-			}
-
-			if(b.slider!=null){
-
-				b.position=b.slider.getPair();
-			}
-		}
-		for(int i=0;i<tickers.size();i++){
-			Bonkject b = tickers.get(i);
-			if(b.dead||b.alpha<=0){
-				b.debonktivate();
-				i--;
-			}
-		}
-
-	}
-	
-	public abstract void update(float delta);
-
-	public void debugRender(SpriteBatch batch){
-		if(collider==null)return;
-		batch.end();
-		collider.debugDraw();
-		batch.begin();
-	}
 
 
 	// Helper methods //

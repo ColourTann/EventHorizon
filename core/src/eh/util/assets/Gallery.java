@@ -138,16 +138,19 @@ public class Gallery {
 	public static Pic[] laserBody=new Pic[3];
 	public static Pic lightning= new Pic("Particle/lightning");
 	public static Pic lightningEnd= new Pic("Particle/lightningend");
-
+	public static Pic[][] debris = new Pic[2][5];
+	
 	//Pause stuff//
 	public static Pic pauseBase= new Pic("Interface/pausebase");
 	
 	//Shit//
 	public static Pic tomato= new Pic("Shit/tomato");
+	public static Pic holes=new Pic("Shit/holes");
 	
 	public static void init(){
 		for(int i=0;i<2;i++){
 			fiveIcon[i]=new Pic("Icon/fiveiconoverlay"+i);
+			
 		}
 		for(int i=0;i<3;i++){
 			baseHP[i]=new Pic("Icon/hpbase"+i);
@@ -177,6 +180,9 @@ public class Gallery {
 			deflectorCard[i]=new Pic("Module/Shield/Deflector/card"+i);
 			repulsorCard[i]=new Pic("Module/Shield/Repulsor/card"+i);
 			repellerCard[i]=new Pic("Module/Shield/Repeller/card"+i);
+			
+			debris[0][i]=new Pic("Ship/Debris/s"+i);
+			debris[1][i]=new Pic("Ship/Debris/b"+i);
 		}
 		
 		blueHP[3]=new Pic("Icon/hpblue3");

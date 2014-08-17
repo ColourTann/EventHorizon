@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import eh.Main;
 import eh.screen.Screen;
+import eh.ship.Debris;
 import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.PerleyBabes;
@@ -22,9 +23,11 @@ import eh.util.maths.Pair;
 
 public class Test extends Screen{
 
-Pic pic=Gallery.tomato;
+Pic pic=Gallery.shipComet;
 ArrayList<Shard> replaced=new ArrayList<Shard>();
 boolean exploding;
+ArrayList<Debris> debris= new ArrayList<Debris>(); 
+
 	@Override
 	public void update(float delta) {
 		for(Shard s:replaced){
@@ -37,6 +40,15 @@ boolean exploding;
 		s.finalise();
 		replaced.add(s);
 		}
+		}
+		
+		if(Math.random()>.995){
+			
+			debris.add(new Debris(Math.random()>.7));
+		}
+		
+		for(Debris d:debris){
+			d.update(delta);
 		}
 	}
 
@@ -51,6 +63,9 @@ boolean exploding;
 		Draw.drawTexture(batch, pic.getCut(Colours.black), 0, 0);
 		for(Shard s:replaced){
 			s.render(batch);
+		}
+		for(Debris d:debris){
+			d.render(batch);
 		}
 	}
 

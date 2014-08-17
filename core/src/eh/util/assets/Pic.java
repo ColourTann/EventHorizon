@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import eh.util.Colours;
 import eh.util.Draw;
@@ -51,11 +52,13 @@ public class Pic {
 		
 		public void finalise(){
 			dr=(float) (Math.random()-.5*10);
-			vector=Pair.randomUnitVector().multiply(1000);
+			vector=Pair.randomUnitVector().multiply((float) (300+Math.random()*700));
 			
 			position=new Pair(left+((right-left)/2), top+((bottom-top)/2));
 		}
 		public void update(float delta){
+			vector=vector.multiply((float) Math.pow(.3, delta));
+			dr=(float) (dr*Math.pow(.3, delta));
 			position=position.add(vector.multiply(delta));
 			rotation+=dr*delta;
 		}
@@ -63,6 +66,7 @@ public class Pic {
 			return "Shard size: "+size+", x:"+left+"-"+right+", y:"+top+"-"+bottom;
 		}
 		public void render(SpriteBatch batch) {
+			if(size<5)return;
 			Draw.drawTextureRotatedCentered(batch, texture, position.x, position.y, rotation);
 		}
 	}
@@ -219,8 +223,6 @@ public class Pic {
 
 
 
-
-
 		Texture result=new Texture(pixMap);
 
 		//pixMap.dispose();
@@ -245,6 +247,7 @@ public class Pic {
 
 		int x=0;
 		int y=0;
+		
 		if(shards.size()==1){
 			x=width/3;
 			y=height/3;
@@ -254,6 +257,16 @@ public class Pic {
 
 			x=(shard.left+shard.right)/2;
 			y=(shard.bottom+shard.top)/2;
+			
+			if(new Color(pixmap.getPixel(x, y)).a==0){
+				x=(shard.left+shard.right)/3*2;
+				y=(shard.bottom+shard.top)/3*2;
+				if(new Color(pixmap.getPixel(x, y)).a==0){
+
+					x=(shard.left+shard.right)/3;
+					y=(shard.bottom+shard.top)/3;
+				}
+			}
 
 		}
 		Pair vector=Pair.randomUnitVector();
@@ -276,13 +289,13 @@ public class Pic {
 		array=null;
 
 	
-		System.out.println(System.currentTimeMillis()-time+"");
+		
 		time=System.currentTimeMillis();
 		Pixmap pixmap=cut.getTextureData().consumePixmap();
 	
 		Color replacer=new Color(0,0,0,0);
 		Pixmap.setBlending(Blending.None);
-		Shard biggest=getBiggestShard();
+		Shard biggest=getMediumestShard();
 		if(biggest==null)return null;
 		shards.remove(biggest);
 		int x=(int) biggest.aPixelLocation.x;
@@ -305,7 +318,7 @@ public class Pic {
 		biggest.texture=result;
 		underneath.dispose();
 		aligned.dispose();
-		System.out.println(System.currentTimeMillis()-time+"");
+
 		return biggest;
 	
 	}
@@ -349,7 +362,7 @@ public class Pic {
 		int width=t.getWidth();
 		int height=t.getHeight();
 		array=new boolean[width][height];
-		shards.clear();
+		ArrayList<Shard> tempShards=new ArrayList<Pic.Shard>();
 		for(int x=0;x<width;x++){
 			for(int y=0;y<height;y++){
 				if(array[x][y])continue;
@@ -361,25 +374,41 @@ public class Pic {
 					shard.aPixelLocation=new Pair(x,y);
 					
 					fillShard(pixmap, x, y, null, shard, null);
-					shards.add(shard);
+					tempShards.add(shard);
 				}
 			}
 		}
-		
+	
+		shards.clear();
+		while(tempShards.size()>0){
+			Shard s=tempShards.remove(0);
+			boolean added=false;
+			for(int i=0;i<shards.size();i++){
+				if(shards.get(i).size>s.size){
+					shards.add(i,s);
+					added=true;
+					break;
+				}
+			}
+			if(!added)shards.add(s);
+		}
+		for(Shard s:shards)System.out.println(s.size);
 	}
 
 	private Shard getBiggestShard(){
 		if(shards.size()==0){
-			System.out.println("no shards");
 			return null;
 		}
-		Shard result=shards.get(0);
-		for(Shard s:shards){
-			if(s.size>result.size){
-				result=s;
-			}
+		return shards.get(shards.size()-1);
+	}
+	
+	private Shard getMediumestShard(){
+		if(shards.size()==0){
+			return null;
 		}
-		return result;
+		
+		return shards.get(shards.size()/2);
+		
 	}
 
 	private void fillShard(Pixmap pixmap, int startX, int startY, Color replacer, Shard store, Pixmap underneath){

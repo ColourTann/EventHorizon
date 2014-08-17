@@ -8,7 +8,11 @@ public class Pair {
 		this.x=x;
 		this.y=y;
 	}
-	public Pair(){}	
+	public Pair(double x, double y){
+		this.x=(float) x;
+		this.y=(float) y;
+	}
+	public Pair(){}
 	public static Pair getVector(Pair from, Pair to){
 		return new Pair(to.x-from.x,to.y-from.y);
 	}
