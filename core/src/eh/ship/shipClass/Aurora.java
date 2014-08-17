@@ -6,12 +6,9 @@ import com.badlogic.gdx.math.Polygon;
 
 import eh.module.computer.Alpha;
 import eh.module.generator.Three;
-import eh.module.shield.Deflector;
 import eh.module.shield.Repeller;
 import eh.module.weapon.Laser;
 import eh.module.weapon.Pulse;
-import eh.module.weapon.Ray;
-import eh.module.weapon.Tesla;
 import eh.ship.Ship;
 import eh.ship.mapThings.mapAbility.MapAbility;
 import eh.ship.mapThings.mapAbility.genAbility.Teleport;

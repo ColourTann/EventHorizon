@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.module.weapon.attack.particle.Lightning;
-import eh.module.weapon.attack.particle.SmokeMachine;
 import eh.module.weapon.attack.particle.Spark;
 import eh.util.assets.Clip;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
-import eh.util.particleSystem.ParticleSystem;
 
 public class LightningAttack extends AttackGraphic{
 	static float frequency=15;
@@ -81,7 +79,6 @@ public class LightningAttack extends AttackGraphic{
 			float mult=1f/(parts+1f);
 
 			ArrayList<Pair> split = new ArrayList<Pair>();
-			Pair previous=origin.copy();
 			split.add(origin);
 			for(int i=1;i<=parts;i++){
 				split.add(origin.add(vector.multiply((mult*i)).add(Pair.randomUnitVector().multiply((float)Math.random()*30)))); 

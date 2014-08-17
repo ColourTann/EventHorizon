@@ -8,7 +8,6 @@ import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.assets.Font;
 import eh.util.assets.Gallery;
-import eh.util.maths.Collider;
 
 public class Checklist extends Bonkject{
 	Task[] tasks;

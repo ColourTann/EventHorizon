@@ -6,13 +6,12 @@ import eh.card.CardCode.Special;
 import eh.module.Module;
 import eh.module.Module.ModuleType;
 import eh.module.utils.Buff;
-import eh.module.utils.DamagePoint;
 import eh.module.utils.Buff.BuffType;
+import eh.module.utils.DamagePoint;
 import eh.module.weapon.Laser;
 import eh.module.weapon.Pulse;
 import eh.module.weapon.Ray;
 import eh.module.weapon.Tesla;
-import eh.screen.battle.Battle;
 
 public class Attack {
 	public AttackGraphic atkgrphc;

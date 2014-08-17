@@ -1,12 +1,7 @@
 package eh.util;
 
 // JAVA REFERENCE IMPLEMENTATION OF IMPROVED NOISE - COPYRIGHT 2002 KEN PERLIN.
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
-import javax.imageio.ImageIO;
 
 public final class PerleyBabes {  // Simplex noise in 2D, 3D and 4D
 

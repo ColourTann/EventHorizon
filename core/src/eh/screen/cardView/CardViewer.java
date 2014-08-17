@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import eh.card.Card;
 import eh.card.CardGraphic;
 import eh.module.Module;
-import eh.module.computer.*;
-import eh.module.generator.*;
-import eh.module.shield.*;
-import eh.module.weapon.*;
+import eh.module.shield.Deflector;
+import eh.module.shield.Repeller;
+import eh.module.shield.Repulsor;
+import eh.module.weapon.Laser;
 import eh.screen.Screen;
 import eh.util.maths.Pair;
 

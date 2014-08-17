@@ -4,7 +4,6 @@ package eh.screen.escape;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -13,11 +12,11 @@ import eh.Main;
 import eh.Main.ScreenType;
 import eh.screen.Screen;
 import eh.util.Bonkject;
+import eh.util.Bonkject.Layer;
 import eh.util.Draw;
 import eh.util.SimpleButton;
 import eh.util.SimpleButton.Code;
 import eh.util.Timer;
-import eh.util.Bonkject.Layer;
 import eh.util.Timer.Interp;
 import eh.util.assets.Gallery;
 import eh.util.maths.Pair;

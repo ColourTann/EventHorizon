@@ -4,9 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.module.weapon.attack.particle.LaserBody;
 import eh.module.weapon.attack.particle.LaserCharge;
-import eh.module.weapon.attack.particle.SmokeMachine;
 import eh.module.weapon.attack.particle.Smoke.SmokeType;
-import eh.screen.battle.Battle;
+import eh.module.weapon.attack.particle.SmokeMachine;
 import eh.util.assets.Clip;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;

@@ -3,7 +3,6 @@ package eh.module.computer;
 import eh.card.CardCode.AI;
 import eh.card.CardCode.Special;
 import eh.util.assets.Gallery;
-import eh.util.assets.Pic;
 
 public class Beta extends Computer{
 

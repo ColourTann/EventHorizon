@@ -2,11 +2,7 @@ package eh.module.utils;
 
 import java.util.ArrayList;
 
-import javax.swing.GroupLayout.Alignment;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
-
 import eh.Main;
 import eh.card.CardGraphic;
 import eh.module.Module;

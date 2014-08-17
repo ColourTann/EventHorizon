@@ -1,6 +1,5 @@
 package eh.module.weapon.attack;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.module.weapon.attack.particle.RayParticle;

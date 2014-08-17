@@ -2,8 +2,6 @@ package eh.screen.battle.tutorial;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.Main;
-import eh.module.utils.ModuleStats;
 import eh.util.Bonkject;
 import eh.util.Draw;
 import eh.util.assets.Gallery;

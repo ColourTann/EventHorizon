@@ -2,50 +2,41 @@ package eh.screen.battle;
 
 import java.util.ArrayList;
 
-import javafx.scene.control.SplitPane.Divider;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Frustum;
-import com.badlogic.gdx.math.Vector3;
 
 import eh.Main;
 import eh.Main.ScreenType;
 import eh.card.Card;
 import eh.card.CardCode;
+import eh.card.CardCode.Special;
 import eh.card.CardGraphic;
 import eh.card.CardIcon;
-import eh.card.CardCode.Special;
 import eh.module.Module;
-import eh.module.utils.DamagePoint;
 import eh.module.utils.ModuleInfo;
-import eh.module.weapon.attack.LightningAttack;
 import eh.screen.Screen;
 import eh.screen.battle.interfaceJunk.CycleButton;
 import eh.screen.battle.interfaceJunk.HelpPanel;
 import eh.screen.battle.interfaceJunk.PhaseButton;
 import eh.screen.battle.interfaceJunk.Star;
-import eh.screen.battle.tutorial.Checklist;
 import eh.screen.battle.tutorial.Tutorial;
-import eh.screen.battle.tutorial.UndoButton;
 import eh.screen.battle.tutorial.Tutorial.Trigger;
+import eh.screen.battle.tutorial.UndoButton;
 import eh.ship.Ship;
 import eh.ship.niche.Niche;
-import eh.ship.shipClass.*;
+import eh.ship.shipClass.Aurora;
+import eh.ship.shipClass.Comet;
+import eh.ship.shipClass.Eclipse;
+import eh.ship.shipClass.Nova;
 import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.PerleyBabes;
 import eh.util.TextWisp;
-import eh.util.TextWisp.WispType;
-import eh.util.Timer.Interp;
-import eh.util.Timer;
 import eh.util.assets.Font;
 import eh.util.assets.Gallery;
 import eh.util.maths.Pair;
@@ -293,10 +284,6 @@ public class Battle extends Screen{
 					cg.override=true;
 					enemyHandList.add(cg);
 					cg.setPosition(new Pair(i*CardGraphic.width,Main.height-CardGraphic.height));
-				}
-
-				for(Module m:player.getRandomisedModules()){
-					//System.out.println(m.getShieldsRequiredToAvoidMajor());
 				}
 			}
 			break;

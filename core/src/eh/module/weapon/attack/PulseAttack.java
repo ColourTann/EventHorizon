@@ -2,7 +2,6 @@ package eh.module.weapon.attack;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.module.utils.DamagePoint;
 import eh.module.weapon.attack.particle.PulseParticle;
 import eh.util.Timer;
 import eh.util.Timer.Finisher;

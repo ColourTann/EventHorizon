@@ -2,11 +2,8 @@ package eh.ship.mapThings.mapAbility.genAbility;
 
 import eh.grid.hex.Hex;
 import eh.grid.hex.HexChoice;
-import eh.screen.map.Map;
-import eh.screen.map.Map.MapState;
 import eh.ship.mapThings.mapAbility.MapAbility;
 import eh.util.assets.Gallery;
-import eh.util.assets.Pic;
 
 public class DoubleMove extends MapAbility{
 

@@ -19,8 +19,8 @@ import eh.util.Timer.Interp;
 import eh.util.assets.Gallery;
 import eh.util.assets.Pic;
 import eh.util.maths.Collider;
-import eh.util.maths.PolygonCollider;
 import eh.util.maths.Pair;
+import eh.util.maths.PolygonCollider;
 
 public class PhaseButton extends Bonkject{
 	public static Pair unClickedHeight;
@@ -33,7 +33,6 @@ public class PhaseButton extends Bonkject{
 	private Pic before=Gallery.endTurnWeapon;
 	private Pic after=Gallery.endTurnShield;
 	Timer t;
-	private boolean glow;
 	public PhaseButton(Collider col) {
 		System.out.println(Main.width/2-width/2+":"+416);
 		mousectivate(new PolygonCollider(new Polygon(new float[]{
@@ -106,9 +105,7 @@ public class PhaseButton extends Bonkject{
 	}
 	
 	//horrible tutorial stuff//
-	public void setGlow(boolean on){
-		glow=on;
-	}
+	
 	
 	
 	

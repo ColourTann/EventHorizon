@@ -4,7 +4,6 @@ import eh.grid.hex.Hex;
 import eh.grid.hex.HexChoice;
 import eh.ship.mapThings.mapAbility.MapAbility;
 import eh.util.assets.Gallery;
-import eh.util.assets.Pic;
 
 public class Cloak extends MapAbility{
 	int duration=5;

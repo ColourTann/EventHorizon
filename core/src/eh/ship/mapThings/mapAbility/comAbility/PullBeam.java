@@ -3,7 +3,6 @@ package eh.ship.mapThings.mapAbility.comAbility;
 import eh.grid.hex.Hex;
 import eh.grid.hex.HexChoice;
 import eh.screen.map.Map;
-import eh.screen.map.Map.MapState;
 import eh.ship.mapThings.MapShip;
 import eh.ship.mapThings.mapAbility.MapAbility;
 import eh.util.assets.Gallery;
@@ -33,6 +32,7 @@ public class PullBeam extends MapAbility{
 	public void pickHex(Hex targetHex) {
 		if(!isValidChoice(targetHex))return;
 		afterPlayerUse();
+		
 		MapShip target=targetHex.mapShip;
 		Hex best=targetHex;
 		float bestDist=targetHex.getLineDistance(mapShip.hex);
@@ -44,6 +44,7 @@ public class PullBeam extends MapAbility{
 				best=h;
 			}
 		}
+		target.moveTo(best);
 	}
 
 	@Override

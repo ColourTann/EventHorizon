@@ -6,11 +6,11 @@ import eh.card.Card;
 import eh.card.CardCode;
 import eh.card.CardCode.Special;
 import eh.module.utils.Buff;
+import eh.module.utils.Buff.BuffType;
 import eh.module.utils.DamagePoint;
 import eh.module.utils.ModuleInfo;
 import eh.module.utils.ModuleStats;
 import eh.module.utils.ShieldPoint;
-import eh.module.utils.Buff.BuffType;
 import eh.module.weapon.Tesla;
 import eh.module.weapon.Weapon;
 import eh.screen.battle.Battle;
@@ -98,6 +98,7 @@ public abstract class Module {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public void clicked(){
 		//CLICKED ON PLAYER MODULE//
 		if(destroyed)return;

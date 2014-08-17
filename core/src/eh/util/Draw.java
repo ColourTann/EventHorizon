@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import eh.util.maths.Pair;
-
 public class Draw {
 	//Drawing Junk//
 	public static void drawTexture(SpriteBatch batch, Texture t, float x, float y){

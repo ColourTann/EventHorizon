@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.grid.hex.Hex;
-import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.assets.Gallery;
 import eh.util.maths.Pair;

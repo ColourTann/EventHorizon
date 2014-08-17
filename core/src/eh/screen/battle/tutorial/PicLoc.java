@@ -7,8 +7,6 @@ import eh.screen.battle.Battle;
 import eh.screen.battle.interfaceJunk.PhaseButton;
 import eh.util.Colours;
 import eh.util.Draw;
-import eh.util.Timer;
-import eh.util.Timer.Interp;
 import eh.util.assets.Gallery;
 import eh.util.assets.Pic;
 import eh.util.maths.Pair;

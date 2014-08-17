@@ -9,9 +9,9 @@ import eh.card.CardCode.Special;
 import eh.module.Module;
 import eh.module.Module.ModuleType;
 import eh.module.utils.Buff;
+import eh.module.utils.Buff.BuffType;
 import eh.module.utils.DamagePoint;
 import eh.module.utils.ShieldPoint;
-import eh.module.utils.Buff.BuffType;
 import eh.module.weapon.Weapon;
 import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
@@ -792,6 +792,7 @@ public class Card {
 		return getName();
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public boolean enemyDecide(int side) {
 		this.side=side;
 		Ship ship=getShip();

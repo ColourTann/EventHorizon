@@ -16,7 +16,6 @@ import eh.util.assets.Font;
 import eh.util.assets.Gallery;
 import eh.util.assets.Pic;
 import eh.util.maths.BoxCollider;
-import eh.util.maths.Collider;
 import eh.util.maths.Pair;
 
 public class ModuleStats extends Bonkject{

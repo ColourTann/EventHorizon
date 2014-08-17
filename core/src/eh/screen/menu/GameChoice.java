@@ -1,7 +1,7 @@
 package eh.screen.menu;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.Main;
 import eh.Main.ScreenType;
@@ -11,7 +11,6 @@ import eh.util.Draw;
 import eh.util.assets.Font;
 import eh.util.assets.Gallery;
 import eh.util.maths.BoxCollider;
-import eh.util.maths.Collider;
 
 public class GameChoice extends Bonkject{
 	static float width=200;

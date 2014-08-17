@@ -2,14 +2,8 @@ package eh.screen.battle.tutorial;
 
 import java.util.ArrayList;
 
-
-
-
-
-
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.Main;
 import eh.card.Card;
@@ -25,12 +19,10 @@ import eh.ship.Ship;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
-import eh.util.Timer;
 import eh.util.Timer.Interp;
 import eh.util.assets.Font;
 import eh.util.assets.Gallery;
 import eh.util.assets.Pic;
-import eh.util.maths.Collider;
 import eh.util.maths.Pair;
 
 public class Tutorial extends Bonkject{
@@ -526,6 +518,7 @@ public class Tutorial extends Bonkject{
 		return true;
 	}
 	
+	@SuppressWarnings("incomplete-switch")
 	public static void goBack() {
 		if(index==0)return;
 		Tutorial t=tutorials.get(index-1);
@@ -552,7 +545,8 @@ public class Tutorial extends Bonkject{
 		
 		t.alpha=1;
 		index--;
-		glows.addAll(getCurrentTutorial().glows);
+		getCurrentTutorial();
+		glows.addAll(Tutorial.glows);
 	}
 
 	public static Tutorial getCurrentTutorial() {

@@ -3,27 +3,20 @@ package eh.screen.test;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
-import eh.Main;
 import eh.screen.Screen;
 import eh.ship.Debris;
-import eh.util.Colours;
 import eh.util.Draw;
-import eh.util.PerleyBabes;
-import eh.util.Timer;
-import eh.util.Timer.Interp;
+import eh.util.assets.CutPic;
+import eh.util.assets.CutPic.Shard;
 import eh.util.assets.Gallery;
-import eh.util.assets.Pic;
-import eh.util.assets.Pic.Shard;
 import eh.util.maths.Pair;
 
 public class Test extends Screen{
 
-Pic pic=Gallery.shipComet;
+CutPic cut=Gallery.shipComet.getCut(new Color(0,0,0,1));
 ArrayList<Shard> replaced=new ArrayList<Shard>();
 boolean exploding;
 ArrayList<Debris> debris= new ArrayList<Debris>(); 
@@ -35,21 +28,21 @@ ArrayList<Debris> debris= new ArrayList<Debris>();
 		}
 		if(exploding){
 			for(int i=0;i<2;i++){
-		Shard s=pic.removeCut();
+		Shard s=cut.removeCut();
 		if(s==null)return;
 		s.finalise();
 		replaced.add(s);
 		}
 		}
 		
-		if(Math.random()>.995){
+		/*if(Math.random()>.995){
 			
 			debris.add(new Debris(Math.random()>.7));
 		}
 		
 		for(Debris d:debris){
 			d.update(delta);
-		}
+		}*/
 	}
 
 	@Override
@@ -60,7 +53,7 @@ ArrayList<Debris> debris= new ArrayList<Debris>();
 
 	@Override
 	public void render(SpriteBatch batch) {
-		Draw.drawTexture(batch, pic.getCut(Colours.black), 0, 0);
+		Draw.drawTexture(batch, cut.get(), 0, 0);
 		for(Shard s:replaced){
 			s.render(batch);
 		}
@@ -78,17 +71,17 @@ ArrayList<Debris> debris= new ArrayList<Debris>();
 		
 		switch(keycode){
 		case Input.Keys.CONTROL_LEFT:
-			pic.addShatter();
+			cut.addShatter();
 			break;
 		case Input.Keys.SPACE:
 			
-			Shard s=pic.removeCut();
+			Shard s=cut.removeCut();
 			s.finalise();
 			replaced.add(s);
 			
 			break;
 		case Input.Keys.SHIFT_LEFT:
-			pic.analyseShards();
+			
 			break;
 		case Input.Keys.ENTER:
 			exploding=true;

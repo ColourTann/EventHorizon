@@ -2,15 +2,12 @@ package eh.ship;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Matrix4;
 
 import eh.Main;
 import eh.module.Module.ModuleType;
-import eh.screen.battle.Battle;
 import eh.ship.niche.Niche;
 import eh.util.Bonkject;
 import eh.util.Draw;
-import eh.util.PerleyBabes;
 import eh.util.maths.Pair;
 
 public class ShipGraphic extends Bonkject{

@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
 
 import eh.card.CardGraphic;
 import eh.screen.Screen;
@@ -24,7 +22,6 @@ import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.TextWisp;
-import eh.util.TextWisp.WispType;
 import eh.util.Timer;
 import eh.util.Timer.Interp;
 import eh.util.assets.Font;

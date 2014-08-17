@@ -1,7 +1,6 @@
 package eh.ship;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -12,35 +11,34 @@ import eh.card.CardCode.AI;
 import eh.card.CardCode.Augment;
 import eh.card.CardCode.Special;
 import eh.card.CardGraphic;
-import eh.grid.hex.Hex;
 import eh.module.Module;
 import eh.module.Module.ModuleType;
 import eh.module.computer.Computer;
 import eh.module.generator.Generator;
 import eh.module.shield.Shield;
-import eh.module.utils.ShieldPoint;
 import eh.module.utils.Buff.BuffType;
+import eh.module.utils.ShieldPoint;
 import eh.module.weapon.Weapon;
 import eh.module.weapon.attack.Attack;
 import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.Phase;
 import eh.screen.battle.interfaceJunk.FightStats;
-import eh.screen.map.Map;
 import eh.ship.mapThings.MapShip;
 import eh.ship.mapThings.mapAbility.MapAbility;
-import eh.ship.mapThings.mapAbility.genAbility.Teleport;
 import eh.ship.niche.Niche;
-import eh.ship.shipClass.*;
+import eh.ship.shipClass.Aurora;
+import eh.ship.shipClass.Comet;
+import eh.ship.shipClass.Eclipse;
+import eh.ship.shipClass.Nova;
 import eh.util.Draw;
 import eh.util.TextWisp;
-import eh.util.Timer;
 import eh.util.TextWisp.WispType;
+import eh.util.Timer;
 import eh.util.Timer.Interp;
 import eh.util.assets.Clip;
 import eh.util.assets.Font;
 import eh.util.assets.Pic;
 import eh.util.maths.Pair;
-import eh.util.particleSystem.Particle;
 
 public abstract class Ship {
 	//0-1 weapon 2 shield 3 gen 4 com

@@ -7,13 +7,12 @@ import eh.grid.hex.Hex;
 import eh.grid.hex.HexChoice;
 import eh.screen.map.Map;
 import eh.screen.map.Map.MapState;
-import eh.ship.Ship;
 import eh.ship.mapThings.MapShip;
 import eh.util.Bonkject;
 import eh.util.Draw;
 import eh.util.assets.Pic;
-import eh.util.maths.PolygonCollider;
 import eh.util.maths.Pair;
+import eh.util.maths.PolygonCollider;
 
 
 public abstract class MapAbility extends Bonkject{

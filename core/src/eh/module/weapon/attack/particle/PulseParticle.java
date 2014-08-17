@@ -8,7 +8,6 @@ import eh.util.Draw;
 import eh.util.assets.Gallery;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
-import eh.util.particleSystem.ParticleSystem;
 
 public class PulseParticle extends Particle{
 	Pair origin;

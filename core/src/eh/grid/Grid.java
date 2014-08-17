@@ -2,7 +2,6 @@ package eh.grid;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -11,7 +10,6 @@ import eh.Main;
 import eh.grid.hex.Hex;
 import eh.screen.map.Map;
 import eh.ship.mapThings.MapShip;
-import eh.ship.shipClass.*;
 import eh.util.Colours;
 import eh.util.maths.Pair;
 

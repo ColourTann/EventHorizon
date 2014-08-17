@@ -11,7 +11,6 @@ import eh.card.CardGraphic;
 import eh.module.weapon.Weapon;
 import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.State;
-import eh.screen.battle.tutorial.PicLoc;
 import eh.screen.battle.tutorial.Tutorial;
 import eh.util.Bonkject;
 import eh.util.Colours;
