@@ -13,11 +13,11 @@ public class Debris extends Bonkject{
 	Pair vector;
 	float dr;
 	float rotation;
-	public Debris(boolean big){
+	public Debris(Pair location, boolean big){
 		t=Gallery.debris[big?1:0][(int) (Math.random()*5)].get();
-		vector=Pair.randomUnitVector().multiply(50);
-		dr=(float) (.5+Math.random());
-		position=new Pair(50+Math.random()*200, 50+Math.random()*200);
+		vector=Pair.randomUnitVector().multiply(250);
+		dr=(float) (.5+Math.random())*5;
+		position=location;
 	}
 	
 	@Override

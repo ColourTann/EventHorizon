@@ -37,6 +37,8 @@ import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.PerleyBabes;
 import eh.util.TextWisp;
+import eh.util.assets.Animation;
+import eh.util.assets.Explosion2;
 import eh.util.assets.Font;
 import eh.util.assets.Gallery;
 import eh.util.maths.Pair;
@@ -61,38 +63,44 @@ public class Battle extends Screen{
 	public static float ticks;
 	static Pair playerKnockBack=new Pair();
 	static Pair playerKnockBackTarget=new Pair();
-	
+
 	static Pair enemyKnockBack=new Pair();
 	static Pair enemyKnockBackTarget=new Pair();
 
 	public static boolean tutorial=false;
 	private ArrayList<CardGraphic> enemyHandList=new ArrayList<CardGraphic>();
 	ArrayList<TextWisp> wisps = new ArrayList<TextWisp>();
-	
+
 	public static int dividerWidth=12;
 	public static Pair viewport=new Pair(480-dividerWidth/2, 340);
-	
+
 	public static OrthographicCamera playerCam=new OrthographicCamera();
 	public static OrthographicCamera enemyCam=new OrthographicCamera();
 
 	public static Pair basePlayerCamPosition= new Pair(Main.width/2-480+viewport.x/2, 80+viewport.y/2);
 	public static Pair baseEnemyCamPosition= new Pair(Main.width/2+500+dividerWidth/2+viewport.x/2, 80+viewport.y/2);
-	
+
 	public static Pair playerBonus= new Pair();
 	public static Pair enemyBonus= new Pair();
+
+	public static float enemyShakeIntensity=0;
+	public static float playerShakeIntensity=0;
+	float shakeDrag=.005f;
 	
+	ArrayList<Animation> animations=new ArrayList<Animation>();
+	float animTicker=0;
 	public Battle(Main.ScreenType type){
 		init(type);
 	}
 
 	public void init(ScreenType type){
-		System.out.println(viewport);
+		
 		playerCam.setToOrtho(true, viewport.x, viewport.y);
 		enemyCam.setToOrtho(true, viewport.x, viewport.y);
 		//playerCam.lookAt(basePlayerCamPosition.x,basePlayerCamPosition.y, 0);
-	
+
 		//playerCam.translate(Main.width/2-480, 80);
-		
+
 
 
 		resetStatics();
@@ -248,7 +256,7 @@ public class Battle extends Screen{
 	}
 
 
-	
+
 
 
 	public void debugRender(SpriteBatch batch){
@@ -300,7 +308,9 @@ public class Battle extends Screen{
 		case Input.Keys.S:
 			shake(false, 2);
 			break;
-
+		case Input.Keys.A:
+			shake(true, 2);
+			break;
 
 
 
@@ -352,9 +362,11 @@ public class Battle extends Screen{
 		Pair shakeAdd=new Pair(amount*4, (float)(Math.random()-.5)*amount);
 		if(player){
 			playerKnockBackTarget=playerKnockBackTarget.add(shakeAdd);
+			playerShakeIntensity+=amount;
 		}
 		if(!player){
 			enemyKnockBackTarget=enemyKnockBackTarget.add(shakeAdd.multiply(new Pair(-1,1)));
+			enemyShakeIntensity+=amount;
 		}
 	}
 
@@ -413,25 +425,42 @@ public class Battle extends Screen{
 	public static void advance() {
 		if(getPhase()==Phase.EnemyShieldPhase||getPhase()==Phase.EnemyWeaponPhase) enemy.enemyFadeAll();
 	}
-	
+
 	@Override
 	public void update(float delta) {
-		playerBonus=new Pair(PerleyBabes.noise(Battle.ticks/4, 100), PerleyBabes.noise(Battle.ticks/4, 300)).multiply(new Pair(15,3)).add(playerKnockBack);
+		
+
+		playerShakeIntensity*=Math.pow(shakeDrag, delta);
+		enemyShakeIntensity*=Math.pow(shakeDrag, delta);
+		
+		float freq=20;
+		float amp=5;
+		float jitter=3;
+		float bonusX=(float) ((Math.sin(ticks*freq)*amp)+(Math.random()-.5)*jitter);
+		float bonusY=(float) ((Math.sin(ticks*(freq*1.1f))*amp)+(Math.random()-.5)*jitter);
+		
+		playerBonus=new Pair(PerleyBabes.noise(Battle.ticks/4, 100), 
+				PerleyBabes.noise(Battle.ticks/4, 300)).multiply(new Pair(15,3)).add(playerKnockBack)
+				.add(new Pair(bonusX*playerShakeIntensity, bonusY*playerShakeIntensity));
 		playerBonus=playerBonus.floor();
 
 		playerKnockBackTarget=playerKnockBackTarget.multiply((float) Math.pow(.2f, delta));
 		playerKnockBack=playerKnockBack.add(playerKnockBackTarget.subtract(playerKnockBack).multiply(delta*50));
+
+		
+		
 		
 		playerCam.position.set(basePlayerCamPosition.x ,basePlayerCamPosition.y, 0);
-		
-		enemyBonus=new Pair(PerleyBabes.noise(Battle.ticks/4, 1100), PerleyBabes.noise(Battle.ticks/4, 1300)).multiply(new Pair(15,3)).add(enemyKnockBack);
+
+		enemyBonus=new Pair(PerleyBabes.noise(Battle.ticks/4, 1100), PerleyBabes.noise(Battle.ticks/4, 1300)).multiply(new Pair(15,3)).add(enemyKnockBack)
+				.add(new Pair(bonusX*enemyShakeIntensity, bonusY*enemyShakeIntensity));;
 		enemyBonus=enemyBonus.floor();
-		
+
 		enemyKnockBackTarget=enemyKnockBackTarget.multiply((float) Math.pow(.2f, delta));
 		enemyKnockBack=enemyKnockBack.add(enemyKnockBackTarget.subtract(enemyKnockBack).multiply(delta*50));
-		
+
 		enemyCam.position.set(baseEnemyCamPosition.x ,baseEnemyCamPosition.y, 0);
-		
+
 		//Just used for checking if the phase is finished//
 		for(Niche n:player.niches){
 			n.graphic.update(delta);
@@ -441,7 +470,7 @@ public class Battle extends Screen{
 		}
 		Star.update(delta);
 		ticks+=delta;
-		
+
 
 		switch(currentPhase){
 		case WeaponPhase: break;
@@ -460,6 +489,29 @@ public class Battle extends Screen{
 			break;
 		}
 
+
+
+
+		//anim tests//
+		/*animTicker+=delta;
+		if(animTicker>.1f){
+			animations.add(new Explosion2());
+			animTicker-=.1f;
+		}
+		System.out.println(animations.size());
+		for(int i=0;i<animations.size();i++){
+
+			Animation a= animations.get(i);
+			if(a.isDone()){
+				a.dispose();
+				animations.remove(a);
+				i--;
+			}
+		}*/
+
+
+
+
 		//tutorishit//
 		if(!Battle.tutorial)return;
 		Tutorial t= Tutorial.tutorials.get(Tutorial.index);
@@ -473,8 +525,8 @@ public class Battle extends Screen{
 	@Override
 	public void render(SpriteBatch batch) {
 		batch.end();
-		
-		
+
+
 		Gdx.gl.glViewport(Main.width/2-480, 282, (int)viewport.x, (int)viewport.y);
 		playerCam.update();
 		batch.setProjectionMatrix(playerCam.combined);
@@ -482,7 +534,7 @@ public class Battle extends Screen{
 		batch.setColor(1,1,1,1);
 		Star.renderStars(batch, true);
 		batch.end();
-		
+
 		playerCam.translate(playerBonus.x, playerBonus.y);
 		playerCam.update();
 		batch.setProjectionMatrix(playerCam.combined);
@@ -499,7 +551,7 @@ public class Battle extends Screen{
 		batch.setColor(1,1,1,1);
 		Star.renderStars(batch, false);//Draw.drawTexture(batch, Star.pixTex, 500-pixTexTimer.getPair().x, pixTexTimer.getPair().y);
 		batch.end();
-		
+
 		enemyCam.translate(enemyBonus.x, enemyBonus.y);
 		enemyCam.update();
 		batch.setProjectionMatrix(enemyCam.combined);
@@ -558,9 +610,12 @@ public class Battle extends Screen{
 
 		if(help!=null)help.render(batch);
 
-		
+
 
 		Tutorial.renderAll(batch);
+		for(Animation a:animations){
+			a.render(batch);
+		}
 	}
 
 	@Override

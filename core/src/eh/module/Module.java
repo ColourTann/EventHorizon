@@ -195,7 +195,7 @@ public abstract class Module {
 			
 		}
 
-		Battle.shake(ship.player,(float)(damagePoint.card.getCost()/2+2)/(float)damagePoint.card.getShots());
+		Battle.shake(ship.player,(float)(damagePoint.card.getCost()/2+1.5)/(float)damagePoint.card.getShots());
 		if(damagePoint.card!=null&&damagePoint.card.mod instanceof Tesla) return;
 		Clip.damageMinor.play();
 	}

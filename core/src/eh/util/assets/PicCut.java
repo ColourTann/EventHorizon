@@ -13,15 +13,15 @@ import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.maths.Pair;
 
-public class CutPic {
+public class PicCut {
 
 	private boolean[][] array;
 	private Color cutColor;
 	private ArrayList<Shard> shards= new ArrayList<Shard>();
 	private Texture cutTexture;
+	private ArrayList<Pair> shatterPoints=new ArrayList<Pair>();
 
-
-	public CutPic(Pic pic, Color color){
+	public PicCut(Pic pic, Color color){
 
 		Texture t=pic.get();
 		t.getTextureData().prepare();
@@ -36,7 +36,7 @@ public class CutPic {
 	public Texture get(){
 		return cutTexture;
 	}
-	
+
 	public void addShatter(){
 
 		if(!cutTexture.getTextureData().isPrepared())cutTexture.getTextureData().prepare();
@@ -52,27 +52,60 @@ public class CutPic {
 		int x=0;
 		int y=0;
 
+
 		if(shards.size()==1){
+
 			x=width/3;
 			y=height/3;
 		}
 		else{
 			Shard shard=getBiggestShard();
 
-			x=(shard.left+shard.right)/2;
-			y=(shard.bottom+shard.top)/2;
+			int startX=shard.left;
+			int startY=shard.top;
+			int across=shard.right-shard.left;
+			int down=shard.bottom-shard.top;
 
-			if(new Color(pixmap.getPixel(x, y)).a==0){
-				x=(shard.left+shard.right)/3*2;
-				y=(shard.bottom+shard.top)/3*2;
-				if(new Color(pixmap.getPixel(x, y)).a==0){
 
-					x=(shard.left+shard.right)/3;
-					y=(shard.bottom+shard.top)/3;
+			x=(startX+across/2);
+			y=(startY+down/2);
+			
+			//BAD CODE//
+			if(!testPoint(x, y, pixmap)){
+				x=(startX+across/3);
+				y=(startY+down/3);
+				if(!testPoint(x, y, pixmap)){
+					x=(startX+across/3*2);
+					y=(startY+down/3);
+					if(!testPoint(x, y, pixmap)){
+						x=(startX+across/3);
+						y=(startY+down/3*2);
+						if(!testPoint(x, y, pixmap)){
+							x=(startX+across/3*2);
+							y=(startY+down/3*2);
+							if(!testPoint(x, y, pixmap)){
+								x=(startX+across/5);
+								y=(startY+down/5);
+								if(!testPoint(x, y, pixmap)){
+									x=(startX+across/5*4);
+									y=(startY+down/5*4);
+									if(!testPoint(x, y, pixmap)){
+										x=(startX+across/5*4);
+										y=(startY+down/5);
+										if(!testPoint(x, y, pixmap)){
+											x=(startX+across/5);
+											y=(startY+down/5*4);
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
-
 		}
+		
+		shatterPoints.add(new Pair(x,y));
 		Pair vector=Pair.randomUnitVector();
 		for(int j=0;j<cuts;j++){
 			cut(pixmap, x, y, vector, cutColor);
@@ -85,20 +118,32 @@ public class CutPic {
 
 	}
 
+	public boolean testPoint(int x, int y, Pixmap pixmap){
+		if(new Color(pixmap.getPixel(x, y)).a==0)return false;
+		for(Pair p:shatterPoints){
+
+			if(p.getDistance(new Pair(x,y))<10){
+
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public Shard removeCut(){
-		
+
 
 
 		array=null;
 
 
 
-		
+
 		Pixmap pixmap=cutTexture.getTextureData().consumePixmap();
 
 		Color replacer=new Color(0,0,0,0);
 		Pixmap.setBlending(Blending.None);
-		Shard biggest=getMediumestShard();
+		Shard biggest=getUpperMediumestShard();
 		if(biggest==null)return null;
 		shards.remove(biggest);
 		int x=(int) biggest.aPixelLocation.x;
@@ -188,6 +233,7 @@ public class CutPic {
 			boolean added=false;
 			for(int i=0;i<shards.size();i++){
 				if(shards.get(i).size>s.size){
+
 					shards.add(i,s);
 					added=true;
 					break;
@@ -195,7 +241,7 @@ public class CutPic {
 			}
 			if(!added)shards.add(s);
 		}
- 
+
 	}
 
 	private Shard getBiggestShard(){
@@ -205,12 +251,12 @@ public class CutPic {
 		return shards.get(shards.size()-1);
 	}
 
-	private Shard getMediumestShard(){
+	private Shard getUpperMediumestShard(){
 		if(shards.size()==0){
 			return null;
 		}
 
-		return shards.get(shards.size()/2);
+		return shards.get(shards.size()/3*2);
 
 	}
 
@@ -226,10 +272,11 @@ public class CutPic {
 
 
 		int leftX=0;
-		int rightX=0;
+		int rightX=width-1;
 
 
 		for(int x=startX;x>0;x--){
+
 			Color col=new Color(pixmap.getPixel(x, startY));
 			if(badColour(col, replacer)){
 				leftX=x+1;
@@ -237,12 +284,16 @@ public class CutPic {
 			}	
 		}
 		for(int x=startX;x<width;x++){
+
 			Color col=new Color(pixmap.getPixel(x, startY));
 			if(badColour(col, replacer)){
 				rightX=x-1;
 				break;
 			}	
+
 		}
+
+
 		if(underneath!=null){
 			underneath.drawPixmap(pixmap, leftX, startY, leftX, startY, rightX-leftX, 1);
 		}
@@ -272,9 +323,9 @@ public class CutPic {
 	}
 
 	private boolean badColour(Color c, Color replacer){
-		
+
 		if(replacer!=null&&Colours.equals(c, replacer)){
-		
+
 			return true;
 		}
 		return c.a==0||Colours.equals(c, cutColor);

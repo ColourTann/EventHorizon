@@ -13,6 +13,7 @@ public class PolygonCollider extends Collider{
 	
 	public PolygonCollider(Polygon p){
 		this.p=p;
+		
 	}
 	
 	@Override

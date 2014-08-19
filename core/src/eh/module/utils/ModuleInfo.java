@@ -74,9 +74,9 @@ public class ModuleInfo extends Bonkject{
 	public void fadeAll(){
 		
 		for(CardGraphic cg: graphics){
-			cg.fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
+			cg.fadeOut(CardGraphic.fadeSpeed*1.5f, CardGraphic.fadeType);
 		}
-		fadeOut(CardGraphic.fadeSpeed, Interp.LINEAR);
+		fadeOut(CardGraphic.fadeSpeed*1.5f, Interp.LINEAR);
 	}
 
 

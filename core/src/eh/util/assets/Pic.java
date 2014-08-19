@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
+import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -20,8 +21,8 @@ public class Pic {
 	private Texture glowOutline;
 	private Texture monoChrome;
 	private Texture mask;
-	private CutPic cut;
-
+	private PicCut cut;
+	private int scale=1;
 	private Pic basePic;
 	private Color[] replacers;
 
@@ -35,6 +36,11 @@ public class Pic {
 		this.basePic=basePic;
 		this.replacers=replacers;
 	}
+	
+	public Pic (String path, int scale){
+		this.path=path+".png";
+		this.scale=scale;
+	}
 
 	public Texture get(){
 		if(t==null){
@@ -44,18 +50,35 @@ public class Pic {
 			if(basePic!=null){
 				t=basePic.paletteSwap(replacers);
 			}
+			if(scale!=1){
+				t=upscale(t,scale);
+			}
 		}
-
-
 		return t;
+	}
+	
+	
+	
+	private Texture upscale(Texture t, int scale){
+		Pixmap.setFilter(Filter.NearestNeighbour);
+		
+		t.getTextureData().prepare();
+		Pixmap source=getPixMap();
+		Pixmap scaler=new Pixmap(t.getWidth()*scale, t.getHeight()*scale, Format.RGBA8888);
+		scaler.drawPixmap(source, 0, 0, source.getWidth(), source.getHeight(), 0, 0, scaler.getWidth(), scaler.getHeight());
+		t.dispose();
+		source.dispose();
+		Texture result=new Texture(scaler);
+		//scaler.dispose();
+		return result;
 	}
 
 	private Texture paletteSwap(Color[] replacers) {
 		get();
 		int width=t.getWidth();
 		int height=t.getHeight();
-		t.getTextureData().prepare();
-		Pixmap base=t.getTextureData().consumePixmap();
+		
+		Pixmap base=getPixMap();
 		Pixmap pixMap=new Pixmap(width, height, Format.RGBA8888);
 
 		HashMap<Color, Color> map = new HashMap<Color, Color>();
@@ -81,8 +104,8 @@ public class Pic {
 		get();
 		int width=t.getWidth();
 		int height=t.getHeight();
-		t.getTextureData().prepare();
-		Pixmap base=t.getTextureData().consumePixmap();
+	
+		Pixmap base=getPixMap();
 		Pixmap pixMap=new Pixmap(width, height, Format.RGBA8888);
 
 
@@ -109,8 +132,8 @@ public class Pic {
 		get();
 		int width=t.getWidth();
 		int height=t.getHeight();
-		t.getTextureData().prepare();
-		Pixmap base=t.getTextureData().consumePixmap();
+		
+		Pixmap base=getPixMap();
 		Pixmap result=new Pixmap(width, height, Format.RGBA8888);
 		for(int x=0;x<width;x++){			
 			for(int y=0;y<height;y++){
@@ -118,7 +141,7 @@ public class Pic {
 			}
 		}
 		putline= new Texture( result );
-		base.dispose();
+		//base.dispose();
 		//result.dispose();
 		return putline;
 	}
@@ -130,7 +153,7 @@ public class Pic {
 		int width=temp.getWidth();
 		int height=temp.getHeight();
 
-		Pixmap base=temp.getTextureData().consumePixmap();
+		Pixmap base=getPixMap();
 		Pixmap result=new Pixmap(width, height, Format.RGBA8888);
 		for(int x=0;x<width;x++){			
 			for(int y=0;y<height;y++){
@@ -148,8 +171,8 @@ public class Pic {
 		if(monoChrome!=null)return monoChrome;
 		int width=t.getWidth();
 		int height=t.getHeight();
-		t.getTextureData().prepare();
-		Pixmap base=t.getTextureData().consumePixmap();
+		
+		Pixmap base=getPixMap();
 		Pixmap result=new Pixmap(width, height, Format.RGBA8888);
 		for(int x=0;x<width;x++){
 			for(int y=0;y<height;y++){
@@ -165,10 +188,10 @@ public class Pic {
 		return monoChrome;
 	}
 
-	public CutPic getCut(Color col){
+	public PicCut getCut(Color col){
 		if(cut==null){
 			get();
-			cut=new CutPic(this, col);
+			cut=new PicCut(this, col);
 		}
 		return cut;
 	}
@@ -230,6 +253,21 @@ public class Pic {
 
 	public void reset() {
 		cut=null;
+	}
+	
+	public Pixmap getPixMap(){
+		get();
+		if(!t.getTextureData().isPrepared()){
+			t.getTextureData().prepare();
+		}
+		return t.getTextureData().consumePixmap();
+	}
+	
+	public static Pixmap getPixMap(Texture t){
+		if(!t.getTextureData().isPrepared()){
+			t.getTextureData().prepare();
+		}
+		return t.getTextureData().consumePixmap();
 	}
 
 }

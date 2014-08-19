@@ -14,8 +14,9 @@ import eh.util.maths.PolygonCollider;
 import eh.util.maths.Pair;
 
 public class Niche{
-	Module mod;
+	public Module mod;
 	public Polygon p;
+	public Polygon originalPolygon;
 	public ModuleType type;
 	Ship ship;
 	int index;
@@ -28,6 +29,7 @@ public class Niche{
 	}
 
 	public void setup(Polygon p){
+		this.originalPolygon=new Polygon(p.getVertices());
 		//Setting up the polygon for mousing and positioning//
 		this.p=p;
 		p.setOrigin(195, 1135);

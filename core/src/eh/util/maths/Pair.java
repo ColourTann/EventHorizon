@@ -19,6 +19,11 @@ public class Pair {
 	public float getDistance(){
 		return (float) Math.sqrt(x*x+y*y);
 	}
+	public float getDistance(Pair p){
+		float xDist=Math.abs(x-p.x);
+		float yDist=Math.abs(y-p.y);
+		return (float) Math.sqrt(xDist*xDist+yDist*yDist);
+	}
 	public Pair normalise(){
 		float dist = getDistance();
 		return new Pair(x=x/dist,y=y/dist);

@@ -7,21 +7,21 @@ import eh.util.Colours;
 public class Gallery {
 	
 	//SHIPS//
-	public static Pic shipAurora=new Pic("Ship/Aurora/ship");
-	public static Pic auroraGenerator= new Pic("Ship/Aurora/generator");
-	public static Pic auroraComputer= new Pic("Ship/Aurora/computer");
+	public static Pic shipAurora=new Pic("Ship/Aurora/ship", 3);
+	public static Pic auroraGenerator= new Pic("Ship/Aurora/generator", 3);
+	public static Pic auroraComputer= new Pic("Ship/Aurora/computer", 3);
 	
-	public static Pic shipComet=new Pic("Ship/Comet/ship");
-	public static Pic cometGenerator= new Pic("Ship/Comet/generator");
-	public static Pic cometComputer= new Pic("Ship/Comet/computer");
+	public static Pic shipComet=new Pic("Ship/Comet/ship", 3);
+	public static Pic cometGenerator= new Pic("Ship/Comet/generator", 3);
+	public static Pic cometComputer= new Pic("Ship/Comet/computer", 3);
 	
-	public static Pic shipNova=new Pic("Ship/Nova/ship");
-	public static Pic novaGenerator= new Pic("Ship/Nova/generator");
-	public static Pic novaComputer= new Pic("Ship/Nova/computer");
+	public static Pic shipNova=new Pic("Ship/Nova/ship", 3);
+	public static Pic novaGenerator= new Pic("Ship/Nova/generator", 3);
+	public static Pic novaComputer= new Pic("Ship/Nova/computer", 3);
 	
-	public static Pic shipEclipse=new Pic("Ship/Eclipse/ship");
-	public static Pic eclipseGenerator= new Pic("Ship/Eclipse/generator");
-	public static Pic eclipseComputer= new Pic("Ship/Eclipse/computer");
+	public static Pic shipEclipse=new Pic("Ship/Eclipse/ship", 3);
+	public static Pic eclipseGenerator= new Pic("Ship/Eclipse/generator", 3);
+	public static Pic eclipseComputer= new Pic("Ship/Eclipse/computer", 3);
 	
 	//CARD STUFF//
 	public static Pic cardBase=new Pic("Interface/cardbase");
@@ -36,23 +36,23 @@ public class Gallery {
 	public static Pic fiveIcon[]= new Pic[2];
 	
 	//WEAPONS//
-	public static Pic blaster=new Pic("Module/Weapon/Blaster/module");
+	public static Pic blaster=new Pic("Module/Weapon/Blaster/module", 3);
 	public static Pic[] blasterCard= new Pic[5];
-	public static Pic laser = new Pic("Module/Weapon/Laser/module");
+	public static Pic laser = new Pic("Module/Weapon/Laser/module", 3);
 	public static Pic[] laserCard= new Pic[5];
-	public static Pic pulse = new Pic("Module/Weapon/Pulse/module");
+	public static Pic pulse = new Pic("Module/Weapon/Pulse/module", 3);
 	public static Pic[] pulseCard= new Pic[5];
-	public static Pic ray = new Pic("Module/Weapon/Ray/module");
+	public static Pic ray = new Pic("Module/Weapon/Ray/module", 3);
 	public static Pic[] rayCard= new Pic[5];
-	public static Pic tesla = new Pic("Module/Weapon/Tesla/module");
+	public static Pic tesla = new Pic("Module/Weapon/Tesla/module", 3);
 	public static Pic[] teslaCard= new Pic[5];
 	
 	//SHIELDS//
-	public static Pic deflector=new Pic("Module/Shield/Deflector/module");
+	public static Pic deflector=new Pic("Module/Shield/Deflector/module", 3);
 	public static Pic[] deflectorCard= new Pic[5];
-	public static Pic repulsor=new Pic("Module/Shield/Repulsor/module");
+	public static Pic repulsor=new Pic("Module/Shield/Repulsor/module", 3);
 	public static Pic[] repulsorCard= new Pic[5];
-	public static Pic repeller=new Pic("Module/Shield/Repeller/module");
+	public static Pic repeller=new Pic("Module/Shield/Repeller/module", 3);
 	public static Pic[] repellerCard= new Pic[5];
 	
 	//COMPUTERS//

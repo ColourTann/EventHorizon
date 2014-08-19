@@ -32,7 +32,7 @@ import eh.util.particleSystem.ParticleSystem;
 public class Main extends ApplicationAdapter  {
 
 	public static float version=0.221f;
-	public static boolean debug=true;
+	public static boolean debug=false;
 
 	public static int height=700;
 	public static int width=1280;
@@ -85,13 +85,13 @@ public class Main extends ApplicationAdapter  {
 		
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-		//select=new Selector();currentScreen=select;
+		select=new Selector();currentScreen=select;
 
 		//viewer=new CardViewer();currentScreen=viewer;
 
 		//map=new Map();currentScreen=map;
 
-		currentScreen=new Test();
+		//currentScreen=new Test();
 	}	
 
 
