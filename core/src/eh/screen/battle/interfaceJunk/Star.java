@@ -19,7 +19,7 @@ public class Star{
 	static Color purp=Colours.make(60, 56, 85);
 	static Color teal=Colours.make(65, 93, 105);
 
-	static float playerSpeed=100;
+	public static float playerSpeed=100;
 	static float enemySpeed=100;
 
 	Pair location;

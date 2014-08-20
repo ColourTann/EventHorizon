@@ -6,22 +6,25 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
+import eh.screen.battle.Battle;
 import eh.screen.test.Test;
 import eh.ship.Debris;
 import eh.util.Colours;
 import eh.util.maths.Pair;
 
 public class Explosion1 extends Animation{
-	public Explosion1(){
-		location=new Pair(130,100).add(Pair.randomAnyVector().multiply(80));
+	Pair baseLocation;
+	public Explosion1(Pair location){
+		this.location=location.add(Pair.randomAnyVector().multiply(30));
+		baseLocation=location.copy();
 		//int radius=(int) (14+Math.random()*12)/3;
-		int radius=(int) (6+Math.random()*4);
+		int radius=(int) (3+Math.random()*4);
 		int diameter=radius*2;
 		Pixmap pixmap=new Pixmap(diameter+1, diameter+1, Format.RGBA8888);
 		Color col=Colours.weaponCols8[(int) (5+Math.random()*2)];
 
 		//ParticleSystem.systems.add(new SmokeMachine(location.add(radius,radius).add(Pair.randomAnyVector().multiply(10)), .1f, 20, SmokeType.Damage));
-		if(Math.random()>.9)Test.debris.add(new Debris(location, Math.random()>.5));
+		//if(Math.random()>.9)Test.debris.add(new Debris(location, Math.random()>.5));
 		//ParticleSystem.systems.add(new SmokeMachine(location.add(radius,radius).add(Pair.randomAnyVector().multiply(10)), .1f, 20, SmokeType.Laser));
 
 		
@@ -37,5 +40,11 @@ public class Explosion1 extends Animation{
 			pixmap.fillCircle((int)start.x, (int)start.y, (int) (((float)diameter/(float)textures.length)*num));
 			textures[num]=new Texture(pixmap);
 		}
+	}
+	
+	public void update(float delta){
+		/*float freq=50;
+		float amp=2;
+		location=baseLocation.add((int)(Math.sin(Battle.ticks*freq)*amp*2), (int)(Math.sin(Battle.ticks*freq+10)*amp));*/
 	}
 }

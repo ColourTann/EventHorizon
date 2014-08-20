@@ -6,6 +6,9 @@ import eh.module.weapon.attack.particle.LaserBody;
 import eh.module.weapon.attack.particle.LaserCharge;
 import eh.module.weapon.attack.particle.Smoke.SmokeType;
 import eh.module.weapon.attack.particle.SmokeMachine;
+import eh.util.Timer;
+import eh.util.Timer.Finisher;
+import eh.util.Timer.Interp;
 import eh.util.assets.Clip;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
@@ -19,15 +22,23 @@ public class LaserAttack extends AttackGraphic{
 	}
 
 	@Override
-	public void fire(Pair target) {
+	public void fire(final Pair target) {
 		this.target=target;
-		particles.add(new LaserBody(origin, target));
-		fired=true;
-		impact();
+		t=new Timer(0,1,1.5f, Interp.LINEAR);
+		t.addFinisher(new Finisher() {
+			
+			@Override
+			public void finish() {
+				particles.add(new LaserBody(origin, target));
+				fired=true;
+				impact();
+				
+				disable();
+				ticks=0;
+				Clip.laser.play();
+			}
+		});
 		
-		disable();
-		ticks=0;
-		Clip.laser.play();
 	}
 
 	@Override

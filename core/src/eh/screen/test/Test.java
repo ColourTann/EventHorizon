@@ -38,13 +38,13 @@ public class Test extends Screen{
 			for(int i=0;i<2;i++){
 				Shard s=cut.removeCut();
 				if(s==null)return;
-				s.finalise();
+				s.finalise(false);
 				replaced.add(s);
 			}
 		}
 		ticks+=delta;
 		if(ticks>.1f){
-			animations.add(new Explosion2());
+			//animations.add(new Explosion1());
 			ticks-=.1f;
 		}
 		for(int i=0;i<animations.size();i++){
@@ -98,7 +98,7 @@ public class Test extends Screen{
 		case Input.Keys.SPACE:
 
 			Shard s=cut.removeCut();
-			s.finalise();
+			s.finalise(false);
 			replaced.add(s);
 
 			break;

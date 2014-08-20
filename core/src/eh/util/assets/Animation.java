@@ -37,8 +37,9 @@ public abstract class Animation {
 		return textures[(int)ticks%textures.length];
 		
 	}
-
+	public abstract void update(float delta);
 	public void render(SpriteBatch batch){
+		update(Gdx.graphics.getDeltaTime());
 		Draw.drawTextureScaledCentered(batch, get(), location.x, location.y,3,3);
 	}
 

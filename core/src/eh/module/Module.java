@@ -2,6 +2,7 @@ package eh.module;
 
 import java.util.ArrayList;
 
+import eh.Main;
 import eh.card.Card;
 import eh.card.CardCode;
 import eh.card.CardCode.Special;
@@ -16,6 +17,7 @@ import eh.module.weapon.Weapon;
 import eh.screen.battle.Battle;
 import eh.screen.battle.Battle.State;
 import eh.ship.Ship;
+import eh.ship.ShipGraphic;
 import eh.ship.niche.Niche;
 import eh.util.Draw;
 import eh.util.TextWisp;
@@ -173,7 +175,7 @@ public abstract class Module {
 		}
 		return getCard(getNextCardSide());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public int getNextCardSide(){
 		if(nextCards.size()==0)nextCards=(ArrayList<Integer>) cardOrder.clone();
@@ -189,15 +191,19 @@ public abstract class Module {
 			return;
 		}
 		damage.add(damagePoint);
-		
+
 		if(getDamage()>=thresholds[currentThreshold]){
 			majorDamage();
-			
-		}
 
-		Battle.shake(ship.player,(float)(damagePoint.card.getCost()/2+1.5)/(float)damagePoint.card.getShots());
-		if(damagePoint.card!=null&&damagePoint.card.mod instanceof Tesla) return;
+		}
+		
+		Battle.shake(ship.player,(float)(damagePoint.card.getCost()/2+2)/(type==ModuleType.WEAPON?(float)damagePoint.card.getShots():1));
+		ship.getGraphic().damage();
 		Clip.damageMinor.play();
+		//if(damagePoint.card!=null&&damagePoint.card.mod instanceof Tesla) return;
+	
+		
+	
 	}
 
 	private void majorDamage() {
@@ -231,8 +237,9 @@ public abstract class Module {
 		}
 	}
 
-	
+
 	public void calculateDamage(int damage, boolean unshieldable) {
+		System.out.println("calc");
 		if(unshieldable){
 			for(int i=0;i<damage;i++){
 				DamagePoint p = unshieldableIcoming.remove(0);
@@ -251,7 +258,7 @@ public abstract class Module {
 
 		}
 	}
-	
+
 	private void calculateDamage() {
 		for(DamagePoint p: incomingDamage){
 			if(shieldPoints.size()>0){
@@ -404,9 +411,17 @@ public abstract class Module {
 		return new Pair(x,y);
 	}
 	public Pair getCenter(){
-		return new Pair
-				((ship.player?0:500)+niche.location.x+niche.width/2,
-				niche.location.y+niche.height/2);
+		Pair result=new Pair(
+				niche.location.x+niche.width/2+ShipGraphic.offset.x,
+				niche.location.y+niche.height/2+ShipGraphic.offset.y);
+
+		if(!ship.player){
+			result=new Pair(
+					500+Main.width-ShipGraphic.offset.x-niche.location.x-niche.width/2+((type==ModuleType.WEAPON||type==ModuleType.SHIELD)?-niche.width:0),
+					ShipGraphic.offset.y+niche.location.y+niche.height/2);
+		}
+
+		return result;
 	}
 	public Pair getHitLocation(){
 		return getCenter().add(Pair.randomAnyVector().multiply(3));
@@ -462,7 +477,7 @@ public abstract class Module {
 				break;
 			}
 		}
-	
+
 		//System.out.println(this+" requires "+(thresholds[keyThreshold]-damageTotal)+" to damage");
 		return thresholds[keyThreshold]-damageTotal;
 
@@ -497,18 +512,18 @@ public abstract class Module {
 	private double calcDouble(int cost){
 		return ((1+cost)*(tier/2d+1));
 	}
-	
+
 	public int calc(int cost){
 		// 1+ because a card is worth a similar amount to an energy //
 		return (int) calcDouble(cost);
 	}
-	
+
 	public int calc(int baseCost, int extraCost){
 		double base= calcDouble(baseCost);
 		base+=(extraCost*(tier/2d+1))/2d;
 		return (int) base;
 	}
-	
+
 	public String toString(){
 		return name[0];
 	}

@@ -152,7 +152,7 @@ public class Tutorial extends Bonkject{
 
 		enemy=Battle.enemy;
 		player=Battle.player;
-		add("This is your ship.\n(click to continue)", Gallery.shipNova, new Pair(167,90));
+		add("This is your ship.\n(click to continue)");
 		add("It has five modules.", Effect.ShowPlayerNames);
 		add("They make up a deck of cards that you use to fight!");
 		add("The enemy ship is playing a weapon card to attack you!", Trigger.PlayerShieldPhase, Effect.EnemyPlayCards);
@@ -502,7 +502,11 @@ public class Tutorial extends Bonkject{
 			t.render(batch);
 			
 		}
-		if(undoVisible())UndoButton.get().render(batch);
+		if(undoVisible()){
+			UndoButton.get().render(batch);
+		}
+		
+
 
 	}
 

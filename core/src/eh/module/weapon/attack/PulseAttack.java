@@ -17,9 +17,9 @@ public class PulseAttack extends AttackGraphic{
 	float gravity=15; 
 	float frequency=80;
 	boolean goingRight;
-	Timer t;
 
-	public PulseAttack(Pair origin, float order) {
+
+	public PulseAttack(Pair origin) {
 		super(origin.add(new Pair(5,0)));
 		this.origin=origin;
 		vector=Pair.randomUnitVector().multiply(20);
@@ -80,16 +80,11 @@ public class PulseAttack extends AttackGraphic{
 		if(!fired){
 			Pair difference=position.subtract(origin);
 			vector=vector.subtract(difference.multiply(delta*gravity));	
-
 		}
 
 		if(fired){
-
-			Pair targetVector=target.subtract(position).normalise().multiply(800);
-
+			Pair targetVector=target.subtract(position).normalise().multiply(1100);
 			vector=vector.add(targetVector.subtract(vector).multiply(.006f));
-
-
 			if((position.x>=target.x)==goingRight){
 				particles.add(new PulseParticle(position));
 				System.out.println("impact");

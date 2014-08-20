@@ -3,6 +3,9 @@ package eh.module.weapon.attack;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.module.weapon.attack.particle.RayParticle;
+import eh.util.Timer;
+import eh.util.Timer.Finisher;
+import eh.util.Timer.Interp;
 import eh.util.assets.Clip;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
@@ -53,15 +56,25 @@ public class RayAttack extends AttackGraphic{
 	}
 
 	@Override
-	public void fire(Pair target) {
+	public void fire(final Pair target) {
 		this.target=target;
-		fired=true;
-		vector=target.subtract(location);
-		vector=vector.normalise();
-		vector=vector.multiply(800);
-		intensity=0;
-		frequency=350;
-		Clip.ray.play();
+		t=new Timer(0,1, 5/(order+.01f), Interp.LINEAR);
+		t.addFinisher(new Finisher() {
+
+
+			@Override
+			public void finish() {
+				fired=true;
+				vector=target.subtract(location);
+				vector=vector.normalise();
+				vector=vector.multiply(800);
+				intensity=0;
+				frequency=350;
+				Clip.ray.play();
+			}
+		});
+		
+		
 		
 
 	}

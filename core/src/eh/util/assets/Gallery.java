@@ -139,6 +139,7 @@ public class Gallery {
 	public static Pic lightning= new Pic("Particle/lightning");
 	public static Pic lightningEnd= new Pic("Particle/lightningend");
 	public static Pic[][] debris = new Pic[2][5];
+	public static Pic[] shipDamage = new Pic[9];
 	
 	//Pause stuff//
 	public static Pic pauseBase= new Pic("Interface/pausebase");
@@ -183,6 +184,9 @@ public class Gallery {
 			
 			debris[0][i]=new Pic("Ship/Debris/s"+i);
 			debris[1][i]=new Pic("Ship/Debris/b"+i);
+		}
+		for(int i=0;i<9;i++){
+			shipDamage[i]=new Pic("Ship/Damage/"+i,3);
 		}
 		
 		blueHP[3]=new Pic("Icon/hpblue3");

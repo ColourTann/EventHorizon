@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import eh.screen.battle.interfaceJunk.Star;
+import eh.ship.ShipGraphic;
+import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
 import eh.util.maths.Pair;
@@ -17,19 +20,21 @@ public class PicCut {
 
 	private boolean[][] array;
 	private Color cutColor;
-	private ArrayList<Shard> shards= new ArrayList<Shard>();
+	public ArrayList<Shard> shards= new ArrayList<Shard>();
 	private Texture cutTexture;
 	private ArrayList<Pair> shatterPoints=new ArrayList<Pair>();
-
+	int width;
+	int height;
 	public PicCut(Pic pic, Color color){
 
-		Texture t=pic.get();
-		t.getTextureData().prepare();
-		Pixmap pixMap=t.getTextureData().consumePixmap();
+
+		Pixmap pixMap=Pic.getPixMap(pic.get());
 
 		cutColor=color;
 
 		cutTexture=new Texture(pixMap);
+		width=cutTexture.getWidth();
+		height=cutTexture.getHeight();
 		//pixMap.dispose();
 	}
 
@@ -69,7 +74,7 @@ public class PicCut {
 
 			x=(startX+across/2);
 			y=(startY+down/2);
-			
+
 			//BAD CODE//
 			if(!testPoint(x, y, pixmap)){
 				x=(startX+across/3);
@@ -104,7 +109,7 @@ public class PicCut {
 				}
 			}
 		}
-		
+
 		shatterPoints.add(new Pair(x,y));
 		Pair vector=Pair.randomUnitVector();
 		for(int j=0;j<cuts;j++){
@@ -169,6 +174,89 @@ public class PicCut {
 
 		return biggest;
 
+	}
+
+	public Pair replaceSection(Texture mask){
+		int maskWidth=mask.getWidth();
+		int maskHeight=mask.getHeight();
+
+
+		for(int i=0;i<100;i++){
+			int x=(int) (Math.random()*width-maskWidth);
+			int y=(int) (Math.random()*height-maskHeight);
+			if(checkSection(mask, x, y)){
+				Shard s=fillSection(mask, x, y);
+				shards.add(s);
+				cutTexture=new Texture(Pic.getPixMap(cutTexture));
+				return new Pair(x,y);
+			}
+		}
+		return null;
+
+	}
+
+	private boolean checkSection(Texture mask, int startX, int startY){
+	
+		Pixmap maskMap=Pic.getPixMap(mask);
+		Pixmap baseMap=Pic.getPixMap(cutTexture);
+
+		for(int x=startX;x<startX+mask.getWidth();x++){
+			for(int y=startY;y<startY+mask.getHeight();y++){
+				
+				if(new Color(maskMap.getPixel(x-startX, y-startY)).a==0)continue;
+			
+				Color baseColor=new Color(baseMap.getPixel(x, y));
+				boolean okCol=false;
+				for(Color c:Colours.shipHull7){
+					if(Colours.equals(c, baseColor)){
+						
+						okCol=true;
+						break;
+					}
+				
+				}
+				if(!okCol){
+					
+					return false;
+				}
+
+			}	
+		}
+
+
+
+		return true;
+	}
+
+	private Shard fillSection(Texture mask, int startX, int startY){
+		Shard shard=new Shard();
+		Pixmap base=Pic.getPixMap(get());
+		Pixmap maskMap=Pic.getPixMap(mask);
+		Pixmap shardMap=new Pixmap(mask.getWidth(), mask.getHeight(), Format.RGBA8888);
+		
+		Pixmap.setBlending(Blending.SourceOver);
+		base.setColor(1, 1, 1, 1);
+		for(int x=0;x<mask.getWidth();x++){
+			for(int y=0;y<mask.getWidth();y++){
+				if(new Color(maskMap.getPixel(x, y)).a==0)continue;
+				Color col=new Color(base.getPixel(x+startX, y+startY));
+				
+				shardMap.setColor(col);
+				shardMap.drawPixel(x, y);
+			}
+		}
+		
+
+		
+		base.drawPixmap(maskMap, startX, startY);
+		shard.left=startX;
+		shard.right=startX+mask.getWidth();
+		shard.top=startY;
+		shard.bottom=startY+mask.getHeight();
+		shard.finalise(true);
+		shard.texture=new Texture(shardMap);
+	//	shard.texture=Gallery.shipEclipse.get();
+		return shard;
 	}
 
 	private void cut(Pixmap result, int startX, int startY, Pair startVector, Color col){
@@ -331,7 +419,7 @@ public class PicCut {
 		return c.a==0||Colours.equals(c, cutColor);
 	}
 
-	public class Shard{
+	public class Shard extends Bonkject{
 		public int size;
 		public int left;
 		public int right;
@@ -342,28 +430,49 @@ public class PicCut {
 		Pair vector;
 		float dr;
 		float rotation;
+		
+		public Pair position;
+		
+		boolean backwards;
 
-		Pair position;
-
-
-		public void finalise(){
+		public void finalise(boolean goBackwards){
 			dr=(float) (Math.random()-.5*10);
 			vector=Pair.randomUnitVector().multiply((float) (300+Math.random()*700));
+			
 
 			position=new Pair(left+((right-left)/2), top+((bottom-top)/2));
+			if(goBackwards){
+				backwards=true;
+				
+				vector.x=-Math.abs(vector.x);
+				vector=vector.multiply(new Pair(2,.5));
+				position=position.add(ShipGraphic.offset);
+			}
 		}
 		public void update(float delta){
-			vector=vector.multiply((float) Math.pow(.3, delta));
+			vector=vector.multiply((float) Math.pow(.5, delta));
 			dr=(float) (dr*Math.pow(.3, delta));
 			position=position.add(vector.multiply(delta));
 			rotation+=dr*delta;
+			if(backwards){
+				position=position.subtract(new Pair(Star.playerSpeed*delta*3,0));
+			}
 		}
 		public String toString(){
 			return "Shard size: "+size+", x:"+left+"-"+right+", y:"+top+"-"+bottom;
 		}
 		public void render(SpriteBatch batch) {
-			if(size<5)return;
+			//if(size<5)return;
 			Draw.drawTextureRotatedCentered(batch, texture, position.x, position.y, rotation);
+		}
+		@Override
+		public void mouseDown() {
+		}
+		@Override
+		public void mouseUp() {
+		}
+		@Override
+		public void mouseClicked(boolean left) {
 		}
 	}
 

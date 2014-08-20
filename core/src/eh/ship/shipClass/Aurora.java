@@ -9,6 +9,7 @@ import eh.module.generator.Three;
 import eh.module.shield.Repeller;
 import eh.module.weapon.Laser;
 import eh.module.weapon.Pulse;
+import eh.module.weapon.Ray;
 import eh.ship.Ship;
 import eh.ship.mapThings.mapAbility.MapAbility;
 import eh.ship.mapThings.mapAbility.genAbility.Teleport;
@@ -46,7 +47,7 @@ public class Aurora extends Ship{
 		niches[3].setup(generator);
 		niches[4].setup(computer);
 
-		setWeapon(new Pulse(0), 0);
+		setWeapon(new Ray(0), 0);
 		setWeapon(new Laser(0), 1);
 		setShield(new Repeller(0));
 		setGenerator(new Three());

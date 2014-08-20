@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.module.weapon.attack.particle.Lightning;
 import eh.module.weapon.attack.particle.Spark;
+import eh.util.Timer;
+import eh.util.Timer.Finisher;
+import eh.util.Timer.Interp;
 import eh.util.assets.Clip;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.Particle;
@@ -26,12 +29,22 @@ public class LightningAttack extends AttackGraphic{
 	}*/
 	@Override
 	public void fire(Pair target) {
-		
 		this.target=target;
-		fired=true;
-		Clip.lightning.play();
+		t=new Timer(0,1,2.5f, Interp.LINEAR);
+		t.addFinisher(new Finisher() {
+
+			@Override
+			public void finish() {
+				
+				fired=true;
+				Clip.lightning.play();
+				
+				impact();
+			}
+			
+		});
+	
 		
-		impact();
 	}
 	@Override
 	public void impact() {

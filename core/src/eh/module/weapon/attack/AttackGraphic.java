@@ -1,5 +1,6 @@
 package eh.module.weapon.attack;
 
+import eh.util.Timer;
 import eh.util.maths.Pair;
 import eh.util.particleSystem.ParticleSystem;
 
@@ -11,8 +12,10 @@ public abstract class AttackGraphic extends ParticleSystem{
 	public float intensity=0;
 	public Attack atk;
 	public int order;
+	Timer t;
 	public AttackGraphic(Pair origin){
 		this.origin=origin;
+
 	}
 	public void disable(){
 		disabled=true;

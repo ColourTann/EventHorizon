@@ -42,6 +42,10 @@ public class Pic {
 		this.scale=scale;
 	}
 
+	public Pic(Texture t){
+		this.t=t;
+	}
+	
 	public Texture get(){
 		if(t==null){
 			if(path!=null){
@@ -57,7 +61,13 @@ public class Pic {
 		return t;
 	}
 	
+	public int getWidth(){
+		return get().getWidth();
+	}
 	
+	public int getHeight(){
+		return get().getHeight();
+	}
 	
 	private Texture upscale(Texture t, int scale){
 		Pixmap.setFilter(Filter.NearestNeighbour);
@@ -153,7 +163,7 @@ public class Pic {
 		int width=temp.getWidth();
 		int height=temp.getHeight();
 
-		Pixmap base=getPixMap();
+		Pixmap base=Pic.getPixMap(temp);
 		Pixmap result=new Pixmap(width, height, Format.RGBA8888);
 		for(int x=0;x<width;x++){			
 			for(int y=0;y<height;y++){

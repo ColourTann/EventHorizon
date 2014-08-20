@@ -86,7 +86,7 @@ public class Battle extends Screen{
 	public static float enemyShakeIntensity=0;
 	public static float playerShakeIntensity=0;
 	float shakeDrag=.005f;
-	
+
 	ArrayList<Animation> animations=new ArrayList<Animation>();
 	float animTicker=0;
 	public Battle(Main.ScreenType type){
@@ -94,7 +94,7 @@ public class Battle extends Screen{
 	}
 
 	public void init(ScreenType type){
-		
+
 		playerCam.setToOrtho(true, viewport.x, viewport.y);
 		enemyCam.setToOrtho(true, viewport.x, viewport.y);
 		//playerCam.lookAt(basePlayerCamPosition.x,basePlayerCamPosition.y, 0);
@@ -282,6 +282,8 @@ public class Battle extends Screen{
 			if(Main.debug){
 				debug();
 			}
+			player.getGraphic().damage();
+			
 			break;
 		case Input.Keys.Q:
 
@@ -333,6 +335,7 @@ public class Battle extends Screen{
 			break;
 
 		}
+		
 
 
 	}
@@ -356,6 +359,7 @@ public class Battle extends Screen{
 	}
 
 	public static void shake(boolean player, float amount){
+		
 		System.out.println("shaking for "+amount);
 		//amount is energy cost of card
 		Star.shake(player, amount);
@@ -428,17 +432,17 @@ public class Battle extends Screen{
 
 	@Override
 	public void update(float delta) {
-		
+
 
 		playerShakeIntensity*=Math.pow(shakeDrag, delta);
 		enemyShakeIntensity*=Math.pow(shakeDrag, delta);
-		
+
 		float freq=20;
 		float amp=5;
 		float jitter=3;
 		float bonusX=(float) ((Math.sin(ticks*freq)*amp)+(Math.random()-.5)*jitter);
-		float bonusY=(float) ((Math.sin(ticks*(freq*1.1f))*amp)+(Math.random()-.5)*jitter);
-		
+		float bonusY=(float) ((Math.sin(100+ticks*(freq*1.1f))*amp)+(Math.random()-.5)*jitter);
+
 		playerBonus=new Pair(PerleyBabes.noise(Battle.ticks/4, 100), 
 				PerleyBabes.noise(Battle.ticks/4, 300)).multiply(new Pair(15,3)).add(playerKnockBack)
 				.add(new Pair(bonusX*playerShakeIntensity, bonusY*playerShakeIntensity));
@@ -447,53 +451,54 @@ public class Battle extends Screen{
 		playerKnockBackTarget=playerKnockBackTarget.multiply((float) Math.pow(.2f, delta));
 		playerKnockBack=playerKnockBack.add(playerKnockBackTarget.subtract(playerKnockBack).multiply(delta*50));
 
-		
-		
-		
+
+		bonusX=(float) ((Math.sin(100+ticks*freq)*amp)+(Math.random()-.5)*jitter);
+		bonusY=(float) ((Math.sin(ticks*(freq*1.1f))*amp)+(Math.random()-.5)*jitter);
+
 		playerCam.position.set(basePlayerCamPosition.x ,basePlayerCamPosition.y, 0);
 
 		enemyBonus=new Pair(PerleyBabes.noise(Battle.ticks/4, 1100), PerleyBabes.noise(Battle.ticks/4, 1300)).multiply(new Pair(15,3)).add(enemyKnockBack)
 				.add(new Pair(bonusX*enemyShakeIntensity, bonusY*enemyShakeIntensity));;
-		enemyBonus=enemyBonus.floor();
+				enemyBonus=enemyBonus.floor();
 
-		enemyKnockBackTarget=enemyKnockBackTarget.multiply((float) Math.pow(.2f, delta));
-		enemyKnockBack=enemyKnockBack.add(enemyKnockBackTarget.subtract(enemyKnockBack).multiply(delta*50));
+				enemyKnockBackTarget=enemyKnockBackTarget.multiply((float) Math.pow(.2f, delta));
+				enemyKnockBack=enemyKnockBack.add(enemyKnockBackTarget.subtract(enemyKnockBack).multiply(delta*50));
 
-		enemyCam.position.set(baseEnemyCamPosition.x ,baseEnemyCamPosition.y, 0);
+				enemyCam.position.set(baseEnemyCamPosition.x ,baseEnemyCamPosition.y, 0);
 
-		//Just used for checking if the phase is finished//
-		for(Niche n:player.niches){
-			n.graphic.update(delta);
-		}
-		for(Niche n:enemy.niches){
-			n.graphic.update(delta);
-		}
-		Star.update(delta);
-		ticks+=delta;
-
-
-		switch(currentPhase){
-		case WeaponPhase: break;
-		case ShieldPhase: break;
-		case EnemyShieldPhase:break;
-		case EnemyWeaponPhase:	break;
-		case EnemyWeaponsFiring:
-
-			if(enemy.finishedAttacking())enemy.endPhase();
-			break;
-		case PlayerWeaponsFiring:
-
-			if(player.finishedAttacking())player.endPhase();
-			break;
-		case End:
-			break;
-		}
+				//Just used for checking if the phase is finished//
+				for(Niche n:player.niches){
+					n.graphic.update(delta);
+				}
+				for(Niche n:enemy.niches){
+					n.graphic.update(delta);
+				}
+				Star.update(delta);
+				ticks+=delta;
 
 
+				switch(currentPhase){
+				case WeaponPhase: break;
+				case ShieldPhase: break;
+				case EnemyShieldPhase:break;
+				case EnemyWeaponPhase:	break;
+				case EnemyWeaponsFiring:
+
+					if(enemy.finishedAttacking())enemy.endPhase();
+					break;
+				case PlayerWeaponsFiring:
+
+					if(player.finishedAttacking())player.endPhase();
+					break;
+				case End:
+					break;
+				}
 
 
-		//anim tests//
-		/*animTicker+=delta;
+
+
+				//anim tests//
+				/*animTicker+=delta;
 		if(animTicker>.1f){
 			animations.add(new Explosion2());
 			animTicker-=.1f;
@@ -512,10 +517,10 @@ public class Battle extends Screen{
 
 
 
-		//tutorishit//
-		if(!Battle.tutorial)return;
-		Tutorial t= Tutorial.tutorials.get(Tutorial.index);
-		if(t.trig==Trigger.PlayerWeaponPhase&&Battle.getPhase()==Phase.WeaponPhase)Tutorial.next();
+				//tutorishit//
+				if(!Battle.tutorial)return;
+				Tutorial t= Tutorial.tutorials.get(Tutorial.index);
+				if(t.trig==Trigger.PlayerWeaponPhase&&Battle.getPhase()==Phase.WeaponPhase)Tutorial.next();
 	}
 
 	@Override
@@ -533,6 +538,7 @@ public class Battle extends Screen{
 		batch.begin();
 		batch.setColor(1,1,1,1);
 		Star.renderStars(batch, true);
+		
 		batch.end();
 
 		playerCam.translate(playerBonus.x, playerBonus.y);
@@ -616,6 +622,7 @@ public class Battle extends Screen{
 		for(Animation a:animations){
 			a.render(batch);
 		}
+		//	Draw.drawTextureScaledFlipped(batch, Gallery.shipAurora.getMonochrome(), 0, 0, 1, 1, true, false);
 	}
 
 	@Override

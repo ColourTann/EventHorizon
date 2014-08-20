@@ -16,30 +16,33 @@ import eh.util.maths.Pair;
 public class Niche{
 	public Module mod;
 	public Polygon p;
-	public Polygon originalPolygon;
+
 	public ModuleType type;
 	Ship ship;
 	int index;
 	public Pair location;
 	public NicheGraphic graphic;
 	public float width,height;
+	public Pair relativeTopLeft;
+	
 	public Niche(Ship ship, ModuleType type) {		
 		this.ship=ship;
 		this.type=type;
 	}
 
 	public void setup(Polygon p){
-		this.originalPolygon=new Polygon(p.getVertices());
+		relativeTopLeft=new Pair(p.getVertices()[0],p.getVertices()[1]);
+	
 		//Setting up the polygon for mousing and positioning//
 		this.p=p;
-		p.setOrigin(195, 1135);
+		/*p.setOrigin(195, 1135);
 		if(ship.player){
 			p.translate(ShipGraphic.offset.x, ShipGraphic.offset.y);
 		}
 		else{
 			p.setScale(-1, 1);
 			p.translate(Main.width-ShipGraphic.offset.x-390, ShipGraphic.offset.y);
-		}
+		}*/
 	}
 
 	public void install(Module m){
@@ -51,16 +54,17 @@ public class Niche{
 		m.ship=ship;
 		if(type==ModuleType.WEAPON||type==ModuleType.SHIELD){
 			Pair start=new Pair(p.getTransformedVertices()[0], p.getTransformedVertices()[1]);
-			width=m.modulePic.get().getWidth()*(ship.player?1:-1);
-			height=m.modulePic.get().getHeight(); 
-			start.y-=height/2;
+			float tWidth=m.modulePic.get().getWidth()*(ship.player?1:-1);
+			float tHeight=m.modulePic.get().getHeight(); 
+			start.y-=tHeight/2;
 			if(type==ModuleType.WEAPON){
 				start.x+=((Weapon) mod).weaponOffset*(ship.player?1:-1);
 			}
-			p=new Polygon(new float[]{start.x,start.y,start.x+width,start.y, start.x+width,start.y+height, start.x, start.y+height});
+			p=new Polygon(new float[]{start.x,start.y,start.x+tWidth,start.y, start.x+tWidth,start.y+tHeight, start.x, start.y+tHeight});
 		}
-		float x=((PolygonCollider)getGraphic().collider).p.getBoundingRectangle().x;
-		float y=((PolygonCollider)getGraphic().collider).p.getBoundingRectangle().y;
+		getGraphic();
+		float x=p.getBoundingRectangle().x;
+		float y=p.getBoundingRectangle().y;
 		width=p.getBoundingRectangle().width;
 		height=p.getBoundingRectangle().height;
 		location=new Pair(x,y);

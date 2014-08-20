@@ -59,4 +59,8 @@ public class Explosion2 extends Animation{
 
 
 	}
+
+	@Override
+	public void update(float delta) {
+	}
 }
