@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import eh.screen.Screen;
 import eh.ship.Debris;
 import eh.util.Draw;
+import eh.util.Screen;
 import eh.util.Draw.BlendType;
 import eh.util.assets.Animation;
 import eh.util.assets.Explosion1;

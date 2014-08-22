@@ -8,7 +8,7 @@ import eh.util.assets.Gallery;
 public class Laser extends Weapon{
 
 	public Laser(int tier) {
-		super("Laser",Gallery.laser, 4,-8, new int[]{5,10,14}, tier);
+		super("Laser",Gallery.laser, 4,0, new int[]{5,10,14}, tier);
 		for(int i=0;i<=variants;i++){
 			cardPic[i]=Gallery.laserCard[i];
 		}
@@ -81,4 +81,6 @@ public class Laser extends Weapon{
 		code[6].add(AI.BetterAgainstSpecificSystem);
 		cardPic[6]=Gallery.laserCard[0];
 	}
+	
+	
 }

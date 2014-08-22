@@ -13,7 +13,7 @@ public class LaserCharge extends Particle{
 	float ticks=0;
 	
 	public LaserCharge(Pair location){
-		this.position=new Pair(location.x-10,location.y);
+		this.position=new Pair(location.x,location.y);
 		colour=Colours.redWeaponCols4[(int) (Math.random()*3)+1];
 		maxLife=1;
 		life=maxLife;

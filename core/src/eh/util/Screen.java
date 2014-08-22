@@ -1,4 +1,4 @@
-package eh.screen;
+package eh.util;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

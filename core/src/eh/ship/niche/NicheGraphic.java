@@ -21,7 +21,7 @@ public class NicheGraphic extends Bonkject{
 	float area;
 	public NicheGraphic(Niche n) {
 		debonktivate();
-		mousectivate(new PolygonCollider(n.p));
+		//mousectivate(new PolygonCollider(n.p));
 		niche=n;
 		area=n.p.getBoundingRectangle().width*n.p.getBoundingRectangle().height;
 	}

@@ -230,7 +230,7 @@ public class Tutorial extends Bonkject{
 
 
 	public static void next(){
-		System.out.println("nexting");
+	
 		if(!Battle.tutorial){
 			for(Tutorial t:three){
 				t.fadeOut(3, Interp.LINEAR);

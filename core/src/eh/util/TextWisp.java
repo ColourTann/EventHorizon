@@ -76,9 +76,10 @@ public class TextWisp extends Bonkject{
 		if(alpha>0){
 			position.y-=delta*speed;
 			alpha-=delta*fadeSpeed;
-		}
-		else{
-			dead=true;
+			if(alpha<=0){
+				wisps.remove(this);
+				dead=true;
+			}
 		}
 	}
 

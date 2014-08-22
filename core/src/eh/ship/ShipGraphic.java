@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eh.Main;
+import eh.module.Module;
 import eh.module.Module.ModuleType;
 import eh.screen.battle.Battle;
 import eh.screen.battle.tutorial.Tutorial;
@@ -116,6 +117,8 @@ public class ShipGraphic extends Bonkject{
 		for(Animation a:animations){
 			a.render(batch);
 		}
+		
+		
 
 	}
 

@@ -12,16 +12,16 @@ import eh.util.maths.Pair;
 import eh.util.particleSystem.ParticleSystem;
 
 public abstract class Bonkject {
-	
+
 	public enum Layer{Default, Escape}
 	public static Layer currentLayer=Layer.Default;
-	
+
 	public boolean dead;
 	public Layer layer;
 	static boolean debug=false;
 	public static ArrayList<Bonkject> mousers = new ArrayList<Bonkject>();
 	public static ArrayList<Bonkject> tickers = new ArrayList<Bonkject>();
-	
+
 
 	//Bonkjects are automatically added to update list but not mouse list//
 	public Bonkject() {
@@ -41,13 +41,13 @@ public abstract class Bonkject {
 	}
 
 	// UPDATING SHIT //
-	
+
 	//Call to re-add to update list//
 	public void bonktivate(){
 		tickers.remove(this);
 		tickers.add(this);
 	}
-	
+
 	public void debonktivate(){
 		tickers.remove(this);
 	}
@@ -74,7 +74,7 @@ public abstract class Bonkject {
 		}
 
 	}
-	
+
 	public abstract void update(float delta);
 
 	public void debugRender(SpriteBatch batch){
@@ -84,8 +84,8 @@ public abstract class Bonkject {
 		batch.begin();
 	}
 
-	
-	
+
+
 	//Must call from InputListener as it deals with polled events//
 	public static void updateClicked(boolean left){
 		updateMousePosition();
@@ -97,7 +97,7 @@ public abstract class Bonkject {
 	}
 
 	// MOUSING SHIT //
-	
+
 	public Collider collider;
 	public boolean moused=false;
 	public static Pair currentMoused;
@@ -108,32 +108,34 @@ public abstract class Bonkject {
 		mousers.remove(this);
 		mousers.add(this);
 	}
-	
+
 	public void demousectivate(){
 		mousers.remove(this);
 		moused=false;
 	}
-	
+
 	public static void updateMoused(){
 		updateMousePosition();
 		boolean found=false;
 		for(int i=0;i<mousers.size();i++){
-			
+
 			Bonkject mouseCheck= mousers.get(i);
 			if(mouseCheck.layer!=currentLayer)continue;
-			
+
 			if(found){
 				mouseCheck.deMouse();
 				continue;
 			}
+
 			found=mouseCheck.checkMoused(currentMoused);
+		
 		}
 	}	
 
 	private static void updateMousePosition(){
 		currentMoused=new Pair(Gdx.input.getX()/(float)Gdx.graphics.getWidth()*(float)Main.width,(Gdx.input.getY()/(float)Gdx.graphics.getHeight()*(float)Main.height));
 	}
-	
+
 	private boolean checkMoused(Pair s){
 		if(collider.collidePoint(s)){
 			if(!moused){
@@ -148,7 +150,7 @@ public abstract class Bonkject {
 		}
 		return false;
 	}
-	
+
 	private void deMouse(){
 		if(moused){
 			mouseUp();
@@ -167,7 +169,7 @@ public abstract class Bonkject {
 	public void moveToTop() {
 		if(Bonkject.mousers.remove(this))Bonkject.mousers.add(0,this);
 	}
-	
+
 	public abstract void mouseDown();
 	public abstract void mouseUp();
 	public abstract void mouseClicked(boolean left);
@@ -202,8 +204,8 @@ public abstract class Bonkject {
 	public void slide(Pair target, float speed, Interp type){
 		slider=new Timer(position, target, speed, type);
 	}
-	
-	
+
+
 
 	public static void clearAllDefaults() {
 		for(int i=0;i<mousers.size();i++){
@@ -226,7 +228,7 @@ public abstract class Bonkject {
 	public static void setLayer(Layer layer){
 		currentLayer=layer;
 	}
-	
+
 	//debug render is very laggy and will mess up if you're using cameras, might fix if can be bothered//
 	public static void debugRenderAll(SpriteBatch batch) {
 		batch.end();

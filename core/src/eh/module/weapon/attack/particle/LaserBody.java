@@ -16,7 +16,7 @@ public class LaserBody extends Particle{
 	
 	public LaserBody(Pair origin, Pair target){
 		
-		this.origin=new Pair(origin.x-10,origin.y);
+		this.origin=new Pair(origin.x,origin.y);
 		this.target=target;
 		vector=Pair.getVector(this.origin, target);
 		rotation=(float) Math.atan2(vector.y, vector.x);

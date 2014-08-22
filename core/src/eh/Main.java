@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import eh.card.CardGraphic;
-import eh.screen.Screen;
 import eh.screen.battle.Battle;
 import eh.screen.cardView.CardViewer;
 import eh.screen.escape.EscapeMenu;
@@ -21,6 +20,8 @@ import eh.ship.Ship;
 import eh.util.Bonkject;
 import eh.util.Colours;
 import eh.util.Draw;
+import eh.util.InputHandler;
+import eh.util.Screen;
 import eh.util.TextWisp;
 import eh.util.Timer;
 import eh.util.Timer.Interp;
@@ -122,8 +123,7 @@ public class Main extends ApplicationAdapter  {
 		for(TextWisp t:TextWisp.wisps)t.render(batch);
 		
 		//fading bit//
-		batch.setColor(Colours.withAlpha(Colours.dark, fadeTimer.getFloat()
-				));
+		batch.setColor(Colours.withAlpha(Colours.dark, fadeTimer.getFloat()));
 		Draw.drawTextureScaled(batch, Gallery.square1.get(), 0, 0, width, height);
 		
 		if(debug){

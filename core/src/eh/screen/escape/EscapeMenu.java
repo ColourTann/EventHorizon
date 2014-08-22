@@ -10,10 +10,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import eh.Main;
 import eh.Main.ScreenType;
-import eh.screen.Screen;
 import eh.util.Bonkject;
 import eh.util.Bonkject.Layer;
 import eh.util.Draw;
+import eh.util.Screen;
 import eh.util.SimpleButton;
 import eh.util.SimpleButton.Code;
 import eh.util.Timer;

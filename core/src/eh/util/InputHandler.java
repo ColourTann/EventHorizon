@@ -1,9 +1,9 @@
-package eh;
+package eh.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
-import eh.util.Bonkject;
+import eh.Main;
 import eh.util.maths.Pair;
 
 public class InputHandler implements InputProcessor {

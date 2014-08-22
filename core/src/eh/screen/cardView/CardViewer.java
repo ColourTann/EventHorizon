@@ -13,7 +13,7 @@ import eh.module.shield.Deflector;
 import eh.module.shield.Repeller;
 import eh.module.shield.Repulsor;
 import eh.module.weapon.Laser;
-import eh.screen.Screen;
+import eh.util.Screen;
 import eh.util.maths.Pair;
 
 public class CardViewer extends Screen{

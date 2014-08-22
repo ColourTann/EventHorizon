@@ -19,7 +19,6 @@ import eh.card.CardGraphic;
 import eh.card.CardIcon;
 import eh.module.Module;
 import eh.module.utils.ModuleInfo;
-import eh.screen.Screen;
 import eh.screen.battle.interfaceJunk.CycleButton;
 import eh.screen.battle.interfaceJunk.HelpPanel;
 import eh.screen.battle.interfaceJunk.PhaseButton;
@@ -35,7 +34,8 @@ import eh.ship.shipClass.Eclipse;
 import eh.ship.shipClass.Nova;
 import eh.util.Colours;
 import eh.util.Draw;
-import eh.util.PerleyBabes;
+import eh.util.Noise;
+import eh.util.Screen;
 import eh.util.TextWisp;
 import eh.util.assets.Animation;
 import eh.util.assets.Explosion2;
@@ -443,8 +443,8 @@ public class Battle extends Screen{
 		float bonusX=(float) ((Math.sin(ticks*freq)*amp)+(Math.random()-.5)*jitter);
 		float bonusY=(float) ((Math.sin(100+ticks*(freq*1.1f))*amp)+(Math.random()-.5)*jitter);
 
-		playerBonus=new Pair(PerleyBabes.noise(Battle.ticks/4, 100), 
-				PerleyBabes.noise(Battle.ticks/4, 300)).multiply(new Pair(15,3)).add(playerKnockBack)
+		playerBonus=new Pair(Noise.noise(Battle.ticks/4, 100), 
+				Noise.noise(Battle.ticks/4, 300)).multiply(new Pair(15,3)).add(playerKnockBack)
 				.add(new Pair(bonusX*playerShakeIntensity, bonusY*playerShakeIntensity));
 		playerBonus=playerBonus.floor();
 
@@ -457,7 +457,7 @@ public class Battle extends Screen{
 
 		playerCam.position.set(basePlayerCamPosition.x ,basePlayerCamPosition.y, 0);
 
-		enemyBonus=new Pair(PerleyBabes.noise(Battle.ticks/4, 1100), PerleyBabes.noise(Battle.ticks/4, 1300)).multiply(new Pair(15,3)).add(enemyKnockBack)
+		enemyBonus=new Pair(Noise.noise(Battle.ticks/4, 1100), Noise.noise(Battle.ticks/4, 1300)).multiply(new Pair(15,3)).add(enemyKnockBack)
 				.add(new Pair(bonusX*enemyShakeIntensity, bonusY*enemyShakeIntensity));;
 				enemyBonus=enemyBonus.floor();
 

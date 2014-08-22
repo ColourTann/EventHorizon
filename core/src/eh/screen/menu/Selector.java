@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import eh.Main;
 import eh.Main.ScreenType;
-import eh.screen.Screen;
+import eh.util.Screen;
 import eh.util.assets.Font;
 import eh.util.maths.Pair;
 
