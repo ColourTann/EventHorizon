@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 
 
+
 import util.Draw;
 import util.maths.Pair;
 import util.update.Screen;
@@ -27,6 +28,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import game.Main;
 import game.Main.ScreenType;
 import game.assets.Gallery;
+import game.screen.menu.Selector;
 
 public class EscapeMenu extends Screen{
 	
@@ -41,7 +43,7 @@ public class EscapeMenu extends Screen{
 			@Override
 			public void onPress() {
 				deactivate();
-				Main.changeScreen(ScreenType.Menu);
+				Main.changeScreen(new Selector());
 			}
 		}));
 		
@@ -96,6 +98,7 @@ public class EscapeMenu extends Screen{
 	}
 		
 	public void cycle() {
+		System.out.println("cycling");
 		if(active)deactivate();
 		else activate();
 	}
@@ -115,10 +118,14 @@ public class EscapeMenu extends Screen{
 	public void fadeIn(){
 		Main.fadeTimer=new Timer(Main.fadeTimer.getFloat(), .8f, 4, Interp.LINEAR);
 		alphaTimer=new Timer(alphaTimer.getFloat(), 1, 4, Interp.SQUARE);
+		alphaTimer.layer=Layer.ALL;
+		Main.fadeTimer.layer=Layer.ALL;
 	}
 	public void fadeOut(){
 		Main.fadeTimer=new Timer(Main.fadeTimer.getFloat(), 0, 4, Interp.LINEAR);
 		alphaTimer=new Timer(alphaTimer.getFloat(), 0, 4, Interp.SQUARE);
+		alphaTimer.layer=Layer.ALL;
+		Main.fadeTimer.layer=Layer.ALL;
 	}
 	
 	public static EscapeMenu get(){

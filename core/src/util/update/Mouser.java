@@ -114,7 +114,6 @@ public abstract class Mouser extends Updater{
 
 	//Must call from InputListener as it deals with polled events//
 	public static boolean updateClicked(boolean left){
-		boolean foundAny=false;
 		updateMousePosition();
 		for(int i=0;i<mousers.size();i++){
 			Mouser checkMoused=mousers.get(i);

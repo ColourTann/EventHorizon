@@ -7,7 +7,8 @@ import util.particleSystem.ParticleSystem;
 import util.update.Timer.Interp;
 
 public abstract class Updater {
-	public static ArrayList<Updater> tickers = new ArrayList<Updater>();
+	private static ArrayList<Updater> tickers = new ArrayList<Updater>();
+	
 	static boolean debug=false;
 	public enum Layer{Default, Escape, ALL}
 	private static Layer currentLayer=Layer.Default;
@@ -35,7 +36,6 @@ public abstract class Updater {
 
 	public void deactivate(){
 		dead=true;
-		tickers.remove(this);
 	}
 	
 	public void fadeIn(float speed, Interp type){
@@ -66,13 +66,30 @@ public abstract class Updater {
 		if(debug){
 			System.out.println("Mouseable count: "+Mouser.mousers.size());
 			System.out.println("Ticker count: "+tickers.size());
+			for(Updater u:tickers){
+				System.out.println(u);
+			}
+			System.out.println("end of list");
+			System.out.println();
 		}
 	}
 
 	private static void updateActives(float delta){
-		for(Updater u:tickers){
-			//System.out.println(b.layer);
+		
+		for(int i=0;i<tickers.size();i++){
+			Updater u = tickers.get(i);
+			if(u.dead){
+				tickers.remove(u);
+				TextWisp.wisps.remove(u);
+				i--;
+			}
+		}
+		
+		for(int i=0;i<tickers.size();i++){
+			Updater u = tickers.get(i);
 			if(u.layer!=currentLayer&&u.layer!=Layer.ALL)continue;
+			
+			
 			
 			u.update(delta);
 			if(u.fader!=null){
@@ -86,14 +103,7 @@ public abstract class Updater {
 				u.position=u.slider.getPair();
 			}
 		}
-		for(int i=0;i<tickers.size();i++){
-			Updater u = tickers.get(i);
-			if(u.dead){
-				tickers.remove(u);
-				TextWisp.wisps.remove(u);
-				i--;
-			}
-		}
+		
 
 	}
 

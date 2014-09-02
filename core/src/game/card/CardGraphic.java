@@ -85,6 +85,7 @@ public class CardGraphic extends Mouser {
 		showLower=false;				//Static half cards have no collider and can't be moused//
 		position=new Pair(x,y);
 		if (card.side == 1) position.y += height / 2;
+		deactivate();
 	}
 
 

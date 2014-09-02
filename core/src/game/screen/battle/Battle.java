@@ -9,6 +9,7 @@ import util.assets.Font;
 import util.maths.Pair;
 import util.particleSystem.ParticleSystem;
 import util.update.Animation;
+import util.update.Mouser;
 import util.update.Screen;
 import util.update.TextWisp;
 
@@ -29,6 +30,7 @@ import game.card.CardGraphic;
 import game.card.CardIcon;
 import game.card.CardCode.Special;
 import game.module.Module;
+import game.module.utils.DamagePoint;
 import game.module.utils.ModuleInfo;
 import game.screen.battle.interfaceJunk.CycleButton;
 import game.screen.battle.interfaceJunk.HelpPanel;
@@ -37,6 +39,7 @@ import game.screen.battle.interfaceJunk.Star;
 import game.screen.battle.tutorial.Tutorial;
 import game.screen.battle.tutorial.UndoButton;
 import game.screen.battle.tutorial.Tutorial.Trigger;
+import game.screen.menu.Selector;
 import game.ship.Ship;
 import game.ship.niche.Niche;
 import game.ship.shipClass.Aurora;
@@ -52,8 +55,8 @@ public class Battle extends Screen{
 	public static Card augmentSource;
 	public static Card targetSource;
 	public static Card moduleChooser;
-	public static Ship player;
-	public static Ship enemy;
+	public Ship player;
+	public Ship enemy;
 
 	public static HelpPanel help;
 	Texture texture;
@@ -67,7 +70,7 @@ public class Battle extends Screen{
 	static Pair enemyKnockBack=new Pair();
 	static Pair enemyKnockBackTarget=new Pair();
 
-	public static boolean tutorial=false;
+	public boolean tutorial=false;
 	private ArrayList<CardGraphic> enemyHandList=new ArrayList<CardGraphic>();
 	ArrayList<TextWisp> wisps = new ArrayList<TextWisp>();
 
@@ -86,60 +89,44 @@ public class Battle extends Screen{
 	public static float enemyShakeIntensity=0;
 	public static float playerShakeIntensity=0;
 	float shakeDrag=.005f;
-
+	private static Battle me;
 	ArrayList<Animation> animations=new ArrayList<Animation>();
 	float animTicker=0;
 	private ScreenType type;
-	public Battle(Main.ScreenType type){
-		this.type=type;
+	public Battle(Ship player, Ship enemy, boolean tutorial){
+		this.player=player;
+		this.enemy=enemy;
+		this.tutorial=tutorial;
 	}
 
 	@Override
 	public void init() {
-		init(type);
-	}
-	
-	public void init(ScreenType type){
-
+		me=this;
 		playerCam.setToOrtho(true, viewport.x, viewport.y);
 		enemyCam.setToOrtho(true, viewport.x, viewport.y);
-		//playerCam.lookAt(basePlayerCamPosition.x,basePlayerCamPosition.y, 0);
-
-		//playerCam.translate(Main.width/2-480, 80);
-
-
-
 		resetStatics();
 		Star.init();
-		switch(type){
-		case EasyFight:
-			player = new Eclipse(true);
-			enemy=new Aurora(false);
-			break;
-		case MediumFight:
-			player=new Comet(true);
-			enemy=new Nova(false);
-			break;
-		case HardFight:
-			player=new Aurora(true);
-			enemy=new Nova(false);
-			break;
-		case TutorialFight:
-			player = new Nova(true);
-			enemy=new Aurora(false);
-			initTutorial();
-			break;
-		case Menu:
-			break;
-		}
+		if(tutorial)initTutorial();
 		player.startFight(true);
 		enemy.startFight(false);
-		if(type==ScreenType.TutorialFight){
+		if(tutorial){
 			player.addEnergy(6);
 			enemy.addEnergy(2);
 		}
 	}
 
+	public static Ship getPlayer(){
+		return me.player;
+	}
+	
+	public static Ship getEnemy(){
+		return me.enemy;
+	}
+	
+	public static boolean isTutorial(){
+		return me.tutorial;
+	}
+	
 	private void resetStatics() {
 		TextWisp.wisps.clear();
 		currentState=State.Nothing;
@@ -201,32 +188,32 @@ public class Battle extends Screen{
 	public static void setPhase(Phase s){
 		if(getPhase()==Phase.End)return;
 		currentPhase=s;
-		enemy.checkDefeat();
-		player.checkDefeat();
+		getEnemy().checkDefeat();
+		getPlayer().checkDefeat();
 		System.out.println();
 		System.out.println("State change to "+s);
 
 		switch(s){
 		case EnemyShieldPhase:
-			player.notifyIncoming();
-			enemy.enemyStartPhase();
+			getPlayer().notifyIncoming();
+			getEnemy().enemyStartPhase();
 			break;
 		case EnemyWeaponPhase:
 			PhaseButton.get().nextPhase();
-			enemy.checkDefeat();
-			enemy.enemyStartPhase();
+			getEnemy().checkDefeat();
+			getEnemy().enemyStartPhase();
 			break;
 		case EnemyWeaponsFiring:
-			enemy.fireAll();
+			getEnemy().fireAll();
 			break;
 		case PlayerWeaponsFiring:
-			player.fireAll();
+			getPlayer().fireAll();
 			break;
 		case ShieldPhase:
 			new TextWisp("Shield Phase", Font.big, new Pair(Main.width/2,330), TextWisp.WispType.Regular);
 			PhaseButton.get().nextPhase();
-			enemy.enemyEndTurn();
-			player.playerStartTurn();
+			getEnemy().enemyEndTurn();
+			getPlayer().playerStartTurn();
 			break;
 		case WeaponPhase:
 			new TextWisp("Weapon Phase", Font.big, new Pair(Main.width/2,330), TextWisp.WispType.Regular);
@@ -241,16 +228,16 @@ public class Battle extends Screen{
 		if(Tutorial.stopEnd())return;
 		if(!isPlayerTurn())return;
 		if(getState()!=State.Nothing)return;
-		if(player.hasSpendableShields())return;
-		player.playCards();
+		if(getPlayer().hasSpendableShields())return;
+		getPlayer().playCards();
 
 		if(getPhase()==Phase.ShieldPhase){
-			player.endPhase();
+			getPlayer().endPhase();
 			PhaseButton.button.nextPhase();
 		}
 		else{
-			player.playerEndTurn();
-			player.endPhase();
+			getPlayer().playerEndTurn();
+			getPlayer().endPhase();
 			PhaseButton.button.nextPhase();
 		}
 	}
@@ -288,7 +275,7 @@ public class Battle extends Screen{
 			if(Main.debug){
 				debug();
 			}
-			player.getGraphic().damage();
+			player.getGraphic().damage(new Pair(100,150));
 			
 			break;
 		case Input.Keys.Q:
@@ -314,10 +301,11 @@ public class Battle extends Screen{
 
 
 		case Input.Keys.S:
-			shake(false, 2);
+			getEnemy().getGraphic().damage(new Pair(100,150));
+			
 			break;
 		case Input.Keys.A:
-			shake(true, 2);
+			getPlayer().getGraphic().damage(new Pair(100,150));
 			break;
 
 
@@ -337,7 +325,7 @@ public class Battle extends Screen{
 			break;
 
 		case Input.Keys.ESCAPE:
-			Main.changeScreen(ScreenType.Menu);
+			Main.changeScreen(new Selector());
 			break;
 
 		}
@@ -433,7 +421,7 @@ public class Battle extends Screen{
 	}
 
 	public static void advance() {
-		if(getPhase()==Phase.EnemyShieldPhase||getPhase()==Phase.EnemyWeaponPhase) enemy.enemyFadeAll();
+		if(getPhase()==Phase.EnemyShieldPhase||getPhase()==Phase.EnemyWeaponPhase) getEnemy().enemyFadeAll();
 	}
 
 	@Override
@@ -503,28 +491,10 @@ public class Battle extends Screen{
 
 
 
-				//anim tests//
-				/*animTicker+=delta;
-		if(animTicker>.1f){
-			animations.add(new Explosion2());
-			animTicker-=.1f;
-		}
-		System.out.println(animations.size());
-		for(int i=0;i<animations.size();i++){
-
-			Animation a= animations.get(i);
-			if(a.isDone()){
-				a.dispose();
-				animations.remove(a);
-				i--;
-			}
-		}*/
-
-
-
+			
 
 				//tutorishit//
-				if(!Battle.tutorial)return;
+				if(!isTutorial())return;
 				Tutorial t= Tutorial.tutorials.get(Tutorial.index);
 				if(t.trig==Trigger.PlayerWeaponPhase&&Battle.getPhase()==Phase.WeaponPhase)Tutorial.next();
 	}
@@ -628,11 +598,15 @@ public class Battle extends Screen{
 		for(Animation a:animations){
 			a.render(batch);
 		}
-		//	Draw.drawTextureScaledFlipped(batch, Gallery.shipAurora.getMonochrome(), 0, 0, 1, 1, true, false);
+
 	}
 
 	@Override
 	public void scroll(int amount) {
+	}
+
+	public static void setTutorial(boolean tutorial) {
+		me.tutorial=tutorial;
 	}
 
 

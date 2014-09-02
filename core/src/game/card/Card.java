@@ -1230,15 +1230,19 @@ public class Card {
 	}
 
 	public void ok(AIclass aiclass, String addition){
+		if(true)return;
 		System.out.println("ok "+aiclass.ai+" "+addition+(aiclass.number==-1?"":(" ("+aiclass.number+")")));
 	}
 	public void ok(String addition){
+		if(true)return;
 		System.out.println("ok "+addition);
 	}
 	public void no(AIclass aiclass, String addition){
+		if(true)return;
 		System.out.println("NO!! "+aiclass.ai+" "+addition+(aiclass.number==-1?"":(" ("+aiclass.number+")")));
 	}
 	public void no(String addition){
+		if(true)return;
 		System.out.println("NO!! "+" "+addition);
 	}
 	public boolean sameAs(Card c){

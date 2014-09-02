@@ -383,7 +383,7 @@ public abstract class Ship {
 	//Card drawing stuff//
 
 	public void drawToMaximum(){
-		if(Battle.tutorial)return;
+		if(Battle.isTutorial())return;
 		drawCard(getComputer().getMaximumHandSize()-hand.size());
 	}
 
@@ -468,7 +468,7 @@ public abstract class Ship {
 	public void startFight(boolean goingFirst){
 		initModuleStats();
 		initFightStats();
-		if(!Battle.tutorial)		drawCard(maxCards);
+		if(!Battle.isTutorial())		drawCard(maxCards);
 
 		if(!goingFirst){
 			currentEnergy=(int) Math.ceil(getGenerator().getIncome()/2f);
@@ -549,8 +549,8 @@ public abstract class Ship {
 		return s;
 	}*/
 	public Ship getEnemy(){
-		if(player)return Battle.enemy;
-		return Battle.player;
+		if(player)return Battle.getEnemy();
+		return Battle.getPlayer();
 	}
 	public void addEnergy(int amount){currentEnergy+=amount;}
 	public int getEnergy(){return currentEnergy;}

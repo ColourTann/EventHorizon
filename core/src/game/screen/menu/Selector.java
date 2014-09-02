@@ -11,6 +11,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import game.Main;
 import game.Main.ScreenType;
+import game.screen.battle.Battle;
+import game.ship.shipClass.Aurora;
+import game.ship.shipClass.Comet;
+import game.ship.shipClass.Eclipse;
+import game.ship.shipClass.Nova;
 
 public class Selector extends Screen{
 	public static Selector me;
@@ -22,10 +27,14 @@ public class Selector extends Screen{
 	@Override
 	public void init() {
 		choices.clear();
-		choices.add(new GameChoice(Main.width/2, 205, "tutorial", ScreenType.TutorialFight));
-		choices.add(new GameChoice(Main.width/2, 305, "easy", ScreenType.EasyFight));
-		choices.add(new GameChoice(Main.width/2, 405, "medium", ScreenType.MediumFight));
-		choices.add(new GameChoice(Main.width/2, 505, "hard", ScreenType.HardFight));
+		choices.add(new GameChoice(Main.width/2, 205, "tutorial", 
+				new Battle(new Nova(true), new Aurora(false), true)));
+		choices.add(new GameChoice(Main.width/2, 305, "easy", 
+				new Battle(new Eclipse(true), new Aurora(false), false)));
+		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
+				new Battle(new Comet(true), new Nova(false), false)));
+		choices.add(new GameChoice(Main.width/2, 505, "hard", 	
+				new Battle(new Aurora(true), new Nova(false), false)));
 	}
 	
 	@Override

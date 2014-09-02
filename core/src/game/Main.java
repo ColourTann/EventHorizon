@@ -44,7 +44,7 @@ public class Main extends ApplicationAdapter  {
 	public static ShapeRenderer shape;
 
 	//SCREENS//
-	public static ScreenType nextType;
+	public static Screen nextScreen;
 	public static Screen currentScreen;
 
 	public static Battle battle;  
@@ -88,7 +88,7 @@ public class Main extends ApplicationAdapter  {
 		
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-		select=new Selector();currentScreen=select;
+		select=new Selector();currentScreen=select;select.init();
 
 		//viewer=new CardViewer();currentScreen=viewer;
 
@@ -150,38 +150,20 @@ public class Main extends ApplicationAdapter  {
 
 	public void update(float delta){
 		
-		Timer.updateAll(delta);
-		ParticleSystem.updateAll(delta);
+	
 		currentScreen.update(delta);
 		Updater.updateAll(delta);
 
-		if(nextType!=null){
-			if(fadeTimer.getFloat()==1){
+		if(nextScreen!=null){
+			if(fadeTimer.getFloat()>=1){
+				System.out.println("switching");
 				TextWisp.wisps.clear();
 				Updater.clearAll();
 				fadeTimer=new Timer(1, 0, 2, Interp.LINEAR);
-				
-				switch(nextType){
-				case EasyFight:
-					battle=new Battle(ScreenType.EasyFight);currentScreen=battle;
-					break;
-				case HardFight:
-					battle=new Battle(ScreenType.HardFight);currentScreen=battle;
-					break;
-				case MediumFight:
-					battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
-					break;
-				case Menu:
-					select=new Selector();currentScreen=select;
-					break;
-				case TutorialFight:
-					battle=new Battle(ScreenType.TutorialFight);currentScreen=battle;
-					break;			
-				}
-			
-				
-				nextType=null;
-				
+				nextScreen.init();
+				System.out.println("finished init");
+				currentScreen=nextScreen;
+				nextScreen=null;
 			}
 			return;
 		}
@@ -192,11 +174,12 @@ public class Main extends ApplicationAdapter  {
 	}
 
 	public enum ScreenType{EasyFight, MediumFight, HardFight, TutorialFight, Menu}
-	public static void changeScreen(ScreenType type){
-		if(type==ScreenType.Menu&&currentScreen==select)return;
+	public static void changeScreen(Screen newScreen){
+		//if(type==ScreenType.Menu&&currentScreen==select)return;
 		TextWisp.wisps.clear();
-		nextType=type;
+		nextScreen=newScreen;
 		fadeTimer=new Timer(fadeTimer.getFloat(), 1, 2, Interp.LINEAR);
+	
 	}
 
 	public static Pair getCam(){

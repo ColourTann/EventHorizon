@@ -139,8 +139,8 @@ public class Tutorial extends Updater{
 	public static ArrayList<Tutorial> tutorials=new ArrayList<Tutorial>();
 	public static void init(){
 
-		enemy=Battle.enemy;
-		player=Battle.player;
+		enemy=Battle.getEnemy();
+		player=Battle.getPlayer();
 		add("This is your ship.\n(click to continue)");
 		add("It has five modules.", Effect.ShowPlayerNames);
 		add("They make up a deck of cards that you use to fight!");
@@ -220,7 +220,7 @@ public class Tutorial extends Updater{
 
 	public static void next(){
 	
-		if(!Battle.tutorial){
+		if(!Battle.isTutorial()){
 			for(Tutorial t:three){
 				t.fadeOut(3, Interp.LINEAR);
 			}
@@ -271,7 +271,7 @@ public class Tutorial extends Updater{
 		if(!t.activated&&t.eff!=null){
 			switch(t.eff){
 			case End:
-				Battle.tutorial=false;
+				Battle.setTutorial(false);
 				player.drawToMaximum();
 				enemy.drawToMaximum();
 				for(Module m:player.getRandomisedModules()){
@@ -281,7 +281,7 @@ public class Tutorial extends Updater{
 				break;
 			case EnemyPlayCards:
 				Battle.zSet(Phase.EnemyWeaponPhase);
-				Battle.enemy.enemyPickAllCards(Battle.getPhase());
+				Battle.getEnemy().enemyPickAllCards(Battle.getPhase());
 				break;
 			case DrawTargeted:
 
@@ -345,11 +345,11 @@ public class Tutorial extends Updater{
 				break;
 
 			case DrawFirstHand:
-				firstShieldCard=Battle.player.getShield().getCard(5);
+				firstShieldCard=Battle.getPlayer().getShield().getCard(5);
 				firstWeaponCard=player.getModule(1).getCard(5);
 				player.drawCard(firstWeaponCard);
 				player.drawCard(player.getModule(1).getCard(5));
-				Battle.player.drawCard(firstShieldCard);
+				Battle.getPlayer().drawCard(firstShieldCard);
 				player.drawCard(player.getModule(0).getCard(5));
 				player.drawCard(player.getModule(0).getCard(5));
 				break;
@@ -368,9 +368,9 @@ public class Tutorial extends Updater{
 						new Task("Click the blue shield to confirm",TaskType.EndShieldPhase, true)
 				});
 				currentList.drawDam=true;
-				Battle.player.drawCard(Battle.player.getShield().getCard(5));
-				Battle.player.drawCard(Battle.player.getShield().getCard(5));
-				Battle.player.drawCard(Battle.player.getShield().getCard(5));
+				Battle.getPlayer().drawCard(Battle.getPlayer().getShield().getCard(5));
+				Battle.getPlayer().drawCard(Battle.getPlayer().getShield().getCard(5));
+				Battle.getPlayer().drawCard(Battle.getPlayer().getShield().getCard(5));
 				while(player.hand.size()<5){
 					player.drawCard(player.getModule(0).getCard(5));
 				}
@@ -434,11 +434,11 @@ public class Tutorial extends Updater{
 	}
 
 	public static boolean stopFlip(){
-		if(!Battle.tutorial)return false;
+		if(!Battle.isTutorial())return false;
 		return !overrideStopFlip;
 	}
 	public static boolean stopClick(){
-		if(!Battle.tutorial)return false;
+		if(!Battle.isTutorial())return false;
 		if(currentList!=null)return false;
 		return !overrideStopClick;
 	}
@@ -448,7 +448,7 @@ public class Tutorial extends Updater{
 				return true;
 			}
 		}
-		if(!Battle.tutorial){
+		if(!Battle.isTutorial()){
 			return false;
 		}
 		if(currentList==null)return !overrideStopEnd;
@@ -500,7 +500,7 @@ public class Tutorial extends Updater{
 	}
 
 	public static boolean undoVisible(){
-		if(!Battle.tutorial)return false;
+		if(!Battle.isTutorial())return false;
 		if(index==0||index>=36)return false;
 		
 		if(currentList!=null&&currentList.isCurrent())return true;

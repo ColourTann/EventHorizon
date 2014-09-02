@@ -17,26 +17,26 @@ public class Font {
 	public static void init(){
 
 		
-
+		int size=9;
 		FileHandle fontFile = Gdx.files.internal("Font/fontspace.ttf");
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
 		FreeTypeFontParameter param= new FreeTypeFontParameter();
 		param.flip=true;
-		param.size=16;
+		param.size=size;
 		small=generator.generateFont(param);
 		small.setUseIntegerPositions(true);
 
 		param.magFilter=TextureFilter.Nearest;
 		param.minFilter=TextureFilter.Nearest;
-		param.size=8;
+		param.size=size*2;
 		medium=generator.generateFont(param);
 		medium.setUseIntegerPositions(true);
 
 
-		param.size=16;
+		param.size=size*3;
 		big=generator.generateFont(param);
 		big.setUseIntegerPositions(true);
-		param.size=14;
+		param.size=size*10;
 		test= generator.generateFont(param);
 		test.setUseIntegerPositions(true);
 		generator.dispose();

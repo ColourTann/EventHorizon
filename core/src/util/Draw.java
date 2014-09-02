@@ -36,7 +36,7 @@ public class Draw {
 		drawTextureRotatedScaledCentered(batch, t, x, y, 1, 1, radianRotation);
 	}
 	public static void drawTextureRotatedScaledCentered(SpriteBatch batch, Texture t, float x, float y, float xScale, float yScale, float radianRotation){
-		batch.draw(t, x-(t.getWidth()/2f*xScale), y-(t.getHeight()/2f*yScale), t.getWidth()/2*xScale, t.getHeight()/2*yScale, t.getWidth(), t.getHeight(), xScale, yScale, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),false,true);
+		batch.draw(t, x-t.getWidth()/2, y-t.getHeight()/2, t.getWidth()/2, t.getHeight()/2, t.getWidth(), t.getHeight(), xScale, yScale, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),false,true);
 	}
 	
 

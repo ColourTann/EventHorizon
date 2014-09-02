@@ -44,7 +44,7 @@ public class ModuleStats extends Mouser{
 	@Override
 	public void mouseDown() {
 		mod.moused();
-		if(!Battle.tutorial){
+		if(!Battle.isTutorial()){
 			Tutorial.next();
 			info.stopFading();
 			ModuleInfo.top=info;

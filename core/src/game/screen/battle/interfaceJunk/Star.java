@@ -20,8 +20,8 @@ public class Star{
 	static Color purp=Colours.make(60, 56, 85);
 	static Color teal=Colours.make(65, 93, 105);
 
-	public static float playerSpeed=100;
-	static float enemySpeed=100;
+	public static float playerSpeed=-100;
+	public static float enemySpeed=100;
 
 	Pair location;
 	float size;
@@ -49,12 +49,12 @@ public class Star{
 	}
 	
 	public static void update(float delta){
-		playerSpeed+=(100-playerSpeed)*delta;
+		playerSpeed+=(-100-playerSpeed)*delta;
 		enemySpeed+=(100-enemySpeed)*delta;
 
 		for(Star s:playerStars){
 
-			s.location=s.location.add((-s.size-.1f)*delta*playerSpeed,0);
+			s.location=s.location.add((s.size-.1f)*delta*playerSpeed,0);
 			s.location.x+=delta;
 			if(s.location.x<150){
 				s.location.x=700;

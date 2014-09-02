@@ -58,7 +58,7 @@ public class CycleButton extends Mouser{
 	@Override
 	public void mouseClicked(boolean left) {
 		
-		if(Battle.tutorial&&Tutorial.stopCycle()){
+		if(Battle.isTutorial()&&Tutorial.stopCycle()){
 			System.out.println("tut");
 			return;
 		}
@@ -66,9 +66,9 @@ public class CycleButton extends Mouser{
 		if(Battle.getState()==State.Nothing){
 			timer=new Timer(0,1,3,Interp.SQUARE);
 
-			if(Battle.player.getEnergy()<cost)return;
+			if(Battle.getPlayer().getEnergy()<cost)return;
 
-			Battle.player.addEnergy(-cost);
+			Battle.getPlayer().addEnergy(-cost);
 			
 			Battle.setState(State.CycleDiscard);
 			return;
@@ -76,7 +76,7 @@ public class CycleButton extends Mouser{
 
 		if(Battle.getState()==State.CycleDiscard){
 			timer=new Timer(timer.getFloat(),0,3,Interp.SQUARE);
-			Battle.player.addEnergy(cost);
+			Battle.getPlayer().addEnergy(cost);
 			
 			Battle.setState(State.Nothing);
 			return;
@@ -87,12 +87,12 @@ public class CycleButton extends Mouser{
 
 	public void setupChoices(){
 		choices.clear();
-		for(Weapon w:Battle.player.getWeapons()){
+		for(Weapon w:Battle.getPlayer().getWeapons()){
 			if(w.destroyed)continue;
 			choices.add(w.getNextCard());	
 		}
-		if(!Battle.player.getShield().destroyed){
-			choices.add(Battle.player.getShield().getNextCard());
+		if(!Battle.getPlayer().getShield().destroyed){
+			choices.add(Battle.getPlayer().getShield().getNextCard());
 		}
 
 		for(int i=0;i<choices.size();i++){
@@ -107,8 +107,8 @@ public class CycleButton extends Mouser{
 	}
 
 	public void choose(Card card) {
-		Battle.player.hand.add(card);
-		Battle.player.updateCardPositions();
+		Battle.getPlayer().hand.add(card);
+		Battle.getPlayer().updateCardPositions();
 		for(Card c:choices){
 			if(c!=card){
 				c.getGraphic().fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);

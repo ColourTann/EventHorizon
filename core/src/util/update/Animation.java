@@ -12,12 +12,14 @@ public class Animation extends Updater{
 	private float frame=0;
 	private boolean oneShot;
 	
-	public Animation(Texture[] textures, float animSpeed, boolean oneShot, Pair position){
+	public void setup(Texture[] textures, float animSpeed, boolean oneShot, Pair position){
 		this.textures=textures;
 		this.animSpeed=animSpeed;
 		this.oneShot=oneShot;
 		this.position=position;
 	}
+	
+
 	
 	@Override	
 	public void update(float delta) {

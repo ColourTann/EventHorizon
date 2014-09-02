@@ -17,7 +17,7 @@ import game.ship.Ship;
 public class Task {
 	String s;
 	TaskType t;
-	Ship player = Battle.player;
+	Ship player = Battle.getPlayer();
 	public Pic pic;
 	public Pair location;
 	public Card card;
@@ -55,19 +55,19 @@ public class Task {
 	public boolean isDone(){
 		switch(t){
 		case PlayShield:
-			for(Card c:Battle.player.playList){
+			for(Card c:Battle.getPlayer().playList){
 				if(c.type==ModuleType.SHIELD)return true;
 			}
 			break;
 		case PlayWeapon:
-			for(Card c:Battle.player.playList){
+			for(Card c:Battle.getPlayer().playList){
 				if(c.type==ModuleType.WEAPON)return true;
 			}
 			break;
 		case ShieldGen:
-			return Battle.player.getGenerator().getShield()==2;
+			return Battle.getPlayer().getGenerator().getShield()==2;
 		case PreventAllMajor:
-			for(Module m:Battle.player.getRandomisedModules()){
+			for(Module m:Battle.getPlayer().getRandomisedModules()){
 				if(m.getShieldsRequiredToAvoidMajor()!=999)return false;
 			}
 			return true;
@@ -78,21 +78,21 @@ public class Task {
 		case PlayerAlternateSide:
 
 			if(Battle.getState()==State.Targeting)return true;
-			for(Card c:Battle.player.playList){
+			for(Card c:Battle.getPlayer().playList){
 				if(c.getCode().contains(Special.Targeted))return true;
 			}
 
 		case TargetGenerator:
-			return Battle.enemy.getGenerator().targeteds>0;
+			return Battle.getEnemy().getGenerator().targeteds>0;
 		case NoneScrambled:
-			for(Module m:Battle.player.getRandomisedModules()){
+			for(Module m:Battle.getPlayer().getRandomisedModules()){
 				if(m.getBuffAmount(BuffType.Scrambled)>0){
 					return false;
 				}
 			}
 			return true;
 		case WeaponPlayed:
-			for(Card c:Battle.player.playList){
+			for(Card c:Battle.getPlayer().playList){
 				if(!c.wasScrambled&&c.mod.type==ModuleType.WEAPON)return true;
 			}
 			break;

@@ -198,7 +198,7 @@ public abstract class Module {
 		}
 		
 		Battle.shake(ship.player,(float)(2.5f));
-		ship.getGraphic().damage();
+		ship.getGraphic().damage(niche.location);
 		Clip.damageMinor.play();
 		//if(damagePoint.card!=null&&damagePoint.card.mod instanceof Tesla) return;
 	
@@ -250,7 +250,7 @@ public abstract class Module {
 			for(int i=0;i<damage;i++){
 				DamagePoint p = incomingDamage.remove(0);
 				if(shieldPoints.size()>0){
-					activatShield(shieldPoints.remove(0));
+					activateShield(shieldPoints.remove(0));
 					continue;
 				}
 				damage(p);
@@ -262,7 +262,7 @@ public abstract class Module {
 	private void calculateDamage() {
 		for(DamagePoint p: incomingDamage){
 			if(shieldPoints.size()>0){
-				activatShield(shieldPoints.remove(0));
+				activateShield(shieldPoints.remove(0));
 				continue;
 			}
 			damage(p);
@@ -275,7 +275,7 @@ public abstract class Module {
 		unshieldableIcoming.clear();
 	}
 
-	private void activatShield(ShieldPoint shield) {
+	private void activateShield(ShieldPoint shield) {
 		if(immune)return;
 		if(!shield.firstAdded)return;
 		CardCode code=shield.card.getCode();
