@@ -71,8 +71,8 @@ public class Star{
 	public void render(SpriteBatch batch){
 		batch.setColor(color);
 	
-		if(size>.5f)Draw.drawTextureScaled(batch, Gallery.whiteSquare.get(), location.x, location.y,size*3, size*3);
-		else Draw.drawTexture(batch, Gallery.whiteSquare.get(), location.x, location.y);
+		if(size>.5f)Draw.drawScaled(batch, Gallery.whiteSquare.get(), location.x, location.y,size*3, size*3);
+		else Draw.draw(batch, Gallery.whiteSquare.get(), location.x, location.y);
 
 	}
 

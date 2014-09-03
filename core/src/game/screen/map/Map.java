@@ -204,7 +204,7 @@ public class Map extends Screen{
 		batch2.begin();
 		batch2.draw(Gallery.mapslice.get(), 0, 0);
 		
-		Draw.drawTextureScaled(batch2, Gallery.mapsliceRight.get(), Main.width, Main.height	, -1, -1);
+		Draw.drawScaled(batch2, Gallery.mapsliceRight.get(), Main.width, Main.height	, -1, -1);
 		batch2.setColor(Colours.light);
 		Font.medium.draw(batch2, ""+getState(), 300, 0);
 		for(MapAbility a:player.mapAbilities)a.render(batch2);

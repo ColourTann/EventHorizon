@@ -48,8 +48,8 @@ public class SimpleButton extends Mouser{
 	
 	public void render(SpriteBatch batch){
 		
-		Draw.drawTexture(batch, pic.get(), position.x, position.y);
-		if(moused)Draw.drawTexture(batch, pic.getOutline(), position.x, position.y);
+		Draw.draw(batch, pic.get(), position.x, position.y);
+		if(moused)Draw.draw(batch, pic.getOutline(), position.x, position.y);
 		Font.medium.setColor(batch.getColor());
 		Font.medium.draw(batch, name, position.x+width/2-Font.medium.getBounds(name).width/2, position.y+height/2-Font.medium.getBounds(name).height/2);
 	}

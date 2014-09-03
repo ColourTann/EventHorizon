@@ -47,21 +47,21 @@ public class FightStats extends Mouser{
 			c=Colours.player2[1];
 			energyX=265;
 			damageX=345;
-			Draw.drawTexture(batch, Gallery.playerEnergy.get(), energyX, y);
-			Draw.drawTexture(batch, Gallery.majorDamagePlayer.get(), damageX, y);
+			Draw.draw(batch, Gallery.playerEnergy.get(), energyX, y);
+			Draw.draw(batch, Gallery.majorDamagePlayer.get(), damageX, y);
 		}
 		else{
 			c=Colours.enemy2[1];
 			energyX=846;
 			damageX=925;
-			Draw.drawTexture(batch, Gallery.enemyEnergy.get(),energyX,y);
-			Draw.drawTexture(batch, Gallery.majorDamageEnemy.get(),damageX,y);
+			Draw.draw(batch, Gallery.enemyEnergy.get(),energyX,y);
+			Draw.draw(batch, Gallery.majorDamageEnemy.get(),damageX,y);
 		}
 		BitmapFont current = (ship.getEnergy()>9?Font.medium:Font.big);
 		current.setColor(c);
 		String s=""+ship.getEnergy();
 		current.draw(batch, s, energyX-current.getBounds(s).width/2+(ship.getEnergy()>9?45:47), y+20-current.getBounds(s).height/2);
-		Draw.drawTextureScaled(batch, Gallery.iconEnergy.get(),energyX+5,y+6, 2,2);
+		Draw.drawScaled(batch, Gallery.iconEnergy.get(),energyX+5,y+6, 2,2);
 		Font.medium.setColor(c);
 		String inc="+"+ship.getIncome();
 		Font.medium.draw(batch, inc, energyX-Font.medium.getBounds(inc).width/2+32, y+35);
@@ -71,7 +71,7 @@ public class FightStats extends Mouser{
 		}*/
 		Texture icon=(player?Gallery.greenHP[1].get():Gallery.redHP[1].get());
 		for(int i=0;i<ship.getMajorDamage()&&i<5;i++){
-			Draw.drawTexture(batch, icon, damageX+damageStart.x+damageGap*i, y+damageStart.y);
+			Draw.draw(batch, icon, damageX+damageStart.x+damageGap*i, y+damageStart.y);
 		}
 	}
 

@@ -49,9 +49,9 @@ public class GameChoice extends Mouser{
 
 
 	public void render(SpriteBatch batch) {
-		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y, 2f, 2f);
-		Draw.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 2f, height);
-		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-height, 2f, -2f);
+		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y, 2f, 2f);
+		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 2f, height);
+		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y-height, 2f, -2f);
 		Font.big.setColor(Colours.withAlpha(Colours.light,alpha));
 		Font.big.drawWrapped(batch, str, x, y-31, width, HAlignment.CENTER);
 		

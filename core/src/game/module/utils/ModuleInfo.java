@@ -87,11 +87,11 @@ public class ModuleInfo extends Mouser{
 		batch.setColor(1,1,1,alpha);
 
 		if(mod.type==ModuleType.SHIELD||mod.type==ModuleType.WEAPON){
-			Draw.drawTexture(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y);
+			Draw.draw(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y);
 		}
 		else{
-			Draw.drawTexture(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y);
-			Draw.drawTexture(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y+CardGraphic.height/2);
+			Draw.draw(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y);
+			Draw.draw(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y+CardGraphic.height/2);
 		}
 
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));

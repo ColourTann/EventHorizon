@@ -123,9 +123,9 @@ public class CycleButton extends Mouser{
 	public void render(SpriteBatch batch) {
 	
 		batch.setColor(new Color(1,1,1,timer.getFloat()));
-		Draw.drawTexture(batch, Gallery.cycleButton.get(), position.x, position.y);
+		Draw.draw(batch, Gallery.cycleButton.get(), position.x, position.y);
 		batch.setColor(new Color(1,1,1,1));
-		Draw.drawTexture(batch, Gallery.iconEnergy.get(), 168,402);
+		Draw.draw(batch, Gallery.iconEnergy.get(), 168,402);
 		Font.medium.setColor(Colours.dark);
 		String s=cost+"";
 		Font.medium.draw(batch, s, 191-Font.medium.getBounds(s).width/2, 403);

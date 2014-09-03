@@ -18,7 +18,7 @@ import game.screen.battle.Battle;
 
 public class NicheGraphic extends Updater{
 	Niche niche;
-	float intensity;
+
 	float ticks;
 	float area;
 	public NicheGraphic(Niche n) {
@@ -40,19 +40,14 @@ public class NicheGraphic extends Updater{
 		
 		Pair bonus=new Pair();
 		if(!niche.ship.player){
-			//bonus=new Pair(500+(float)Math.sin(Battle.ticks*Battle.sinSpeed)*Battle.enemyShakeIntensity, (float)Math.cos((Battle.ticks-2.5f)*Battle.sinSpeed)*Battle.enemyShakeIntensity);
 			bonus=new Pair(500, 0);
 		}
 		bonus=bonus.floor();
-		//bonus=bonus.add(niche.ship.getGraphic().bonus);
 		
-		Draw.drawTextureScaledFlipped(batch, t, niche.location.x+bonus.x, niche.location.y+bonus.y, 1, 1, !niche.mod.ship.player, false);
-		if(intensity>0){
-			batch.setColor(Colours.withAlpha(Colours.shieldCols6[2],intensity));
-			
-			Draw.drawTextureScaledFlipped(batch, niche.mod.modulePic.getGlow(), niche.location.x, niche.location.y, 1, 1, !niche.mod.ship.player, false);
-		}
+		Draw.drawRotatedScaledFlipped(batch, t, niche.location.x+bonus.x, niche.location.y+bonus.y, 1, 1, 0, !niche.mod.ship.player, false);
+
 		batch.setColor(1,1,1,1);
+		
 		}
 
 	public String toString(){
@@ -64,17 +59,14 @@ public class NicheGraphic extends Updater{
 	@Override
 	public void update(float delta) {
 
-		if(niche.mod.currentThreshold==3){
-			intensity=0;
-			return;
-		}
+	
 
 		ticks+=delta*area*.00025f*niche.mod.currentThreshold;
 		int shield=Math.min(3,niche.mod.getShield());
 
 		float target=(float) (.15f*shield+(Math.sin(Battle.ticks*4)/2+.5f)/(5-shield));
 		if(shield==0)target=0;
-		intensity+=(target-intensity)*delta*10;
+	
 
 		if(ticks>1){
 			ticks-=Math.random();

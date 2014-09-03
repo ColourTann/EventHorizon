@@ -1,4 +1,4 @@
-package game.assets;
+package game.assets.animations;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;

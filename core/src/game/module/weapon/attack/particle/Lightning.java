@@ -42,11 +42,11 @@ public class Lightning extends Particle{
 		normal=normal.multiply((t.getWidth()/2+1)*scale);
 
 		//batch.setColor(1,1,1,.4f);
-		Draw.drawTextureRotatedScaledCentered(batch, Gallery.lightning.get(), start.x, start.y, distance, scale, (float)angle);
+		Draw.drawRotatedScaledCentered(batch, Gallery.lightning.get(), start.x, start.y, distance, scale, (float)angle);
 		//batch.setColor(1,1,1,1);
-		Draw.drawTextureRotatedScaledCentered(batch, t, start.x-normal.x, start.y-normal.y, scale,scale, (float)angle);
+		Draw.drawRotatedScaledCentered(batch, t, start.x-normal.x, start.y-normal.y, scale,scale, (float)angle);
 		
-		Draw.drawTextureRotatedScaledCentered(batch, t, finish.x+normal.x, finish.y+normal.y, -scale,scale, (float)angle);
+		Draw.drawRotatedScaledCentered(batch, t, finish.x+normal.x, finish.y+normal.y, -scale,scale, (float)angle);
 		
 		
 		Draw.setBlend(batch, BlendType.Normal);

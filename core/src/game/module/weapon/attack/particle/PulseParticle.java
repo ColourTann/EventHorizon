@@ -43,7 +43,7 @@ public class PulseParticle extends Particle{
 		if(c==null)batch.setColor(Colours.withAlpha(Colours.blueWeaponCols4[(int)(ratio*4)],ratio*.3f));
 		else batch.setColor(Colours.withAlpha(c,ratio));
 	
-		Draw.drawTextureScaledCentered(batch, Gallery.circle32.get(), position.x, position.y, .17f,.17f);
+		Draw.drawScaledCentered(batch, Gallery.circle32.get(), position.x, position.y, .17f,.17f);
 	}
 
 }

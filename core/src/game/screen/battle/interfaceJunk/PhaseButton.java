@@ -118,11 +118,11 @@ public class PhaseButton extends Mouser{
 		}
 		
 		batch.setColor(c);
-		Draw.drawTexture(batch, Gallery.endTurnBottom.get(),605,353);
-		Draw.drawTexture(batch, before.get(),t.getPair().x,t.getPair().y);
+		Draw.draw(batch, Gallery.endTurnBottom.get(),605,353);
+		Draw.draw(batch, before.get(),t.getPair().x,t.getPair().y);
 		
 		batch.setColor(Colours.withAlpha(c,phaseChangeAlpha));
-		Draw.drawTexture(batch, after.get(),t.getPair().x,t.getPair().y);
+		Draw.draw(batch, after.get(),t.getPair().x,t.getPair().y);
 		batch.setColor(1, 1, 1, 1);
 		
 		for(PicLoc pl:Tutorial.glows)pl.renderFuckingPhaseButtonStupidTutorial(batch);

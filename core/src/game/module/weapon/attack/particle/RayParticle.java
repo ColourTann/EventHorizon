@@ -48,7 +48,7 @@ public class RayParticle extends Particle{
 		}
 		sb.setColor(Colours.withAlpha(Colours.redWeaponCols4[(int)(life/maxLife*4)], life/maxLife));
 		//Junk.drawTexture(sb, t, x, y, life/maxLife*5f, life/maxLife*3f);
-		Draw.drawTextureScaled(sb, t, position.x, position.y, life/maxLife*5f, life/maxLife*3f);
+		Draw.drawScaled(sb, t, position.x, position.y, life/maxLife*5f, life/maxLife*3f);
 	}
 
 }

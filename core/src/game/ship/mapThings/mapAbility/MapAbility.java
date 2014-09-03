@@ -120,7 +120,7 @@ public abstract class MapAbility extends Mouser{
 	}
 	
 	public void render(SpriteBatch batch) {
-		Draw.drawTextureScaledCentered(batch, abilityPic.get(), location.x, location.y, 1, 1);
+		Draw.drawScaledCentered(batch, abilityPic.get(), location.x, location.y, 1, 1);
 	}
 
 

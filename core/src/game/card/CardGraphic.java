@@ -183,7 +183,7 @@ public class CardGraphic extends Mouser {
 			Texture cd = Gallery.iconCooldown.get();
 
 			for (float i = 0; i < number; i++) {
-				Draw.drawTextureScaled(batch, cd, 
+				Draw.drawScaled(batch, cd, 
 						position.x + width / 2 - cooldownWidth / 2 + cooldownGap* (i) - cooldownGap * (number - 1) / 2,
 						position.y + height / 2 - cd.getHeight() / 2 * 3, 3, 3);
 			}
@@ -206,12 +206,12 @@ public class CardGraphic extends Mouser {
 
 		//Card base//
 
-		Draw.drawTexture(batch, Gallery.cardBase.get(), position.x, baseHeight);
+		Draw.draw(batch, Gallery.cardBase.get(), position.x, baseHeight);
 
 
 		//Card image//
 		if (drawTopPic || part != card.side)
-			Draw.drawTextureScaled(batch, card.getImage(part).get(), position.x + positionPic.x, baseHeight
+			Draw.drawScaled(batch, card.getImage(part).get(), position.x + positionPic.x, baseHeight
 					+ positionPic.y, 2, 2);
 
 		//Name//
@@ -244,23 +244,23 @@ public class CardGraphic extends Mouser {
 			for (int i = 0; i < effect; i++) {
 				if (i == 0) {
 
-					Draw.drawTexture(batch, effectPics[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
+					Draw.draw(batch, effectPics[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
 					if(effect>7){
-						Draw.drawTexture(batch, Gallery.fiveIcon[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
+						Draw.draw(batch, Gallery.fiveIcon[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
 						effect-=4;
 					}
 					continue;
 				}
 				if (i == 6) {
-					Draw.drawTexture(batch, effectPics[2].get(), position.x+ positionEffectEnd.x, baseHeight+ positionEffectEnd.y);
+					Draw.draw(batch, effectPics[2].get(), position.x+ positionEffectEnd.x, baseHeight+ positionEffectEnd.y);
 
 					continue;
 				}
 				
-				Draw.drawTexture(batch, effectPics[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
+				Draw.draw(batch, effectPics[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
 				//7-i spots remaining
 				if(effect>7){
-					Draw.drawTexture(batch, Gallery.fiveIcon[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
+					Draw.draw(batch, Gallery.fiveIcon[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
 					effect-=4;
 				}
 			}
@@ -273,24 +273,24 @@ public class CardGraphic extends Mouser {
 		if (card.mod instanceof Weapon&&!scrambled&&!card.wasScrambled) {
 			int shots = card.getShots(part);
 			if (shots > 1) {
-				Draw.drawTexture(batch, Gallery.iconShots.get(), position.x + positionShots.x-5, baseHeight + positionShots.y-19);
+				Draw.draw(batch, Gallery.iconShots.get(), position.x + positionShots.x-5, baseHeight + positionShots.y-19);
 				Font.small.setColor(darkText);
 				Font.small.draw(batch, "x" + shots, position.x + positionShots.x - 6, baseHeight + positionShots.y -7);
 			}
-			if (card.hasSpecial(Special.Targeted, part))Draw.drawTexture(batch, Gallery.iconTargeted.get(), position.x + positionTargeted.x, baseHeight + positionTargeted.y-17);
+			if (card.hasSpecial(Special.Targeted, part))Draw.draw(batch, Gallery.iconTargeted.get(), position.x + positionTargeted.x, baseHeight + positionTargeted.y-17);
 		}
 
 		//Cost//
 		if(scrambled){
 			if(!card.wasScrambled&&card.mod.ship.player){
-				Draw.drawTexture(batch, Gallery.iconJammed.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
+				Draw.draw(batch, Gallery.iconJammed.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
 			}
 		}
 
 		//Cost//
 		if(scrambled){
 			if(!card.wasScrambled&&card.mod.ship.player){
-				Draw.drawTexture(batch, Gallery.iconJammed.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
+				Draw.draw(batch, Gallery.iconJammed.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
 			}
 		}
 		else{
@@ -298,10 +298,10 @@ public class CardGraphic extends Mouser {
 			if(card.wasScrambled)cost=0;
 			Font.medium.setColor(darkText);
 			if (cost < 5) {
-				for (int i = 0; i < cost; i++)	Draw.drawTexture(batch, Gallery.iconEnergy.get(), position.x + positionEnergy.x+ positionArray[cost][i].x, baseHeight+ positionEnergy.y + positionArray[cost][i].y);
+				for (int i = 0; i < cost; i++)	Draw.draw(batch, Gallery.iconEnergy.get(), position.x + positionEnergy.x+ positionArray[cost][i].x, baseHeight+ positionEnergy.y + positionArray[cost][i].y);
 			} 
 			else {
-				Draw.drawTexture(batch, Gallery.iconEnergy.get(), position.x + positionEnergy.x+ positionArray[5][0].x-1, baseHeight + positionEnergy.y+ positionArray[5][0].y);
+				Draw.draw(batch, Gallery.iconEnergy.get(), position.x + positionEnergy.x+ positionArray[5][0].x-1, baseHeight + positionEnergy.y+ positionArray[5][0].y);
 				Font.medium.draw(batch, "" + cost, position.x + positionEnergy.x + 6,baseHeight + positionEnergy.y + positionArray[5][0].y);
 			}
 		}
@@ -309,16 +309,16 @@ public class CardGraphic extends Mouser {
 		//Cooldown//
 		if(scrambled){
 			if(!card.wasScrambled&&card.mod.ship.player){
-				Draw.drawTexture(batch, Gallery.iconJammed.get(),position.x+positionCooldown.x+positionArray[1][0].x-4,baseHeight+positionCooldown.y+positionArray[1][0].y-3);
+				Draw.draw(batch, Gallery.iconJammed.get(),position.x+positionCooldown.x+positionArray[1][0].x-4,baseHeight+positionCooldown.y+positionArray[1][0].y-3);
 			}
 		}
 		else{
 			int cooldown = card.getCoodlown(part);
 			if (cooldown < 3) {
-				for (int i = 0; i < cooldown; i++) Draw.drawTexture(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[cooldown][i].x, baseHeight+ positionCooldown.y + positionArray[cooldown][i].y);
+				for (int i = 0; i < cooldown; i++) Draw.draw(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[cooldown][i].x, baseHeight+ positionCooldown.y + positionArray[cooldown][i].y);
 			} 
 			else {
-				Draw.drawTexture(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[5][0].x, baseHeight + positionCooldown.y+ positionArray[5][0].y);
+				Draw.draw(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[5][0].x, baseHeight + positionCooldown.y+ positionArray[5][0].y);
 				Font.medium.draw(batch, "" + cooldown, position.x + positionCooldown.x + 6,baseHeight + positionCooldown.y + positionArray[5][0].y+ 23);
 			}
 		}

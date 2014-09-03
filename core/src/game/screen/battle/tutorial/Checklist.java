@@ -83,9 +83,9 @@ public class Checklist extends Mouser{
 	public void render(SpriteBatch batch) {
 		if(!isCurrent())return;
 		batch.setColor(Colours.withAlpha(Colours.white,alpha));
-		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, 3, 3);
-		Draw.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y, 3, height);
-		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, 3, -3);
+		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, 3, 3);
+		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y, 3, height);
+		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, 3, -3);
 		float heightAdd=0;
 		for(Task t:tasks){
 			if(t.isDone())Font.medium.setColor(Colours.withAlpha(Colours.player2[1],alpha));
@@ -94,7 +94,7 @@ public class Checklist extends Mouser{
 			heightAdd+=Font.medium.getWrappedBounds(t.s+"\n\n", width-offset*2).height;
 		}
 		if(drawDam){
-			Draw.drawTexture(batch, Gallery.orangeHP[1].get(), 614,148);
+			Draw.draw(batch, Gallery.orangeHP[1].get(), 614,148);
 		}
 		//599 560
 

@@ -86,15 +86,15 @@ public class ModuleStats extends Mouser{
 			base=Gallery.baseModuleStats;
 		}
 		batch.setColor(1,1,1,1);
-		Draw.drawTexture(batch, base.get(), collider.position.x, collider.position.y);
+		Draw.draw(batch, base.get(), collider.position.x, collider.position.y);
 
-		if(mod.moused)Draw.drawTexture(batch, Gallery.statsMoused.get(), collider.position.x, collider.position.y);
-		if(mod.targeteds>0)	Draw.drawTexture(batch, Gallery.statsTargeted.get(), collider.position.x, collider.position.y);
-		if(mod.immune)Draw.drawTexture(batch, Gallery.statsImmune.get(), collider.position.x, collider.position.y);
+		if(mod.moused)Draw.draw(batch, Gallery.statsMoused.get(), collider.position.x, collider.position.y);
+		if(mod.targeteds>0)	Draw.draw(batch, Gallery.statsTargeted.get(), collider.position.x, collider.position.y);
+		if(mod.immune)Draw.draw(batch, Gallery.statsImmune.get(), collider.position.x, collider.position.y);
 
 		if(mod.type==ModuleType.WEAPON){
 			batch.setColor(1, 1, 1, .5f);
-			Draw.drawTextureScaledCentered(batch, mod.modulePic.get(), collider.position.x+37, collider.position.y+110, 2f/3f,2f/3f);
+			Draw.drawScaledCentered(batch, mod.modulePic.get(), collider.position.x+37, collider.position.y+110, 2f/3f,2f/3f);
 			batch.setColor(1, 1, 1, 1);
 			//Draw.drawTexture(batch, mod.modulePic.get(),collider.x+5,collider.y+5);
 		}
@@ -132,9 +132,9 @@ public class ModuleStats extends Mouser{
 			}
 			if(mod.thresholds[0]==i+1||mod.thresholds[1]==i+1)index=1;
 			if(i==mod.maxHP-1)index=2;
-			Draw.drawTexture(batch, p[index].get(),collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y+hpGap.y*(i/row));
+			Draw.draw(batch, p[index].get(),collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y+hpGap.y*(i/row));
 			if(moused){
-				Draw.drawTexture(batch, Gallery.mousedHP.get(), collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y+hpGap.y*(i/row));
+				Draw.draw(batch, Gallery.mousedHP.get(), collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y+hpGap.y*(i/row));
 			}
 		}
 
@@ -145,7 +145,7 @@ public class ModuleStats extends Mouser{
 			ext=Gallery.blueHP[3];
 		}
 		if(damage+unshieldable+incoming>mod.maxHP){
-			Draw.drawTexture(batch, ext.get(), collider.position.x+hpLoc.x+hpGap.x*(mod.maxHP%row),collider.position.y+hpLoc.y+hpGap.y*(mod.maxHP/row));
+			Draw.draw(batch, ext.get(), collider.position.x+hpLoc.x+hpGap.x*(mod.maxHP%row),collider.position.y+hpLoc.y+hpGap.y*(mod.maxHP/row));
 			//Off the edge number//
 			if(ext==Gallery.orangeHP[3]){
 				Font.small.setColor(Colours.weaponCols8[6]);
@@ -162,7 +162,7 @@ public class ModuleStats extends Mouser{
 			if(mod.buffs.get(i).getPic()==null){
 				continue;
 			}
-			Draw.drawTexture(batch, mod.buffs.get(i).getPic().get(), collider.position.x+8+pos*gap, collider.position.y+70);
+			Draw.draw(batch, mod.buffs.get(i).getPic().get(), collider.position.x+8+pos*gap, collider.position.y+70);
 			pos++;
 		}
 

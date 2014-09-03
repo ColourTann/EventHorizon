@@ -41,7 +41,7 @@ public class Test extends Screen{
 			for(int i=0;i<2;i++){
 				Shard s=cut.removeCut();
 				if(s==null)return;
-				s.finalise(false);
+				s.finalise();
 				replaced.add(s);
 			}
 		}
@@ -73,7 +73,7 @@ public class Test extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch) {
-		Draw.drawTexture(batch, cut.get(), 0, 0);
+		Draw.draw(batch, cut.get(), 0, 0);
 		for(Shard s:replaced){
 			s.render(batch);
 		}
@@ -101,7 +101,7 @@ public class Test extends Screen{
 		case Input.Keys.SPACE:
 
 			Shard s=cut.removeCut();
-			s.finalise(false);
+			s.finalise();
 			replaced.add(s);
 
 			break;

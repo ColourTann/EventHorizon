@@ -2,6 +2,9 @@ package game.module;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import util.Colours;
 import util.Draw;
 import util.assets.Clip;
 import util.assets.Font;
@@ -9,7 +12,10 @@ import util.image.Pic;
 import util.maths.Pair;
 import util.update.TextWisp;
 import util.update.TextWisp.WispType;
+import util.update.Timer.Interp;
+import util.update.Timer;
 import game.Main;
+import game.assets.Gallery;
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardCode.Special;
@@ -78,11 +84,15 @@ public abstract class Module {
 	public Pic modulePic;
 	public boolean moused;
 	public int targeteds;
-
+	public Timer alphaTimer=new Timer();
+	
+	
 	//Buff stuff//
 	public ArrayList<Buff> buffs=new ArrayList<Buff>();
 
 
+	
+	
 	public Module(String name, Pic p, int variants, int numCards, int thresholds[], int tier){
 		moduleName=name;
 		this.tier=tier;
@@ -250,6 +260,7 @@ public abstract class Module {
 			for(int i=0;i<damage;i++){
 				DamagePoint p = incomingDamage.remove(0);
 				if(shieldPoints.size()>0){
+					Clip.shieldActivate.play();
 					activateShield(shieldPoints.remove(0));
 					continue;
 				}
@@ -281,6 +292,7 @@ public abstract class Module {
 		CardCode code=shield.card.getCode();
 		ship.drawCard(code.getAmount(Special.AbsorbDraw));
 		ship.addEnergy(code.getAmount(Special.AbsorbEnergy));
+		alphaTimer=new Timer(1,0,1,Interp.SQUARE);
 	}
 
 	public boolean shield(ShieldPoint s, boolean overlapSound){
@@ -289,7 +301,7 @@ public abstract class Module {
 		if(s.card.getCode().contains(Special.ShieldOnlyDamaged))if(currentThreshold==0)return false;
 
 		shieldPoints.add(s);
-		if(overlapSound)Clip.shieldUse.overlay();
+		if(overlapSound)Clip.shieldUse.play();
 		else Clip.shieldUse.play();
 		return true;
 	}
@@ -410,6 +422,11 @@ public abstract class Module {
 
 		return new Pair(x,y);
 	}
+	
+	public Pair getCorner(){
+		return getCenter().add(-niche.width/2, -niche.height/2);
+	}
+	
 	public Pair getCenter(){
 		Pair result=new Pair(
 				niche.location.x+niche.width/2+ShipGraphic.offset.x,
@@ -545,6 +562,16 @@ public abstract class Module {
 				i--;
 			}
 		}
+	}
+
+	public void drawShield(SpriteBatch batch) {
+		float alpha= (float) (Math.sin(Battle.ticks*3)+1)/4+.5f;
+		alpha/=4;
+		alpha*=Math.min(4, shieldPoints.size());
+		batch.setColor(Colours.withAlpha(Colours.shieldCols6[3], alpha));
+		Draw.drawRotatedScaledCenteredFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);
+		batch.setColor(1,1,1,alphaTimer.getFloat());
+		Draw.drawRotatedScaledCenteredFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);
 	}
 
 

@@ -107,21 +107,21 @@ public class Tutorial extends Updater{
 
 		batch.setColor(1,1,1,alpha);
 		if(target!=null){
-			Draw.drawTextureRotatedScaled(batch, Gallery.tutPoint.get(), origin.x, origin.y, distance, 1, rotation);
+			Draw.drawRotatedScaled(batch, Gallery.tutPoint.get(), origin.x, origin.y, distance, 1, rotation);
 		}
-		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, 3, 3);
-		Draw.drawTextureScaled(batch, Gallery.tutPanelMain.get(), x, y, 3, height);
-		Draw.drawTextureScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, 3, -3);
+		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, 3, 3);
+		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y, 3, height);
+		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, 3, -3);
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		Font.medium.drawWrapped(batch, str, x+offset, y+5, width-offset*2, HAlignment.CENTER);
 
 
 		if(special==1){
-			Draw.drawTexture(batch, Gallery.greenHP[1].get(), 503, 152);
-			Draw.drawTexture(batch, Gallery.greenHP[2].get(), 615, 152);
+			Draw.draw(batch, Gallery.greenHP[1].get(), 503, 152);
+			Draw.draw(batch, Gallery.greenHP[2].get(), 615, 152);
 		}
 		if(special==2){
-			Draw.drawTexture(batch, Gallery.iconTargeted.get(), 727,136);
+			Draw.draw(batch, Gallery.iconTargeted.get(), 727,136);
 		}
 		batch.setColor(1,1,1,1);
 	}

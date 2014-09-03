@@ -61,9 +61,9 @@ public class SimpleSlider extends Mouser{
 
 
 		batch.setColor(Colours.withAlpha(outside, batch.getColor().a));
-		Draw.drawTextureScaled(batch, Gallery.whiteSquare.get(), position.x, position.y, width, height);
+		Draw.drawScaled(batch, Gallery.whiteSquare.get(), position.x, position.y, width, height);
 		batch.setColor(Colours.withAlpha(inside, batch.getColor().a));
-		Draw.drawTextureScaled(batch, Gallery.whiteSquare.get(), position.x+offset, position.y+offset, (width-offset*2)*option.getFloat(), height-offset*2);
+		Draw.drawScaled(batch, Gallery.whiteSquare.get(), position.x+offset, position.y+offset, (width-offset*2)*option.getFloat(), height-offset*2);
 
 	}
 

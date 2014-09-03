@@ -34,8 +34,8 @@ public class UndoButton extends Mouser{
 	public void update(float delta) {
 	}
 	public void render(SpriteBatch batch){
-		Draw.drawTextureScaledCentered(batch, Gallery.tutUndo.get(), position.x, position.y, 3, 3);
-		if(glow)Draw.drawTextureScaledCentered(batch, Gallery.tutUndo.getOutline(), position.x, position.y, 3, 3);
+		Draw.drawScaledCentered(batch, Gallery.tutUndo.get(), position.x, position.y, 3, 3);
+		if(glow)Draw.drawScaledCentered(batch, Gallery.tutUndo.getOutline(), position.x, position.y, 3, 3);
 	}
 	public static UndoButton get() {
 		if(me==null)me=new UndoButton();

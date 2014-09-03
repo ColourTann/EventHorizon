@@ -454,7 +454,7 @@ public class PicCut {
 		}
 		public void render(SpriteBatch batch) {
 			//if(size<5)return;
-			Draw.drawTextureRotatedCentered(batch, texture, position.x, position.y, rotation);
+			Draw.drawRotatedCentered(batch, texture, position.x, position.y, rotation);
 		}
 
 

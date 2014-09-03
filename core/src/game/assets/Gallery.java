@@ -143,6 +143,7 @@ public class Gallery {
 	public static Pic lightningEnd= new Pic("Particle/lightningend");
 	public static Pic[][] debris = new Pic[2][5];
 	public static Pic[] shipDamage = new Pic[9];
+	public static Pic shieldEffect= new Pic("Particle/shield");
 	
 	//Pause stuff//
 	public static Pic pauseBase= new Pic("Interface/pausebase");

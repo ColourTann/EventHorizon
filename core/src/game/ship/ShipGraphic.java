@@ -19,8 +19,8 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
-import game.assets.Explosion1;
 import game.assets.Gallery;
+import game.assets.animations.Explosion1;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.screen.battle.Battle;
@@ -113,10 +113,11 @@ public class ShipGraphic extends Updater{
 	}
 
 	public void render(SpriteBatch batch){
-
+		
 		for(int i=0;i<animations.size();i++){
 			Animation a= animations.get(i);
 			if(a.isDone()){
+				a.dispose();
 				animations.remove(a);
 				i--;
 			}
@@ -124,11 +125,11 @@ public class ShipGraphic extends Updater{
 
 
 		batch.setColor(1, 1, 1, 1);
-		if(ship.player)Draw.drawTexture(batch, picCut.get(), offset.x, offset.y);
-		if(!ship.player)	Draw.drawTextureScaledFlipped(batch, picCut.get(), 
+		if(ship.player)Draw.draw(batch, picCut.get(), offset.x, offset.y);
+		if(!ship.player)	Draw.drawRotatedScaledFlipped(batch, picCut.get(), 
 				500+Main.width-offset.x-composite.getWidth(), 
 				offset.y,
-				1,1,true, false);
+				1,1,0, true, false);
 
 		//Shitty tutorial shit shit shit//
 		if(ship.player&&Tutorial.index==0&&Battle.isTutorial()){
@@ -136,7 +137,7 @@ public class ShipGraphic extends Updater{
 			for(int x=-1;x<=1;x+=2){
 				for(int y=-1;y<=1;y+=2){
 
-					Draw.drawTexture(batch, composite.getGlow(), offset.x+x, offset.y+y);
+					Draw.draw(batch, composite.getGlow(), offset.x+x, offset.y+y);
 				}
 			}
 		}
@@ -148,6 +149,10 @@ public class ShipGraphic extends Updater{
 			a.render(batch);
 		}
 
+		for(Module m:ship.modules){
+			m.drawShield(batch);
+		
+		}
 
 
 	}

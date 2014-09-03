@@ -48,7 +48,7 @@ public class Smoke extends Particle{
 		if(type==SmokeType.Damage){
 			divisor=18;
 		}
-		Draw.drawTextureRotatedScaledCentered(sb, Gallery.greySmoke.get(), position.x, position.y, (1-life/maxLife)/divisor+.01f, (1-life/maxLife)/divisor+.01f, rotation);
+		Draw.drawRotatedScaledCentered(sb, Gallery.greySmoke.get(), position.x, position.y, (1-life/maxLife)/divisor+.01f, (1-life/maxLife)/divisor+.01f, rotation);
 		sb.setColor(1,1,1,1);
 	}
 

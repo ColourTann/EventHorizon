@@ -82,9 +82,9 @@ public class CardIcon extends Mouser{
 
 	public void render(SpriteBatch batch) {
 		if(!overrideAlpha)batch.setColor(1,1,1,.2f+.8f*(icons.indexOf(this)+14-icons.size())/14); 	//This alpha thing took me 20 minutes...//
-		Draw.drawTextureScaled(batch,cg.card.getImage().get(), position.x, position.y, 2, 2);
+		Draw.drawScaled(batch,cg.card.getImage().get(), position.x, position.y, 2, 2);
 	
-		Draw.drawTexture(batch, border.get(),position.x,position.y);
+		Draw.draw(batch, border.get(),position.x,position.y);
 		batch.setColor(1,1,1,1);
 	}
 

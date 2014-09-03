@@ -548,7 +548,7 @@ public class Battle extends Screen{
 		batch.setColor(1,1,1,1);
 		player.renderFightStats(batch);
 		enemy.renderFightStats(batch);
-		Draw.drawTexture(batch, Gallery.battleScreen.get(), 128, 0);
+		Draw.draw(batch, Gallery.battleScreen.get(), 128, 0);
 		//debug phase text
 		if(Main.debug){
 			Font.medium.setColor(Colours.grey);
@@ -564,6 +564,8 @@ public class Battle extends Screen{
 		}
 		//	debugRender(batch);
 
+		
+		//Draw.drawScaledCentered(batch, Gallery.whiteSquare.get(), Mouser.getMousePosition().x, Mouser.getMousePosition().y, 200, 200);
 	}
 
 	@Override

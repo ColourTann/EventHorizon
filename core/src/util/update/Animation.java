@@ -11,7 +11,7 @@ public class Animation extends Updater{
 	private float animSpeed=1;
 	private float frame=0;
 	private boolean oneShot;
-	
+	private boolean disposed;
 	public void setup(Texture[] textures, float animSpeed, boolean oneShot, Pair position){
 		this.textures=textures;
 		this.animSpeed=animSpeed;
@@ -27,10 +27,18 @@ public class Animation extends Updater{
 	}
 	
 	public void render(SpriteBatch batch){
-		Draw.drawTextureCentered(batch, textures[(int) (frame%textures.length)], position.x, position.y);
+		if(disposed)return;
+		Draw.drawCentered(batch, textures[(int) (frame%textures.length)], position.x, position.y);
 	}
 	
 	public boolean isDone(){
 		return !oneShot&&frame>=textures.length;
+	}
+	
+	public void dispose(){
+		for(Texture t:textures){
+			t.dispose();
+		}
+		disposed=true;
 	}
 }

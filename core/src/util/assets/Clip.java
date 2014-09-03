@@ -11,6 +11,7 @@ public class Clip{
 	
 	public static Clip error= new Clip("Sound/error.ogg");
 	public static Clip shieldUse= new Clip("Sound/shielduse.ogg");
+	public static Clip shieldActivate=new Clip("Sound/shieldactivate.wav");
 	public static Clip cardFlip= new Clip("Sound/flip.ogg");
 	public static Clip cardDeselect= new Clip("Sound/deselectcard.ogg");
 	public static Clip cardSelect= new Clip("Sound/selectcard.ogg");
@@ -21,6 +22,8 @@ public class Clip{
 	public static Clip ray=new Clip("Sound/ray.ogg");
 	public static Clip laser=new Clip("Sound/laser.ogg");
 	public static Clip lightning=new Clip("Sound/lightning.ogg");
+	
+	
 	
 	public static Option soundLevel=new Option(1);
 	
@@ -41,7 +44,7 @@ public class Clip{
 		return sound;
 	}
 	public void play(){
-		//get().stop();
+		get().stop();
 		get().play(getVolume());
 	}
 	public void overlay(){

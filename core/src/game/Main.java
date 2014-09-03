@@ -126,7 +126,7 @@ public class Main extends ApplicationAdapter  {
 		
 		//fading bit//
 		batch.setColor(Colours.withAlpha(Colours.dark, fadeTimer.getFloat()));
-		Draw.drawTextureScaled(batch, Gallery.whiteSquare.get(), 0, 0, width, height);
+		Draw.drawScaled(batch, Gallery.whiteSquare.get(), 0, 0, width, height);
 		
 		if(debug){
 			batch.end();
