@@ -36,7 +36,7 @@ public class Font {
 		param.size=size*3;
 		big=generator.generateFont(param);
 		big.setUseIntegerPositions(true);
-		param.size=size*10;
+		param.size=(int) (size*1.7f);
 		test= generator.generateFont(param);
 		test.setUseIntegerPositions(true);
 		generator.dispose();

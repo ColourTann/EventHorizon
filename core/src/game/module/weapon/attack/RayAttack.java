@@ -22,7 +22,7 @@ public class RayAttack extends AttackGraphic{
 
 	public void update(float delta) {
 		if(!disabled){
-			
+
 			ticks+=delta*frequency;
 			if(fired){
 				location.x+=vector.x*delta;
@@ -73,26 +73,26 @@ public class RayAttack extends AttackGraphic{
 				Clip.ray.play();
 			}
 		});
-		
-		
-		
+
+
+
 
 	}
 
 	@Override
 	public void impact() {
-		
+
 		disable();
-		
+
 		vector=vector.multiply(.4f);
-		
+
 		gravity=false;
-		
+
 		if(atk.activateDamage()){
-		for(int i=0;i<35;i++){
-			Pair newVector=vector.add(Pair.randomUnitVector().multiply((float)Math.random()*300)).multiply(.5f);
-			particles.add(new RayParticle(this, newVector,1,false));
-		}
+			for(int i=0;i<35;i++){
+				Pair newVector=vector.add(Pair.randomUnitVector().multiply((float)Math.random()*300)).multiply(.5f);
+				particles.add(new RayParticle(this, newVector,1,false));
+			}
 		}
 	}
 

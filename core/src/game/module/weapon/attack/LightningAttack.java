@@ -35,16 +35,16 @@ public class LightningAttack extends AttackGraphic{
 
 			@Override
 			public void finish() {
-				
+
 				fired=true;
 				Clip.lightning.play();
-				
+
 				impact();
 			}
-			
+
 		});
-	
-		
+
+
 	}
 	@Override
 	public void impact() {
@@ -57,35 +57,35 @@ public class LightningAttack extends AttackGraphic{
 	}
 	@Override
 	public void update(float delta) {
-		
+
 		if(!fired&&!disabled){
 			ticks+=delta*frequency*6;
 			while(ticks>1){
 				ticks-=1;
 				particles.add(new Spark(origin,0));	
 			}
-			
+
 		}
 		for(Particle p:particles){
 			p.update(delta);
 		}
-		
+
 		if(fired){
 			if(alpha<=0){
 				particles.clear();	
 				disable();
 				return;
 			}
-			
+
 			alpha-=delta*1.4f;
 			ticks+=frequency*delta;
 
 			if(ticks<1)return;
 			ticks-=1;
-			
+
 			particles.removeAll(lightning);
 			lightning.clear();
-		
+
 			Pair vector=target.subtract(origin);
 			//float distance=vector.getDistance();
 			int parts=(int) (vector.getDistance()*.04f);
@@ -107,7 +107,7 @@ public class LightningAttack extends AttackGraphic{
 				lightning.add(l);
 			}
 		}
-		
+
 	}
 	@Override
 	public void render(SpriteBatch sb) {

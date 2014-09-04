@@ -53,6 +53,7 @@ public class Test extends Screen{
 		for(int i=0;i<animations.size();i++){
 			Animation a= animations.get(i);
 			if(a.isDone()){
+				a.dispose();
 				animations.remove(a);
 				i--;
 			}

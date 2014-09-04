@@ -1,6 +1,7 @@
 package game.screen.battle.interfaceJunk;
 
 import game.assets.Gallery;
+import game.screen.battle.Battle;
 
 import java.util.ArrayList;
 
@@ -47,10 +48,15 @@ public class Star{
 		if(player)playerSpeed-=amount*20;
 		if(!player)enemySpeed-=amount*20;
 	}
-	
+
 	public static void update(float delta){
-		playerSpeed+=(-100-playerSpeed)*delta;
-		enemySpeed+=(100-enemySpeed)*delta;
+		if(Battle.getPlayer().dead)playerSpeed-=playerSpeed*delta;
+		else playerSpeed+=(-100-playerSpeed)*delta;
+		
+		if(Battle.getEnemy().dead)enemySpeed-=enemySpeed*delta;
+		else enemySpeed+=(100-enemySpeed)*delta;
+
+
 
 		for(Star s:playerStars){
 
@@ -70,9 +76,9 @@ public class Star{
 
 	public void render(SpriteBatch batch){
 		batch.setColor(color);
-	
-		if(size>.5f)Draw.drawScaled(batch, Gallery.whiteSquare.get(), location.x, location.y,size*3, size*3);
-		else Draw.draw(batch, Gallery.whiteSquare.get(), location.x, location.y);
+
+		if(size>.5f)Draw.drawScaled(batch, Gallery.whiteSquare.get(), (int)location.x, (int)location.y,(int)(size*3), (int)(size*3));
+		else Draw.draw(batch, Gallery.whiteSquare.get(), (int)location.x, (int)location.y);
 
 	}
 

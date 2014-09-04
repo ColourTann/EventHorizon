@@ -48,7 +48,7 @@ public class CardGraphic extends Mouser {
 	private static Pair positionEffectStart = new Pair(5, 65);
 	private static Pair positionEffectMid = new Pair(9, 67);
 	private static Pair positionEffectEnd = new Pair(110, 65);
-	private static Pair positionAugment = new Pair(Main.width / 2 - width / 2, 334);
+	private static Pair positionAugment = new Pair(Main.width / 2 - width / 2, 320);
 	private static float cooldownWidth = Gallery.iconCooldown.get().getWidth() * 3;
 	private static float cooldownGap = cooldownWidth + 6;
 	private static float effectGap = 17;
@@ -266,9 +266,6 @@ public class CardGraphic extends Mouser {
 			}
 		}
 
-
-
-
 		// Weapon Junk//
 		if (card.mod instanceof Weapon&&!scrambled&&!card.wasScrambled) {
 			int shots = card.getShots(part);
@@ -326,6 +323,9 @@ public class CardGraphic extends Mouser {
 
 
 		batch.setColor(Colours.white);
+		if(part==card.side&&moused){
+			Draw.draw(batch, Gallery.cardBase.getOutline(), position.x, baseHeight);
+		}
 	}
 
 	//Setting up Energy icon positions//

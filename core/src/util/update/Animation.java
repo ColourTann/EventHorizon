@@ -10,7 +10,7 @@ public class Animation extends Updater{
 	private Texture[] textures;
 	private float animSpeed=1;
 	private float frame=0;
-	private boolean oneShot;
+	public boolean oneShot;
 	private boolean disposed;
 	public void setup(Texture[] textures, float animSpeed, boolean oneShot, Pair position){
 		this.textures=textures;
@@ -23,7 +23,9 @@ public class Animation extends Updater{
 	
 	@Override	
 	public void update(float delta) {
+		if(frame>=textures.length-1&&oneShot)return;
 		frame+=delta*animSpeed;
+		
 	}
 	
 	public void render(SpriteBatch batch){

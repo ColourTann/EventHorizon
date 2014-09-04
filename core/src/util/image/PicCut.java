@@ -23,7 +23,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class PicCut {
 
 	private boolean[][] array;
-	private Color cutColor;
+	public Color cutColor;
 	public ArrayList<Shard> shards= new ArrayList<Shard>();
 	private Texture cutTexture;
 	private ArrayList<Pair> shatterPoints=new ArrayList<Pair>();
@@ -51,8 +51,8 @@ public class PicCut {
 		analyseShards();
 	}
 
-	public void addShatter(){
-
+	public Pair addShatter(){
+		Pixmap.setBlending(Blending.None);
 		if(!cutTexture.getTextureData().isPrepared())cutTexture.getTextureData().prepare();
 		Pixmap pixmap=cutTexture.getTextureData().consumePixmap();
 
@@ -122,13 +122,16 @@ public class PicCut {
 		shatterPoints.add(new Pair(x,y));
 		Pair vector=Pair.randomUnitVector();
 		for(int j=0;j<cuts;j++){
+			
 			cut(pixmap, x, y, vector, cutColor);
 			vector=vector.rotate(Math.PI*2/cuts+(Math.random()-.5)*2);
 		}
-
+		
 		Texture result=new Texture(pixmap);
 		cutTexture=result;
 		analyseShards();
+		
+		return new Pair(x,y);
 
 	}
 
@@ -160,6 +163,7 @@ public class PicCut {
 		Shard biggest=getUpperMediumestShard();
 		if(biggest==null)return null;
 		shards.remove(biggest);
+		
 		int x=(int) biggest.aPixelLocation.x;
 		int y=(int) biggest.aPixelLocation.y;
 		Pixmap underneath=new Pixmap(cutTexture.getWidth(),cutTexture.getHeight(), Format.RGBA8888);
@@ -189,6 +193,7 @@ public class PicCut {
 
 		if(checkSection(mask, (int)location.x, (int)location.y)){
 			Shard s=fillSection(mask, (int)location.x, (int)location.y);
+			
 			shards.add(s);
 			cutTexture=new Texture(Pic.getPixMap(cutTexture));
 			return s;
@@ -283,7 +288,7 @@ public class PicCut {
 			result.drawPixel((int)x, (int)y);
 			x+=vector.x;
 			y+=vector.y;
-
+			
 			vector=vector.add(Pair.randomUnitVector().multiply(0.05f));
 			vector=vector.normalise();
 			vector=vector.rotate(rotation);
@@ -311,6 +316,7 @@ public class PicCut {
 					shard.left=x;
 					shard.top=y;
 					shard.aPixelLocation=new Pair(x,y);
+					System.out.println(shard.aPixelLocation);
 
 					fillShard(pixmap, x, y, null, shard, null);
 					tempShards.add(shard);
@@ -324,7 +330,7 @@ public class PicCut {
 			boolean added=false;
 			for(int i=0;i<shards.size();i++){
 				if(shards.get(i).size>s.size){
-
+					
 					shards.add(i,s);
 					added=true;
 					break;
@@ -332,7 +338,6 @@ public class PicCut {
 			}
 			if(!added)shards.add(s);
 		}
-
 	}
 
 	private Shard getBiggestShard(){
@@ -346,7 +351,7 @@ public class PicCut {
 		if(shards.size()==0){
 			return null;
 		}
-
+		
 		return shards.get(shards.size()/3*2);
 
 	}
@@ -422,13 +427,13 @@ public class PicCut {
 		return c.a==0||Colours.equals(c, cutColor);
 	}
 
-	public class Shard extends Updater{
+	public class Shard{
 		public int size;
 		public int left;
 		public int right;
 		public int bottom;
 		public int top;
-		public Pair aPixelLocation;
+		public Pair aPixelLocation=new Pair();
 		public Texture texture;
 		public Pair vector;
 		public float dr;
@@ -443,8 +448,8 @@ public class PicCut {
 
 		}
 		public void update(float delta){
-			vector=vector.multiply((float) Math.pow(.5, delta));
-			dr=(float) (dr*Math.pow(.3, delta));
+			vector=vector.multiply((float) Math.pow(.9, delta));
+			dr=(float) (dr*Math.pow(.7, delta));
 			position=position.add(vector.multiply(delta));
 			rotation+=dr*delta;
 
@@ -455,6 +460,9 @@ public class PicCut {
 		public void render(SpriteBatch batch) {
 			//if(size<5)return;
 			Draw.drawRotatedCentered(batch, texture, position.x, position.y, rotation);
+		}
+		public void estimatePosition() {
+			position=new Pair(left+((right-left)/2f), top+((bottom-top)/2));
 		}
 
 

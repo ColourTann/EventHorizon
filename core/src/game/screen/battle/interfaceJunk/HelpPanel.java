@@ -21,7 +21,7 @@ public class HelpPanel extends Mouser{
 		text=s;
 		fadeIn(2, Interp.SQUARE);
 		if(high)y=150;
-		else y=265;
+		else y=250;
 	}
 
 	@Override

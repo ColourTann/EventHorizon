@@ -2,11 +2,11 @@ package game.screen.battle.interfaceJunk;
 
 import java.util.ArrayList;
 
-
 import util.Colours;
 import util.Draw;
 import util.update.Timer;
 import util.update.Timer.Interp;
+import util.assets.Clip;
 import util.assets.Font;
 import util.maths.BoxCollider;
 import util.maths.Collider;
@@ -58,13 +58,13 @@ public class CycleButton extends Mouser{
 	@Override
 	public void mouseClicked(boolean left) {
 		
-		if(Battle.isTutorial()&&Tutorial.stopCycle()){
-			System.out.println("tut");
-			return;
-		}
+		if(Battle.isTutorial()&&Tutorial.stopCycle())return;
 		if(!Battle.isPlayerTurn())return;
 		if(Battle.getState()==State.Nothing){
+			
+			Clip.cardSelect.play();
 			timer=new Timer(0,1,3,Interp.SQUARE);
+			
 
 			if(Battle.getPlayer().getEnergy()<cost)return;
 
@@ -75,6 +75,7 @@ public class CycleButton extends Mouser{
 		}
 
 		if(Battle.getState()==State.CycleDiscard){
+			Clip.cardDeselect.play();
 			timer=new Timer(timer.getFloat(),0,3,Interp.SQUARE);
 			Battle.getPlayer().addEnergy(cost);
 			
@@ -96,6 +97,7 @@ public class CycleButton extends Mouser{
 		}
 
 		for(int i=0;i<choices.size();i++){
+			
 			CardGraphic cg=choices.get(i).getGraphic();
 			cg.finishFlipping();
 			cg.override=true;
@@ -123,6 +125,9 @@ public class CycleButton extends Mouser{
 	public void render(SpriteBatch batch) {
 	
 		batch.setColor(new Color(1,1,1,timer.getFloat()));
+		if(timer.getFloat()<=.2f&&moused){
+			batch.setColor(new Color(1,1,1,.2f));
+		}
 		Draw.draw(batch, Gallery.cycleButton.get(), position.x, position.y);
 		batch.setColor(new Color(1,1,1,1));
 		Draw.draw(batch, Gallery.iconEnergy.get(), 168,402);

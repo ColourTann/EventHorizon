@@ -48,7 +48,6 @@ public class PicLoc {
 			for(int y=-2;y<=2;y++){
 				if(location!=null)Draw.draw(batch, pic.getOutline(), location.x+x, location.y+y);
 				if(card!=null){
-					System.out.println("drawing at "+card.getGraphic().getBaseHeight(side));
 					Draw.draw(batch, Gallery.cardBase.getOutline(), card.getGraphic().position.x+x, card.getGraphic().getBaseHeight(side)+y);
 				}
 

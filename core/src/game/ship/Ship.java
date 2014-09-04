@@ -68,6 +68,9 @@ public abstract class Ship {
 	//Map stuff//
 	private MapShip mapShip;
 
+	public boolean dead=false;
+	public boolean exploded=false;
+	
 	public Timer timer = new Timer();
 	public enum ShipType{Aurora,Comet,Eclipse,Nova}
 	public abstract void placeNiches();
@@ -418,6 +421,7 @@ public abstract class Ship {
 			for(int i=0;i<hand.size();i++){
 				CardGraphic c=hand.get(i).getGraphic();
 				c.slide(new Pair(start+gap*(i+1)-CardGraphic.width, Main.height-CardGraphic.height), 2f, Interp.SQUARE);
+				c.finishFlipping();
 			}
 		}
 		else{
@@ -426,6 +430,7 @@ public abstract class Ship {
 			for(int i=0;i<hand.size();i++){
 				CardGraphic c=hand.get(i).getGraphic();
 				c.slide(new Pair(start+gap*i, Main.height-CardGraphic.height), 2, Interp.SQUARE);
+				c.finishFlipping();
 			}
 		}
 	}

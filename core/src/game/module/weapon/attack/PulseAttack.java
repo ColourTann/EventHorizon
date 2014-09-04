@@ -54,10 +54,11 @@ public class PulseAttack extends AttackGraphic{
 		
 		if(atk.activateDamage()){
 			Clip.damageMinor.play();
+			for(int i=0;i<50;i++){
+				particles.add(new PulseParticle(position, vector));
+			}
 		}
-		for(int i=0;i<50;i++){
-			particles.add(new PulseParticle(position, vector));
-		}
+		
 		
 
 		disable();

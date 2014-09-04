@@ -94,7 +94,7 @@ public abstract class Updater {
 			u.update(delta);
 			if(u.fader!=null){
 				u.alpha=u.fader.getFloat();
-				if(u.alpha<=0){
+				if(u.alpha<0){
 					u.alpha=0;
 					u.dead=true;
 				}

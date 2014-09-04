@@ -156,7 +156,7 @@ public abstract class Module {
 				targeteds++;
 				//Only the first shot is targeted//
 				for(int i=0;i<targeter.getShots();i++){
-					source.addAttack(targeter, i==0?this:null);
+					source.addAttack(targeter, this);
 				}
 			}
 		}

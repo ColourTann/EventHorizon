@@ -404,10 +404,10 @@ public class Card {
 			if(code.contains(AI.OtherTargeted)){
 				ship.focusTarget=target;	
 			}
-			((Weapon)mod).addAttack(this, target);
+	
 			
-			for(int i=0;i<getShots()-1;i++){
-				((Weapon)mod).addAttack(this);
+			for(int i=0;i<getShots();i++){
+				((Weapon)mod).addAttack(this, target);
 			}
 		}
 	

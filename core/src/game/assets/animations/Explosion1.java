@@ -40,7 +40,7 @@ public class Explosion1 extends Animation{
 			textures[num]=new Texture(pixmap);
 		}
 		setup(textures, 15, false, myLocation);
-		
+		oneShot=true;
 	}
 
 }

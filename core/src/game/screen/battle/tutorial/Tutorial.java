@@ -41,8 +41,8 @@ public class Tutorial extends Updater{
 	public static Card firstWeaponCard;
 	public static Card targetedWeaponCard;
 
-	static float width=300;
-	static float offset=6;
+	static float width=350;
+	static float offset=8;
 	float x=Main.width/2-width/2;
 	float y=173;
 	float height;
@@ -109,19 +109,19 @@ public class Tutorial extends Updater{
 		if(target!=null){
 			Draw.drawRotatedScaled(batch, Gallery.tutPoint.get(), origin.x, origin.y, distance, 1, rotation);
 		}
-		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, 3, 3);
-		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y, 3, height);
-		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, 3, -3);
+		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, width/100f, 3);
+		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y, width/100f, height);
+		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, width/100f, -3);
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		Font.medium.drawWrapped(batch, str, x+offset, y+5, width-offset*2, HAlignment.CENTER);
 
 
 		if(special==1){
-			Draw.draw(batch, Gallery.greenHP[1].get(), 503, 152);
-			Draw.draw(batch, Gallery.greenHP[2].get(), 615, 152);
+			Draw.draw(batch, Gallery.greenHP[1].get(), 491, 161);
+			Draw.draw(batch, Gallery.greenHP[2].get(), 603, 161);
 		}
 		if(special==2){
-			Draw.draw(batch, Gallery.iconTargeted.get(), 727,136);
+			Draw.draw(batch, Gallery.iconTargeted.get(), 591,154);
 		}
 		batch.setColor(1,1,1,1);
 	}
@@ -513,6 +513,7 @@ public class Tutorial extends Updater{
 	
 	@SuppressWarnings("incomplete-switch")
 	public static void goBack() {
+		System.out.println("going back");
 		if(index==0)return;
 		Tutorial t=tutorials.get(index-1);
 		if(t==null)return;
