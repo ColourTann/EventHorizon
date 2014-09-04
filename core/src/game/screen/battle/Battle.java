@@ -59,8 +59,6 @@ public class Battle extends Screen{
 	public Ship enemy;
 
 	public static HelpPanel help;
-	Texture texture;
-	TextureRegion region;
 	float debug;
 	static Ship victor;
 	public static float ticks;
@@ -616,6 +614,12 @@ public class Battle extends Screen{
 
 	public static void setTutorial(boolean tutorial) {
 		me.tutorial=tutorial;
+	}
+
+	@Override
+	public void dispose() {
+	player.getGraphic().dispose();
+	enemy.getGraphic().dispose();
 	}
 
 

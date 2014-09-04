@@ -8,6 +8,7 @@ import util.maths.Pair;
 public abstract class Screen {
 
 	public abstract void init();
+	public abstract void dispose();
 	public abstract void update(float delta);
 	public abstract void shapeRender(ShapeRenderer shape);
 	public abstract void render(SpriteBatch batch);

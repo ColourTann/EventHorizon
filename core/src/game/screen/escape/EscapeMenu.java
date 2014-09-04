@@ -141,6 +141,10 @@ public class EscapeMenu extends Screen{
 	public void init() {
 	}
 
+	@Override
+	public void dispose() {
+	}
+
 	
 
 }

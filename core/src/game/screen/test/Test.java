@@ -126,6 +126,9 @@ public class Test extends Screen{
 	@Override
 	public void scroll(int amount) {
 	}
+	@Override
+	public void dispose() {
+	}
 
 
 }

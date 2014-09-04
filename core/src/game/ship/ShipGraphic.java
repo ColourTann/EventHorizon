@@ -182,7 +182,7 @@ public class ShipGraphic extends Updater{
 		Battle.shake(ship.player, 20);
 		ship.exploded=true;
 		Shard s=picCut.removeCut();
-		if(true)return;
+		
 		while(s!=null){
 			setupShard(s);
 			if(s==null||s.position==null)continue;
@@ -257,6 +257,13 @@ public class ShipGraphic extends Updater{
 		}
 
 
+	}
+
+	public void dispose() {
+		picCut.dispose();
+		for(Shard s:shards)s.texture.dispose();
+		picCut.dispose();
+		composite.dispose();
 	}
 
 

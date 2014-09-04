@@ -161,6 +161,7 @@ public class Main extends ApplicationAdapter  {
 				Updater.clearAll();
 				fadeTimer=new Timer(1, 0, 2, Interp.LINEAR);
 				nextScreen.init();
+				currentScreen.dispose();
 				System.out.println("finished init");
 				currentScreen=nextScreen;
 				nextScreen=null;

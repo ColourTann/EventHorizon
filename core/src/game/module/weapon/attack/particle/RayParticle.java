@@ -9,10 +9,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import game.assets.Gallery;
 import game.module.weapon.attack.RayAttack;
 
 public class RayParticle extends Particle{
-	static Texture t=new Texture("Particle/pixel.png");
+	static Texture t=Gallery.whiteSquare.get();
 	Color c= Colours.redWeaponCols4[(int)(Math.random()*3)+1];
 	private Pair origin;
 	private boolean gravity;

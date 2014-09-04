@@ -469,4 +469,11 @@ public class PicCut {
 
 	}
 
+	public void dispose() {
+		for(Shard s:shards){
+			s.texture.dispose();
+		}
+		cutTexture.dispose();
+	}
+
 }

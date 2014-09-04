@@ -93,5 +93,9 @@ public class CardViewer extends Screen{
 	public void scroll(int amount) {
 	}
 
+	@Override
+	public void dispose() {
+	}
+
 
 }

@@ -66,9 +66,6 @@ public abstract class Updater {
 		if(debug){
 			System.out.println("Mouseable count: "+Mouser.mousers.size());
 			System.out.println("Ticker count: "+tickers.size());
-			for(Updater u:tickers){
-				System.out.println(u);
-			}
 			System.out.println("end of list");
 			System.out.println();
 		}

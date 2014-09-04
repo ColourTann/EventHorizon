@@ -224,6 +224,10 @@ public class Map extends Screen{
 	public void scroll(int amount) {
 	}
 
+	@Override
+	public void dispose() {
+	}
+
 
 
 

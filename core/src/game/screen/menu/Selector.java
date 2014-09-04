@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import game.Main;
 import game.Main.ScreenType;
 import game.screen.battle.Battle;
+import game.screen.cardView.CardViewer;
 import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
@@ -29,8 +30,10 @@ public class Selector extends Screen{
 		choices.clear();
 		choices.add(new GameChoice(Main.width/2, 205, "tutorial", 
 				new Battle(new Nova(true), new Aurora(false), true)));
+		/*choices.add(new GameChoice(Main.width/2, 305, "easy", 
+				new Battle(new Eclipse(true), new Aurora(false), false)));*/
 		choices.add(new GameChoice(Main.width/2, 305, "easy", 
-				new Battle(new Eclipse(true), new Aurora(false), false)));
+				new CardViewer()));
 		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
 				new Battle(new Comet(true), new Nova(false), false)));
 		choices.add(new GameChoice(Main.width/2, 505, "hard", 	
@@ -69,6 +72,10 @@ public class Selector extends Screen{
 	}
 	@Override
 	public void scroll(int amount) {
+	}
+
+	@Override
+	public void dispose() {
 	}
 
 	

@@ -265,7 +265,10 @@ public class Pic {
 	}
 
 	public void dispose() {
-		if(t!=null)t.dispose();
+		if(t!=null){
+			t.dispose();
+		}
+		
 	}
 	
 	

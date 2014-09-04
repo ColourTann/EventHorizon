@@ -40,7 +40,7 @@ public class Star{
 			location=location.add(1140,78);
 			enemyStars.add(this);
 		}
-
+		
 		color=Math.random()>.5?purp:teal;
 	}
 
@@ -83,6 +83,8 @@ public class Star{
 	}
 
 	public static void init() {
+		playerStars.clear();
+		enemyStars.clear();
 		for(int i=0;i<600;i++){
 			new Star(true);
 			new Star(false);
