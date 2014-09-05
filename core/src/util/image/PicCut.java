@@ -156,25 +156,24 @@ public class PicCut {
 
 
 
-		Pixmap pixmap=cutTexture.getTextureData().consumePixmap();
-
-		Color replacer=new Color(0,0,0,0);
+		Pixmap pixmap=Pic.getPixMap(cutTexture);
+		Color replacer=Colours.transparent;
 		Pixmap.setBlending(Blending.None);
 		Shard biggest=getUpperMediumestShard();
 		if(biggest==null)return null;
 		shards.remove(biggest);
-		
 		int x=(int) biggest.aPixelLocation.x;
 		int y=(int) biggest.aPixelLocation.y;
 		Pixmap underneath=new Pixmap(cutTexture.getWidth(),cutTexture.getHeight(), Format.RGBA8888);
-		underneath.setColor(0, 0, 0, 0);
+		underneath.setColor(replacer);
 		underneath.fillRectangle(0, 0, cutTexture.getWidth(), cutTexture.getHeight());
 		fillShard(pixmap, x, y, replacer, null, underneath);
 
 
-
+		
 
 		Texture newCut=new Texture(pixmap);
+		cutTexture.dispose();
 		//pixMap.dispose();
 		cutTexture=newCut;
 		Pixmap aligned=new Pixmap(biggest.right-biggest.left, biggest.bottom-biggest.top, Format.RGBA8888);
@@ -193,7 +192,7 @@ public class PicCut {
 
 		if(checkSection(mask, (int)location.x, (int)location.y)){
 			Shard s=fillSection(mask, (int)location.x, (int)location.y);
-			
+			s.aPixelLocation=new Pair(location.x,location.y);
 			shards.add(s);
 			cutTexture=new Texture(Pic.getPixMap(cutTexture));
 			return s;
@@ -263,6 +262,7 @@ public class PicCut {
 		shard.bottom=startY+mask.getHeight();
 		shard.finalise();
 		shard.texture=new Texture(shardMap);
+		shardMap.dispose();
 		//	shard.texture=Gallery.shipEclipse.get();
 		return shard;
 	}
@@ -316,7 +316,7 @@ public class PicCut {
 					shard.left=x;
 					shard.top=y;
 					shard.aPixelLocation=new Pair(x,y);
-					System.out.println(shard.aPixelLocation);
+					
 
 					fillShard(pixmap, x, y, null, shard, null);
 					tempShards.add(shard);
@@ -427,13 +427,20 @@ public class PicCut {
 		return c.a==0||Colours.equals(c, cutColor);
 	}
 
+	public void dispose() {
+		for(Shard s:shards){
+			s.dispose();
+		}
+		cutTexture.dispose();
+	}
+	
 	public class Shard{
 		public int size;
 		public int left;
 		public int right;
 		public int bottom;
 		public int top;
-		public Pair aPixelLocation=new Pair();
+		public Pair aPixelLocation;
 		public Texture texture;
 		public Pair vector;
 		public float dr;
@@ -464,16 +471,14 @@ public class PicCut {
 		public void estimatePosition() {
 			position=new Pair(left+((right-left)/2f), top+((bottom-top)/2));
 		}
-
-
-
-	}
-
-	public void dispose() {
-		for(Shard s:shards){
-			s.texture.dispose();
+		public void dispose() {
+			if(texture!=null)texture.dispose();
 		}
-		cutTexture.dispose();
+
+
+
 	}
+
+	
 
 }

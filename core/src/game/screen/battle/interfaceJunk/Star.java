@@ -59,15 +59,15 @@ public class Star{
 
 
 		for(Star s:playerStars){
-
-			s.location=s.location.add((s.size-.1f)*delta*playerSpeed,0);
+			s.location.x+=(s.size-.1f)*delta*playerSpeed;
 			s.location.x+=delta;
 			if(s.location.x<150){
 				s.location.x=700;
 			}
 		}
 		for(Star s:enemyStars){
-			s.location=s.location.add((s.size+.1f)*delta*enemySpeed,0);
+			s.location.x+=(s.size+.1f)*delta*enemySpeed;
+			
 			if(s.location.x>1700){
 				s.location.x=1130;
 			}

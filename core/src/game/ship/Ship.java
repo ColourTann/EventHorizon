@@ -473,7 +473,7 @@ public abstract class Ship {
 	public void startFight(boolean goingFirst){
 		initModuleStats();
 		initFightStats();
-		if(!Battle.isTutorial())		drawCard(maxCards);
+		if(!Battle.isTutorial())		drawCard(maxCards); //No leak here!//
 
 		if(!goingFirst){
 			currentEnergy=(int) Math.ceil(getGenerator().getIncome()/2f);

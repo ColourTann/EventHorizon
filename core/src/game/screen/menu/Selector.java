@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import util.assets.Font;
 import util.maths.Pair;
 import util.update.Screen;
+import util.update.Updater;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -19,7 +21,7 @@ import game.ship.shipClass.Eclipse;
 import game.ship.shipClass.Nova;
 
 public class Selector extends Screen{
-	public static Selector me;
+	public Selector me;
 	ArrayList<GameChoice> choices= new ArrayList<GameChoice>();
 	public Selector(){
 		
@@ -30,10 +32,8 @@ public class Selector extends Screen{
 		choices.clear();
 		choices.add(new GameChoice(Main.width/2, 205, "tutorial", 
 				new Battle(new Nova(true), new Aurora(false), true)));
-		/*choices.add(new GameChoice(Main.width/2, 305, "easy", 
-				new Battle(new Eclipse(true), new Aurora(false), false)));*/
 		choices.add(new GameChoice(Main.width/2, 305, "easy", 
-				new CardViewer()));
+				new Battle(new Eclipse(true), new Aurora(false), false)));
 		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
 				new Battle(new Comet(true), new Nova(false), false)));
 		choices.add(new GameChoice(Main.width/2, 505, "hard", 	
@@ -55,6 +55,17 @@ public class Selector extends Screen{
 
 	@Override
 	public void keyPress(int keycode) {
+		switch(keycode){
+		case Input.Keys.A:
+			for(int i=0;i<100;i++){
+				Battle s = new Battle(new Aurora(true), new Aurora(false), false);
+				
+				s.init();
+				//Updater.clearAll();
+				s.dispose();
+			}
+			break;
+		}
 	}
 
 	@Override

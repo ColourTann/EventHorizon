@@ -85,14 +85,15 @@ public abstract class Module {
 	public boolean moused;
 	public int targeteds;
 	public Timer alphaTimer=new Timer();
-	
-	
+
+
 	//Buff stuff//
 	public ArrayList<Buff> buffs=new ArrayList<Buff>();
 
+	private Pair center;
+	private Pair barrel;
 
-	
-	
+
 	public Module(String name, Pic p, int variants, int numCards, int thresholds[], int tier){
 		moduleName=name;
 		this.tier=tier;
@@ -206,14 +207,14 @@ public abstract class Module {
 			majorDamage();
 
 		}
-		
+
 		Battle.shake(ship.player,(float)(2.5f));
 		ship.getGraphic().damage(niche.location);
 		Clip.damageMinor.play();
 		//if(damagePoint.card!=null&&damagePoint.card.mod instanceof Tesla) return;
-	
-		
-	
+
+
+
 	}
 
 	private void majorDamage() {
@@ -416,29 +417,36 @@ public abstract class Module {
 		unshieldableIcoming.add(d);
 	}
 	public Pair getBarrel(){
+		if(barrel==null){
 		float offset=12+niche.width/2;
 		float x=getCenter().x+(ship.player?offset:-offset);
 		float y=getCenter().y;
+		barrel=new Pair(x,y);
+		}
 
-		return new Pair(x,y);
+		return barrel;
 	}
-	
+
 	public Pair getCorner(){
 		return getCenter().add(-niche.width/2, -niche.height/2);
 	}
-	
+
 	public Pair getCenter(){
-		Pair result=new Pair(
-				niche.location.x+niche.width/2+ShipGraphic.offset.x,
-				niche.location.y+niche.height/2+ShipGraphic.offset.y);
+		if(center==null){
+			
+			if(ship.player){
+				center=new Pair(
+						niche.location.x+niche.width/2+ShipGraphic.offset.x,
+						niche.location.y+niche.height/2+ShipGraphic.offset.y);
+			}
 
-		if(!ship.player){
-			result=new Pair(
-					500+Main.width-ShipGraphic.offset.x-niche.location.x-niche.width/2+((type==ModuleType.WEAPON||type==ModuleType.SHIELD)?-niche.width:0),
-					ShipGraphic.offset.y+niche.location.y+niche.height/2);
+			if(!ship.player){
+				center=new Pair(
+						500+Main.width-ShipGraphic.offset.x-niche.location.x-niche.width/2+((type==ModuleType.WEAPON||type==ModuleType.SHIELD)?-niche.width:0),
+						ShipGraphic.offset.y+niche.location.y+niche.height/2);
+			}
 		}
-
-		return result;
+		return center;
 	}
 	public Pair getHitLocation(){
 		return getCenter().add(Pair.randomAnyVector().multiply(3));
@@ -569,6 +577,7 @@ public abstract class Module {
 		alpha/=4;
 		alpha*=Math.min(4, shieldPoints.size());
 		batch.setColor(Colours.withAlpha(Colours.shieldCols6[3], alpha));
+
 		Draw.drawRotatedScaledCenteredFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);
 		batch.setColor(1,1,1,alphaTimer.getFloat());
 		Draw.drawRotatedScaledCenteredFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);

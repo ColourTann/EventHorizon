@@ -5,16 +5,21 @@ import util.particleSystem.Particle;
 
 
 public class Pair {
+	public static int pairsMade=0;
 	public float x,y;
 	public Pair(float x, float y){
 		this.x=x;
 		this.y=y;
+		pairsMade++;
 	}
 	public Pair(double x, double y){
 		this.x=(float) x;
 		this.y=(float) y;
+		pairsMade++;
 	}
-	public Pair(){}
+	public Pair(){
+		pairsMade++;
+	}
 	public static Pair getVector(Pair from, Pair to){
 		return new Pair(to.x-from.x,to.y-from.y);
 	}

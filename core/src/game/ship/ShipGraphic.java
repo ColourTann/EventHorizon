@@ -41,11 +41,11 @@ public class ShipGraphic extends Updater{
 	PicCut picCut;
 	ArrayList<Animation> animations= new ArrayList<Animation>();
 	ArrayList<Shard> shards= new ArrayList<Shard>();
-
+	Pixmap shipMap;
 	public static Pair topRightEnemyShipPosition= new Pair(500+Main.width-offset.x, offset.y);
 	public ShipGraphic(Ship s){
 		ship=s;
-		Pixmap shipMap=new Pixmap(450, 270, Format.RGBA8888);
+		shipMap=new Pixmap(450, 270, Format.RGBA8888);
 		Pixmap.setBlending(Blending.SourceOver);
 
 		for(Niche n:ship.niches){
@@ -101,6 +101,7 @@ public class ShipGraphic extends Updater{
 
 
 		if(s!=null){
+
 			shards.add(s);
 			s.vector=Pair.randomAnyVector().multiply(250);
 			s.dr=(float) ((Math.random()-.5f)*15);
@@ -113,12 +114,12 @@ public class ShipGraphic extends Updater{
 				s.position=topRightEnemyShipPosition.add(-s.position.x,s.position.y);
 			}
 
-			for(int i=0;i<2;i++)
-				animations.add(new Explosion1(s.position));
+			for(int i=0;i<2;i++)animations.add(new Explosion1(s.position));
+
 		}
-		else{
-			animations.add(new Explosion1(damageLoc.add(Pair.randomAnyVector().multiply(40))));
-		}
+		else animations.add(new Explosion1(damageLoc.add(Pair.randomAnyVector().multiply(40))));
+
+
 
 	}
 
@@ -126,7 +127,7 @@ public class ShipGraphic extends Updater{
 		ship.dead=true;
 
 		crack();
-		float speed=5f;
+		float speed=1f;
 		Timer t=new Timer(0,1,speed/.5f,Interp.LINEAR);
 		t.addFinisher(new Finisher() {
 			@Override
@@ -165,13 +166,18 @@ public class ShipGraphic extends Updater{
 	}
 
 	private void crack(){
+
 		Clip.shatter.play();
 		for(int i=0;i<2;i++){
 			Pair position= picCut.addShatter();
 			if(ship.player)position=position.add(ShipGraphic.offset);
 			else position=new Pair(topRightEnemyShipPosition.x-position.x, topRightEnemyShipPosition.y+position.y);
-			//damage(position);damage(position);damage(position);damage(position);damage(position);
-			//for(int j=0;j<5;j++)animations.add(new Explosion1(position.add(Pair.randomAnyVector().multiply(60))));
+			damage(position);damage(position);damage(position);damage(position);damage(position);
+			for(int j=0;j<5;j++)animations.add(new Explosion1(position.add(Pair.randomAnyVector().multiply(60))));
+		}
+		for(int i=0;i<1;i++){
+			Shard s=picCut.removeCut();
+			setupShard(s);
 		}
 
 		Battle.shake(ship.player, 7);
@@ -182,13 +188,11 @@ public class ShipGraphic extends Updater{
 		Battle.shake(ship.player, 20);
 		ship.exploded=true;
 		Shard s=picCut.removeCut();
-		
+
 		while(s!=null){
 			setupShard(s);
 			if(s==null||s.position==null)continue;
 			Pair position= s.position;
-			if(ship.player)position=position.add(ShipGraphic.offset);
-			else position=new Pair(topRightEnemyShipPosition.x-position.x, topRightEnemyShipPosition.y+position.y);
 			animations.add(new Explosion1(position.add(Pair.randomAnyVector().multiply(60))));
 			s=picCut.removeCut();
 		}
@@ -199,16 +203,21 @@ public class ShipGraphic extends Updater{
 		s.estimatePosition();
 		if(ship.player)s.position=s.position.add(ShipGraphic.offset);
 		else s.position=new Pair(topRightEnemyShipPosition.x-s.position.x, topRightEnemyShipPosition.y+s.position.y);
-		s.vector=Pair.randomAnyVector().multiply(120);
+		s.vector=Pair.randomAnyVector().multiply((float)Math.random()*220);
 		s.dr=Particle.random(5);
+
+
 		shards.add(s);
 	}
 
 	@Override
 	public void update(float delta) {
+
 		for(Shard s:shards){
+
 			s.update(delta);
-			s.position=s.position.add((ship.player?Star.playerSpeed:Star.enemySpeed)*delta*2, 0);
+			s.position.x+=(ship.player?Star.playerSpeed:Star.enemySpeed)*delta*2;
+
 		}
 		for(int i=0;i<animations.size();i++){
 			Animation a= animations.get(i);
@@ -251,19 +260,24 @@ public class ShipGraphic extends Updater{
 			a.render(batch);
 		}
 
+
 		for(Module m:ship.modules){
 			m.drawShield(batch);
-
 		}
+
 
 
 	}
 
 	public void dispose() {
-		picCut.dispose();
 		for(Shard s:shards)s.texture.dispose();
+		for(Animation a:animations)a.dispose();
 		picCut.dispose();
 		composite.dispose();
+		if(shipMap!=null)shipMap.dispose();
+		shards.clear();
+		animations.clear();
+		picCut.shards.clear();
 	}
 
 

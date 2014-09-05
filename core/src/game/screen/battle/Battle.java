@@ -12,6 +12,7 @@ import util.update.Animation;
 import util.update.Mouser;
 import util.update.Screen;
 import util.update.TextWisp;
+import util.update.Updater;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -427,7 +428,7 @@ public class Battle extends Screen{
 
 	@Override
 	public void update(float delta) {
-
+		
 
 		playerShakeIntensity*=Math.pow(shakeDrag, delta);
 		enemyShakeIntensity*=Math.pow(shakeDrag, delta);
@@ -618,6 +619,7 @@ public class Battle extends Screen{
 
 	@Override
 	public void dispose() {
+	//Updater.clearAll();
 	player.getGraphic().dispose();
 	enemy.getGraphic().dispose();
 	}
