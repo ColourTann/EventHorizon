@@ -40,14 +40,10 @@ public class Star{
 			location=location.add(1140,78);
 			enemyStars.add(this);
 		}
-		
 		color=Math.random()>.5?purp:teal;
 	}
 
-	public static void shake(boolean player, float amount){
-		if(player)playerSpeed-=amount*20;
-		if(!player)enemySpeed-=amount*20;
-	}
+
 
 	public static void update(float delta){
 		if(Battle.getPlayer().dead)playerSpeed-=playerSpeed*delta;

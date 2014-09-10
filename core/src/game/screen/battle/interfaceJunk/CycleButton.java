@@ -6,7 +6,7 @@ import util.Colours;
 import util.Draw;
 import util.update.Timer;
 import util.update.Timer.Interp;
-import util.assets.Clip;
+import util.assets.SoundClip;
 import util.assets.Font;
 import util.maths.BoxCollider;
 import util.maths.Collider;
@@ -62,8 +62,8 @@ public class CycleButton extends Mouser{
 		if(!Battle.isPlayerTurn())return;
 		if(Battle.getState()==State.Nothing){
 			
-			Clip.cardSelect.play();
-			timer=new Timer(0,1,3,Interp.SQUARE);
+			SoundClip.cardSelect.play();
+			timer=new Timer(0,1,1/3f,Interp.SQUARE);
 			
 
 			if(Battle.getPlayer().getEnergy()<cost)return;
@@ -75,7 +75,7 @@ public class CycleButton extends Mouser{
 		}
 
 		if(Battle.getState()==State.CycleDiscard){
-			Clip.cardDeselect.play();
+			SoundClip.cardDeselect.play();
 			timer=new Timer(timer.getFloat(),0,3,Interp.SQUARE);
 			Battle.getPlayer().addEnergy(cost);
 			
@@ -104,7 +104,7 @@ public class CycleButton extends Mouser{
 			cg.mousectivate(new BoxCollider(0,0,CardGraphic.width,CardGraphic.height));
 			cg.setPosition(new Pair(start.x+gap*i,start.y));
 			cg.alpha=0;
-			cg.fadeIn(3, Interp.SQUARE);
+			cg.fadeIn(.33f, Interp.SQUARE);
 		}
 	}
 
@@ -119,7 +119,7 @@ public class CycleButton extends Mouser{
 		card.getGraphic().override=false;
 		Battle.setState(State.Nothing);
 		cost++;
-		timer=new Timer(timer.getFloat(),0,3,Interp.SQUARE);
+		timer=new Timer(timer.getFloat(),0,1/3f,Interp.SQUARE);
 	}
 
 	public void render(SpriteBatch batch) {

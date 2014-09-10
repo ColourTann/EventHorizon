@@ -29,7 +29,7 @@ public class Teleport extends MapAbility{
 	public void pickHex(Hex hex) {
 		if(!isValidChoice(hex))return;
 		if(mapShip.ship.player) afterPlayerUse();
-		mapShip.stretch=new Timer(0,1, Map.phaseSpeed, Interp.SIN);
+		mapShip.stretch=new Timer(0,1, 1/Map.phaseSpeed, Interp.SIN);
 		mapShip.moveTo(hex);
 	}
 

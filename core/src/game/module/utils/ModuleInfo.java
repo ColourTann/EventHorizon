@@ -76,9 +76,9 @@ public class ModuleInfo extends Mouser{
 	public void fadeAll(){
 		
 		for(CardGraphic cg: graphics){
-			cg.fadeOut(CardGraphic.fadeSpeed*1.5f, CardGraphic.fadeType);
+			cg.fadeOut(CardGraphic.fadeSpeed/1.5f, CardGraphic.fadeType);
 		}
-		fadeOut(CardGraphic.fadeSpeed*1.5f, Interp.LINEAR);
+		fadeOut(CardGraphic.fadeSpeed/1.5f, Interp.LINEAR);
 	}
 
 

@@ -351,11 +351,11 @@ public class Hex {
 	}
 
 	public void mapAbilityChoiceFadein(){
-		mapAbilityFadeTimer=new Timer(0, 1, 2, Interp.SQUARE);
+		mapAbilityFadeTimer=new Timer(0, 1, 1/2f, Interp.SQUARE);
 	}
 
 	public void mapAbilityChoiceFadeout(){
-		mapAbilityFadeTimer=new Timer(mapAbilityFadeTimer.getFloat(), 0, 2, Interp.SQUARE);
+		mapAbilityFadeTimer=new Timer(mapAbilityFadeTimer.getFloat(), 0, 1/2f, Interp.SQUARE);
 	}
 
 

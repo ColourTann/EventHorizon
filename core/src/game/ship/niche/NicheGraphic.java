@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 import game.module.weapon.attack.particle.SmokeMachine;
 import game.module.weapon.attack.particle.Smoke.SmokeType;
 import game.screen.battle.Battle;
+import game.ship.ShipGraphic;
 
 public class NicheGraphic extends Updater{
 	Niche niche;
@@ -34,9 +35,7 @@ public class NicheGraphic extends Updater{
 
 		batch.setColor(1,1,1,1);
 		Texture t=niche.mod.modulePic.get();
-		if(niche.mod.currentThreshold==3){
-			t=niche.mod.modulePic.getMonochrome();
-		}
+	
 		
 		Pair bonus=new Pair();
 		if(!niche.ship.player){
@@ -70,11 +69,19 @@ public class NicheGraphic extends Updater{
 
 		if(ticks>1){
 			ticks-=Math.random();
+			//ticks=1;
 			Pair s=new Pair();
 			Rectangle r =niche.p.getBoundingRectangle();
-			s.x= niche.location.x+(float) (Math.random()*r.width*.8f)+r.width*.1f;
-			s.y= niche.location.y+(float) (Math.random()*r.height*.8f)+r.height*.1f;
-			ParticleSystem.systems.add(new SmokeMachine(s, .2f, 20, SmokeType.Damage));
+			
+
+			//s.x= niche.location.x+(float) (Math.random()*r.width*.8f)+r.width*.1f+ShipGraphic.offset.x;
+			//s.y= niche.location.y+(float) (Math.random()*r.height*.8f)+r.height*.1f+ShipGraphic.offset.y;
+			float bonusX=(float) (r.getWidth()*Math.random())-r.getWidth()/2;
+			float bonusY=(float) (r.getHeight()*Math.random())-r.getHeight()/2;
+			
+			
+			Pair p=niche.mod.getCenter().add(bonusX, bonusY);
+			ParticleSystem.systems.add(new SmokeMachine(p, .2f, 20, SmokeType.Damage));
 		}
 
 

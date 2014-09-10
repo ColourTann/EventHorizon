@@ -19,7 +19,7 @@ public class HelpPanel extends Mouser{
 	
 	public HelpPanel(String s, boolean high) {
 		text=s;
-		fadeIn(2, Interp.SQUARE);
+		fadeIn(.5f, Interp.SQUARE);
 		if(high)y=150;
 		else y=250;
 	}
@@ -46,7 +46,7 @@ public class HelpPanel extends Mouser{
 	}
 	
 	public void done(){
-		fadeOut(2, Interp.SQUARE);
+		fadeOut(.5f, Interp.SQUARE);
 	}
 
 	@Override

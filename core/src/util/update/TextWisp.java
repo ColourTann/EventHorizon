@@ -34,7 +34,6 @@ public class TextWisp extends Updater{
 		case HoldUntilFade:
 			holdTime=-1;
 			speed=0;
-			
 			break;
 		case Regular:
 			break;

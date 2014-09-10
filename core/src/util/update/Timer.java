@@ -4,7 +4,7 @@ import util.maths.Pair;
 
 public class Timer extends Updater{
 	public enum Interp{SQUARE, CUBE, INVERSESQUARED, LINEAR, SANTIBOUNCE, SIN}	
-	float speed;
+	float seconds;
 	Interp lerpType;
 
 	Pair startPosition;
@@ -25,17 +25,17 @@ public class Timer extends Updater{
 		dead=true;
 	}
 	
-	public Timer(float from, float to, float speed, Interp type){
+	public Timer(float from, float to, float seconds, Interp type){
 		fromFloat=from;
 		toFloat=to;
-		this.speed=speed;
+		this.seconds=seconds;
 		lerpType=type;
 	}
 
-	public Timer(Pair from, Pair to, float speed, Interp type){
+	public Timer(Pair from, Pair to, float seconds, Interp type){
 		startPosition=from;
 		endPosition=to;
-		this.speed=speed;
+		this.seconds=seconds;
 		lerpType=type;
 		fromFloat=0;
 		toFloat=1;
@@ -47,7 +47,7 @@ public class Timer extends Updater{
 	}
 
 	public void update(float delta){
-		ratio+=delta*speed;
+		ratio+=delta/seconds;
 		ratio=Math.min(1, ratio);
 		if(ratio>=1){
 			dead=true;

@@ -268,7 +268,6 @@ public class Pic {
 		if(t!=null){
 			t.dispose();
 		}
-		
 	}
 	
 	

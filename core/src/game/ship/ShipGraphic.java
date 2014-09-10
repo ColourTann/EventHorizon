@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import util.Colours;
 import util.Draw;
-import util.assets.Clip;
+import util.assets.SoundClip;
 import util.image.Pic;
 import util.image.PicCut;
 import util.image.PicCut.Shard;
@@ -45,12 +45,24 @@ public class ShipGraphic extends Updater{
 	public static Pair topRightEnemyShipPosition= new Pair(500+Main.width-offset.x, offset.y);
 	public ShipGraphic(Ship s){
 		ship=s;
+		drawMap();
+	}
+
+	public void drawMap(){
+		if(composite!=null)composite.dispose();
+		if(picCut!=null)picCut.dispose();
+		if(shipMap!=null)shipMap.dispose();
 		shipMap=new Pixmap(450, 270, Format.RGBA8888);
 		Pixmap.setBlending(Blending.SourceOver);
 
 		for(Niche n:ship.niches){
-			if(n.mod.type==ModuleType.WEAPON)
-				shipMap.drawPixmap(n.mod.modulePic.getPixMap(),(int)(n.relativeTopLeft.x), (int)(n.relativeTopLeft.y)-n.mod.modulePic.get().getHeight()/2, 0, 0,  n.mod.modulePic.get().getWidth(), n.mod.modulePic.get().getHeight());
+			if(n.mod.type==ModuleType.WEAPON){
+				Pixmap map=n.mod.modulePic.getPixMap();
+				if(n.mod.currentThreshold==3){
+					map=Pic.getPixMap(n.mod.modulePic.getMonochrome());
+				}
+				shipMap.drawPixmap(map,(int)(n.relativeTopLeft.x), (int)(n.relativeTopLeft.y)-n.mod.modulePic.get().getHeight()/2, 0, 0,  n.mod.modulePic.get().getWidth(), n.mod.modulePic.get().getHeight());
+			}
 		}
 
 		shipMap.drawPixmap(ship.shipPic.getPixMap(), 0, 0, 0, 0, 390, 270);
@@ -62,8 +74,11 @@ public class ShipGraphic extends Updater{
 			if(n.mod.type==ModuleType.WEAPON)continue;
 
 			if(n.mod.type==ModuleType.GENERATOR||n.mod.type==ModuleType.COMPUTER){
-
-				shipMap.drawPixmap(n.mod.modulePic.getPixMap(),
+				Pixmap map=n.mod.modulePic.getPixMap();
+				if(n.mod.currentThreshold==3){
+					map=Pic.getPixMap(n.mod.modulePic.getMonochrome());
+				}
+				shipMap.drawPixmap(map,
 						(int)(n.p.getBoundingRectangle().x), 
 						(int)(n.p.getBoundingRectangle().y), 
 						0, 0,  n.mod.modulePic.get().getWidth(), n.mod.modulePic.get().getHeight());
@@ -71,7 +86,11 @@ public class ShipGraphic extends Updater{
 			}
 
 			if(n.mod.type==ModuleType.SHIELD){
-				shipMap.drawPixmap(n.mod.modulePic.getPixMap(),
+				Pixmap map=n.mod.modulePic.getPixMap();
+				if(n.mod.currentThreshold==3){
+					map=Pic.getPixMap(n.mod.modulePic.getMonochrome());
+				}
+				shipMap.drawPixmap(map,
 						(int)(n.relativeTopLeft.x), 
 						(int)(n.relativeTopLeft.y-n.mod.modulePic.get().getHeight()/2), 
 						0, 0,  n.mod.modulePic.get().getWidth(), n.mod.modulePic.get().getHeight());
@@ -81,8 +100,6 @@ public class ShipGraphic extends Updater{
 		composite=new Pic(new Texture(shipMap));
 		picCut=new PicCut(composite, new Color(0,0,0,0));
 
-
-		//shipMap.dispose();
 	}
 
 	public void damage(Pair damageLoc){
@@ -90,7 +107,7 @@ public class ShipGraphic extends Updater{
 		if(Math.random()>.7){
 
 			for(int i=0;i<50;i++){
-				s=picCut.replaceSection(damageLoc.add(Pair.randomAnyVector().multiply(100)), Gallery.shipDamage[(int) (Math.random()*9)].get());
+				s=picCut.replaceSection(damageLoc.add(Pair.randomAnyVector().multiply(120)), Gallery.shipDamage[(int) (Math.random()*9)].get());
 				if(s!=null){
 					shards.add(s);
 					break;
@@ -124,35 +141,35 @@ public class ShipGraphic extends Updater{
 	}
 
 	public void destroy(){
-		ship.dead=true;
 
-		crack();
+
+		crack(true);
 		float speed=1f;
-		Timer t=new Timer(0,1,speed/.5f,Interp.LINEAR);
+		Timer t=new Timer(0,1,1/(speed/.5f),Interp.LINEAR);
 		t.addFinisher(new Finisher() {
 			@Override
 			public void finish() {
-				crack();
+				crack(true);
 			}
 		});
 
-		t=new Timer(0,1,speed,Interp.LINEAR);
+		t=new Timer(0,1,1/speed,Interp.LINEAR);
 		t.addFinisher(new Finisher() {
 			@Override
 			public void finish() {
-				crack();
+				crack(true);
 			}
 		});
 
-		t=new Timer(0,1,speed/1.5f,Interp.LINEAR);
+		t=new Timer(0,1,1/(speed/1.5f),Interp.LINEAR);
 		t.addFinisher(new Finisher() {
 			@Override
 			public void finish() {
-				crack();
+				crack(true);
 			}
 		});
 
-		t=new Timer(0,1,speed/2f,Interp.LINEAR);
+		t=new Timer(0,1,1/(speed/2f),Interp.LINEAR);
 		t.addFinisher(new Finisher() {
 			@Override
 			public void finish() {
@@ -165,9 +182,9 @@ public class ShipGraphic extends Updater{
 
 	}
 
-	private void crack(){
+	private void crack(boolean shake){
 
-		Clip.shatter.play();
+		SoundClip.shatter.play();
 		for(int i=0;i<2;i++){
 			Pair position= picCut.addShatter();
 			if(ship.player)position=position.add(ShipGraphic.offset);
@@ -180,11 +197,11 @@ public class ShipGraphic extends Updater{
 			setupShard(s);
 		}
 
-		Battle.shake(ship.player, 7);
+		if(shake)Battle.shake(ship.player, 7);
 	}
 
 	private void release(){
-		Clip.explode.play();
+		SoundClip.explode.play();
 		Battle.shake(ship.player, 20);
 		ship.exploded=true;
 		Shard s=picCut.removeCut();

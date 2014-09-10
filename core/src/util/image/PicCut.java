@@ -455,8 +455,8 @@ public class PicCut {
 
 		}
 		public void update(float delta){
-			vector=vector.multiply((float) Math.pow(.9, delta));
-			dr=(float) (dr*Math.pow(.7, delta));
+			vector=vector.multiply((float) Math.pow(.95, delta));
+			dr=(float) (dr*Math.pow(.9, delta));
 			position=position.add(vector.multiply(delta));
 			rotation+=dr*delta;
 

@@ -6,7 +6,7 @@ import game.card.CardCode.Special;
 
 public class Three extends Generator{
 	public Three(){
-		super("Neutron",null,3, new int[]{5,10,12});
+		super("Neutron",null,3, new int[]{5,9,12});
 		for(int i=0;i<=variants;i++){
 			cardPic[i]=Gallery.cardGenerator[i*1];
 		}

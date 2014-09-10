@@ -43,13 +43,13 @@ public class CardIcon extends Mouser{
 		icons.add(new CardIcon(c));
 		c.getGraphic().removeTopPic();
 		while(icons.size()>14){
-			icons.remove(0).fadeOut(100, Interp.LINEAR);;
+			icons.remove(0).fadeOut(.001f, Interp.LINEAR);;
 		}
 		updateCardIconPositions();
 	}
 
 	private static void updateCardIconPositions(){
-		for(int i=0;i<icons.size();i++)icons.get(i).slide(new Pair(start.x+gap*(icons.size()-i), start.y), 1.5f, Interp.SQUARE);
+		for(int i=0;i<icons.size();i++)icons.get(i).slide(new Pair(start.x+gap*(icons.size()-i), start.y), .67f, Interp.SQUARE);
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class CardIcon extends Mouser{
 	@Override
 	public void mouseUp() {
 		mousedGraphic.activate();
-		mousedGraphic.fadeOut(3, Interp.LINEAR);
+		mousedGraphic.fadeOut(.33f, Interp.LINEAR);
 		overrideAlpha=false;
 		cg.card.getShip().cardOrIconUnmoused();
 	}

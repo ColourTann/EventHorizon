@@ -30,7 +30,7 @@ public class ModuleStats extends Mouser{
 
 	//Just for tutorial//
 	TextWisp nameWisp;
-	
+
 	public ModuleStats(Module m) {
 		mousectivate(new BoxCollider(m.ship.player?0:Main.width-width, height*m.getIndex(), width, height));
 		mod=m;
@@ -62,7 +62,7 @@ public class ModuleStats extends Mouser{
 	public void showNameWisp(){
 		nameWisp=new TextWisp(mod.getClass().getSuperclass().getSimpleName(), Font.test, collider.position.add(63, 73), WispType.HoldUntilFade);
 	}
-	
+
 	public void hideNameWisp(){
 		nameWisp.release();
 	}
@@ -110,8 +110,39 @@ public class ModuleStats extends Mouser{
 		}
 		int index;
 		Pic[] p;
-
+		int remainingSlots=row*3;
+		int healthLeft=mod.maxHP;
+		int twin=0;
+		int slotLoc=0;
+		int thresholdsRemaining=3;
 		for(int i=0;i<mod.maxHP;i++){
+
+			if(i!=0){
+				twin--;
+				if(twin<=0){
+					slotLoc++;
+					remainingSlots--;
+				}
+
+				healthLeft--;
+
+				boolean onThresh=false;
+				for(int thr=0;thr<mod.thresholds.length;thr++){
+					if(i+2==mod.thresholds[thr]||i+1==mod.thresholds[thr]){
+						onThresh=true;
+					}
+
+				}
+
+				if(twin<=0&&remainingSlots*2-thresholdsRemaining-1<=healthLeft&&!onThresh){
+					twin=2;
+				}
+				if(mod.type==ModuleType.GENERATOR&&mod.ship.player)System.out.println(i+":"+onThresh+":"+twin);
+
+			}
+
+
+		
 			p=Gallery.greenHP;
 			index=0;
 			boolean moused=false;
@@ -130,19 +161,30 @@ public class ModuleStats extends Mouser{
 					p=Gallery.blueHP;
 				}
 			}
-			if(mod.thresholds[0]==i+1||mod.thresholds[1]==i+1)index=1;
-			if(i==mod.maxHP-1)index=2;
-			Draw.draw(batch, p[index].get(),collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y+hpGap.y*(i/row));
-			if(moused){
-				Draw.draw(batch, Gallery.mousedHP.get(), collider.position.x+hpLoc.x+hpGap.x*(i%row),collider.position.y+hpLoc.y+hpGap.y*(i/row));
+			if(mod.thresholds[0]==i+1||mod.thresholds[1]==i+1){
+				thresholdsRemaining--;
+				index=1;
 			}
+			if(i==mod.maxHP-1){
+				thresholdsRemaining--;
+				index=2;
+			}
+			Draw.draw(batch, p[twin>0?2+twin:index].get(),collider.position.x+hpLoc.x+hpGap.x*(slotLoc%row),collider.position.y+hpLoc.y+hpGap.y*(slotLoc/row));
+			if(moused){
+				Draw.draw(batch, Gallery.mousedHP.get(), collider.position.x+hpLoc.x+hpGap.x*(slotLoc%row),collider.position.y+hpLoc.y+hpGap.y*(slotLoc/row));
+			}
+
+
+
+
+
 		}
 
 		//Off the edge damage//
-		Pic ext=Gallery.orangeHP[3];
+		Pic ext=Gallery.orangeHP[5];
 
 		if(damage+unshieldable+incoming-shields<=mod.maxHP){
-			ext=Gallery.blueHP[3];
+			ext=Gallery.blueHP[5];
 		}
 		if(damage+unshieldable+incoming>mod.maxHP){
 			Draw.draw(batch, ext.get(), collider.position.x+hpLoc.x+hpGap.x*(mod.maxHP%row),collider.position.y+hpLoc.y+hpGap.y*(mod.maxHP/row));

@@ -155,13 +155,13 @@ public class Main extends ApplicationAdapter  {
 
 		if(nextScreen!=null){
 			if(fadeTimer.getFloat()>=1){
-				System.out.println("switching");
+				
 				TextWisp.wisps.clear();
 				Updater.clearAll();
-				fadeTimer=new Timer(1, 0, 2, Interp.LINEAR);
+				fadeTimer=new Timer(1, 0, 1/2f, Interp.LINEAR);
 				nextScreen.init();
 				currentScreen.dispose();
-				System.out.println("finished init");
+				
 				currentScreen=nextScreen;
 				nextScreen=null;
 			}
@@ -178,7 +178,7 @@ public class Main extends ApplicationAdapter  {
 		//if(type==ScreenType.Menu&&currentScreen==select)return;
 		TextWisp.wisps.clear();
 		nextScreen=newScreen;
-		fadeTimer=new Timer(fadeTimer.getFloat(), 1, 2, Interp.LINEAR);
+		fadeTimer=new Timer(fadeTimer.getFloat(), 1, 1/2f, Interp.LINEAR);
 	
 	}
 

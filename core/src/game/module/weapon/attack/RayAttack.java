@@ -2,7 +2,7 @@ package game.module.weapon.attack;
 
 import util.update.Timer;
 import util.update.Timer.*;
-import util.assets.Clip;
+import util.assets.SoundClip;
 import util.maths.Pair;
 import util.particleSystem.Particle;
 
@@ -58,7 +58,7 @@ public class RayAttack extends AttackGraphic{
 	@Override
 	public void fire(final Pair target) {
 		this.target=target;
-		t=new Timer(0,1, 5/(order+.01f), Interp.LINEAR);
+		t=new Timer(0,1, 1/(5f/(order+.01f)), Interp.LINEAR);
 		t.addFinisher(new Finisher() {
 
 
@@ -70,7 +70,7 @@ public class RayAttack extends AttackGraphic{
 				vector=vector.multiply(800);
 				intensity=0;
 				frequency=350;
-				Clip.ray.play();
+				SoundClip.ray.play();
 			}
 		});
 

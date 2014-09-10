@@ -34,7 +34,7 @@ public class CardGraphic extends Mouser {
 	public static Pair enemyPlayStartPosition = new Pair(Main.width, 150);
 	public static Pair enemyPlayToPosition = new Pair(850, 150);
 	public static float maxSelectedHeight = -26;
-	public static float fadeSpeed = 2.5f;
+	public static float fadeSpeed = .4f;
 	public static Interp fadeType = Interp.LINEAR;
 
 	public static Pair positionPic = new Pair(43, 31);
@@ -366,7 +366,7 @@ public class CardGraphic extends Mouser {
 	}
 
 	public void moveUp() {
-		slide(positionAugment, 2, Interp.SQUARE);
+		slide(positionAugment, .5f, Interp.SQUARE);
 	}
 
 	public void hideLower() {

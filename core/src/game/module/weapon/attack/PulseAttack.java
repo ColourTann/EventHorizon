@@ -2,7 +2,7 @@ package game.module.weapon.attack;
 
 import util.update.Timer;
 import util.update.Timer.*;
-import util.assets.Clip;
+import util.assets.SoundClip;
 import util.maths.Pair;
 import util.particleSystem.Particle;
 
@@ -31,13 +31,13 @@ public class PulseAttack extends AttackGraphic{
 	public void fire(final Pair targett) {
 		System.out.println("order"+order);
 
-		t=new Timer(0,1, 10/(order+.01f), Interp.LINEAR);
+		t=new Timer(0,1, 1/(10f/(order+.01f)), Interp.LINEAR);
 		t.addFinisher(new Finisher() {
 
 
 			@Override
 			public void finish() {
-				Clip.pulse.overlay();
+				SoundClip.pulse.overlay();
 				goingRight=targett.x>origin.x;
 				target=targett;
 
@@ -53,7 +53,7 @@ public class PulseAttack extends AttackGraphic{
 		System.out.println("imapcting");
 		
 		if(atk.activateDamage()){
-			Clip.damageMinor.play();
+			SoundClip.damageMinor.play();
 			for(int i=0;i<50;i++){
 				particles.add(new PulseParticle(position, vector));
 			}

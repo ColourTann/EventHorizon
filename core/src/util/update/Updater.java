@@ -38,15 +38,15 @@ public abstract class Updater {
 		dead=true;
 	}
 	
-	public void fadeIn(float speed, Interp type){
+	public void fadeIn(float seconds, Interp type){
 		activate();
-		fader=new Timer(alpha, 1, speed, type);
+		fader=new Timer(alpha, 1, seconds, type);
 	}
 
-	public void fadeOut(float speed, Interp type){
+	public void fadeOut(float seconds, Interp type){
 		activate();
 		Mouser.mousers.remove(this); //Just in case//
-		fader=new Timer(alpha, 0, speed, type);
+		fader=new Timer(alpha, 0, seconds, type);
 	}
 
 	public void stopFading(){
@@ -54,8 +54,8 @@ public abstract class Updater {
 		alpha=1;
 	}
 
-	public void slide(Pair target, float speed, Interp type){
-		slider=new Timer(position, target, speed, type);
+	public void slide(Pair target, float seconds, Interp type){
+		slider=new Timer(position, target, seconds, type);
 	}
 	
 	public static void updateAll(float delta) {
@@ -108,6 +108,7 @@ public abstract class Updater {
 		clearAllDefaults();
 		Mouser.clearAllDefaultMousers();
 		TextWisp.wisps.clear();
+		ParticleSystem.clearAll();
 	}
 	
 	private static void clearAllDefaults() {

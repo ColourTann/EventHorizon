@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import util.Colours;
 import util.Draw;
 import util.Noise;
+import util.assets.SoundClip;
 import util.assets.Font;
 import util.maths.Pair;
 import util.particleSystem.ParticleSystem;
@@ -12,6 +13,8 @@ import util.update.Animation;
 import util.update.Mouser;
 import util.update.Screen;
 import util.update.TextWisp;
+import util.update.Timer;
+import util.update.Timer.Interp;
 import util.update.Updater;
 
 import com.badlogic.gdx.Gdx;
@@ -47,6 +50,7 @@ import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
 import game.ship.shipClass.Nova;
+import game.utilitySystem.armour.BasicArmour;
 
 public class Battle extends Screen{
 	public enum Phase{ShieldPhase, EnemyWeaponsFiring, WeaponPhase, EnemyShieldPhase, PlayerWeaponsFiring, EnemyWeaponPhase, End};
@@ -92,6 +96,9 @@ public class Battle extends Screen{
 	ArrayList<Animation> animations=new ArrayList<Animation>();
 	float animTicker=0;
 	private ScreenType type;
+	
+	static Timer victoryFadeInTimer=new Timer();
+	
 	public Battle(Ship player, Ship enemy, boolean tutorial){
 		this.player=player;
 		this.enemy=enemy;
@@ -113,6 +120,7 @@ public class Battle extends Screen{
 			player.addEnergy(6);
 			enemy.addEnergy(2);
 		}
+		player.setArmour(new BasicArmour(1.9f));
 	}
 
 	public static Ship getPlayer(){
@@ -154,7 +162,7 @@ public class Battle extends Screen{
 		CardIcon.icons.clear();
 		CardGraphic.augmentPicker=null;
 		help=null;
-
+		victoryFadeInTimer=new Timer();
 	}
 
 	private void initTutorial() {
@@ -190,8 +198,8 @@ public class Battle extends Screen{
 		currentPhase=s;
 		getEnemy().checkDefeat();
 		getPlayer().checkDefeat();
-		System.out.println();
-		System.out.println("State change to "+s);
+		
+		
 
 		switch(s){
 		case EnemyShieldPhase:
@@ -243,9 +251,12 @@ public class Battle extends Screen{
 	}
 
 	public static void battleWon(Ship ship) {
+		ship.getEnemy().dead=true;
+		ship.getEnemy().getGraphic().destroy();
 		setPhase(Phase.End);
 		System.out.println("ended");
 		victor=ship;
+		victoryFadeInTimer=new Timer(0,1,5,Interp.LINEAR);
 	}
 
 
@@ -298,11 +309,11 @@ public class Battle extends Screen{
 
 
 		case Input.Keys.S:
-			getEnemy().getGraphic().destroy();
+
 
 			break;
 		case Input.Keys.A:
-			getPlayer().getGraphic().destroy();
+			battleWon(getPlayer());
 			break;
 
 
@@ -351,12 +362,12 @@ public class Battle extends Screen{
 
 	public static void shake(boolean player, float amount){
 
-		System.out.println("shaking for "+amount);
+		
 		//amount is energy cost of card
 		Ship s=null;
 		if(player)s=getPlayer();
 		else s=getEnemy();
-		if(!s.dead)Star.shake(player, amount);
+		//if(!s.dead)Star.shake(player, amount);
 		
 		Pair shakeAdd=new Pair(amount*4, (float)(Math.random()-.5)*amount);
 		if(player){
@@ -419,7 +430,7 @@ public class Battle extends Screen{
 			Tutorial.goBack();
 			return;
 		}
-		System.out.println(location);
+		
 	}
 
 	public static void advance() {
@@ -563,7 +574,7 @@ public class Battle extends Screen{
 
 		if(getPhase()==Phase.End){
 			String s=victor.player?"You win!":"You lose.";
-			Font.big.setColor(Colours.light);
+			Font.big.setColor(Colours.withAlpha(Colours.light,victoryFadeInTimer.getFloat()));
 			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 205);
 			s="(esc to return)";
 			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 245);

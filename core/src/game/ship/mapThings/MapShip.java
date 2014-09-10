@@ -110,7 +110,7 @@ public class MapShip {
 		if(ship.player)h.highlight=false;
 		source = hex.getPixel();
 		destination = h.getPixel();
-		timer = new Timer(1, 0, Map.phaseSpeed, Interp.SQUARE);
+		timer = new Timer(1, 0, 1/Map.phaseSpeed, Interp.SQUARE);
 		rotation = source.getAngle(destination);
 		if (hex.mapShip == this)hex.mapShip = null;
 		h.addShip(this);

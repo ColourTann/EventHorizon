@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import util.Colours;
 import util.Draw;
-import util.assets.Clip;
+import util.assets.SoundClip;
 import util.assets.Font;
 import util.image.Pic;
 import util.maths.Pair;
@@ -51,7 +51,8 @@ public abstract class Module {
 	public boolean immune;
 	public int maxHP;
 	public int currentThreshold;
-	public int[] thresholds;
+	private int[] baseThresholds;
+	public int[] thresholds=new int[3];
 
 	public ArrayList<DamagePoint> damage= new ArrayList<DamagePoint>();
 	public ArrayList<DamagePoint> incomingDamage= new ArrayList<DamagePoint>();
@@ -94,11 +95,11 @@ public abstract class Module {
 	private Pair barrel;
 
 
-	public Module(String name, Pic p, int variants, int numCards, int thresholds[], int tier){
+	public Module(String name, Pic p, int variants, int numCards, int baseThresholds[], int tier){
 		moduleName=name;
 		this.tier=tier;
-		this.thresholds=thresholds;
-		maxHP=thresholds[2];
+		this.baseThresholds=baseThresholds;
+		
 		this.numCards=numCards;
 		this.modulePic=p;
 		this.variants=variants;
@@ -109,6 +110,13 @@ public abstract class Module {
 		for(int i=0;i<code.length;i++){
 			code[i]=new CardCode();
 		}
+	}
+	
+	public void recalculateThresholds(){
+		for(int i=0;i<3;i++){
+			thresholds[i]=(int)(baseThresholds[i]*ship.armour.getMultuplier());
+		}
+		maxHP=thresholds[2];
 	}
 
 	@SuppressWarnings("unused")
@@ -123,7 +131,7 @@ public abstract class Module {
 				for(int i=0;i<Battle.moduleChooser.getEffect();i++)shield(new ShieldPoint(Battle.moduleChooser, i==0), false);
 				if(code.contains(Special.GetCardFromChosenModule)){
 					if(this==Battle.moduleChooser.mod){
-						Clip.error.play();
+						SoundClip.error.play();
 						return;
 					}
 					else ship.drawCard(getNextCard());
@@ -141,7 +149,7 @@ public abstract class Module {
 						return;
 					}
 				}
-				Clip.error.play();
+				SoundClip.error.play();
 
 			}
 
@@ -210,7 +218,7 @@ public abstract class Module {
 
 		Battle.shake(ship.player,(float)(2.5f));
 		ship.getGraphic().damage(niche.location);
-		Clip.damageMinor.play();
+		SoundClip.damageMinor.play();
 		//if(damagePoint.card!=null&&damagePoint.card.mod instanceof Tesla) return;
 
 
@@ -218,6 +226,7 @@ public abstract class Module {
 	}
 
 	private void majorDamage() {
+		
 		currentThreshold++;
 		ship.majorDamage();
 		if(currentThreshold==3){
@@ -226,6 +235,8 @@ public abstract class Module {
 		}
 		new TextWisp("Scrambled", Font.medium, getCenter().add(new Pair(0,-40)), WispType.Regular); 
 		scramble();
+		for(int i=0;i<5;i++)ship.getGraphic().damage(niche.location);
+		ship.checkDefeat();
 	}
 
 	private void destroy(){
@@ -246,6 +257,7 @@ public abstract class Module {
 				i--;
 			}
 		}
+		ship.getGraphic().drawMap();
 	}
 
 
@@ -261,7 +273,7 @@ public abstract class Module {
 			for(int i=0;i<damage;i++){
 				DamagePoint p = incomingDamage.remove(0);
 				if(shieldPoints.size()>0){
-					Clip.shieldActivate.play();
+					SoundClip.shieldActivate.play();
 					activateShield(shieldPoints.remove(0));
 					continue;
 				}
@@ -302,8 +314,8 @@ public abstract class Module {
 		if(s.card.getCode().contains(Special.ShieldOnlyDamaged))if(currentThreshold==0)return false;
 
 		shieldPoints.add(s);
-		if(overlapSound)Clip.shieldUse.play();
-		else Clip.shieldUse.play();
+		if(overlapSound)SoundClip.shieldUse.overlay();
+		else SoundClip.shieldUse.play();
 		return true;
 	}
 

@@ -3,7 +3,7 @@ package game.ship;
 import java.util.ArrayList;
 
 import util.Draw;
-import util.assets.Clip;
+import util.assets.SoundClip;
 import util.assets.Font;
 import util.image.Pic;
 import util.maths.Pair;
@@ -40,6 +40,8 @@ import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
 import game.ship.shipClass.Nova;
+import game.utilitySystem.armour.Armour;
+import game.utilitySystem.armour.BasicArmour;
 
 public abstract class Ship {
 	//0-1 weapon 2 shield 3 gen 4 com
@@ -60,6 +62,8 @@ public abstract class Ship {
 	private int majorDamageTaken=0;
 	private int energyAtEndOfPhase=0;
 	private float powerLevel=0;
+	public Armour armour= new BasicArmour(1);
+
 
 	//Enemy ai stuff//
 	public Module focusTarget;
@@ -70,7 +74,9 @@ public abstract class Ship {
 
 	public boolean dead=false;
 	public boolean exploded=false;
-	
+
+
+
 	public Timer timer = new Timer();
 	public enum ShipType{Aurora,Comet,Eclipse,Nova}
 	public abstract void placeNiches();
@@ -81,7 +87,9 @@ public abstract class Ship {
 		placeNiches();
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
+		recalculateThresholds();
 	}
+
 
 	//Phase stuff//
 	public void startTurn() {
@@ -114,7 +122,7 @@ public abstract class Ship {
 	}
 
 	public void checkDefeat(){
-		if(majorDamageTaken>=5){
+		if(majorDamageTaken>=5&&!dead){
 			Battle.battleWon(getEnemy());
 		}
 	}
@@ -230,7 +238,7 @@ public abstract class Ship {
 			c.getGraphic().slide(new Pair(
 					975-(i/2)*(gap+CardGraphic.width),
 					80+(i%2)*(CardGraphic.height/2+gap)),
-					1.5f, 
+					.67f, 
 					Interp.SQUARE);
 
 			c=pickCard(p);
@@ -241,7 +249,7 @@ public abstract class Ship {
 		}
 		notifyIncoming();
 
-		timer=new Timer(1, 0, 10, Interp.LINEAR);
+		timer=new Timer(1, 0, 1/10f, Interp.LINEAR);
 
 	}
 
@@ -420,7 +428,7 @@ public abstract class Ship {
 		if(hand.size()<=7){
 			for(int i=0;i<hand.size();i++){
 				CardGraphic c=hand.get(i).getGraphic();
-				c.slide(new Pair(start+gap*(i+1)-CardGraphic.width, Main.height-CardGraphic.height), 2f, Interp.SQUARE);
+				c.slide(new Pair(start+gap*(i+1)-CardGraphic.width, Main.height-CardGraphic.height), .5f, Interp.SQUARE);
 				c.finishFlipping();
 			}
 		}
@@ -429,7 +437,7 @@ public abstract class Ship {
 			gap=width/(hand.size()-1);
 			for(int i=0;i<hand.size();i++){
 				CardGraphic c=hand.get(i).getGraphic();
-				c.slide(new Pair(start+gap*i, Main.height-CardGraphic.height), 2, Interp.SQUARE);
+				c.slide(new Pair(start+gap*i, Main.height-CardGraphic.height), .5f, Interp.SQUARE);
 				c.finishFlipping();
 			}
 		}
@@ -501,7 +509,7 @@ public abstract class Ship {
 
 	//Rendering junk//
 
-	
+
 
 	public void renderFightStats(SpriteBatch batch){
 		fightStats.render(batch);
@@ -516,7 +524,7 @@ public abstract class Ship {
 	public void addToEnergyAtEndOfPhase(int amount){energyAtEndOfPhase+=amount;}
 	public void majorDamage() {
 		Battle.shake(player,3);
-		Clip.damageMajor.play();
+		SoundClip.damageMajor.play();
 		majorDamageTaken++;
 	}
 	public int getMajorDamage(){
@@ -597,6 +605,10 @@ public abstract class Ship {
 		maxCards=c.maxCards;
 		niches[4].install(c);
 	}
+	public void setArmour(Armour a){
+		this.armour=a;
+		recalculateThresholds();
+	}
 	public Pic getPic(){
 		return shipPic;
 	}
@@ -632,7 +644,11 @@ public abstract class Ship {
 
 		return result;
 	}
-
+	
+	private void recalculateThresholds() {
+	 for(Module m:modules)m.recalculateThresholds();	
+	}
+	
 	public float getPowerLevel(){
 		if(powerLevel!=0)return powerLevel;
 		deck.clear();

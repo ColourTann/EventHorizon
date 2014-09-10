@@ -76,12 +76,12 @@ public class Gallery {
 	public static Pic statsTargeted= new Pic("Interface/statstargeted");
 	public static Pic statsImmune= new Pic("Interface/statsimmune");
 	public static Pic mousedHP=new Pic("Icon/hpmoused");
-	public static Pic greenHP[]= new Pic[3];
-	public static Pic orangeHP[]= new Pic[4];
-	public static Pic redHP[]= new Pic[3];
-	public static Pic blueHP[]= new Pic[4];
-	public static Pic greyHP[]= new Pic[3];
-	public static Pic baseHP[]= new Pic[3];
+	public static Pic greenHP[]= new Pic[5];
+	public static Pic orangeHP[]= new Pic[6];
+	public static Pic redHP[]= new Pic[6];
+	public static Pic blueHP[]= new Pic[6];
+	public static Pic greyHP[]= new Pic[5];
+	public static Pic baseHP[]= new Pic[5];
 
 	private static Color[] greenHPReplace= new Color[]{Colours.baseReplacers[0], Colours.greenHPCols[0], Colours.baseReplacers[1], Colours.greenHPCols[1], Colours.baseReplacers[2], Colours.greenHPCols[2]};
 	private static Color[] orangeHPReplace= new Color[]{Colours.baseReplacers[0], Colours.orangeHPCols[0], Colours.baseReplacers[1], Colours.orangeHPCols[1], Colours.baseReplacers[2], Colours.orangeHPCols[2]};
@@ -161,24 +161,27 @@ public class Gallery {
 			
 		}
 		for(int i=0;i<3;i++){
+			
+			laserBody[i]=new Pic("Particle/laserbody"+i);
+			damageIcon[i]=new Pic("Icon/damageicon"+i);
+			shieldIcon[i]=new Pic("Icon/shieldicon"+i);
+		}
+	
+		
+		for(int i=0;i<4;i++){
+			
+			cardComputer[i]= new Pic("Module/Computer/card"+i);
+			cardGenerator[i]= new Pic("Module/Generator/card"+i);
+		}
+		
+		for(int i=0;i<5;i++){
+		
 			baseHP[i]=new Pic("Icon/hpbase"+i);
 			greenHP[i]=new Pic(baseHP[i], greenHPReplace);
 			redHP[i]=new Pic(baseHP[i], redHPReplace);
 			greyHP[i]=new Pic(baseHP[i], greyHPReplace);
 			orangeHP[i]=new Pic(baseHP[i], orangeHPReplace);
 			blueHP[i]=new Pic(baseHP[i], blueHPReplace);
-			
-			laserBody[i]=new Pic("Particle/laserbody"+i);
-			damageIcon[i]=new Pic("Icon/damageicon"+i);
-			shieldIcon[i]=new Pic("Icon/shieldicon"+i);
-		}
-		
-		for(int i=0;i<4;i++){
-			cardComputer[i]= new Pic("Module/Computer/card"+i);
-			cardGenerator[i]= new Pic("Module/Generator/card"+i);
-		}
-		
-		for(int i=0;i<5;i++){
 			pulseCard[i]=new Pic("Module/Weapon/Pulse/card"+i);
 			rayCard[i]=new Pic("Module/Weapon/Ray/card"+i);
 			laserCard[i]=new Pic("Module/Weapon/Laser/card"+i);
@@ -196,9 +199,9 @@ public class Gallery {
 			shipDamage[i]=new Pic("Ship/Damage/"+i,3);
 		}
 		
-		blueHP[3]=new Pic("Icon/hpblue3");
-		orangeHP[3]=new Pic("Icon/hporange3");
-		redHP[2]=new Pic("Icon/hpred2");
+		blueHP[5]=new Pic("Icon/hpblue3");
+		orangeHP[5]=new Pic("Icon/hporange3");
+		redHP[5]=new Pic("Icon/hpred2");
 		
 		Pixmap map = new Pixmap(1,1,Format.RGBA8888);
 		map.setColor(1, 1, 1, 1);

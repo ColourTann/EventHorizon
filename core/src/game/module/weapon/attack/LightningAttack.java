@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import util.update.Timer.*;
 import util.update.Timer;
-import util.assets.Clip;
+import util.assets.SoundClip;
 import util.maths.Pair;
 import util.particleSystem.Particle;
 
@@ -30,14 +30,14 @@ public class LightningAttack extends AttackGraphic{
 	@Override
 	public void fire(Pair target) {
 		this.target=target;
-		t=new Timer(0,1,2.5f, Interp.LINEAR);
+		t=new Timer(0,1,1/2.5f, Interp.LINEAR);
 		t.addFinisher(new Finisher() {
 
 			@Override
 			public void finish() {
 
 				fired=true;
-				Clip.lightning.play();
+				SoundClip.lightning.play();
 
 				impact();
 			}

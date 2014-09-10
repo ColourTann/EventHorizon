@@ -2,7 +2,7 @@ package game.module.weapon.attack;
 
 
 
-import util.assets.Clip;
+import util.assets.SoundClip;
 import util.maths.Pair;
 import util.particleSystem.Particle;
 import util.particleSystem.ParticleSystem;
@@ -26,7 +26,7 @@ public class LaserAttack extends AttackGraphic{
 	@Override
 	public void fire(final Pair target) {
 		this.target=target;
-		t=new Timer(0,1,1.5f, Interp.LINEAR);
+		t=new Timer(0,1,1/1.5f, Interp.LINEAR);
 		t.addFinisher(new Finisher() {
 		
 			
@@ -38,7 +38,7 @@ public class LaserAttack extends AttackGraphic{
 				
 				disable();
 				ticks=0;
-				Clip.laser.play();
+				SoundClip.laser.play();
 			}
 		});
 		

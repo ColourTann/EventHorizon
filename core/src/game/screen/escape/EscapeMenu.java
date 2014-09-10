@@ -116,14 +116,14 @@ public class EscapeMenu extends Screen{
 	}
 	
 	public void fadeIn(){
-		Main.fadeTimer=new Timer(Main.fadeTimer.getFloat(), .8f, 4, Interp.LINEAR);
-		alphaTimer=new Timer(alphaTimer.getFloat(), 1, 4, Interp.SQUARE);
+		Main.fadeTimer=new Timer(Main.fadeTimer.getFloat(), .8f, 1/4f, Interp.LINEAR);
+		alphaTimer=new Timer(alphaTimer.getFloat(), 1, 1/4f, Interp.SQUARE);
 		alphaTimer.layer=Layer.ALL;
 		Main.fadeTimer.layer=Layer.ALL;
 	}
 	public void fadeOut(){
-		Main.fadeTimer=new Timer(Main.fadeTimer.getFloat(), 0, 4, Interp.LINEAR);
-		alphaTimer=new Timer(alphaTimer.getFloat(), 0, 4, Interp.SQUARE);
+		Main.fadeTimer=new Timer(Main.fadeTimer.getFloat(), 0, 1/4f, Interp.LINEAR);
+		alphaTimer=new Timer(alphaTimer.getFloat(), 0, 1/4f, Interp.SQUARE);
 		alphaTimer.layer=Layer.ALL;
 		Main.fadeTimer.layer=Layer.ALL;
 	}

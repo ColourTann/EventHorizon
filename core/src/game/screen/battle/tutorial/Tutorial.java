@@ -222,7 +222,7 @@ public class Tutorial extends Updater{
 	
 		if(!Battle.isTutorial()){
 			for(Tutorial t:three){
-				t.fadeOut(3, Interp.LINEAR);
+				t.fadeOut(.33f, Interp.LINEAR);
 			}
 			three.clear();
 			return;
@@ -256,7 +256,7 @@ public class Tutorial extends Updater{
 
 		if(currentList!=null){
 			if(tutorials.indexOf(currentList.tutorial)<index){
-				currentList.fadeOut(3, Interp.LINEAR);
+				currentList.fadeOut(.33f, Interp.LINEAR);
 				currentList=null;
 			}
 		}
@@ -277,7 +277,7 @@ public class Tutorial extends Updater{
 				for(Module m:player.getRandomisedModules()){
 					m.removeSramble();
 				}
-				tutorials.remove(0).fadeOut(3, Interp.LINEAR);
+				tutorials.remove(0).fadeOut(.33f, Interp.LINEAR);
 				break;
 			case EnemyPlayCards:
 				Battle.zSet(Phase.EnemyWeaponPhase);
