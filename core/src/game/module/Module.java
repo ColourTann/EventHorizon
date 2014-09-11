@@ -21,14 +21,14 @@ import game.assets.Sounds;
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardCode.Special;
+import game.module.component.weapon.Tesla;
+import game.module.component.weapon.Weapon;
 import game.module.stuff.Buff;
 import game.module.stuff.DamagePoint;
 import game.module.stuff.ModuleInfo;
 import game.module.stuff.ModuleStats;
 import game.module.stuff.ShieldPoint;
 import game.module.stuff.Buff.BuffType;
-import game.module.weapon.Tesla;
-import game.module.weapon.Weapon;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.State;
 import game.ship.Ship;
@@ -587,11 +587,11 @@ public abstract class Module {
 	}
 
 	private double calcDouble(int cost){
+		// 1+ because a card is worth a similar amount to an energy //
 		return ((1+cost)*(tier/2d+1));
 	}
 
 	public int calc(int cost){
-		// 1+ because a card is worth a similar amount to an energy //
 		return (int) calcDouble(cost);
 	}
 

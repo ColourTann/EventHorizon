@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Polygon;
 import game.Main;
 import game.module.Module;
 import game.module.Module.ModuleType;
-import game.module.weapon.Weapon;
+import game.module.component.weapon.Weapon;
 import game.ship.Ship;
 import game.ship.ShipGraphic;
 

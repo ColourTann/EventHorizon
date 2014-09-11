@@ -21,7 +21,7 @@ import game.assets.Gallery;
 import game.assets.Sounds;
 import game.card.Card;
 import game.card.CardGraphic;
-import game.module.weapon.Weapon;
+import game.module.component.weapon.Weapon;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.State;
 import game.screen.battle.tutorial.Tutorial;

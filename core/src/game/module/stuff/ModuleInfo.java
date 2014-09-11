@@ -16,7 +16,7 @@ import game.assets.Gallery;
 import game.card.CardGraphic;
 import game.module.Module;
 import game.module.Module.ModuleType;
-import game.module.computer.Computer;
+import game.module.component.computer.Computer;
 
 public class ModuleInfo extends Mouser{
 	//279373

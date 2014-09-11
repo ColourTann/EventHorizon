@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Polygon;
 
 import game.assets.Gallery;
-import game.module.computer.Beta;
-import game.module.generator.Three;
-import game.module.shield.Repeller;
-import game.module.weapon.Pulse;
-import game.module.weapon.Tesla;
+import game.module.component.computer.Beta;
+import game.module.component.generator.Three;
+import game.module.component.shield.Repeller;
+import game.module.component.weapon.Pulse;
+import game.module.component.weapon.Tesla;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
 import game.ship.mapThings.mapAbility.genAbility.Teleport;

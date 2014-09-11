@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
-import game.module.weapon.attack.particle.SmokeMachine;
-import game.module.weapon.attack.particle.Smoke.SmokeType;
+import game.module.component.weapon.attack.particle.SmokeMachine;
+import game.module.component.weapon.attack.particle.Smoke.SmokeType;
 import game.screen.battle.Battle;
 import game.ship.ShipGraphic;
 

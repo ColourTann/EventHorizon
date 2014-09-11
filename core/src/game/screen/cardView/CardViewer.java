@@ -12,10 +12,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import game.card.Card;
 import game.card.CardGraphic;
 import game.module.Module;
-import game.module.shield.Deflector;
-import game.module.shield.Repeller;
-import game.module.shield.Repulsor;
-import game.module.weapon.Laser;
+import game.module.component.shield.Deflector;
+import game.module.component.shield.Repeller;
+import game.module.component.shield.Repulsor;
+import game.module.component.weapon.Laser;
 
 public class CardViewer extends Screen{
 	public ArrayList<Module> modules = new ArrayList<Module>();
