@@ -15,6 +15,7 @@ import util.update.Timer.Interp;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
+import game.assets.Sounds;
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardGraphic;
@@ -26,8 +27,11 @@ import game.module.Module.ModuleType;
 import game.module.computer.Computer;
 import game.module.generator.Generator;
 import game.module.shield.Shield;
-import game.module.utils.ShieldPoint;
-import game.module.utils.Buff.BuffType;
+import game.module.stuff.ShieldPoint;
+import game.module.stuff.Buff.BuffType;
+import game.module.utility.Utility;
+import game.module.utility.armour.Armour;
+import game.module.utility.armour.BasicArmour;
 import game.module.weapon.Weapon;
 import game.module.weapon.attack.Attack;
 import game.screen.battle.Battle;
@@ -40,8 +44,6 @@ import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
 import game.ship.shipClass.Nova;
-import game.utilitySystem.armour.Armour;
-import game.utilitySystem.armour.BasicArmour;
 
 public abstract class Ship {
 	//0-1 weapon 2 shield 3 gen 4 com
@@ -62,8 +64,10 @@ public abstract class Ship {
 	private int majorDamageTaken=0;
 	private int energyAtEndOfPhase=0;
 	private float powerLevel=0;
-	public Armour armour= new BasicArmour(1);
-
+	
+	//private 
+	private Armour armour= new BasicArmour(1);
+	private ArrayList<Utility> utilities=new ArrayList<Utility>();
 
 	//Enemy ai stuff//
 	public Module focusTarget;
@@ -98,6 +102,10 @@ public abstract class Ship {
 		}	
 		if(player)drawToMaximum();
 		currentEnergy+=getGenerator().getIncome();
+		
+		
+		for(Utility u:utilities)u.beginTurnEffect();
+		
 	}
 
 	public void enemyStartTurn(){	
@@ -487,6 +495,7 @@ public abstract class Ship {
 			currentEnergy=(int) Math.ceil(getGenerator().getIncome()/2f);
 		}
 		else currentEnergy=getGenerator().getIncome();
+		for(Utility u:utilities)u.startBattleEffect();
 	}
 
 	private void initFightStats() {
@@ -524,7 +533,7 @@ public abstract class Ship {
 	public void addToEnergyAtEndOfPhase(int amount){energyAtEndOfPhase+=amount;}
 	public void majorDamage() {
 		Battle.shake(player,3);
-		SoundClip.damageMajor.play();
+		Sounds.damageMajor.play();
 		majorDamageTaken++;
 	}
 	public int getMajorDamage(){
@@ -551,6 +560,9 @@ public abstract class Ship {
 		System.out.println("all mods destroyed?");
 		return null;
 	}
+	
+	
+	
 	/*public static Ship getRandomShip(boolean player){
 		Class<? extends Ship> ship= classes.get((int)(Math.random()*classes.size()));
 		Ship s=null;
@@ -606,9 +618,19 @@ public abstract class Ship {
 		niches[4].install(c);
 	}
 	public void setArmour(Armour a){
+		utilities.remove(this.armour);
 		this.armour=a;
+		a.ship=this;
+		utilities.add(this.armour);
 		recalculateThresholds();
 	}
+	
+	public void setUtility(Utility u){
+		if(u instanceof Armour) System.out.println("Watch out, setting armour as utility wuhohh!");
+		utilities.add(u);
+		u.ship=this;
+	}
+	
 	public Pic getPic(){
 		return shipPic;
 	}
@@ -635,6 +657,10 @@ public abstract class Ship {
 		return false;
 	}
 
+	public float getArmourMultiplier(){
+		return armour.getMultuplier();
+	}
+	
 	public int getTotalDeckSize(){
 		int result=0;
 
@@ -701,6 +727,9 @@ public abstract class Ship {
 
 	public void setMapShip(MapShip mapShip) {
 		this.mapShip=mapShip;
+	}
+	public void clearShields() {
+		for(Module m:modules)m.clearShields();
 	}
 
 

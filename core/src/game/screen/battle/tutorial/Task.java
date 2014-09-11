@@ -8,7 +8,7 @@ import game.card.Card;
 import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.Module.ModuleType;
-import game.module.utils.Buff.BuffType;
+import game.module.stuff.Buff.BuffType;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.Battle.State;

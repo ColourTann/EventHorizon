@@ -8,6 +8,7 @@ import util.particleSystem.Particle;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import game.assets.Sounds;
 import game.module.weapon.attack.particle.RayParticle;
 
 public class RayAttack extends AttackGraphic{
@@ -70,7 +71,7 @@ public class RayAttack extends AttackGraphic{
 				vector=vector.multiply(800);
 				intensity=0;
 				frequency=350;
-				SoundClip.ray.play();
+				Sounds.ray.play();
 			}
 		});
 

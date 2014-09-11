@@ -2,7 +2,6 @@ package game.screen.battle.tutorial;
 
 import java.util.ArrayList;
 
-
 import util.Colours;
 import util.Draw;
 import util.update.Timer.Interp;
@@ -20,7 +19,7 @@ import game.card.Card;
 import game.card.CardCode.AI;
 import game.card.CardCode.Special;
 import game.module.Module;
-import game.module.utils.ModuleStats;
+import game.module.stuff.ModuleStats;
 import game.module.weapon.Pulse;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;

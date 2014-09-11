@@ -5,16 +5,17 @@ import java.util.ArrayList;
 import util.Draw;
 import util.assets.SoundClip;
 import util.image.Pic;
+import game.assets.Sounds;
 import game.card.CardCode.AI;
 import game.card.CardCode.AIclass;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.Module.ModuleType;
-import game.module.utils.Buff;
-import game.module.utils.DamagePoint;
-import game.module.utils.ShieldPoint;
-import game.module.utils.Buff.BuffType;
+import game.module.stuff.Buff;
+import game.module.stuff.DamagePoint;
+import game.module.stuff.ShieldPoint;
+import game.module.stuff.Buff.BuffType;
 import game.module.weapon.Weapon;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
@@ -99,7 +100,7 @@ public class Card {
 		if(Tutorial.stopClick())return;
 		//First check if you're in a playable phase//
 		if(Battle.getPhase()==Phase.End||Battle.getPhase()!=Phase.ShieldPhase&&Battle.getPhase()!=Phase.WeaponPhase){
-			SoundClip.error.play();
+			Sounds.error.play();
 			return;	
 		}
 
@@ -119,23 +120,23 @@ public class Card {
 
 		if(Battle.getState()==State.CycleDiscard){
 			if(selected){
-				SoundClip.error.play();
+				Sounds.error.play();
 				return;
 			}
 			getShip().discard(this);
 			Battle.help.done();
 			Battle.setState(State.CycleGet);
-			SoundClip.cardDeselect.play();
+			Sounds.cardDeselect.play();
 			return;
 		}
 
 		if(Battle.getState()==State.CycleGet){
 			if(CycleButton.choices.contains(this)){
 				CycleButton.get().choose(this);
-				SoundClip.cardSelect.play();
+				Sounds.cardSelect.play();
 				return;
 			}
-			SoundClip.error.play();
+			Sounds.error.play();
 			return;
 		}
 
@@ -153,12 +154,12 @@ public class Card {
 		}
 
 		if((Battle.getPhase()==Phase.WeaponPhase&&mod.type==ModuleType.SHIELD)||(Battle.getPhase()==Phase.ShieldPhase&&mod.type==ModuleType.WEAPON)){
-			SoundClip.error.play();
+			Sounds.error.play();
 			System.out.println("Wrong state"); return;						//Wrong phase//
 		}
 		
 		if(mod.getBuffAmount(BuffType.Scrambled)>0){
-			SoundClip.cardSelect.play();
+			Sounds.cardSelect.play();
 			scrambSelect();
 			return;
 		}
@@ -166,13 +167,13 @@ public class Card {
 		//If it's an augment, must be valid//
 		if(getCode().contains(Special.Augment)){
 			if(!validAugmentPlay()){
-				SoundClip.error.play();
+				Sounds.error.play();
 				return;
 			}
 		}
 
 		if(Battle.getState()!=State.Nothing){
-			SoundClip.error.play();
+			Sounds.error.play();
 			return;
 		}
 
@@ -183,11 +184,11 @@ public class Card {
 
 		//Then check to see if you are unable to play the card//
 		if(getShip().getEnergy()<getCost()){
-			SoundClip.error.play();
+			Sounds.error.play();
 			System.out.println("Not enough energy to play "+this); return;	//Not enough Energy//			
 		}	
 		if(mod.getCurrentCooldown()>0){
-			SoundClip.error.play();
+			Sounds.error.play();
 			System.out.println(this+" is cooling down"); return;			//Cooling down//
 		}
 		
@@ -272,15 +273,15 @@ public class Card {
 		Ship ship=getShip();
 		//special case//
 		if(code.contains(Special.EnergyIfEmpty)&&ship.getEnergy()!=0){
-			SoundClip.error.play();
+			Sounds.error.play();
 			return;
 		}
 		if(code.contains(Special.MustBeMajorDamaged)&&mod.currentThreshold==0){
-			SoundClip.error.play();
+			Sounds.error.play();
 			return;
 		}
 		if(code.contains(Special.MustBeUndamaged)&&mod.getDamage()>0){
-			SoundClip.error.play();
+			Sounds.error.play();
 			return;
 		}
 		//Complicated bit about deselecting cards. First you have to deselect all cards that rely on this card. Currently only for reducecost//
@@ -309,8 +310,8 @@ public class Card {
 				}
 			}
 		}*/
-		if(!(type==ModuleType.SHIELD&&getEffect()>0&&!getCode().contains(Special.AddShieldPoints)))SoundClip.cardSelect.play();
-		if(code.contains(Special.ShieldChosenModule))SoundClip.cardSelect.play();
+		if(!(type==ModuleType.SHIELD&&getEffect()>0&&!getCode().contains(Special.AddShieldPoints)))Sounds.cardSelect.play();
+		if(code.contains(Special.ShieldChosenModule))Sounds.cardSelect.play();
 		selected=true;
 
 
@@ -451,7 +452,7 @@ public class Card {
 		//Reasons not to deselect//
 		//if(wasScrambled)return;
 		if(code.getAmount(Special.GainEnergy)>ship.getEnergy()){
-			SoundClip.error.play();
+			Sounds.error.play();
 			return;
 		}
 		
@@ -512,7 +513,7 @@ public class Card {
 
 		ship.playList.remove(this);
 		
-		if(playSound)SoundClip.cardDeselect.play();
+		if(playSound)Sounds.cardDeselect.play();
 	}
 
 	//General Play method//
@@ -563,7 +564,7 @@ public class Card {
 		}
 		selected=false;
 		wasScrambled=false;
-		SoundClip.cardDeselect.play();
+		Sounds.cardDeselect.play();
 		getShip().playList.remove(this);
 	}	
 
@@ -723,7 +724,7 @@ public class Card {
 		if(Battle.getPhase()==Phase.End||Battle.getState()!=State.Nothing)return;
 		if(selected)return;
 		if(Tutorial.stopFlip())return;
-		SoundClip.cardFlip.play();
+		Sounds.cardFlip.play();
 		flip();
 	}
 

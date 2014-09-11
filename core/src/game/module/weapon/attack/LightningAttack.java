@@ -10,6 +10,7 @@ import util.particleSystem.Particle;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import game.assets.Sounds;
 import game.module.weapon.attack.particle.Lightning;
 import game.module.weapon.attack.particle.Spark;
 
@@ -37,7 +38,7 @@ public class LightningAttack extends AttackGraphic{
 			public void finish() {
 
 				fired=true;
-				SoundClip.lightning.play();
+				Sounds.lightning.play();
 
 				impact();
 			}

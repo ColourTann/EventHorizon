@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.assets.animations.Explosion1;
 import game.module.Module;
 import game.module.Module.ModuleType;
@@ -184,7 +185,7 @@ public class ShipGraphic extends Updater{
 
 	private void crack(boolean shake){
 
-		SoundClip.shatter.play();
+		Sounds.shatter.play();
 		for(int i=0;i<2;i++){
 			Pair position= picCut.addShatter();
 			if(ship.player)position=position.add(ShipGraphic.offset);
@@ -201,7 +202,7 @@ public class ShipGraphic extends Updater{
 	}
 
 	private void release(){
-		SoundClip.explode.play();
+		Sounds.explode.play();
 		Battle.shake(ship.player, 20);
 		ship.exploded=true;
 		Shard s=picCut.removeCut();

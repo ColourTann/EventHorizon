@@ -53,12 +53,12 @@ public class PhaseButton extends Mouser{
 
 	@Override
 	public void mouseDown() {
-		if(Battle.getPhase()==Phase.ShieldPhase||Battle.getPhase()==Phase.WeaponPhase)t=new Timer(unClickedHeight, clickedHeight, 4, Interp.SQUARE);
+		if(Battle.getPhase()==Phase.ShieldPhase||Battle.getPhase()==Phase.WeaponPhase)t=new Timer(unClickedHeight, clickedHeight, .25f, Interp.SQUARE);
 	}
 
 	@Override
 	public void mouseUp() {
-		t=new Timer(t.getPair(), unClickedHeight, 4, Interp.SQUARE);
+		t=new Timer(t.getPair(), unClickedHeight, .25f, Interp.SQUARE);
 	
 	}
 

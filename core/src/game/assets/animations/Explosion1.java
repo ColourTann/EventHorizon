@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 
 import util.Colours;
 import util.maths.Pair;
+import util.particleSystem.Particle;
 import util.update.Animation;
 
 public class Explosion1 extends Animation{
@@ -39,8 +40,9 @@ public class Explosion1 extends Animation{
 			pixmap.fillCircle((int)start.x, (int)start.y, (int) (((float)diameter/(float)textures.length)*num));
 			textures[num]=new Texture(pixmap);
 		}
-		setup(textures, 15, false, myLocation);
+		setup(textures, 15+Particle.random(3), false, myLocation);
 		oneShot=true;
+		
 	}
 
 }

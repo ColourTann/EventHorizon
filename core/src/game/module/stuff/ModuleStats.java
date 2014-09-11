@@ -1,4 +1,4 @@
-package game.module.utils;
+package game.module.stuff;
 
 import util.Colours;
 import util.Draw;
@@ -110,39 +110,14 @@ public class ModuleStats extends Mouser{
 		}
 		int index;
 		Pic[] p;
-		int remainingSlots=row*3;
-		int healthLeft=mod.maxHP;
+	
 		int twin=0;
 		int slotLoc=0;
-		int thresholdsRemaining=3;
 		for(int i=0;i<mod.maxHP;i++){
-
-			if(i!=0){
-				twin--;
-				if(twin<=0){
-					slotLoc++;
-					remainingSlots--;
-				}
-
-				healthLeft--;
-
-				boolean onThresh=false;
-				for(int thr=0;thr<mod.thresholds.length;thr++){
-					if(i+2==mod.thresholds[thr]||i+1==mod.thresholds[thr]){
-						onThresh=true;
-					}
-
-				}
-
-				if(twin<=0&&remainingSlots*2-thresholdsRemaining-1<=healthLeft&&!onThresh){
-					twin=2;
-				}
-				if(mod.type==ModuleType.GENERATOR&&mod.ship.player)System.out.println(i+":"+onThresh+":"+twin);
-
-			}
-
-
-		
+			twin--;
+			
+			if(mod.doubles[slotLoc]&&twin<=0) twin=2;
+			
 			p=Gallery.greenHP;
 			index=0;
 			boolean moused=false;
@@ -162,11 +137,9 @@ public class ModuleStats extends Mouser{
 				}
 			}
 			if(mod.thresholds[0]==i+1||mod.thresholds[1]==i+1){
-				thresholdsRemaining--;
 				index=1;
 			}
 			if(i==mod.maxHP-1){
-				thresholdsRemaining--;
 				index=2;
 			}
 			Draw.draw(batch, p[twin>0?2+twin:index].get(),collider.position.x+hpLoc.x+hpGap.x*(slotLoc%row),collider.position.y+hpLoc.y+hpGap.y*(slotLoc/row));
@@ -174,8 +147,7 @@ public class ModuleStats extends Mouser{
 				Draw.draw(batch, Gallery.mousedHP.get(), collider.position.x+hpLoc.x+hpGap.x*(slotLoc%row),collider.position.y+hpLoc.y+hpGap.y*(slotLoc/row));
 			}
 
-
-
+			if(twin!=2)slotLoc++;
 
 
 		}

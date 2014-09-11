@@ -67,7 +67,7 @@ public class NicheGraphic extends Updater{
 		if(shield==0)target=0;
 	
 
-		if(ticks>1){
+		if(ticks>1&&!niche.ship.dead){
 			ticks-=Math.random();
 			//ticks=1;
 			Pair s=new Pair();

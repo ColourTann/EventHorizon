@@ -1,6 +1,8 @@
-package game.utilitySystem.armour;
+package game.module.utility.armour;
 
-public abstract class Armour {
+import game.module.utility.Utility;
+
+public abstract class Armour extends Utility{
 	private float multiplier;
 	public Armour(float multiplier){
 		this.multiplier=multiplier;
@@ -8,4 +10,6 @@ public abstract class Armour {
 	public float getMultuplier(){
 		return multiplier;
 	}
+
+	
 }

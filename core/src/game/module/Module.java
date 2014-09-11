@@ -2,6 +2,7 @@ package game.module;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import util.Colours;
@@ -16,15 +17,16 @@ import util.update.Timer.Interp;
 import util.update.Timer;
 import game.Main;
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardCode.Special;
-import game.module.utils.Buff;
-import game.module.utils.DamagePoint;
-import game.module.utils.ModuleInfo;
-import game.module.utils.ModuleStats;
-import game.module.utils.ShieldPoint;
-import game.module.utils.Buff.BuffType;
+import game.module.stuff.Buff;
+import game.module.stuff.DamagePoint;
+import game.module.stuff.ModuleInfo;
+import game.module.stuff.ModuleStats;
+import game.module.stuff.ShieldPoint;
+import game.module.stuff.Buff.BuffType;
 import game.module.weapon.Tesla;
 import game.module.weapon.Weapon;
 import game.screen.battle.Battle;
@@ -54,6 +56,9 @@ public abstract class Module {
 	private int[] baseThresholds;
 	public int[] thresholds=new int[3];
 
+	
+	float shieldIntensity=0;
+	
 	public ArrayList<DamagePoint> damage= new ArrayList<DamagePoint>();
 	public ArrayList<DamagePoint> incomingDamage= new ArrayList<DamagePoint>();
 	public ArrayList<DamagePoint> unshieldableIcoming= new ArrayList<DamagePoint>();
@@ -73,6 +78,7 @@ public abstract class Module {
 	private ArrayList<Integer> nextCards= new ArrayList<Integer>();
 	public boolean destroyed;
 	public int tier=5;
+	public boolean[] doubles= new boolean[18];
 	//Bonuses//
 	/*public int bonusCost;
 	public int bonusCooldown;
@@ -114,9 +120,40 @@ public abstract class Module {
 	
 	public void recalculateThresholds(){
 		for(int i=0;i<3;i++){
-			thresholds[i]=(int)(baseThresholds[i]*ship.armour.getMultuplier());
+			thresholds[i]=(int)(baseThresholds[i]*ship.getArmourMultiplier());
 		}
 		maxHP=thresholds[2];
+		
+		for(int i=0;i<doubles.length;i++)doubles[i]=false;
+		
+		if(doubles.length>=maxHP){
+			return;
+		}
+		int boxesLeft=18;
+		for(int hpLeft=maxHP;hpLeft>=0;hpLeft--){
+		
+			
+			boolean found=false;
+			for(int thr:thresholds){
+				if(hpLeft==thr||hpLeft-1==thr){
+				
+					boxesLeft--;
+					found=true;
+					break;
+				}
+			}
+			if(found)continue;
+			//if(doubles[boxesLeft])continue;
+			if(hpLeft>boxesLeft){
+				hpLeft--;
+				boxesLeft--;
+				doubles[boxesLeft]=true;
+				continue;
+			}
+			
+			boxesLeft--;
+		}
+		
 	}
 
 	@SuppressWarnings("unused")
@@ -131,7 +168,7 @@ public abstract class Module {
 				for(int i=0;i<Battle.moduleChooser.getEffect();i++)shield(new ShieldPoint(Battle.moduleChooser, i==0), false);
 				if(code.contains(Special.GetCardFromChosenModule)){
 					if(this==Battle.moduleChooser.mod){
-						SoundClip.error.play();
+						Sounds.error.play();
 						return;
 					}
 					else ship.drawCard(getNextCard());
@@ -149,7 +186,7 @@ public abstract class Module {
 						return;
 					}
 				}
-				SoundClip.error.play();
+				Sounds.error.play();
 
 			}
 
@@ -218,7 +255,7 @@ public abstract class Module {
 
 		Battle.shake(ship.player,(float)(2.5f));
 		ship.getGraphic().damage(niche.location);
-		SoundClip.damageMinor.play();
+		Sounds.damageMinor.play();
 		//if(damagePoint.card!=null&&damagePoint.card.mod instanceof Tesla) return;
 
 
@@ -262,7 +299,6 @@ public abstract class Module {
 
 
 	public void calculateDamage(int damage, boolean unshieldable) {
-		System.out.println("calc");
 		if(unshieldable){
 			for(int i=0;i<damage;i++){
 				DamagePoint p = unshieldableIcoming.remove(0);
@@ -273,7 +309,7 @@ public abstract class Module {
 			for(int i=0;i<damage;i++){
 				DamagePoint p = incomingDamage.remove(0);
 				if(shieldPoints.size()>0){
-					SoundClip.shieldActivate.play();
+					Sounds.shieldActivate.play();
 					activateShield(shieldPoints.remove(0));
 					continue;
 				}
@@ -283,7 +319,7 @@ public abstract class Module {
 		}
 	}
 
-	private void calculateDamage() {
+	/*private void calculateDamage() {
 		for(DamagePoint p: incomingDamage){
 			if(shieldPoints.size()>0){
 				activateShield(shieldPoints.remove(0));
@@ -297,7 +333,7 @@ public abstract class Module {
 		incomingDamage.clear();
 		shieldPoints.clear();
 		unshieldableIcoming.clear();
-	}
+	}*/
 
 	private void activateShield(ShieldPoint shield) {
 		if(immune)return;
@@ -311,14 +347,18 @@ public abstract class Module {
 	public boolean shield(ShieldPoint s, boolean overlapSound){
 		//#1Reason why not to shield//
 		System.out.println("shielding "+this);
-		if(s.card.getCode().contains(Special.ShieldOnlyDamaged))if(currentThreshold==0)return false;
+		if(s.card!=null&&s.card.getCode().contains(Special.ShieldOnlyDamaged))if(currentThreshold==0)return false;
 
 		shieldPoints.add(s);
-		if(overlapSound)SoundClip.shieldUse.overlay();
-		else SoundClip.shieldUse.play();
+		if(overlapSound)Sounds.shieldUse.overlay();
+		else Sounds.shieldUse.play();
 		return true;
 	}
 
+	public void clearShields(){
+		shieldPoints.clear();
+	}
+	
 	public void unshield(Card card) {
 		for(int i=0;i<shieldPoints.size();i++){
 			ShieldPoint sp=shieldPoints.get(i);
@@ -573,7 +613,7 @@ public abstract class Module {
 			damage(new DamagePoint(null));
 		}
 		damageAtEnd=0;
-		calculateDamage();
+		
 		//DOT stuff here//
 		for(int i=0;i<buffs.size();i++){
 			Buff b = buffs.get(i);
@@ -585,9 +625,15 @@ public abstract class Module {
 	}
 
 	public void drawShield(SpriteBatch batch) {
+		
+		
+		float delta= Gdx.graphics.getDeltaTime();
+		
+		shieldIntensity+=(shieldPoints.size()-shieldIntensity)*delta*5;
+		
 		float alpha= (float) (Math.sin(Battle.ticks*3)+1)/4+.5f;
 		alpha/=4;
-		alpha*=Math.min(4, shieldPoints.size());
+		alpha*=Math.min(4, shieldIntensity);
 		batch.setColor(Colours.withAlpha(Colours.shieldCols6[3], alpha));
 
 		Draw.drawRotatedScaledCenteredFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);

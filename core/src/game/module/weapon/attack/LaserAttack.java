@@ -11,6 +11,7 @@ import util.update.Timer.*;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import game.assets.Sounds;
 import game.module.weapon.attack.particle.LaserBody;
 import game.module.weapon.attack.particle.LaserCharge;
 import game.module.weapon.attack.particle.SmokeMachine;
@@ -38,7 +39,7 @@ public class LaserAttack extends AttackGraphic{
 				
 				disable();
 				ticks=0;
-				SoundClip.laser.play();
+				Sounds.laser.play();
 			}
 		});
 		

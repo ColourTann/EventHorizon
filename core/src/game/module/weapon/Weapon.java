@@ -6,7 +6,7 @@ import util.image.Pic;
 import util.particleSystem.ParticleSystem;
 import game.card.Card;
 import game.module.Module;
-import game.module.utils.Buff.BuffType;
+import game.module.stuff.Buff.BuffType;
 import game.module.weapon.attack.Attack;
 
 public abstract class Weapon extends Module{

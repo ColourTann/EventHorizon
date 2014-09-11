@@ -34,8 +34,9 @@ import game.card.CardGraphic;
 import game.card.CardIcon;
 import game.card.CardCode.Special;
 import game.module.Module;
-import game.module.utils.DamagePoint;
-import game.module.utils.ModuleInfo;
+import game.module.stuff.DamagePoint;
+import game.module.stuff.ModuleInfo;
+import game.module.utility.armour.BasicArmour;
 import game.screen.battle.interfaceJunk.CycleButton;
 import game.screen.battle.interfaceJunk.HelpPanel;
 import game.screen.battle.interfaceJunk.PhaseButton;
@@ -50,7 +51,6 @@ import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
 import game.ship.shipClass.Nova;
-import game.utilitySystem.armour.BasicArmour;
 
 public class Battle extends Screen{
 	public enum Phase{ShieldPhase, EnemyWeaponsFiring, WeaponPhase, EnemyShieldPhase, PlayerWeaponsFiring, EnemyWeaponPhase, End};
@@ -114,13 +114,20 @@ public class Battle extends Screen{
 		resetStatics();
 		Star.init();
 		if(tutorial)initTutorial();
+		
+		
+		player.setArmour(new BasicArmour(2));
+		
 		player.startFight(true);
 		enemy.startFight(false);
 		if(tutorial){
 			player.addEnergy(6);
 			enemy.addEnergy(2);
 		}
-		player.setArmour(new BasicArmour(1.9f));
+		
+		
+
+		
 	}
 
 	public static Ship getPlayer(){
@@ -207,6 +214,7 @@ public class Battle extends Screen{
 			getEnemy().enemyStartPhase();
 			break;
 		case EnemyWeaponPhase:
+			getEnemy().clearShields();
 			PhaseButton.get().nextPhase();
 			getEnemy().checkDefeat();
 			getEnemy().enemyStartPhase();
@@ -215,6 +223,7 @@ public class Battle extends Screen{
 			getEnemy().fireAll();
 			break;
 		case PlayerWeaponsFiring:
+			
 			getPlayer().fireAll();
 			break;
 		case ShieldPhase:
@@ -224,6 +233,7 @@ public class Battle extends Screen{
 			getPlayer().playerStartTurn();
 			break;
 		case WeaponPhase:
+			getPlayer().clearShields();
 			new TextWisp("Weapon Phase", Font.big, new Pair(Main.width/2,330), TextWisp.WispType.Regular);
 			break;
 		default:

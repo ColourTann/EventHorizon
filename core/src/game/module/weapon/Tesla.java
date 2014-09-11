@@ -7,7 +7,7 @@ import game.card.CardCode.Special;
 
 public class Tesla extends Weapon{
 	public Tesla(int tier){
-		super("Tesla",Gallery.tesla,4,0, new int[]{4,11,16}, tier);
+		super("Tesla",Gallery.tesla,4,0, new int[]{4,11,15}, tier);
 		for(int i=0;i<=variants;i++){
 			cardPic[i]=Gallery.teslaCard[i];
 		}

@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.card.Card;
 import game.card.CardGraphic;
 import game.module.weapon.Weapon;
@@ -62,7 +63,7 @@ public class CycleButton extends Mouser{
 		if(!Battle.isPlayerTurn())return;
 		if(Battle.getState()==State.Nothing){
 			
-			SoundClip.cardSelect.play();
+			Sounds.cardSelect.play();
 			timer=new Timer(0,1,1/3f,Interp.SQUARE);
 			
 
@@ -75,7 +76,7 @@ public class CycleButton extends Mouser{
 		}
 
 		if(Battle.getState()==State.CycleDiscard){
-			SoundClip.cardDeselect.play();
+			Sounds.cardDeselect.play();
 			timer=new Timer(timer.getFloat(),0,3,Interp.SQUARE);
 			Battle.getPlayer().addEnergy(cost);
 			

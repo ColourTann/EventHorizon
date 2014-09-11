@@ -8,6 +8,7 @@ import util.particleSystem.Particle;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import game.assets.Sounds;
 import game.module.weapon.attack.particle.PulseParticle;
 
 public class PulseAttack extends AttackGraphic{
@@ -29,7 +30,7 @@ public class PulseAttack extends AttackGraphic{
 
 	@Override
 	public void fire(final Pair targett) {
-		System.out.println("order"+order);
+	
 
 		t=new Timer(0,1, 1/(10f/(order+.01f)), Interp.LINEAR);
 		t.addFinisher(new Finisher() {
@@ -37,7 +38,7 @@ public class PulseAttack extends AttackGraphic{
 
 			@Override
 			public void finish() {
-				SoundClip.pulse.overlay();
+				Sounds.pulse.overlay();
 				goingRight=targett.x>origin.x;
 				target=targett;
 
@@ -50,10 +51,10 @@ public class PulseAttack extends AttackGraphic{
 
 	@Override
 	public void impact() {
-		System.out.println("imapcting");
+
 		
 		if(atk.activateDamage()){
-			SoundClip.damageMinor.play();
+			Sounds.damageMinor.play();
 			for(int i=0;i<50;i++){
 				particles.add(new PulseParticle(position, vector));
 			}
@@ -88,7 +89,7 @@ public class PulseAttack extends AttackGraphic{
 			vector=vector.add(targetVector.subtract(vector).multiply(.006f));
 			if((position.x>=target.x)==goingRight){
 				particles.add(new PulseParticle(position));
-				System.out.println("impact");
+				
 				impact();
 			}
 		}
