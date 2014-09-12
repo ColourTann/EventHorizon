@@ -3,11 +3,12 @@ package game.module.component.generator;
 import util.image.Pic;
 import game.card.CardCode.Special;
 import game.module.Module;
+import game.module.component.Component;
 
-public abstract class Generator extends Module{
+public abstract class Generator extends Component{
 	public int energyIncome;
 	public Generator(String modName,Pic p, int energyIncome, int[] thresholds){
-		super(modName,p,1,2, thresholds, 0);
+		super(0, modName, p, 1, 2, thresholds);
 		this.energyIncome=energyIncome;
 		type=ModuleType.GENERATOR;
 		name[0]="Recharge";

@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
-import game.module.component.weapon.attack.particle.SmokeMachine;
-import game.module.component.weapon.attack.particle.Smoke.SmokeType;
+import game.attack.particle.SmokeMachine;
+import game.attack.particle.Smoke.SmokeType;
 import game.screen.battle.Battle;
 import game.ship.ShipGraphic;
 
@@ -34,7 +34,7 @@ public class NicheGraphic extends Updater{
 	public void render(SpriteBatch batch){
 
 		batch.setColor(1,1,1,1);
-		Texture t=niche.mod.modulePic.get();
+		Texture t=niche.component.modulePic.get();
 	
 		
 		Pair bonus=new Pair();
@@ -43,7 +43,7 @@ public class NicheGraphic extends Updater{
 		}
 		bonus=bonus.floor();
 		
-		Draw.drawRotatedScaledFlipped(batch, t, niche.location.x+bonus.x, niche.location.y+bonus.y, 1, 1, 0, !niche.mod.ship.player, false);
+		Draw.drawRotatedScaledFlipped(batch, t, niche.location.x+bonus.x, niche.location.y+bonus.y, 1, 1, 0, !niche.component.ship.player, false);
 
 		batch.setColor(1,1,1,1);
 		
@@ -60,8 +60,8 @@ public class NicheGraphic extends Updater{
 
 	
 
-		ticks+=delta*area*.00025f*niche.mod.currentThreshold;
-		int shield=Math.min(3,niche.mod.getShield());
+		ticks+=delta*area*.00025f*niche.component.currentThreshold;
+		int shield=Math.min(3,niche.component.getShield());
 
 		float target=(float) (.15f*shield+(Math.sin(Battle.ticks*4)/2+.5f)/(5-shield));
 		if(shield==0)target=0;
@@ -80,7 +80,7 @@ public class NicheGraphic extends Updater{
 			float bonusY=(float) (r.getHeight()*Math.random())-r.getHeight()/2;
 			
 			
-			Pair p=niche.mod.getCenter().add(bonusX, bonusY);
+			Pair p=niche.component.getCenter().add(bonusX, bonusY);
 			ParticleSystem.systems.add(new SmokeMachine(p, .2f, 20, SmokeType.Damage));
 		}
 

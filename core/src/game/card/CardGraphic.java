@@ -5,6 +5,7 @@ import util.Draw;
 import util.assets.Font;
 import util.image.Pic;
 import util.maths.BoxCollider;
+import util.maths.CircleCollider;
 import util.maths.Pair;
 import util.update.Mouser;
 import util.update.Timer.Interp;
@@ -70,7 +71,7 @@ public class CardGraphic extends Mouser {
 	boolean scrambled;
 
 	//offcuts//
-	public static CardGraphic augmentPicker;
+	//public static CardGraphic augmentPicker;
 
 	public CardGraphic(Card c) {
 		position=new Pair(Main.width/2 - width/2, Main.height+height+10);
@@ -120,10 +121,13 @@ public class CardGraphic extends Mouser {
 		if(card.getShip()==null)return;
 		if(card.getShip().player)selectedHeight += ((card.selected ? maxSelectedHeight : 0) - selectedHeight)* delta * selectSpeed;
 
+		
+
 
 		//Updating collider position//
 		collider.position=position.copy().add(0,selectedHeight);
-
+	
+		
 	}
 
 	public void render(SpriteBatch batch) {
@@ -210,9 +214,11 @@ public class CardGraphic extends Mouser {
 
 
 		//Card image//
-		if (drawTopPic || part != card.side)
+		if (drawTopPic || part != card.side){
+		
 			Draw.drawScaled(batch, card.getImage(part).get(), position.x + positionPic.x, baseHeight
 					+ positionPic.y, 2, 2);
+		}
 
 		//Name//
 		Font.small.setColor(darkText);
@@ -326,6 +332,7 @@ public class CardGraphic extends Mouser {
 		if(part==card.side&&moused){
 			Draw.draw(batch, Gallery.cardBase.getOutline(), position.x, baseHeight);
 		}
+
 	}
 
 	//Setting up Energy icon positions//
@@ -370,6 +377,7 @@ public class CardGraphic extends Mouser {
 	}
 
 	public void hideLower() {
+		System.out.println("hidinglower");
 		showLower = false;
 		((BoxCollider) collider).h=height/2;
 	}
@@ -402,18 +410,20 @@ public class CardGraphic extends Mouser {
 	}
 
 
-	public static void setAugmentOrTarget(CardGraphic augmenter){
+	/*public static void setAugmentOrTarget(CardGraphic augmenter){
 		resetOffCuts();
 		augmentPicker=augmenter;
 	}
 
 	public static void resetOffCuts(){
 		augmentPicker=null;
-	}
+	}*/
 
 	public static void renderOffCuts(SpriteBatch batch){
-		if(augmentPicker!=null)augmentPicker.render(batch);
+		if(Battle.augmentSource!=null)Battle.augmentSource.getGraphic().render(batch);
+		if(Battle.moduleChooser!=null)Battle.moduleChooser.getGraphic().render(batch);
 		for(Card c:CycleButton.choices)c.getGraphic().render(batch);
+		//if(Card.)
 	}
 
 

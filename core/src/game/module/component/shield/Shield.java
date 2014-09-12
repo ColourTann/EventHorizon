@@ -2,10 +2,11 @@ package game.module.component.shield;
 
 import util.image.Pic;
 import game.module.Module;
+import game.module.component.Component;
 
-public abstract class Shield extends Module{
+public abstract class Shield extends Component{
 	public Shield(String name,Pic p, int numCards, int[] thresholds, int tier){
-		super(name,p,4, numCards, thresholds, tier);
+		super(tier, name,p,4, numCards, thresholds);
 		type=ModuleType.SHIELD;
 	}
 }

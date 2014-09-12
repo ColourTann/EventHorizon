@@ -34,9 +34,11 @@ import game.card.CardGraphic;
 import game.card.CardIcon;
 import game.card.CardCode.Special;
 import game.module.Module;
+import game.module.component.Component;
 import game.module.stuff.DamagePoint;
 import game.module.stuff.ModuleInfo;
 import game.module.utility.armour.BasicArmour;
+import game.module.utility.armour.RegenArmour;
 import game.screen.battle.interfaceJunk.CycleButton;
 import game.screen.battle.interfaceJunk.HelpPanel;
 import game.screen.battle.interfaceJunk.PhaseButton;
@@ -113,21 +115,14 @@ public class Battle extends Screen{
 		enemyCam.setToOrtho(true, viewport.x, viewport.y);
 		resetStatics();
 		Star.init();
-		if(tutorial)initTutorial();
-		
-		
-		player.setArmour(new BasicArmour(2));
-		
+		if(tutorial)initTutorial();		
+		player.setArmour(new RegenArmour(0));
 		player.startFight(true);
 		enemy.startFight(false);
 		if(tutorial){
 			player.addEnergy(6);
 			enemy.addEnergy(2);
 		}
-		
-		
-
-		
 	}
 
 	public static Ship getPlayer(){
@@ -167,7 +162,6 @@ public class Battle extends Screen{
 		PhaseButton.button=null;
 		Card.extraCardsToRender.clear();
 		CardIcon.icons.clear();
-		CardGraphic.augmentPicker=null;
 		help=null;
 		victoryFadeInTimer=new Timer();
 	}
@@ -175,7 +169,7 @@ public class Battle extends Screen{
 	private void initTutorial() {
 		CardCode code = new CardCode();
 		code.add(Special.AddShieldPoints);
-		enemy.drawCard(enemy.getModule(0).getCard(5));
+		enemy.drawCard(enemy.getComponent(0).getCard(5));
 		tutorial=true;
 		Tutorial.init();
 		currentPhase=Phase.EnemyWeaponPhase;
@@ -320,7 +314,7 @@ public class Battle extends Screen{
 
 		case Input.Keys.S:
 
-
+			battleWon(getEnemy());
 			break;
 		case Input.Keys.A:
 			battleWon(getPlayer());
@@ -602,11 +596,11 @@ public class Battle extends Screen{
 		for(CardIcon icon:CardIcon.icons){
 			icon.render(batch);
 		}
-		for(Module m:player.modules){
-			m.getStats().render(batch);
+		for(Component c:player.components){
+			c.getStats().render(batch);
 		}
-		for(Module m:enemy.modules){
-			m.getStats().render(batch);
+		for(Component c:enemy.components){
+			c.getStats().render(batch);
 		}
 		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
 		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);

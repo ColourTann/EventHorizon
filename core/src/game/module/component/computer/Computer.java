@@ -5,11 +5,12 @@ import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
 import game.module.Module;
+import game.module.component.Component;
 
-public abstract class Computer extends Module{
+public abstract class Computer extends Component{
 	public int maxCards;
 	public Computer(String modName,Pic p, int maxCards, int[] thresholds) {
-		super(modName, p,1,2,thresholds, 0);
+		super(0, modName, p,1,2,thresholds);
 		this.maxCards=maxCards;
 		type=ModuleType.COMPUTER;
 		name[0]="Lock-on";

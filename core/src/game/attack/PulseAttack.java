@@ -1,4 +1,4 @@
-package game.module.component.weapon.attack;
+package game.attack;
 
 import util.update.Timer;
 import util.update.Timer.*;
@@ -9,7 +9,7 @@ import util.particleSystem.Particle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.assets.Sounds;
-import game.module.component.weapon.attack.particle.PulseParticle;
+import game.attack.particle.PulseParticle;
 
 public class PulseAttack extends AttackGraphic{
 

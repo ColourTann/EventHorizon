@@ -19,6 +19,7 @@ import game.card.Card;
 import game.card.CardCode.AI;
 import game.card.CardCode.Special;
 import game.module.Module;
+import game.module.component.Component;
 import game.module.component.weapon.Pulse;
 import game.module.stuff.ModuleStats;
 import game.screen.battle.Battle;
@@ -273,8 +274,8 @@ public class Tutorial extends Updater{
 				Battle.setTutorial(false);
 				player.drawToMaximum();
 				enemy.drawToMaximum();
-				for(Module m:player.getRandomisedModules()){
-					m.removeSramble();
+				for(Component c:player.getRandomisedModules()){
+					c.removeSramble();
 				}
 				tutorials.remove(0).fadeOut(.33f, Interp.LINEAR);
 				break;
@@ -294,7 +295,7 @@ public class Tutorial extends Updater{
 					}
 				}
 				if(!cardFound){
-					targetedWeaponCard=player.getModule(0).getCard(6);
+					targetedWeaponCard=player.getComponent(0).getCard(6);
 					player.drawCard(targetedWeaponCard);
 				}
 				for(Card c:player.hand){
@@ -304,28 +305,28 @@ public class Tutorial extends Updater{
 				}
 
 
-				Card c=enemy.getModule(1).getCard(5);
+				Card c=enemy.getComponent(1).getCard(5);
 				c.getCode(1).clear();
 				c.getCode(1).add(Special.Targeted);
 				c.getCode(1).add(Special.BonusVsModule0);
 				c.getCode(1).add(AI.BetterAgainstSpecificSystem);
 				c.zSetEffect(4);
 				enemy.drawCard(c);
-				Card c1=enemy.getModule(1).getCard(5);
+				Card c1=enemy.getComponent(1).getCard(5);
 				c1.getCode(1).clear();
 				c1.getCode(1).add(Special.Targeted);
 				c1.getCode(1).add(Special.BonusVsModule0);
 				c1.getCode(1).add(AI.BetterAgainstSpecificSystem);
 				c1.zSetEffect(4);
 				enemy.drawCard(c1);
-				Card c2=enemy.getModule(1).getCard(5);
+				Card c2=enemy.getComponent(1).getCard(5);
 				c2.getCode(1).clear();
 				c2.getCode(1).add(Special.Targeted);
 				c2.getCode(1).add(Special.BonusVsModule1);
 				c2.getCode(1).add(AI.BetterAgainstSpecificSystem);
 				c2.zSetEffect(6);
 				enemy.drawCard(c2);
-				Card c3=enemy.getModule(1).getCard(5);
+				Card c3=enemy.getComponent(1).getCard(5);
 				c3.getCode(1).clear();
 				c3.getCode(1).add(Special.Targeted);
 				c3.getCode(1).add(Special.BonusVsModule1);
@@ -333,7 +334,7 @@ public class Tutorial extends Updater{
 				c3.zSetEffect(6);
 				enemy.drawCard(c3);
 				overrideStopFlip=true;
-				for(Module m:enemy.modules)m.getStats().showNameWisp();
+				for(Component com:enemy.components)com.getStats().showNameWisp();
 				break;
 			case ShieldGenList:
 				currentList=new Checklist(t, new Task[]{
@@ -345,12 +346,12 @@ public class Tutorial extends Updater{
 
 			case DrawFirstHand:
 				firstShieldCard=Battle.getPlayer().getShield().getCard(5);
-				firstWeaponCard=player.getModule(1).getCard(5);
+				firstWeaponCard=player.getComponent(1).getCard(5);
 				player.drawCard(firstWeaponCard);
-				player.drawCard(player.getModule(1).getCard(5));
+				player.drawCard(player.getComponent(1).getCard(5));
 				Battle.getPlayer().drawCard(firstShieldCard);
-				player.drawCard(player.getModule(0).getCard(5));
-				player.drawCard(player.getModule(0).getCard(5));
+				player.drawCard(player.getComponent(0).getCard(5));
+				player.drawCard(player.getComponent(0).getCard(5));
 				break;
 			case PlayWeaponList:
 				currentList=new Checklist(t, new Task[]{
@@ -358,8 +359,8 @@ public class Tutorial extends Updater{
 						new Task("Click the red crossed swords to confirm",TaskType.EndWeaponPhase, true)
 				});
 				enemy.drawCard(enemy.getShield().getNextCard());
-				enemy.drawCard(new Card(enemy.getModule(1),5));
-				enemy.drawCard(new Card(enemy.getModule(1),6));
+				enemy.drawCard(new Card(enemy.getComponent(1),5));
+				enemy.drawCard(new Card(enemy.getComponent(1),6));
 				break;
 			case ShieldMajorList:
 				currentList=new Checklist(t, new Task[]{
@@ -371,13 +372,13 @@ public class Tutorial extends Updater{
 				Battle.getPlayer().drawCard(Battle.getPlayer().getShield().getCard(5));
 				Battle.getPlayer().drawCard(Battle.getPlayer().getShield().getCard(5));
 				while(player.hand.size()<5){
-					player.drawCard(player.getModule(0).getCard(5));
+					player.drawCard(player.getComponent(0).getCard(5));
 				}
 				break;
 
 
 			case hideNameWisps:
-				for(Module m:player.modules)m.getStats().hideNameWisp();
+				for(Component hnwc:player.components)hnwc.getStats().hideNameWisp();
 				break;
 
 			case HighlightTargetedPulse:
@@ -396,8 +397,8 @@ public class Tutorial extends Updater{
 			case drawTwoShields:
 				player.drawCard(player.getShield().getCard(3));
 				player.drawCard(player.getShield().getCard(4));
-				while(player.hand.size()<5)player.drawCard(player.modules[1].getNextCard());
-				for(Module m:enemy.modules)m.getStats().hideNameWisp();
+				while(player.hand.size()<5)player.drawCard(player.components[1].getNextCard());
+				for(Component dtsc:enemy.components)dtsc.getStats().hideNameWisp();
 				break;
 
 			case LotsShieldList:
@@ -414,11 +415,11 @@ public class Tutorial extends Updater{
 				});
 				break;
 			case DrawMoreTeslas:
-				enemy.drawCard(enemy.getModule(0).getNextCard());
-				enemy.drawCard(enemy.getModule(1).getNextCard());
+				enemy.drawCard(enemy.getComponent(0).getNextCard());
+				enemy.drawCard(enemy.getComponent(1).getNextCard());
 				break;
 			case ShowPlayerNames:
-				for(Module m:player.modules)m.getStats().showNameWisp();
+				for(Component com:player.components)com.getStats().showNameWisp();
 				glows.clear();
 				
 				for(int i=0;i<5;i++){

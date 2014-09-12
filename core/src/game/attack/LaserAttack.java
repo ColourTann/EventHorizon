@@ -1,4 +1,4 @@
-package game.module.component.weapon.attack;
+package game.attack;
 
 
 
@@ -12,10 +12,10 @@ import util.update.Timer.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.assets.Sounds;
-import game.module.component.weapon.attack.particle.LaserBody;
-import game.module.component.weapon.attack.particle.LaserCharge;
-import game.module.component.weapon.attack.particle.SmokeMachine;
-import game.module.component.weapon.attack.particle.Smoke.SmokeType;
+import game.attack.particle.LaserBody;
+import game.attack.particle.LaserCharge;
+import game.attack.particle.SmokeMachine;
+import game.attack.particle.Smoke.SmokeType;
 
 public class LaserAttack extends AttackGraphic{
 

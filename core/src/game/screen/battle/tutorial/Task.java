@@ -8,6 +8,7 @@ import game.card.Card;
 import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.Module.ModuleType;
+import game.module.component.Component;
 import game.module.stuff.Buff.BuffType;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
@@ -67,8 +68,8 @@ public class Task {
 		case ShieldGen:
 			return Battle.getPlayer().getGenerator().getShield()==2;
 		case PreventAllMajor:
-			for(Module m:Battle.getPlayer().getRandomisedModules()){
-				if(m.getShieldsRequiredToAvoidMajor()!=999)return false;
+			for(Component c:Battle.getPlayer().getRandomisedModules()){
+				if(c.getShieldsRequiredToAvoidMajor()!=999)return false;
 			}
 			return true;
 		case EndShieldPhase:
@@ -97,7 +98,7 @@ public class Task {
 			}
 			break;
 		case WeirdPrevent:
-			if(player.getModule(0).getShieldableIncoming()<=player.getModule(0).thresholds[0]&&player.getModule(1).getShieldableIncoming()<=player.getModule(1).thresholds[1])return true;
+			if(player.getComponent(0).getShieldableIncoming()<=player.getComponent(0).thresholds[0]&&player.getComponent(1).getShieldableIncoming()<=player.getComponent(1).thresholds[1])return true;
 			break;
 		case FlipCard:
 			return Tutorial.targetedWeaponCard.side==1;

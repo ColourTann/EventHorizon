@@ -1,4 +1,4 @@
-package game.module.component.weapon.attack.particle;
+package game.attack.particle;
 
 import util.Colours;
 import util.Draw;
@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.assets.Gallery;
-import game.module.component.weapon.attack.RayAttack;
+import game.attack.RayAttack;
 
 public class RayParticle extends Particle{
 	static Texture t=Gallery.whiteSquare.get();

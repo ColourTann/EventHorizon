@@ -33,7 +33,7 @@ public class BoxCollider extends Collider{
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		sr.begin(ShapeType.Filled);
 
-		sr.setColor(1, 1, 1, .3f);
+		sr.setColor(1, 0, 1, .1f);
 		if(override!=null) sr.setColor(override);
 		
 		sr.rect(position.x, position.y, w, h);

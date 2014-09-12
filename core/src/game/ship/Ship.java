@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Sounds;
+import game.attack.Attack;
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardGraphic;
@@ -24,11 +25,11 @@ import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.Module.ModuleType;
+import game.module.component.Component;
 import game.module.component.computer.Computer;
 import game.module.component.generator.Generator;
 import game.module.component.shield.Shield;
 import game.module.component.weapon.Weapon;
-import game.module.component.weapon.attack.Attack;
 import game.module.stuff.ShieldPoint;
 import game.module.stuff.Buff.BuffType;
 import game.module.utility.Utility;
@@ -49,7 +50,7 @@ public abstract class Ship {
 	//0-1 weapon 2 shield 3 gen 4 com
 	public static ArrayList<Class<? extends Ship>> classes = new ArrayList<Class<? extends Ship>>();
 	public Niche[] niches= new Niche[5]; 
-	public Module[] modules= new Module[5];
+	public Component[] components= new Component[5];
 	private ShipGraphic battleGraphic;
 	public Pic shipPic;
 	//Deck is stored as a list of modules so you can generate nice and easily!!//
@@ -66,11 +67,11 @@ public abstract class Ship {
 	private float powerLevel=0;
 	
 	//private 
-	private Armour armour= new BasicArmour(1);
+	private Armour armour;
 	private ArrayList<Utility> utilities=new ArrayList<Utility>();
 
 	//Enemy ai stuff//
-	public Module focusTarget;
+	public Component focusTarget;
 	public FightStats fightStats;
 
 	//Map stuff//
@@ -87,11 +88,13 @@ public abstract class Ship {
 	public Ship(boolean player, Pic shipPic, Pic genPic, Pic comPic){
 		this.player=player;
 		this.shipPic=shipPic;
+		
 		setupNiches();
 		placeNiches();
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
-		recalculateThresholds();
+		setArmour(new BasicArmour(0));
+		
 	}
 
 
@@ -124,7 +127,7 @@ public abstract class Ship {
 
 	private void endTurn(){
 		focusTarget=null;
-		for(Module m:modules)m.endAdmin();
+		for(Component c:components)c.endAdmin();
 
 		shieldPoints.clear();
 	}
@@ -198,8 +201,8 @@ public abstract class Ship {
 	}
 
 	public void playerEndTurn(){
-		for(Module m:getEnemy().modules){
-			m.targeteds=0;
+		for(Component c:getEnemy().components){
+			c.targeteds=0;
 		}
 		endTurn();
 	}
@@ -346,28 +349,28 @@ public abstract class Ship {
 
 
 
-		for(Module m:getRandomisedModules()){
+		for(Component c:getRandomisedModules()){
 			if(shieldPoints.size()==0)return;
 			//Need to put in reasons not to shield//
 			if(shieldPoints.get(0).card.getCode().contains(Special.ShieldOnlyDamaged)){
 				System.out.println("can't use shield becaus not major damaged");
-				if(m.currentThreshold==0)continue;
+				if(c.currentThreshold==0)continue;
 			}
 
 			//Priority checking//
 			if(priority){
-				m.getShieldsRequiredToAvoidMajor();
-				while(m.getShieldsRequiredToAvoidMajor()<=shieldPoints.size()){ //not a hopeless cause// //Only shield until it's barely surviving//
+				c.getShieldsRequiredToAvoidMajor();
+				while(c.getShieldsRequiredToAvoidMajor()<=shieldPoints.size()){ //not a hopeless cause// //Only shield until it's barely surviving//
 					System.out.println("found priority shield");
-					System.out.println("Going to shield "+m+" because requires "+m.getShieldsRequiredToAvoidMajor()+" and I have "+shieldPoints.size());
-					m.shield(shieldPoints.remove(0),false);
+					System.out.println("Going to shield "+c+" because requires "+c.getShieldsRequiredToAvoidMajor()+" and I have "+shieldPoints.size());
+					c.shield(shieldPoints.remove(0),false);
 				}
 				continue;
 			}
 
 			//Non-priority//
-			while(m.getShieldableIncoming()>0&&shieldPoints.size()>0){
-				m.shield(shieldPoints.remove(0),false);
+			while(c.getShieldableIncoming()>0&&shieldPoints.size()>0){
+				c.shield(shieldPoints.remove(0),false);
 			}
 
 		}
@@ -380,14 +383,14 @@ public abstract class Ship {
 	}
 
 	public void shieldAll(Card card, int effect) {
-		for(Module m:modules){
-			for(int i=0;i<effect;i++)m.shield(new ShieldPoint(card,i==0),false);
+		for(Component c:components){
+			for(int i=0;i<effect;i++)c.shield(new ShieldPoint(card,i==0),false);
 		}
 	}
 
 	public void unShield(Card card) {
-		for(Module m:modules){
-			m.unshield(card);
+		for(Component c:components){
+			c.unshield(card);
 		}
 
 		for(int i=0;i<shieldPoints.size();i++){
@@ -416,6 +419,7 @@ public abstract class Ship {
 
 	public void drawCard(Card card) {
 		hand.add(card);
+		card.getGraphic().activate();
 		card.getGraphic().mousectivate(null);
 		if(player)updateCardPositions();
 	}
@@ -452,19 +456,19 @@ public abstract class Ship {
 	}
 
 	public void cardOrIconMoused(Card card) {
-		for(Module m:modules){
+		for(Module m:components){
 			m.cardIconMoused(card);
 		}
-		for(Module m:getEnemy().modules){
+		for(Module m:getEnemy().components){
 			m.cardIconMoused(card);
 		}
 	}
 
 	public void cardOrIconUnmoused() {
-		for(Module m:modules){
+		for(Module m:components){
 			m.cardIconUnmoused();
 		}
-		for(Module m:getEnemy().modules){
+		for(Module m:getEnemy().components){
 			m.cardIconUnmoused();
 		}
 	}
@@ -479,10 +483,11 @@ public abstract class Ship {
 	}
 
 	public void makeDeck(){
-		for(Module m:modules){
+		for(Module m:components){
 			if(m.destroyed)continue;
 			for(int i=0;i<m.numCards;i++)deck.add(m);
 		}
+		for(Module m:utilities)for(int i=0;i<m.numCards;i++)deck.add(m);
 		Draw.shuffle(deck);
 	}
 
@@ -503,8 +508,8 @@ public abstract class Ship {
 	}
 
 	private void initModuleStats(){
-		for(Module m:modules){
-			m.getStats();
+		for(Component c:components){
+			c.getStats();
 		}
 	}
 
@@ -541,20 +546,20 @@ public abstract class Ship {
 	}
 	public int getTotalShieldableIncoming(){
 		int total=0;
-		for(Module m:modules){
-			total+=m.getShieldableIncoming();
+		for(Component c:components){
+			total+=c.getShieldableIncoming();
 		}
 		return total;
 	}
-	public Module getRandomUndestroyedModule(){
+	public Component getRandomUndestroyedModule(){
 		ArrayList<Integer> ints = new ArrayList<Integer>();
 		for(int i=0;i<5;i++){
 			ints.add(i);
 		}
 		Draw.shuffle(ints);
 		for(int i:ints){
-			if(modules[i].currentThreshold<3){
-				return modules[i];
+			if(components[i].currentThreshold<3){
+				return components[i];
 			}
 		}
 		System.out.println("all mods destroyed?");
@@ -579,19 +584,19 @@ public abstract class Ship {
 	}
 	public void addEnergy(int amount){currentEnergy+=amount;}
 	public int getEnergy(){return currentEnergy;}
-	public Weapon[] getWeapons(){return new Weapon[]{(Weapon) modules[0],(Weapon) modules[1]};}
-	public ArrayList<Module> getRandomisedModules(){
-		ArrayList<Module> result=new ArrayList<Module>();
-		for(Module m:modules){
-			if(m.currentThreshold<2)result.add(m);
+	public Weapon[] getWeapons(){return new Weapon[]{(Weapon) components[0],(Weapon) components[1]};}
+	public ArrayList<Component> getRandomisedModules(){
+		ArrayList<Component> result=new ArrayList<Component>();
+		for(Component c:components){
+			if(c.currentThreshold<2)result.add(c);
 		}
 		Draw.shuffle(result);
 		return result;
 	}
-	public Module getModule(int index){return modules[index];}
-	public Module getShield(){return modules[2];}
-	public Generator getGenerator(){return (Generator) modules[3];}
-	public Computer getComputer(){return (Computer) modules[4];}
+	public Component getComponent(int index){return components[index];}
+	public Component getShield(){return components[2];}
+	public Generator getGenerator(){return (Generator) components[3];}
+	public Computer getComputer(){return (Computer) components[4];}
 	public ShipGraphic getGraphic(){
 		if(battleGraphic==null)battleGraphic=new ShipGraphic(this);
 		return battleGraphic;
@@ -605,7 +610,7 @@ public abstract class Ship {
 			return;
 		}
 		niches[i].install(w);
-		modules[i]=w;
+		components[i]=w;
 	}
 	public void setShield(Shield s){
 		niches[2].install(s);
@@ -647,8 +652,8 @@ public abstract class Ship {
 
 	public boolean hasSpendableShields() {
 		if(shieldPoints.size()>0){
-			for(Module m:modules){
-				if(m.getShieldableIncoming()>0){
+			for(Component c:components){
+				if(c.getShieldableIncoming()>0){
 					new TextWisp("Spend all your shields first!", Font.medium, new Pair(Main.width/2,300), WispType.Regular);
 					return true;
 				}
@@ -664,7 +669,7 @@ public abstract class Ship {
 	public int getTotalDeckSize(){
 		int result=0;
 
-		for(Module m:modules){
+		for(Module m:components){
 			result+=m.numCards;
 		}
 
@@ -672,7 +677,7 @@ public abstract class Ship {
 	}
 	
 	private void recalculateThresholds() {
-	 for(Module m:modules)m.recalculateThresholds();	
+	 for(Component c:components)c.recalculateThresholds();	
 	}
 	
 	public float getPowerLevel(){
@@ -729,7 +734,7 @@ public abstract class Ship {
 		this.mapShip=mapShip;
 	}
 	public void clearShields() {
-		for(Module m:modules)m.clearShields();
+		for(Component c:components)c.clearShields();
 	}
 
 

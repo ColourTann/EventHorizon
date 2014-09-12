@@ -10,12 +10,14 @@ import com.badlogic.gdx.math.Polygon;
 import game.Main;
 import game.module.Module;
 import game.module.Module.ModuleType;
+import game.module.component.Component;
 import game.module.component.weapon.Weapon;
 import game.ship.Ship;
 import game.ship.ShipGraphic;
 
 public class Niche{
-	public Module mod;
+	public Component component;
+	
 	public Polygon p;
 
 	public ModuleType type;
@@ -46,20 +48,20 @@ public class Niche{
 		}*/
 	}
 
-	public void install(Module m){
-		m.niche=this;
+	public void install(Component c){
+		c.niche=this;
 		index=Arrays.asList(ship.niches).indexOf(this);
-		ship.modules[index]=m;
-		m.index=index;
-		this.mod=m;
-		m.ship=ship;
+		ship.components[index]=c;
+		c.index=index;
+		this.component=c;
+		c.ship=ship;
 		if(type==ModuleType.WEAPON||type==ModuleType.SHIELD){
 			Pair start=new Pair(p.getTransformedVertices()[0], p.getTransformedVertices()[1]);
-			float tWidth=m.modulePic.get().getWidth()*(ship.player?1:-1);
-			float tHeight=m.modulePic.get().getHeight(); 
+			float tWidth=c.modulePic.get().getWidth()*(ship.player?1:-1);
+			float tHeight=c.modulePic.get().getHeight(); 
 			start.y-=tHeight/2;
 			if(type==ModuleType.WEAPON){
-				start.x+=((Weapon) mod).weaponOffset*(ship.player?1:-1);
+				start.x+=((Weapon) component).weaponOffset*(ship.player?1:-1);
 			}
 			p=new Polygon(new float[]{start.x,start.y,start.x+tWidth,start.y, start.x+tWidth,start.y+tHeight, start.x, start.y+tHeight});
 		}
@@ -73,7 +75,7 @@ public class Niche{
 	}
 
 	public NicheGraphic getGraphic(){
-		if(mod==null){
+		if(component==null){
 			System.out.println("niche not installed with module yet");
 			return null;
 		}
@@ -82,7 +84,7 @@ public class Niche{
 	}
 
 	public String toString(){
-		return ship+" niche "+ index+ ": "+type+" containting "+mod;
+		return ship+" niche "+ index+ ": "+type+" containting "+component;
 	}
 
 

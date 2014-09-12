@@ -1,4 +1,4 @@
-package game.module.component.weapon.attack;
+package game.attack;
 
 import java.util.ArrayList;
 
@@ -11,8 +11,8 @@ import util.particleSystem.Particle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.assets.Sounds;
-import game.module.component.weapon.attack.particle.Lightning;
-import game.module.component.weapon.attack.particle.Spark;
+import game.attack.particle.Lightning;
+import game.attack.particle.Spark;
 
 public class LightningAttack extends AttackGraphic{
 	static float frequency=15;

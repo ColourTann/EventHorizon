@@ -1,13 +1,15 @@
 package game.module.utility.armour;
 
+import game.assets.Gallery;
 import game.card.Card;
 import game.module.Module;
+import game.module.component.Component;
 import game.module.stuff.ShieldPoint;
 
 public class ShieldArmour extends Armour{
 
 	public ShieldArmour(int tier) {
-		super(.6f+tier*.2f);
+		super(.6f+tier*.2f, tier, "Plating", Gallery.auroraComputer, 0, 0);
 	}
 
 	@Override
@@ -16,7 +18,7 @@ public class ShieldArmour extends Armour{
 
 	@Override
 	public void beginTurnEffect() {
-		for(Module m:ship.modules)m.shield(new ShieldPoint(null, false), false);
+		for(Component c:ship.components)c.shield(new ShieldPoint(null, false), false);
 	}
 
 	@Override

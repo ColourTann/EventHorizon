@@ -1,10 +1,11 @@
-package game.module.component.weapon.attack;
+package game.attack;
 
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.Module.ModuleType;
+import game.module.component.Component;
 import game.module.component.weapon.Laser;
 import game.module.component.weapon.Pulse;
 import game.module.component.weapon.Ray;
@@ -17,7 +18,7 @@ public class Attack {
 	public AttackGraphic atkgrphc;
 	public Card card;
 	public Module mod;
-	public Module target;
+	public Component target;
 	boolean finished;
 	boolean activated;
 	public int order;
@@ -32,7 +33,7 @@ public class Attack {
 		if(mod instanceof Tesla)atkgrphc=new LightningAttack(mod.getBarrel());
 		atkgrphc.atk=this;
 	}
-	public Attack(Card c, Module target){
+	public Attack(Card c, Component target){
 		this(c);
 		this.target=target;
 	}

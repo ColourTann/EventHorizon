@@ -1,4 +1,4 @@
-package game.module.component.weapon.attack.particle;
+package game.attack.particle;
 
 import game.assets.Gallery;
 import util.Colours;

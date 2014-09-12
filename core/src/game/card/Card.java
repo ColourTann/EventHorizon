@@ -12,6 +12,7 @@ import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.Module.ModuleType;
+import game.module.component.Component;
 import game.module.component.weapon.Weapon;
 import game.module.stuff.Buff;
 import game.module.stuff.DamagePoint;
@@ -26,7 +27,7 @@ import game.ship.Ship;
 
 public class Card {
 	public Module mod;
-
+	public Component component;
 	//Card Stats//
 	private String[] names = new String[2];
 	private Pic[] cardPics = new Pic[2];
@@ -52,6 +53,8 @@ public class Card {
 	//Setting up card//
 	public Card(Module m, int side){
 		mod=m;
+		
+		if(m instanceof Component)component=(Component) m;
 		specialSide=side;
 		for(int i=0;i<2;i++){
 			names[i]=mod.getName(i*specialSide);
@@ -224,10 +227,10 @@ public class Card {
 		
 		
 		//General stuff//
-		if(code.contains(Special.IncreaseEffect))mod.addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.IncreaseEffect), this, false));
-		if(code.contains(Special.PermanentIncreaseEffect))mod.addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.PermanentIncreaseEffect), this, true));
-		if(code.contains(Special.ReduceCost))mod.addBuff(new Buff(BuffType.ReduceCost, code.getAmount(Special.ReduceCost), this, false));
-		if(code.contains(Special.BonusShots))mod.addBuff(new Buff(BuffType.BonusShot, code.getAmount(Special.BonusShots), this, false));
+		if(code.contains(Special.IncreaseEffect))component.addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.IncreaseEffect), this, false));
+		if(code.contains(Special.PermanentIncreaseEffect))component.addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.PermanentIncreaseEffect), this, true));
+		if(code.contains(Special.ReduceCost))component.addBuff(new Buff(BuffType.ReduceCost, code.getAmount(Special.ReduceCost), this, false));
+		if(code.contains(Special.BonusShots))component.addBuff(new Buff(BuffType.BonusShot, code.getAmount(Special.BonusShots), this, false));
 		ship.addIncome(code.getAmount(Special.EnergyIncome));
 
 		ship.drawCard(code.getAmount(Special.DrawCard));
@@ -254,7 +257,7 @@ public class Card {
 		if(code.contains(Special.ShieldComputer))for(int i=0;i<getEffect();i++)getShip().getComputer().shield(new ShieldPoint(this,i==0),false);
 		if(code.contains(Special.ShieldGenerator))for(int i=0;i<getEffect();i++)getShip().getGenerator().shield(new ShieldPoint(this,i==0),false);
 		if(code.contains(Special.ShieldWeapons))for(Weapon w:ship.getWeapons())for(int i=0;i<getEffect();i++)w.shield(new ShieldPoint(this, i==0),false);
-		if(code.contains(Special.ThisInvuln))mod.immune=true;
+		if(code.contains(Special.ThisInvuln))component.immune=true;
 
 
 
@@ -276,11 +279,11 @@ public class Card {
 			Sounds.error.play();
 			return;
 		}
-		if(code.contains(Special.MustBeMajorDamaged)&&mod.currentThreshold==0){
+		if(code.contains(Special.MustBeMajorDamaged)&&component.currentThreshold==0){
 			Sounds.error.play();
 			return;
 		}
-		if(code.contains(Special.MustBeUndamaged)&&mod.getDamage()>0){
+		if(code.contains(Special.MustBeUndamaged)&&component.getDamage()>0){
 			Sounds.error.play();
 			return;
 		}
@@ -347,17 +350,17 @@ public class Card {
 		if(code.contains(Special.Targeted)){
 			//pick a target nicely//
 			Ship enemy=getShip().getEnemy();
-			System.out.println("checking targeted stuff");
+			
 
-			Module target=enemy.getRandomUndestroyedModule();
+			Component target=enemy.getRandomUndestroyedModule();
 			int required=1000;
 
 			//Override target due to almost destroying//
-			for(Module m:enemy.getRandomisedModules()){
-				if(m.isDead())continue;
-				int thisReq=m.getDamageUntilMajor();
+			for(Component c:enemy.getRandomisedModules()){
+				if(c.isDead())continue;
+				int thisReq=c.getDamageUntilMajor();
 				if(thisReq<required){
-					target=m;
+					target=c;
 					required=thisReq;
 				}
 			}
@@ -368,36 +371,36 @@ public class Card {
 			}
 
 			//Override target due to bonus damage vs specific things//
-			for(Module m:enemy.getRandomisedModules()){
-				if(code.contains(Special.BonusVsPristine)&&m.getDamage()==0){
+			for(Component c:enemy.getRandomisedModules()){
+				if(code.contains(Special.BonusVsPristine)&&c.getDamage()==0){
 					System.out.println("overriding due to pristine found");
-					target=m;
+					target=c;
 					break;
 				}
-				if(code.contains(Special.BonusVsWeapon)&&m.type==ModuleType.WEAPON){
+				if(code.contains(Special.BonusVsWeapon)&&c.type==ModuleType.WEAPON){
 					System.out.println("overriding due to weapon found");
-					target=m;
+					target=c;
 					break;
 				}
-				if(code.contains(Special.BonusVsGenerator)&&m.type==ModuleType.GENERATOR){
+				if(code.contains(Special.BonusVsGenerator)&&c.type==ModuleType.GENERATOR){
 					System.out.println("overriding due to generator found");
-					target=m;
+					target=c;
 					break;
 				}
-				if(code.contains(Special.BonusVsComputer)&&m.type==ModuleType.COMPUTER){
+				if(code.contains(Special.BonusVsComputer)&&c.type==ModuleType.COMPUTER){
 					System.out.println("overriding due to generator found");
-					target=m;
+					target=c;
 					break;
 				}
 				//Tutorishit//
-				if(code.contains(Special.BonusVsModule0)&&m.index==0){
+				if(code.contains(Special.BonusVsModule0)&&c.index==0){
 					System.out.println("overriding due to tutorishit");
-					target=m;
+					target=c;
 					break;
 				}
-				if(code.contains(Special.BonusVsModule1)&&m.index==1){
+				if(code.contains(Special.BonusVsModule1)&&c.index==1){
 					System.out.println("overriding due to tutorishit");
-					target=m;
+					target=c;
 					break;
 				}
 			}
@@ -430,9 +433,9 @@ public class Card {
 		}
 
 		if(code.contains(Special.ShieldChosenModule)){
-			for(Module m:ship.getRandomisedModules()){
-				if(m.getShieldableIncoming()>=getEffect()-1){
-					for(int i=0;i<getEffect();i++)m.shield(new ShieldPoint(this, i==0), false);
+			for(Component c:ship.getRandomisedModules()){
+				if(c.getShieldableIncoming()>=getEffect()-1){
+					for(int i=0;i<getEffect();i++)c.shield(new ShieldPoint(this, i==0), false);
 				}
 			}
 		}
@@ -462,7 +465,7 @@ public class Card {
 		
 		//Complicated bit about deselecting cards. First you have to deselect all cards that rely on this card. Currently only for reducecost//
 		Special unplaySpecial=null;
-		System.out.println("ra");
+		
 		if(code.contains(Special.ReduceCost))unplaySpecial=Special.ReduceCost;
 		if(code.contains(Special.IncreaseEffect))unplaySpecial=Special.IncreaseEffect;
 		if(code.contains(Special.BonusShots))unplaySpecial=Special.BonusShots;
@@ -489,15 +492,18 @@ public class Card {
 		}
 
 		//Resetting code stuff//
-		mod.removeBuffs(this);
+		
 
 		ship.addIncome(-code.getAmount(Special.EnergyIncome));
 		ship.addEnergy(-code.getAmount(Special.GainEnergy));
 
-		if(code.contains(Special.ThisInvuln))mod.immune=false;
+		if(code.contains(Special.ThisInvuln))component.immune=false;
 		//Clearing shields//
 		if(type==ModuleType.SHIELD)ship.unShield(this);
-		mod.removeIncoming(this);
+		if(component!=null){
+			component.removeIncoming(this);
+			component.removeBuffs(this);
+		}
 
 		//Uncharing weapons//
 		if(type==ModuleType.WEAPON){
@@ -524,8 +530,8 @@ public class Card {
 		
 
 		//Enemies play cards normally, players play discardwhenclickeds immediately//
-		for(int i=0;i<code.getAmount(Special.SelfScramble);i++)mod.scramble();
-		for(int i=0;i<code.getAmount(Special.selfDamage);i++)mod.damage(new DamagePoint(this));
+		for(int i=0;i<code.getAmount(Special.SelfScramble);i++)component.scramble();
+		for(int i=0;i<code.getAmount(Special.selfDamage);i++)component.damage(new DamagePoint(this));
 
 		if(((getCode().contains(Special.DiscardWhenPlayed)||getCode().contains(Special.Augment))&&getShip().player))
 			return;
@@ -551,12 +557,12 @@ public class Card {
 	private void scrambSelect() {
 		wasScrambled=true;
 		selected=true;
-		mod.removeSramble();
+		component.removeSramble();
 		getShip().playList.add(this);
 	}
 
 	private void scrambDeselect() {
-		mod.scramble();
+		component.scramble();
 		for(Card c:getShip().hand){
 			if(c.selected&&!c.wasScrambled&&c.mod==mod){
 				c.deselect(false);
@@ -578,7 +584,6 @@ public class Card {
 		getShip().updateCardPositions();
 		getGraphic().moveUp();
 		getGraphic().hideLower();
-		CardGraphic.setAugmentOrTarget(getGraphic());
 	}
 
 
@@ -677,7 +682,6 @@ public class Card {
 		getShip().updateCardPositions();
 		getGraphic().moveUp();
 		getGraphic().hideLower();
-		if(mod.ship.player)CardGraphic.setAugmentOrTarget(getGraphic());
 	}
 
 	//Graphical and state stuff from choosing not to augment//
@@ -729,6 +733,7 @@ public class Card {
 	}
 
 	public CardGraphic getGraphic(){
+		
 		if(cg==null){
 			cg=new CardGraphic(this);
 		}
@@ -828,11 +833,11 @@ public class Card {
 		}
 
 		//Checking special cases//
-		if(code.contains(Special.MustBeMajorDamaged)&&mod.currentThreshold==0){
+		if(code.contains(Special.MustBeMajorDamaged)&&component.currentThreshold==0){
 			no("must be damaged");
 			return false;
 		}
-		if(code.contains(Special.MustBeUndamaged)&&mod.getDamage()!=0){
+		if(code.contains(Special.MustBeUndamaged)&&component.getDamage()!=0){
 			no("must be pristine");
 			return false;
 		}
@@ -942,16 +947,16 @@ public class Card {
 				break;
 
 			case DamageSelf:
-				if(mod.getDamageUntilMajor()<=aiclass.number){
-					no(aiclass, "damage until: "+mod.getDamageUntilMajor());
+				if(component.getDamageUntilMajor()<=aiclass.number){
+					no(aiclass, "damage until: "+component.getDamageUntilMajor());
 					return false;
 				}
-				ok(aiclass, "damage until: "+mod.getDamageUntilMajor());
+				ok(aiclass, "damage until: "+component.getDamageUntilMajor());
 				break;
 			case DamagedModules:
 				int damagedModules=0;
-				for(Module m:ship.getRandomisedModules()){
-					if(m.currentThreshold>0)damagedModules++;
+				for(Component c:ship.getRandomisedModules()){
+					if(c.currentThreshold>0)damagedModules++;
 				}
 				if(damagedModules>=aiclass.number){
 					ok(aiclass, damagedModules+" damaged modules");
@@ -981,8 +986,8 @@ public class Card {
 
 			case PlayerPristineSystems:
 				int pristines=0;
-				for(Module m: ship.getEnemy().getRandomisedModules()){
-					if(m.getDamage()==0)pristines++;
+				for(Component c: ship.getEnemy().getRandomisedModules()){
+					if(c.getDamage()==0)pristines++;
 				}
 				if(code.contains(Special.Targeted)&&pristines>0){	
 					ok(aiclass, "is targeted and pristines "+pristines);
@@ -1013,8 +1018,8 @@ public class Card {
 
 			case MajorDamagedEnemySystems:
 				int majorDamagedEnemySystems=0;
-				for(Module m:ship.getEnemy().getRandomisedModules()){
-					if(m.currentThreshold>0)majorDamagedEnemySystems++;
+				for(Component c:ship.getEnemy().getRandomisedModules()){
+					if(c.currentThreshold>0)majorDamagedEnemySystems++;
 				}
 				if(majorDamagedEnemySystems>0&&code.contains(Special.Targeted)){
 					ok(aiclass, "is targeted and "+majorDamagedEnemySystems+ " so perfect!");
@@ -1086,9 +1091,9 @@ public class Card {
 					break;
 				}
 				boolean found=false;
-				for(Module m:ship.getRandomisedModules()){
-					if(m.getShieldsRequiredToAvoidMajor()<=getEffect()&&side==0){
-						ok(aiclass, "Can stop major on"+m+" even though it would be inefficient");
+				for(Component c:ship.getRandomisedModules()){
+					if(c.getShieldsRequiredToAvoidMajor()<=getEffect()&&side==0){
+						ok(aiclass, "Can stop major on"+c+" even though it would be inefficient");
 						found=true;
 					}
 				}
@@ -1111,9 +1116,9 @@ public class Card {
 
 			case IncomingOnMajorDamaged:
 				int totalShieldable=0;
-				for(Module m:ship.getRandomisedModules()){
-					if(m.currentThreshold>0){
-						totalShieldable+=m.getShieldableIncoming();
+				for(Component c:ship.getRandomisedModules()){
+					if(c.currentThreshold>0){
+						totalShieldable+=c.getShieldableIncoming();
 					}
 				}
 				if(totalShieldable>=aiclass.number){
@@ -1127,8 +1132,8 @@ public class Card {
 
 			case IncomingAll:
 				int incomingAllShielded=0;
-				for(Module m:ship.getRandomisedModules()){
-					incomingAllShielded+=Math.min(m.getShieldableIncoming(), getEffect());
+				for(Component c:ship.getRandomisedModules()){
+					incomingAllShielded+=Math.min(c.getShieldableIncoming(), getEffect());
 				}
 				if(incomingAllShielded>getEffect()*2){
 					ok(aiclass, "amount to shield: "+incomingAllShielded);
@@ -1141,8 +1146,8 @@ public class Card {
 
 			case TotalIncoming:
 				int finc=0;
-				for(Module m:ship.getRandomisedModules()){
-					finc+=m.getShieldableIncoming();
+				for(Component c:ship.getRandomisedModules()){
+					finc+=c.getShieldableIncoming();
 				}
 				if(finc>=aiclass.number){
 					ok(aiclass, "incoming: "+finc);
@@ -1166,7 +1171,7 @@ public class Card {
 				break;
 
 			case TotalIncomingThis:
-				int thisInc=mod.getTotalIncoming();
+				int thisInc=component.getTotalIncoming();
 				if(thisInc>=aiclass.number){
 					ok(aiclass, "incoming is "+thisInc);
 				}
@@ -1189,8 +1194,8 @@ public class Card {
 
 			case ShieldAll:
 				int totalShielded=0;
-				for(Module m:ship.getRandomisedModules()){
-					totalShielded+=Math.min(m.getShieldableIncoming(), getEffect());
+				for(Component c:ship.getRandomisedModules()){
+					totalShielded+=Math.min(c.getShieldableIncoming(), getEffect());
 				}
 				if(totalShielded>=aiclass.number){
 					ok(aiclass, "total "+totalShielded);
@@ -1202,9 +1207,9 @@ public class Card {
 				break;
 
 			case SingleModuleIncoming:
-				for(Module m:ship.getRandomisedModules()){
-					if(m.getShieldableIncoming()>=aiclass.number){
-						ok(aiclass, m+"");
+				for(Component c:ship.getRandomisedModules()){
+					if(c.getShieldableIncoming()>=aiclass.number){
+						ok(aiclass, c+"");
 						break;
 					}
 					else{

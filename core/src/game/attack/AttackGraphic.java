@@ -1,4 +1,4 @@
-package game.module.component.weapon.attack;
+package game.attack;
 
 
 import util.maths.Pair;

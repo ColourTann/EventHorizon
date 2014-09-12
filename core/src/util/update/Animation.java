@@ -34,10 +34,11 @@ public class Animation extends Updater{
 	}
 	
 	public boolean isDone(){
-		return !oneShot&&frame>=textures.length;
+		return oneShot&&frame>=textures.length-1;
 	}
 	
 	public void dispose(){
+		deactivate();
 		for(Texture t:textures){
 			t.dispose();
 		}

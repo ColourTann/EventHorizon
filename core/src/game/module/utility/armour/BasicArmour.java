@@ -1,23 +1,24 @@
 package game.module.utility.armour;
 
+import game.assets.Gallery;
 import game.card.Card;
-import game.module.Module;
-import game.module.stuff.ShieldPoint;
+import game.card.CardCode.AI;
+import game.card.CardCode.Special;
 
 public class BasicArmour extends Armour{
 
 	public BasicArmour(int tier) {
-		super(1+tier*.25f);
+		super(1+tier*.25f,tier, "Plating", Gallery.auroraComputer, 0, 0);
 	}
 
 	@Override
 	public void startBattleEffect() {
-		ship.addEnergy(50);
+
 	}
 
 	@Override
 	public void beginTurnEffect() {
-		
+
 	}
 
 	@Override

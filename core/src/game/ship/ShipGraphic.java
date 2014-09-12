@@ -29,6 +29,7 @@ import game.assets.Sounds;
 import game.assets.animations.Explosion1;
 import game.module.Module;
 import game.module.Module.ModuleType;
+import game.module.component.Component;
 import game.screen.battle.Battle;
 import game.screen.battle.interfaceJunk.Star;
 import game.screen.battle.tutorial.Tutorial;
@@ -57,12 +58,17 @@ public class ShipGraphic extends Updater{
 		Pixmap.setBlending(Blending.SourceOver);
 
 		for(Niche n:ship.niches){
-			if(n.mod.type==ModuleType.WEAPON){
-				Pixmap map=n.mod.modulePic.getPixMap();
-				if(n.mod.currentThreshold==3){
-					map=Pic.getPixMap(n.mod.modulePic.getMonochrome());
+			if(n.component.type==ModuleType.WEAPON){
+				Pixmap map=n.component.modulePic.getPixMap();
+				if(n.component.currentThreshold==3){
+					map=Pic.getPixMap(n.component.modulePic.getMonochrome());
 				}
-				shipMap.drawPixmap(map,(int)(n.relativeTopLeft.x), (int)(n.relativeTopLeft.y)-n.mod.modulePic.get().getHeight()/2, 0, 0,  n.mod.modulePic.get().getWidth(), n.mod.modulePic.get().getHeight());
+				shipMap.drawPixmap(map,
+						(int)(n.relativeTopLeft.x), 
+						(int)(n.relativeTopLeft.y)-n.component.modulePic.get().getHeight()/2, 
+						0, 0,  
+						n.component.modulePic.get().getWidth(), 
+						n.component.modulePic.get().getHeight());
 			}
 		}
 
@@ -72,29 +78,29 @@ public class ShipGraphic extends Updater{
 
 
 		for(Niche n:ship.niches){
-			if(n.mod.type==ModuleType.WEAPON)continue;
+			if(n.component.type==ModuleType.WEAPON)continue;
 
-			if(n.mod.type==ModuleType.GENERATOR||n.mod.type==ModuleType.COMPUTER){
-				Pixmap map=n.mod.modulePic.getPixMap();
-				if(n.mod.currentThreshold==3){
-					map=Pic.getPixMap(n.mod.modulePic.getMonochrome());
+			if(n.component.type==ModuleType.GENERATOR||n.component.type==ModuleType.COMPUTER){
+				Pixmap map=n.component.modulePic.getPixMap();
+				if(n.component.currentThreshold==3){
+					map=Pic.getPixMap(n.component.modulePic.getMonochrome());
 				}
 				shipMap.drawPixmap(map,
 						(int)(n.p.getBoundingRectangle().x), 
 						(int)(n.p.getBoundingRectangle().y), 
-						0, 0,  n.mod.modulePic.get().getWidth(), n.mod.modulePic.get().getHeight());
+						0, 0,  n.component.modulePic.get().getWidth(), n.component.modulePic.get().getHeight());
 
 			}
 
-			if(n.mod.type==ModuleType.SHIELD){
-				Pixmap map=n.mod.modulePic.getPixMap();
-				if(n.mod.currentThreshold==3){
-					map=Pic.getPixMap(n.mod.modulePic.getMonochrome());
+			if(n.component.type==ModuleType.SHIELD){
+				Pixmap map=n.component.modulePic.getPixMap();
+				if(n.component.currentThreshold==3){
+					map=Pic.getPixMap(n.component.modulePic.getMonochrome());
 				}
 				shipMap.drawPixmap(map,
 						(int)(n.relativeTopLeft.x), 
-						(int)(n.relativeTopLeft.y-n.mod.modulePic.get().getHeight()/2), 
-						0, 0,  n.mod.modulePic.get().getWidth(), n.mod.modulePic.get().getHeight());
+						(int)(n.relativeTopLeft.y-n.component.modulePic.get().getHeight()/2), 
+						0, 0,  n.component.modulePic.get().getWidth(), n.component.modulePic.get().getHeight());
 			}
 		}
 
@@ -238,6 +244,7 @@ public class ShipGraphic extends Updater{
 
 		}
 		for(int i=0;i<animations.size();i++){
+			
 			Animation a= animations.get(i);
 			if(a.isDone()){
 				a.dispose();
@@ -279,8 +286,8 @@ public class ShipGraphic extends Updater{
 		}
 
 
-		for(Module m:ship.modules){
-			m.drawShield(batch);
+		for(Component c:ship.components){
+			c.drawShield(batch);
 		}
 
 

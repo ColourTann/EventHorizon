@@ -60,11 +60,19 @@ public class Gallery {
 	public static Pic repeller=new Pic("Module/Shield/Repeller/module", 3);
 	public static Pic[] repellerCard= new Pic[5];
 	
-	//COMPUTERS//
+	//Computers//
 	public static Pic[] cardComputer= new Pic[4];
 	
 	//Generators//
 	public static Pic[] cardGenerator= new Pic[4];
+	
+	//UTILITY//
+	
+	public static Pic armour=new Pic("Module/Utility/cycle");
+	
+	//Armour//
+	
+	public static Pic repair=new Pic("Module/Utility/Armour/repair");
 	
 	//MOD STAT STUFF//
 	public static Pic baseModuleStats= new Pic("Interface/basestats");
