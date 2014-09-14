@@ -210,9 +210,9 @@ public abstract class Component extends Module{
 			}
 		}
 		for(int i=0;i<ship.deck.size();i++){
-			Module m= ship.deck.get(i);
-			if(m==this){
-				ship.deck.remove(this);
+			Card c= ship.deck.get(i);
+			if(c.mod==this){
+				ship.deck.remove(c);
 				i--;
 			}
 		}

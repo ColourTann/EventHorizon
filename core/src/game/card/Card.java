@@ -29,8 +29,8 @@ public class Card {
 	public Module mod;
 	public Component component;
 	//Card Stats//
-	private String[] names = new String[2];
-	private Pic[] cardPics = new Pic[2];
+	private String[] name = new String[2];
+	private Pic[] cardPic = new Pic[2];
 	private int[] baseCost = new int[2];
 	private int[] baseEffect = new int[2];
 	public int bonusEffect=0;
@@ -58,8 +58,8 @@ public class Card {
 		if(m instanceof Component)component=(Component) m;
 		specialSide=side;
 		for(int i=0;i<2;i++){
-			names[i]=mod.getName(i*specialSide);
-			cardPics[i]=mod.getPic(i*specialSide);
+			name[i]=mod.getName(i*specialSide);
+			cardPic[i]=mod.getPic(i*specialSide);
 			baseCost[i]=mod.getCost(i*specialSide);
 			baseEffect[i]=mod.getEffect(i*specialSide);
 			baseCooldown[i]=mod.getCooldown(i*specialSide);
@@ -72,13 +72,26 @@ public class Card {
 			}
 		}
 		type=m.type;
+		
 	}
-
+	
+	public Card(Ship s, String[] names, Pic[] cardpics, int[] baseCosts, int[] baseEffects, int[] baseCooldown, String[] rules, CardCode[] codes, ModuleType type){
+		mod=s.getSpecialComponent();
+		this.name=names;
+		this.cardPic=cardpics;
+		this.baseCost=baseCosts;
+		this.baseEffect=baseEffects;
+		this.baseCooldown=baseCooldown;
+		this.rules=rules;
+		this.code=codes;
+		this.type=type;
+	}
+	
 	public void remakeCard(int side){
 		specialSide=side;
 		for(int i=0;i<2;i++){
-			names[i]=mod.getName(i*specialSide);
-			cardPics[i]=mod.getPic(i*specialSide);
+			name[i]=mod.getName(i*specialSide);
+			cardPic[i]=mod.getPic(i*specialSide);
 			baseCost[i]=mod.getCost(i*specialSide);
 			baseEffect[i]=mod.getEffect(i*specialSide);
 			baseCooldown[i]=mod.getCooldown(i*specialSide);
@@ -264,10 +277,8 @@ public class Card {
 
 		//Weapon stuff//
 		if(type==ModuleType.WEAPON&&!code.contains(Special.Targeted)){
-			Weapon weapon=(Weapon) mod;
 			for(int i=0;i<getShots();i++){
 				ship.addAttack(this);
-				//TODO - attacks from single cards
 			}
 		}
 	}
@@ -763,10 +774,10 @@ public class Card {
 
 	//Big list of getter methods//
 	public String getName(){return getName(side);}
-	public String getName(int pick){return names[pick];}
+	public String getName(int pick){return name[pick];}
 
 	public Pic getImage(){return getImage(side);}
-	public Pic getImage(int pick){return cardPics[pick];}
+	public Pic getImage(int pick){return cardPic[pick];}
 
 	public int getCost(){return getCost(side);}
 	public int getCost(int pick){

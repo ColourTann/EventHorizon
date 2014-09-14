@@ -1,6 +1,7 @@
 package game.ship;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import util.Draw;
 import util.assets.SoundClip;
@@ -16,6 +17,7 @@ import util.update.Timer.Interp;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
+import game.assets.Gallery;
 import game.assets.Sounds;
 import game.attack.Attack;
 import game.card.Card;
@@ -27,6 +29,7 @@ import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
+import game.module.component.SpecialComponent;
 import game.module.component.computer.Computer;
 import game.module.component.generator.Generator;
 import game.module.component.shield.Shield;
@@ -55,7 +58,7 @@ public abstract class Ship {
 	private ShipGraphic battleGraphic;
 	public Pic shipPic;
 	//Deck is stored as a list of modules so you can generate nice and easily!!//
-	public ArrayList<Module> deck = new ArrayList<Module>();
+	public ArrayList<Card> deck = new ArrayList<Card>();
 	public ArrayList<Card> hand = new ArrayList<Card>();
 	public ArrayList<Card> playList= new ArrayList<Card>();
 	public ArrayList<ShieldPoint> shieldPoints= new ArrayList<ShieldPoint>();
@@ -85,9 +88,12 @@ public abstract class Ship {
 
 
 	public Timer timer = new Timer();
+	private Module specialComponent;
 	public enum ShipType{Aurora,Comet,Eclipse,Nova}
 	public abstract void placeNiches();
+
 	public Ship(boolean player, Pic shipPic, Pic genPic, Pic comPic){
+		specialComponent=new SpecialComponent();
 		this.player=player;
 		this.shipPic=shipPic;
 
@@ -96,7 +102,8 @@ public abstract class Ship {
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
 		setArmour(new BasicArmour(0));
-
+specialComponent= new SpecialComponent();
+specialComponent.ship=this;
 	}
 
 
@@ -452,7 +459,7 @@ public abstract class Ship {
 		if(number<=0)return;
 		for(int i=0;i<number;i++){
 			if(deck.size()==0) makeDeck();
-			drawCard(deck.remove(0).getNextCard());
+			drawCard(deck.remove(0));
 		}
 	}
 
@@ -522,11 +529,36 @@ public abstract class Ship {
 	}
 
 	public void makeDeck(){
+		ArrayList<Module> modules=new ArrayList<Module>();
+
 		for(Module m:components){
 			if(m.destroyed)continue;
-			for(int i=0;i<m.numCards;i++)deck.add(m);
+			for(int i=0;i<m.numCards;i++)modules.add(m);
 		}
-		for(Module m:utilities)for(int i=0;i<m.numCards;i++)deck.add(m);
+		for(Module m:utilities)for(int i=0;i<m.numCards;i++)modules.add(m);
+
+		Draw.shuffle(modules);
+
+		while(modules.size()>0)deck.add(modules.remove(0).getNextCard());
+
+		for(int i=0;i<100;i++){
+			deck.add(new Card(
+					this,
+					new String[]{"hi","ho"},
+					new Pic[]{Gallery.shipAurora, Gallery.shipEclipse},
+					new int[]{0,5},
+					new int[]{0,4},
+					new int[]{0,0},
+					new String[]{"Bleeop","blaop"},
+					new CardCode[]{new CardCode(), new CardCode()},
+					ModuleType.WEAPON
+					
+					));
+
+
+
+		}
+
 		Draw.shuffle(deck);
 	}
 
@@ -726,8 +758,8 @@ public abstract class Ship {
 		float totalEffect=0;
 		float totalCost=0;
 		float deckSize=deck.size();
-		for(Module m:deck){
-			Card c=m.getNextCard();
+		for(Card c:deck){
+			
 			CardCode code=c.getCode();
 
 			totalEffect+=c.getEffect();
@@ -774,6 +806,9 @@ public abstract class Ship {
 	}
 	public void clearShields() {
 		for(Component c:components)c.clearShields();
+	}
+	public Module getSpecialComponent() {
+		return specialComponent;
 	}
 
 

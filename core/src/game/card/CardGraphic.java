@@ -400,14 +400,12 @@ public class CardGraphic extends Mouser {
 	@Override
 	public void mouseDown() {
 		card.getShip().cardOrIconMoused(card);
-		//card.mod.moused=true;
 		moveToTop();
 	}
 
 	@Override
 	public void mouseUp() {
 		card.getShip().cardOrIconUnmoused();
-		//card.mod.moused=false;
 	}
 
 
