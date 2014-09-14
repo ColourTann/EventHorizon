@@ -37,7 +37,7 @@ public class CardCode {
 		AugmentWeapon, AugmentThis, AugmentAll,
 
 		//Augment Effects//
-		AugmentTargeted, AugmentDrawCard, AugmentDamage
+		AugmentTargeted, AugmentDrawCard, AugmentDamage, AugmentAddShot
 	};
 	private ArrayList<CardSpecial> specials= new ArrayList<CardCode.CardSpecial>();
 	private ArrayList<AIclass> ais = new ArrayList<AIclass>();

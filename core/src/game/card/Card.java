@@ -33,10 +33,11 @@ public class Card {
 	private Pic[] cardPic = new Pic[2];
 	private int[] baseCost = new int[2];
 	private int[] baseEffect = new int[2];
-	public int bonusEffect=0;
+	private int bonusEffect=0;
 	private int[] baseCooldown = new int[2];
 	private String[] rules = new String[2];
 	private int[] shots = new int[2];
+	private int bonusShots=0;
 	private CardCode[] code=new CardCode[2];
 	int specialSide;
 	public ModuleType type;
@@ -726,8 +727,9 @@ public class Card {
 		}
 
 		//General bonuses//
-		int bonusDam=augCode.getAmount(Augment.AugmentDamage);
-		bonusEffect+=bonusDam;
+
+		bonusEffect+=augCode.getAmount(Augment.AugmentDamage);
+		bonusShots+=augCode.getAmount(Augment.AugmentAddShot);
 		
 		
 		if(augCode.contains(Augment.AugmentDrawCard))getShip().drawCard(1);
@@ -813,9 +815,9 @@ public class Card {
 
 	public int getShots(){return getShots(side);}
 	public int getShots(int pick){
-		if(mod instanceof Weapon){
+		if(type ==ModuleType.WEAPON){
 			//TODO - single card
-			return ((Weapon)mod).getShots(pick*specialSide);
+			return mod.getShots(pick*specialSide)+bonusShots;
 		}
 		return shots[pick];
 	}

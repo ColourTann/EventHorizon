@@ -37,6 +37,7 @@ import game.module.component.weapon.Laser;
 import game.module.component.weapon.Weapon;
 import game.module.stuff.ShieldPoint;
 import game.module.stuff.Buff.BuffType;
+import game.module.utility.RapidFire;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
 import game.module.utility.armour.BasicArmour;
@@ -103,6 +104,7 @@ public abstract class Ship {
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
 		setArmour(new BasicArmour(0));
+		addUtility(new RapidFire(0));
 		specialComponent= new SpecialComponent();
 		specialComponent.ship=this;
 	
@@ -712,7 +714,7 @@ public abstract class Ship {
 		recalculateThresholds();
 	}
 
-	public void setUtility(Utility u){
+	public void addUtility(Utility u){
 		if(u instanceof Armour) System.out.println("Watch out, setting armour as utility wuhohh!");
 		utilities.add(u);
 		u.ship=this;

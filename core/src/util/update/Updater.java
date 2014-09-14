@@ -59,7 +59,7 @@ public abstract class Updater {
 	}
 	
 	public static void updateAll(float delta) {
-
+		
 		updateActives(delta);
 		Mouser.updateMoused();
 		ParticleSystem.updateAll(delta);

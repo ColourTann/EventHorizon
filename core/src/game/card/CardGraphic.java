@@ -445,7 +445,7 @@ public class CardGraphic extends Mouser {
 		if(Battle.targetSource!=null)Battle.targetSource.getGraphic().render(batch);
 		if(onTopGraphic!=null)onTopGraphic.render(batch);
 		for(Card c:CycleButton.choices)c.getGraphic().render(batch);
-		
+		for(CardGraphic cg:Battle.enemyHandList)cg.render(batch);
 		//if(Card.)
 	}
 

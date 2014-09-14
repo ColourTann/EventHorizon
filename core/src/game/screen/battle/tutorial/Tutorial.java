@@ -278,6 +278,7 @@ public class Tutorial extends Updater{
 					c.removeSramble();
 				}
 				tutorials.remove(0).fadeOut(.33f, Interp.LINEAR);
+				for(Card c:enemy.hand)c.getCode(1).add(AI.Ignore);
 				break;
 			case EnemyPlayCards:
 				Battle.zSet(Phase.EnemyWeaponPhase);

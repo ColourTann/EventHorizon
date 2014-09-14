@@ -76,7 +76,7 @@ public class Battle extends Screen{
 	static Pair enemyKnockBackTarget=new Pair();
 
 	public boolean tutorial=false;
-	private ArrayList<CardGraphic> enemyHandList=new ArrayList<CardGraphic>();
+	public static ArrayList<CardGraphic> enemyHandList=new ArrayList<CardGraphic>();
 	ArrayList<TextWisp> wisps = new ArrayList<TextWisp>();
 
 	public static int dividerWidth=12;
@@ -264,13 +264,8 @@ public class Battle extends Screen{
 		victoryFadeInTimer=new Timer(0,1,5,Interp.LINEAR);
 	}
 
-
-
-
-
 	public void debugRender(SpriteBatch batch){
 	}
-
 
 	private void drawInterfaceOverlay(SpriteBatch batch){
 		PhaseButton.get().render(batch);
@@ -299,7 +294,8 @@ public class Battle extends Screen{
 					CardGraphic cg=new CardGraphic(enemy.hand.get(i));
 					cg.override=true;
 					enemyHandList.add(cg);
-					cg.setPosition(new Pair(i*CardGraphic.width,Main.height-CardGraphic.height));
+					cg.setPosition(new Pair(i*CardGraphic.width,0));
+					cg.finishFlipping();
 				}
 			}
 			break;

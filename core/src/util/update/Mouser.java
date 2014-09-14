@@ -31,11 +31,9 @@ public abstract class Mouser extends Updater{
 	}
 
 	public static void updateMoused(){
-		
 		updateMousePosition();
 		boolean found=false;
 		for(int i=0;i<mousers.size();i++){
-
 			Mouser mouseCheck= mousers.get(i);
 			if(mouseCheck.dead){
 				mousers.remove(i);
@@ -43,14 +41,11 @@ public abstract class Mouser extends Updater{
 				continue;
 			}
 			if(mouseCheck.layer!=getLayer()&&mouseCheck.layer!=Layer.ALL)continue;
-
 			if(found){
 				mouseCheck.deMouse();
 				continue;
 			}
-
 			found=mouseCheck.checkMoused(currentMoused);
-
 		}
 	}	
 

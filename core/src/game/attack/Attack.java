@@ -33,6 +33,8 @@ public class Attack {
 		if(mod instanceof Pulse)atkgrphc=new PulseAttack(mod.getBarrel());
 		if(mod instanceof Tesla)atkgrphc=new LightningAttack(mod.getBarrel());
 		if(mod instanceof SpecialComponent)atkgrphc=new LaserAttack(mod.getBarrel());
+		if(atkgrphc==null)atkgrphc=new LaserAttack(mod.getBarrel());
+		
 		atkgrphc.atk=this;
 	}
 	public Attack(Card c, Component target){

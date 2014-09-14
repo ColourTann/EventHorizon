@@ -59,6 +59,7 @@ public abstract class Module {
 	protected int[] cost = new int[7];
 	protected int[] cooldown = new int[7];
 	protected int[] effect = new int[7];
+	protected int[] shots = new int[7];
 	protected String[] rules = new String[7];
 	protected CardCode[] code = new CardCode[7];
 	protected ArrayList<Integer> cardOrder= new ArrayList<Integer>();
@@ -67,8 +68,10 @@ public abstract class Module {
 	public int tier=-5;
 	public boolean destroyed;
 
-
 	
+
+
+
 	private ModuleInfo info;
 
 	public boolean moused;
@@ -116,7 +119,7 @@ public abstract class Module {
 	}
 	public void cardIconUnmoused() {
 	}
-	
+
 	public ArrayList<Card> getCardsJustForShowing(){
 		ArrayList<Card> result = new ArrayList<Card>();
 		for(int i=1;i<=variants;i++){
@@ -149,8 +152,8 @@ public abstract class Module {
 	public CardCode getCode(int i) {
 		return code[i].copy();
 	}
-	
-	
+
+
 	public ModuleInfo getInfo(){
 		if(info==null)info=new ModuleInfo(this);
 		return info;
@@ -161,7 +164,7 @@ public abstract class Module {
 	public void increaseCooldown(int amount){
 		currentCooldown+=amount;
 	}
-	
+
 
 	private double calcDouble(int cost){
 		// 1+ because a card is worth a similar amount to an energy //
@@ -184,7 +187,16 @@ public abstract class Module {
 	}
 
 	public Pair getBarrel(){
-	return new Pair(0,0);
+		if(ship.player){
+			return new Pair(
+					ShipGraphic.offset.x+ShipGraphic.width/2,
+					ShipGraphic.offset.y+ShipGraphic.height/2);
+			}
+			else{
+				return new Pair(
+						500+Main.width-ShipGraphic.offset.x-ShipGraphic.width/2,
+						ShipGraphic.offset.y+ShipGraphic.height/2);
+			}
 	}
 
 	public int getBuffAmount(BuffType check) {
@@ -194,7 +206,9 @@ public abstract class Module {
 		return false;
 	}
 
-
+	public int getShots(int i){	
+		return shots[i]==0?0:shots[i]+getBuffAmount(BuffType.BonusShot);
+	}
 
 
 }
