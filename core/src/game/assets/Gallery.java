@@ -30,6 +30,7 @@ public class Gallery {
 	
 	//CARD STUFF//
 	public static Pic cardBase=new Pic("Interface/cardbase");
+	public static Pic cardOutline=new Pic("Interface/cardoutline");
 	public static Pic iconEnergy=new Pic("Icon/energy");
 	public static Pic iconCooldown=new Pic("Icon/cooldown");
 	public static Pic iconShots=new Pic("Icon/multipleshot");

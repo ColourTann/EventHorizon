@@ -21,6 +21,7 @@ import game.assets.Sounds;
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardCode.Special;
+import game.module.component.SpecialComponent;
 import game.module.component.weapon.Tesla;
 import game.module.component.weapon.Weapon;
 import game.module.stuff.Buff;
@@ -178,6 +179,7 @@ public abstract class Module {
 	}
 
 	public String toString(){
+		if(this instanceof SpecialComponent)return "Special Component";
 		return name[0];
 	}
 

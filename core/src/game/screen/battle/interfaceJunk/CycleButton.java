@@ -77,7 +77,7 @@ public class CycleButton extends Mouser{
 
 		if(Battle.getState()==State.CycleDiscard){
 			Sounds.cardDeselect.play();
-			timer=new Timer(timer.getFloat(),0,3,Interp.SQUARE);
+			timer=new Timer(timer.getFloat(),0,1/3f,Interp.SQUARE);
 			Battle.getPlayer().addEnergy(cost);
 			
 			Battle.setState(State.Nothing);

@@ -39,12 +39,14 @@ public class ShipGraphic extends Updater{
 	Ship ship;
 	public static Pair offset=new Pair(175, 90);
 	public static int height=270;
+	public static int width=390;
 	Pic composite;
 	PicCut picCut;
 	ArrayList<Animation> animations= new ArrayList<Animation>();
 	ArrayList<Shard> shards= new ArrayList<Shard>();
 	Pixmap shipMap;
 	public static Pair topRightEnemyShipPosition= new Pair(500+Main.width-offset.x, offset.y);
+	
 	public ShipGraphic(Ship s){
 		ship=s;
 		drawMap();

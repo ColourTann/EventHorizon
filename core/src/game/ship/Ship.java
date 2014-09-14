@@ -33,6 +33,7 @@ import game.module.component.SpecialComponent;
 import game.module.component.computer.Computer;
 import game.module.component.generator.Generator;
 import game.module.component.shield.Shield;
+import game.module.component.weapon.Laser;
 import game.module.component.weapon.Weapon;
 import game.module.stuff.ShieldPoint;
 import game.module.stuff.Buff.BuffType;
@@ -73,6 +74,7 @@ public abstract class Ship {
 
 	private Armour armour;
 	private ArrayList<Utility> utilities=new ArrayList<Utility>();
+	
 	private ArrayList<Attack> attacks=new ArrayList<Attack>();
 
 	//Enemy ai stuff//
@@ -88,12 +90,11 @@ public abstract class Ship {
 
 
 	public Timer timer = new Timer();
-	private Module specialComponent;
+	private Component specialComponent;
 	public enum ShipType{Aurora,Comet,Eclipse,Nova}
 	public abstract void placeNiches();
 
 	public Ship(boolean player, Pic shipPic, Pic genPic, Pic comPic){
-		specialComponent=new SpecialComponent();
 		this.player=player;
 		this.shipPic=shipPic;
 
@@ -102,8 +103,9 @@ public abstract class Ship {
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
 		setArmour(new BasicArmour(0));
-specialComponent= new SpecialComponent();
-specialComponent.ship=this;
+		specialComponent= new SpecialComponent();
+		specialComponent.ship=this;
+	
 	}
 
 
@@ -165,21 +167,28 @@ specialComponent.ship=this;
 	public void addAttack(Card card, Component target){addAttack(new Attack(card,target));}
 
 	private void addAttack(Attack a){
+		System.out.println(player);
 		a.atkgrphc.order=attacks.size();
 
 		attacks.add(a);
 		ParticleSystem.systems.add(a.atkgrphc);
 		updateIntensities();
+
 	}
 
 	public void removeAttack(Card card){
+		System.out.println(player);
+		System.out.println("removing attack from "+card);
+		System.out.println(attacks.size());
 		for(int i=0;i<attacks.size();i++){
+			
 			Attack a=attacks.get(i);
 			if(a.card==card){
 				if(a.target!=null)a.target.targeteds--;
 				attacks.remove(i);
 				a.disable();
 				i--;
+				System.out.println("removing attack");
 			}
 		}
 		updateIntensities();
@@ -197,6 +206,7 @@ specialComponent.ship=this;
 
 	public void updateIntensities(){
 		for(Weapon w:getWeapons())w.updateIntensity();
+		specialComponent.updateIntensity();
 	}
 
 
@@ -319,7 +329,7 @@ specialComponent.ship=this;
 	}
 
 	public Card pickCard(Phase p){
-		System.out.println();
+		
 		//Checks to see if card is valid to play//
 		boolean shield=true;
 		boolean weapon=true;
@@ -361,8 +371,8 @@ specialComponent.ship=this;
 
 		for(Card c:hand){
 			if(c.selected)continue; //Probably just for debugging//
-			if(c.mod.type==ModuleType.WEAPON&&!weapon) continue;
-			if(c.mod.type==ModuleType.SHIELD&&!shield) continue;
+			if(c.type==ModuleType.WEAPON&&!weapon) continue;
+			if(c.type==ModuleType.SHIELD&&!shield) continue;
 
 
 			for(int side=1;side>=0;side--){
@@ -541,25 +551,26 @@ specialComponent.ship=this;
 
 		while(modules.size()>0)deck.add(modules.remove(0).getNextCard());
 
-		for(int i=0;i<100;i++){
+		/*for(int i=0;i<100;i++){
 			deck.add(new Card(
 					this,
 					new String[]{"hi","ho"},
-					new Pic[]{Gallery.shipAurora, Gallery.shipEclipse},
+					new Pic[]{Gallery.pulseCard[1], Gallery.pulseCard[0]},
 					new int[]{0,5},
 					new int[]{0,4},
 					new int[]{0,0},
+					new int[]{5,2},
 					new String[]{"Bleeop","blaop"},
 					new CardCode[]{new CardCode(), new CardCode()},
 					ModuleType.WEAPON
-					
+
 					));
 
 
 
-		}
+		}*/
 
-		Draw.shuffle(deck);
+		//Draw.shuffle(deck);
 	}
 
 	public void startFight(boolean goingFirst){
@@ -759,7 +770,7 @@ specialComponent.ship=this;
 		float totalCost=0;
 		float deckSize=deck.size();
 		for(Card c:deck){
-			
+
 			CardCode code=c.getCode();
 
 			totalEffect+=c.getEffect();

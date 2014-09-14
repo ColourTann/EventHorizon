@@ -70,6 +70,8 @@ public class CardGraphic extends Mouser {
 	float scrambleTicks=0;
 	boolean scrambled;
 
+	public static CardGraphic onTopGraphic;
+	
 	//offcuts//
 	//public static CardGraphic augmentPicker;
 
@@ -174,10 +176,16 @@ public class CardGraphic extends Mouser {
 		}
 
 		//Draw the lower one first so the higher one overlaps when flipping//
+		//batch.setColor(Colours.compCols6[3]);
+	
+		
+		//Draw.draw(batch, Gallery.cardOutline.get(), position.x, getBaseHeight(1));
+		//Draw.draw(batch, Gallery.cardOutline.get(), position.x, getBaseHeight(0));
+
+		
 		if (showLower)renderHalf(1 - card.side, batch,Colours.withAlpha(c, lowerSideAlpha * alpha));
 		renderHalf(card.side, batch, Colours.withAlpha(c, alpha));
-
-
+	
 		//Drawing cooldown stuff//
 		if (!card.selected&&showLower) {
 			//Coodlown symbols drawn faded if the card couldn't be clicked anyway//
@@ -194,6 +202,8 @@ public class CardGraphic extends Mouser {
 		}
 		Font.small.setColor(Colours.white);
 		batch.setColor(Colours.white);
+		
+		
 	}
 
 	public float getBaseHeight(int part){
@@ -211,8 +221,18 @@ public class CardGraphic extends Mouser {
 		//Card base//
 
 		Draw.draw(batch, Gallery.cardBase.get(), position.x, baseHeight);
-
-
+		
+		
+		//Augment colouring//
+		if(!still&&card.isAugmented(part)){
+			float alpha=(float)Math.sin(Battle.ticks*5);
+			
+			alpha+=2.3f;
+			alpha/=4;
+		batch.setColor(Colours.withAlpha(Colours.orangeHPCols[0], alpha));
+		Draw.draw(batch, Gallery.cardOutline.get(), position.x, baseHeight);
+		batch.setColor(1,1,1,1);
+		}
 		//Card image//
 		if (drawTopPic || part != card.side){
 		
@@ -241,8 +261,8 @@ public class CardGraphic extends Mouser {
 		Pic[] effectPics=null;
 		int effect = card.getEffect(part);
 		if(card.wasScrambled)effect=0;
-		if (card.mod instanceof Weapon)effectPics=Gallery.damageIcon;
-		if (card.mod instanceof Shield)	effectPics=Gallery.shieldIcon;
+		if (card.type == ModuleType.WEAPON)effectPics=Gallery.damageIcon;
+		if (card.type == ModuleType.SHIELD)	effectPics=Gallery.shieldIcon;
 		if (effectPics!=null) {
 
 
@@ -273,7 +293,7 @@ public class CardGraphic extends Mouser {
 		}
 
 		// Weapon Junk//
-		if (card.mod instanceof Weapon&&!scrambled&&!card.wasScrambled) {
+		if (card.type == ModuleType.WEAPON&&!scrambled&&!card.wasScrambled) {
 			//TODO - single card
 			int shots = card.getShots(part);
 			if (shots > 1) {
@@ -378,7 +398,6 @@ public class CardGraphic extends Mouser {
 	}
 
 	public void hideLower() {
-		System.out.println("hidinglower");
 		showLower = false;
 		((BoxCollider) collider).h=height/2;
 	}
@@ -399,12 +418,14 @@ public class CardGraphic extends Mouser {
 
 	@Override
 	public void mouseDown() {
+		if(Battle.getPlayer().hand.contains(card))onTopGraphic=this;
 		card.getShip().cardOrIconMoused(card);
 		moveToTop();
 	}
 
 	@Override
 	public void mouseUp() {
+		onTopGraphic=null;
 		card.getShip().cardOrIconUnmoused();
 	}
 
@@ -421,7 +442,10 @@ public class CardGraphic extends Mouser {
 	public static void renderOffCuts(SpriteBatch batch){
 		if(Battle.augmentSource!=null)Battle.augmentSource.getGraphic().render(batch);
 		if(Battle.moduleChooser!=null)Battle.moduleChooser.getGraphic().render(batch);
+		if(Battle.targetSource!=null)Battle.targetSource.getGraphic().render(batch);
+		if(onTopGraphic!=null)onTopGraphic.render(batch);
 		for(Card c:CycleButton.choices)c.getGraphic().render(batch);
+		
 		//if(Card.)
 	}
 

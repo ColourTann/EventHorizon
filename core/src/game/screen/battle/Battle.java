@@ -164,6 +164,7 @@ public class Battle extends Screen{
 		CardIcon.icons.clear();
 		help=null;
 		victoryFadeInTimer=new Timer();
+		CardGraphic.onTopGraphic=null;
 	}
 
 	private void initTutorial() {
@@ -608,7 +609,7 @@ public class Battle extends Screen{
 		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
 
 		for(Card c:player.hand){
-			c.getGraphic().render(batch);
+			if(c.getGraphic()!=CardGraphic.onTopGraphic)c.getGraphic().render(batch);
 		}
 		CardGraphic.renderOffCuts(batch);
 		CycleButton.get().render(batch);

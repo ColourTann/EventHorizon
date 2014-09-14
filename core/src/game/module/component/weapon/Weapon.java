@@ -27,16 +27,7 @@ public abstract class Weapon extends Component{
 
 	
 
-	public void updateIntensity(){
-		int count=0;
-		for(Attack atk:ship.getAttacks()){
-			if(atk.mod==this)count++;
-		}
-		for(Attack atk:ship.getAttacks()){
-			atk.atkgrphc.intensity=count;
-		}
-	
-	}
+
 
 	
 

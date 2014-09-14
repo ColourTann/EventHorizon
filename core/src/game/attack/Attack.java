@@ -6,6 +6,7 @@ import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
+import game.module.component.SpecialComponent;
 import game.module.component.weapon.Laser;
 import game.module.component.weapon.Pulse;
 import game.module.component.weapon.Ray;
@@ -26,11 +27,12 @@ public class Attack {
 	public boolean unshieldable;
 	public Attack(Card c){
 		this.card=c;
-		this.mod=c.component;
+		this.mod=c.mod;
 		if(mod instanceof Laser)atkgrphc=new LaserAttack(mod.getBarrel());
 		if(mod instanceof Ray)atkgrphc=new RayAttack(mod.getBarrel());
 		if(mod instanceof Pulse)atkgrphc=new PulseAttack(mod.getBarrel());
 		if(mod instanceof Tesla)atkgrphc=new LightningAttack(mod.getBarrel());
+		if(mod instanceof SpecialComponent)atkgrphc=new LaserAttack(mod.getBarrel());
 		atkgrphc.atk=this;
 	}
 	public Attack(Card c, Component target){

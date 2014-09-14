@@ -49,6 +49,7 @@ public class Card {
 	public static ArrayList<CardGraphic> extraCardsToRender=new ArrayList<CardGraphic>();
 	
 	public boolean wasScrambled;
+	public boolean[] augmented=new boolean[]{false, false};
 
 	
 	//Setting up card//
@@ -75,7 +76,7 @@ public class Card {
 		
 	}
 	
-	public Card(Ship s, String[] names, Pic[] cardpics, int[] baseCosts, int[] baseEffects, int[] baseCooldown, String[] rules, CardCode[] codes, ModuleType type){
+	public Card(Ship s, String[] names, Pic[] cardpics, int[] baseCosts, int[] baseEffects, int[] baseCooldown, int[] shots, String[] rules, CardCode[] codes, ModuleType type){
 		mod=s.getSpecialComponent();
 		this.name=names;
 		this.cardPic=cardpics;
@@ -85,6 +86,7 @@ public class Card {
 		this.rules=rules;
 		this.code=codes;
 		this.type=type;
+		this.shots=shots;
 	}
 	
 	public void remakeCard(int side){
@@ -255,6 +257,7 @@ public class Card {
 		if(code.contains(Augment.AugmentAll)){
 			for(Card c:ship.hand){
 				if(c!=this)c.augmentThis(this);
+				
 			}
 		}
 
@@ -521,7 +524,7 @@ public class Card {
 
 		//Uncharing weapons//
 		if(type==ModuleType.WEAPON){
-			Weapon weapon=(Weapon) mod;
+			
 			if(getShots()>0){
 				ship.removeAttack(this);
 			}
@@ -599,6 +602,8 @@ public class Card {
 		getShip().updateCardPositions();
 		getGraphic().moveUp();
 		getGraphic().hideLower();
+		
+		System.out.println(Battle.targetSource);
 	}
 
 
@@ -707,6 +712,7 @@ public class Card {
 		getShip().updateCardPositions();
 		getGraphic().showLower();
 		deselect(true);
+		mod.ship.removeAttack(this);
 	}
 
 	//The chosen card to augment//
@@ -720,7 +726,10 @@ public class Card {
 		}
 
 		//General bonuses//
-		bonusEffect+=augCode.getAmount(Augment.AugmentDamage);
+		int bonusDam=augCode.getAmount(Augment.AugmentDamage);
+		bonusEffect+=bonusDam;
+		
+		
 		if(augCode.contains(Augment.AugmentDrawCard))getShip().drawCard(1);
 
 		//Per-side bonuses//
@@ -729,6 +738,7 @@ public class Card {
 			if(getShots(i)>0){
 				if(augCode.contains(Augment.AugmentTargeted)){
 					code[i].add(Special.Targeted);
+					augmented[i]=true;
 				}
 			}
 		}
@@ -807,7 +817,7 @@ public class Card {
 			//TODO - single card
 			return ((Weapon)mod).getShots(pick*specialSide);
 		}
-		return 0;
+		return shots[pick];
 	}
 
 	public boolean hasSpecial(Special test){return code[side].contains(test);}
@@ -1276,6 +1286,15 @@ public class Card {
 	public void zSetEffect(int eff){
 		baseEffect[0]=eff;
 		baseEffect[1]=eff;
+	}
+
+	public boolean isAugmented(int checkSide) {
+		if(selected&&side!=checkSide)return false;
+		if(code[checkSide].contains(Special.ReduceCost))return false;
+		if(code[checkSide].contains(Special.IncreaseEffect))return false;
+		if(code[checkSide].contains(Special.BonusShots))return false;
+		if(bonusEffect>0&&getEffect(checkSide)>0)return true;
+		return augmented[checkSide]||(component!=null&&component.isAugmented());
 	}
 
 	

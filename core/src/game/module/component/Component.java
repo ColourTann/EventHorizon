@@ -17,6 +17,7 @@ import util.update.Timer.Interp;
 import game.Main;
 import game.assets.Gallery;
 import game.assets.Sounds;
+import game.attack.Attack;
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardCode.Special;
@@ -154,9 +155,8 @@ public abstract class Component extends Module{
 				Weapon source=(Weapon) targeter.mod;
 				targeter.targetChosen();
 				targeteds++;
-				//Only the first shot is targeted//
 				for(int i=0;i<targeter.getShots();i++){
-					ship.addAttack(targeter, this);
+					ship.getEnemy().addAttack(targeter, this);
 				}
 			}
 		}
@@ -330,6 +330,9 @@ public abstract class Component extends Module{
 		unshieldableIcoming.add(d);
 	}
 	public Pair getBarrel(){
+		if(this instanceof SpecialComponent){
+			barrel=getCenter();
+		}
 		if(barrel==null){
 			float offset=12+niche.width/2;
 			float x=getCenter().x+(ship.player?offset:-offset);
@@ -345,8 +348,20 @@ public abstract class Component extends Module{
 	}
 
 	public Pair getCenter(){
+		if(center==null&&this instanceof SpecialComponent){
+			if(ship.player){
+			center=new Pair(
+					ShipGraphic.offset.x+ShipGraphic.width/2,
+					ShipGraphic.offset.y+ShipGraphic.height/2);
+			}
+			else{
+				center=new Pair(
+						500+Main.width-ShipGraphic.offset.x-ShipGraphic.width/2,
+						ShipGraphic.offset.y+ShipGraphic.height/2);
+			}
+		}
 		if(center==null){
-
+			
 			if(ship.player){
 				center=new Pair(
 						niche.location.x+niche.width/2+ShipGraphic.offset.x,
@@ -487,4 +502,40 @@ public abstract class Component extends Module{
 		if(stats==null)stats=new ModuleStats(this);
 		return stats;
 	}
+	
+	public void updateIntensity(){
+		int count=0;
+		for(Attack atk:ship.getAttacks()){
+			if(atk.mod==this)count++;
+		}
+		for(Attack atk:ship.getAttacks()){
+			atk.atkgrphc.intensity=count;
+		}
+	
+	}
+	
+	
+	public boolean isAugmented(){
+		for(Buff b:buffs){
+			switch (b.type){
+			case BonusEffeect:
+				return true;
+			case BonusShot:
+				return true;
+			case ReduceCost:
+				return true;
+			case Scrambled:
+				break;
+			case TakesExtraDamage:
+				break;
+			default:
+				break;
+			
+			}
+		}
+		
+		
+		return false;
+	}
+	
 }
