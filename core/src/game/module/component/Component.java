@@ -156,7 +156,7 @@ public abstract class Component extends Module{
 				targeteds++;
 				//Only the first shot is targeted//
 				for(int i=0;i<targeter.getShots();i++){
-					source.addAttack(targeter, this);
+					ship.addAttack(targeter, this);
 				}
 			}
 		}

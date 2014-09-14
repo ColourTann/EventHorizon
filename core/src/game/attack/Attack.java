@@ -26,7 +26,7 @@ public class Attack {
 	public boolean unshieldable;
 	public Attack(Card c){
 		this.card=c;
-		this.mod=c.mod;
+		this.mod=c.component;
 		if(mod instanceof Laser)atkgrphc=new LaserAttack(mod.getBarrel());
 		if(mod instanceof Ray)atkgrphc=new RayAttack(mod.getBarrel());
 		if(mod instanceof Pulse)atkgrphc=new PulseAttack(mod.getBarrel());

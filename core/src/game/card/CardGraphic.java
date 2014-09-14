@@ -274,6 +274,7 @@ public class CardGraphic extends Mouser {
 
 		// Weapon Junk//
 		if (card.mod instanceof Weapon&&!scrambled&&!card.wasScrambled) {
+			//TODO - single card
 			int shots = card.getShots(part);
 			if (shots > 1) {
 				Draw.draw(batch, Gallery.iconShots.get(), position.x + positionShots.x-5, baseHeight + positionShots.y-19);

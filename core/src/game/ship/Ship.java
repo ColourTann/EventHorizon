@@ -7,6 +7,7 @@ import util.assets.SoundClip;
 import util.assets.Font;
 import util.image.Pic;
 import util.maths.Pair;
+import util.particleSystem.ParticleSystem;
 import util.update.TextWisp;
 import util.update.TextWisp.WispType;
 import util.update.Timer;
@@ -65,10 +66,11 @@ public abstract class Ship {
 	private int majorDamageTaken=0;
 	private int energyAtEndOfPhase=0;
 	private float powerLevel=0;
-	
-	//private 
+
+
 	private Armour armour;
 	private ArrayList<Utility> utilities=new ArrayList<Utility>();
+	private ArrayList<Attack> attacks=new ArrayList<Attack>();
 
 	//Enemy ai stuff//
 	public Component focusTarget;
@@ -88,27 +90,25 @@ public abstract class Ship {
 	public Ship(boolean player, Pic shipPic, Pic genPic, Pic comPic){
 		this.player=player;
 		this.shipPic=shipPic;
-		
+
 		setupNiches();
 		placeNiches();
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
 		setArmour(new BasicArmour(0));
-		
+
 	}
 
 
 	//Phase stuff//
 	public void startTurn() {
-		for(Weapon w:getWeapons()){
-			w.attacks.clear();
-		}	
+		attacks.clear();
 		if(player)drawToMaximum();
 		currentEnergy+=getGenerator().getIncome();
-		
-		
+
+
 		for(Utility u:utilities)u.beginTurnEffect();
-		
+
 	}
 
 	public void enemyStartTurn(){	
@@ -149,25 +149,64 @@ public abstract class Ship {
 	}
 
 	public void notifyIncoming(){
-		for(Weapon w:getWeapons()){
-			w.notifyIncoming();
+		for(Attack a:attacks){
+			a.activateIncoming();
 		}
 	}
 
-	public void fireAll() {
-		for(Weapon w:getWeapons()){
-			for(Attack atk:w.attacks){
-				atk.fire();
+	public void addAttack(Card card){addAttack(new Attack(card));}
+	public void addAttack(Card card, Component target){addAttack(new Attack(card,target));}
+
+	private void addAttack(Attack a){
+		a.atkgrphc.order=attacks.size();
+
+		attacks.add(a);
+		ParticleSystem.systems.add(a.atkgrphc);
+		updateIntensities();
+	}
+
+	public void removeAttack(Card card){
+		for(int i=0;i<attacks.size();i++){
+			Attack a=attacks.get(i);
+			if(a.card==card){
+				if(a.target!=null)a.target.targeteds--;
+				attacks.remove(i);
+				a.disable();
+				i--;
 			}
 		}
+		updateIntensities();
 	}
 
-	public boolean finishedAttacking() {
-		for(Weapon w:getWeapons()){
-			if(!w.checkFinished())return false;
+	public ArrayList<Attack> getAttacks(){return attacks;}
+
+	public void fireAll() {
+
+		for(Attack atk:attacks){
+			atk.fire();
 		}
-		return true;
+
 	}
+
+	public void updateIntensities(){
+		for(Weapon w:getWeapons())w.updateIntensity();
+	}
+
+
+
+	public boolean finishedAttacking() {
+
+		for (int i=0;i<attacks.size();i++){
+			Attack a=attacks.get(i);
+			if(a.atkgrphc.particles.size()==0){
+				attacks.remove(i);
+				i--;
+			}
+		}
+		return attacks.size()==0;
+
+	}
+
 
 	public void endPhase() {	
 
@@ -565,9 +604,9 @@ public abstract class Ship {
 		System.out.println("all mods destroyed?");
 		return null;
 	}
-	
-	
-	
+
+
+
 	/*public static Ship getRandomShip(boolean player){
 		Class<? extends Ship> ship= classes.get((int)(Math.random()*classes.size()));
 		Ship s=null;
@@ -629,13 +668,13 @@ public abstract class Ship {
 		utilities.add(this.armour);
 		recalculateThresholds();
 	}
-	
+
 	public void setUtility(Utility u){
 		if(u instanceof Armour) System.out.println("Watch out, setting armour as utility wuhohh!");
 		utilities.add(u);
 		u.ship=this;
 	}
-	
+
 	public Pic getPic(){
 		return shipPic;
 	}
@@ -665,7 +704,7 @@ public abstract class Ship {
 	public float getArmourMultiplier(){
 		return armour.getMultuplier();
 	}
-	
+
 	public int getTotalDeckSize(){
 		int result=0;
 
@@ -675,11 +714,11 @@ public abstract class Ship {
 
 		return result;
 	}
-	
+
 	private void recalculateThresholds() {
-	 for(Component c:components)c.recalculateThresholds();	
+		for(Component c:components)c.recalculateThresholds();	
 	}
-	
+
 	public float getPowerLevel(){
 		if(powerLevel!=0)return powerLevel;
 		deck.clear();

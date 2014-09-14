@@ -13,7 +13,7 @@ import game.module.stuff.Buff.BuffType;
 public abstract class Weapon extends Component{
 
 	int[] shots = new int[7];
-	public ArrayList<Attack> attacks=new ArrayList<Attack>();
+	
 	public int getShots(int i){	
 
 
@@ -27,49 +27,21 @@ public abstract class Weapon extends Component{
 		type=ModuleType.WEAPON;
 	}
 
-	public void addAttack(Card card){addAttack(new Attack(card));}
-	public void addAttack(Card card, Component target){addAttack(new Attack(card,target));}
 
-	private void addAttack(Attack a){
-		a.atkgrphc.order=attacks.size();
-		
-		attacks.add(a);
-		ParticleSystem.systems.add(a.atkgrphc);
-		updateIntensity();
-	}
-	public void removeAttack(Card card){
-		for(int i=0;i<attacks.size();i++){
-			Attack a=attacks.get(i);
-			if(a.card==card){
-				if(a.target!=null)a.target.targeteds--;
-				attacks.remove(i);
-				a.disable();
-				i--;
-			}
-		}
-		updateIntensity();
-	}
+	
 
 	public void updateIntensity(){
-		for(Attack atk:attacks){
-			atk.atkgrphc.intensity=attacks.size();
+		int count=0;
+		for(Attack atk:ship.getAttacks()){
+			if(atk.mod==this)count++;
 		}
+		for(Attack atk:ship.getAttacks()){
+			atk.atkgrphc.intensity=count;
+		}
+	
 	}
 
-	public boolean checkFinished(){
-		for (int i=0;i<attacks.size();i++){
-			Attack a=attacks.get(i);
-			if(a.atkgrphc.particles.size()==0){
-				attacks.remove(i);
-				i--;
-			}
-		}
-		return attacks.size()==0;
-	}
+	
 
-	public void notifyIncoming() {
-		for(Attack a:attacks){
-			a.activateIncoming();
-		}
-	}
+	
 }

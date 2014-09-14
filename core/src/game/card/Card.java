@@ -49,6 +49,7 @@ public class Card {
 	public static ArrayList<CardGraphic> extraCardsToRender=new ArrayList<CardGraphic>();
 	
 	public boolean wasScrambled;
+
 	
 	//Setting up card//
 	public Card(Module m, int side){
@@ -156,7 +157,7 @@ public class Card {
 			return;
 		}
 
-		if((Battle.getPhase()==Phase.WeaponPhase&&mod.type==ModuleType.SHIELD)||(Battle.getPhase()==Phase.ShieldPhase&&mod.type==ModuleType.WEAPON)){
+		if((Battle.getPhase()==Phase.WeaponPhase&&type==ModuleType.SHIELD)||(Battle.getPhase()==Phase.ShieldPhase&&type==ModuleType.WEAPON)){
 			Sounds.error.play();
 			System.out.println("Wrong state"); return;						//Wrong phase//
 		}
@@ -265,7 +266,8 @@ public class Card {
 		if(type==ModuleType.WEAPON&&!code.contains(Special.Targeted)){
 			Weapon weapon=(Weapon) mod;
 			for(int i=0;i<getShots();i++){
-				weapon.addAttack(this);
+				ship.addAttack(this);
+				//TODO - attacks from single cards
 			}
 		}
 	}
@@ -411,7 +413,8 @@ public class Card {
 	
 			
 			for(int i=0;i<getShots();i++){
-				((Weapon)mod).addAttack(this, target);
+				ship.addAttack(this, target);
+				//TODO attacks from single cards
 			}
 		}
 	
@@ -509,8 +512,9 @@ public class Card {
 		if(type==ModuleType.WEAPON){
 			Weapon weapon=(Weapon) mod;
 			if(getShots()>0){
-				weapon.removeAttack(this);
+				ship.removeAttack(this);
 			}
+			//TODO single attacks
 		}
 
 		//Getting resources back
@@ -750,7 +754,10 @@ public class Card {
 	}
 	
 	public void flip(){side=1-side;}
-	public Ship getShip(){return mod.ship;}
+	public Ship getShip(){
+		return mod.ship;
+	//TODO - single cards	
+	}
 
 
 
@@ -786,6 +793,7 @@ public class Card {
 	public int getShots(){return getShots(side);}
 	public int getShots(int pick){
 		if(mod instanceof Weapon){
+			//TODO - single card
 			return ((Weapon)mod).getShots(pick*specialSide);
 		}
 		return 0;

@@ -116,7 +116,7 @@ public class Battle extends Screen{
 		resetStatics();
 		Star.init();
 		if(tutorial)initTutorial();		
-		player.setArmour(new RegenArmour(0));
+		//player.setArmour(new RegenArmour(0));
 		player.startFight(true);
 		enemy.startFight(false);
 		if(tutorial){
