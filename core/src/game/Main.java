@@ -5,7 +5,6 @@ import util.Colours;
 import util.Draw;
 import util.assets.Font;
 import util.maths.Pair;
-import util.particleSystem.ParticleSystem;
 import util.update.InputHandler;
 import util.update.Screen;
 import util.update.TextWisp;
@@ -29,7 +28,6 @@ import game.screen.cardView.CardViewer;
 import game.screen.escape.EscapeMenu;
 import game.screen.map.Map;
 import game.screen.menu.Selector;
-import game.screen.test.Test;
 import game.ship.Ship;
 
 public class Main extends ApplicationAdapter  {

@@ -9,7 +9,6 @@ import game.module.component.computer.Alpha;
 import game.module.component.generator.Three;
 import game.module.component.shield.Repeller;
 import game.module.component.weapon.Laser;
-import game.module.component.weapon.Pulse;
 import game.module.component.weapon.Ray;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;

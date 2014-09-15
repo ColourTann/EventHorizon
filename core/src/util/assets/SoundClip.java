@@ -1,7 +1,5 @@
 package util.assets;
 
-import java.util.ArrayList;
-
 import util.Option;
 import util.update.Updater;
 

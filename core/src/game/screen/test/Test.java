@@ -3,7 +3,6 @@ package game.screen.test;
 import java.util.ArrayList;
 
 import util.Draw;
-import util.Draw.BlendType;
 import util.image.PicCut;
 import util.image.PicCut.Shard;
 import util.maths.Pair;
@@ -11,7 +10,6 @@ import util.update.Animation;
 import util.update.Screen;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 

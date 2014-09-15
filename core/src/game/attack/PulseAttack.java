@@ -2,7 +2,6 @@ package game.attack;
 
 import util.update.Timer;
 import util.update.Timer.*;
-import util.assets.SoundClip;
 import util.maths.Pair;
 import util.particleSystem.Particle;
 

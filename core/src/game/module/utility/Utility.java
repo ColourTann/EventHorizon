@@ -2,15 +2,15 @@ package game.module.utility;
 
 import game.card.Card;
 import game.module.Module;
-import game.ship.Ship;
-
 import java.util.ArrayList;
 
 import util.image.Pic;
 
 public abstract class Utility extends Module{
-	public Utility(int tier, String name, Pic modulePic, int variants, int numCards) {
+	public String passive;
+	public Utility(int tier, String name, String passive, Pic modulePic, int variants, int numCards) {
 		super(tier, name, modulePic, variants, numCards);
+		this.passive=passive;
 	}
 
 	
@@ -26,6 +26,10 @@ public abstract class Utility extends Module{
 	public abstract void endTurnEffect();
 	
 	public abstract void playCard(Card c);
+	
+	public abstract int getBonusEffect(Card c, int baseEffect);
+	
+	public abstract int getBonusShots(Card c, int baseShots);
 	
 	public abstract void afterBattle();
 }

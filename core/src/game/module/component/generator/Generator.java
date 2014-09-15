@@ -2,7 +2,6 @@ package game.module.component.generator;
 
 import util.image.Pic;
 import game.card.CardCode.Special;
-import game.module.Module;
 import game.module.component.Component;
 
 public abstract class Generator extends Component{

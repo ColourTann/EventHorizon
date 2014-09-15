@@ -3,7 +3,6 @@ package game.card;
 import java.util.ArrayList;
 
 import util.Draw;
-import util.assets.SoundClip;
 import util.image.Pic;
 import game.assets.Sounds;
 import game.card.CardCode.AI;
@@ -14,14 +13,15 @@ import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
 import game.module.component.weapon.Weapon;
-import game.module.stuff.Buff;
-import game.module.stuff.DamagePoint;
-import game.module.stuff.ShieldPoint;
-import game.module.stuff.Buff.BuffType;
+import game.module.junk.Buff;
+import game.module.junk.DamagePoint;
+import game.module.junk.ShieldPoint;
+import game.module.junk.Buff.BuffType;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.Battle.State;
 import game.screen.battle.interfaceJunk.CycleButton;
+import game.screen.battle.interfaceJunk.HelpPanel;
 import game.screen.battle.tutorial.Tutorial;
 import game.ship.Ship;
 
@@ -337,6 +337,8 @@ public class Card {
 
 		//Enemy doesn't need to access augment state//
 		if(code.contains(Special.Augment))augmentSelect();
+		if(code.contains(Special.DiscardOthers))discardSelect();
+		
 
 
 
@@ -681,8 +683,9 @@ public class Card {
 		CardCode code=augmenter.getCode();
 		boolean checkForWeapon=code.contains(Augment.AugmentWeapon);
 		boolean checkForSameSystem=code.contains(Augment.AugmentThis);
-
+		
 		if(augmenter==this)return false; //Same card
+		if(code.contains(Augment.AugmentAny))return true;
 		if(checkForWeapon&&type==ModuleType.WEAPON){
 			if(code.contains(Augment.AugmentTargeted)){
 				if(getCode(0).contains(Special.Targeted))return false;
@@ -703,7 +706,15 @@ public class Card {
 		getShip().updateCardPositions();
 		getGraphic().moveUp();
 		getGraphic().hideLower();
+		Battle.help=new HelpPanel("Pick a card to augment",false);
 	}
+	
+	public void discardSelect(){
+		augmentSelect();
+		Battle.help=new HelpPanel("Choose a card to discard",false);
+	}
+	
+	
 
 	//Graphical and state stuff from choosing not to augment//
 	private void deAugment() {
@@ -719,6 +730,7 @@ public class Card {
 	//The chosen card to augment//
 	private void augmentThis(Card augmenter) {
 		CardCode augCode=augmenter.getCode();
+		if(augCode.contains(Augment.AugmentDiscard))mod.ship.discard(this);
 		if(augmenter==Battle.augmentSource){
 			Battle.augmentSource.getGraphic().fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
 			Battle.setState(State.Nothing);
@@ -727,10 +739,10 @@ public class Card {
 		}
 
 		//General bonuses//
-
+		mod.ship.addEnergy(augCode.getAmount(Augment.AugmentGainEnergy));
 		bonusEffect+=augCode.getAmount(Augment.AugmentDamage);
 		bonusShots+=augCode.getAmount(Augment.AugmentAddShot);
-		
+		mod.ship.getComputer().addBonusCards(augCode.getAmount(Augment.AugmentAddBonusHandSize));
 		
 		if(augCode.contains(Augment.AugmentDrawCard))getShip().drawCard(1);
 
@@ -801,7 +813,9 @@ public class Card {
 	public int getEffect(){return getEffect(side);}
 	public int getEffect(int pick){
 		if(baseEffect[pick]==0)return 0;
-		return baseEffect[pick]+bonusEffect+mod.getBuffAmount(BuffType.BonusEffeect);
+		int effect= baseEffect[pick]+bonusEffect+mod.getBuffAmount(BuffType.BonusEffeect);
+		effect+=mod.ship.getBonusEffect(this, pick, effect);
+		return effect;
 	}
 
 	public int getCoolDown(){return getCoodlown(side);}
@@ -1267,20 +1281,20 @@ public class Card {
 	}
 
 	public void ok(AIclass aiclass, String addition){
-		if(true)return;
-		System.out.println("ok "+aiclass.ai+" "+addition+(aiclass.number==-1?"":(" ("+aiclass.number+")")));
+	
+		//System.out.println("ok "+aiclass.ai+" "+addition+(aiclass.number==-1?"":(" ("+aiclass.number+")")));
 	}
 	public void ok(String addition){
-		if(true)return;
-		System.out.println("ok "+addition);
+	
+		//System.out.println("ok "+addition);
 	}
 	public void no(AIclass aiclass, String addition){
-		if(true)return;
-		System.out.println("NO!! "+aiclass.ai+" "+addition+(aiclass.number==-1?"":(" ("+aiclass.number+")")));
+	
+		//System.out.println("NO!! "+aiclass.ai+" "+addition+(aiclass.number==-1?"":(" ("+aiclass.number+")")));
 	}
 	public void no(String addition){
-		if(true)return;
-		System.out.println("NO!! "+" "+addition);
+		
+		//System.out.println("NO!! "+" "+addition);
 	}
 	public boolean sameAs(Card c){
 		return c.getName(1).equals(getName(1));

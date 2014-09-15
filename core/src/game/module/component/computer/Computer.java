@@ -4,11 +4,11 @@ import util.image.Pic;
 import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
-import game.module.Module;
 import game.module.component.Component;
 
 public abstract class Computer extends Component{
 	public int maxCards;
+	private int bonusCards;
 	public Computer(String modName,Pic p, int maxCards, int[] thresholds) {
 		super(0, modName, p,1,2,thresholds);
 		this.maxCards=maxCards;
@@ -26,6 +26,12 @@ public abstract class Computer extends Component{
 		code[0].add(AI.OverrideIfOtherSideIgnore);
 	}
 	public int getMaximumHandSize() {
-		return (int) (destroyed?Math.ceil(maxCards/2f):maxCards);
+		return (int) (destroyed?Math.ceil(maxCards/2f):maxCards)+bonusCards;
+	}
+	public void addBonusCards(int amount){
+		bonusCards+=amount;
+	}
+	public void resetBonusCards(){
+		bonusCards=0;
 	}
 }

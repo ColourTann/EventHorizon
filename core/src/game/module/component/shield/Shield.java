@@ -1,7 +1,6 @@
 package game.module.component.shield;
 
 import util.image.Pic;
-import game.module.Module;
 import game.module.component.Component;
 
 public abstract class Shield extends Component{

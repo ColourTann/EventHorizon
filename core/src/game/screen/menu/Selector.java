@@ -5,16 +5,12 @@ import java.util.ArrayList;
 import util.assets.Font;
 import util.maths.Pair;
 import util.update.Screen;
-import util.update.Updater;
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import game.Main;
-import game.Main.ScreenType;
 import game.screen.battle.Battle;
-import game.screen.cardView.CardViewer;
 import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;

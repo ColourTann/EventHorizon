@@ -2,13 +2,12 @@ package game.module.utility.armour;
 
 import game.assets.Gallery;
 import game.card.Card;
-import game.card.CardCode.AI;
 import game.card.CardCode.Special;
 
 public class RegenArmour extends Armour{
 
 	public RegenArmour(int tier) {
-		super(.9f+tier*.2f, tier, "Plating", Gallery.auroraComputer, 1, 10);
+		super(.9f+tier*.2f, tier, "Plating", "Repair one extra damage between each fight", Gallery.auroraComputer, 1, 10);
 		name[0]="Repair";
 		cost[0]=0;
 		cooldown[0]=0;
@@ -38,6 +37,16 @@ public class RegenArmour extends Armour{
 
 	@Override
 	public void afterBattle() {
+	}
+
+	@Override
+	public int getBonusEffect(Card c, int baseEffect) {
+		return 0;
+	}
+
+	@Override
+	public int getBonusShots(Card c, int baseShots) {
+		return 0;
 	}
 
 }

@@ -1,4 +1,4 @@
-package game.module.stuff;
+package game.module.junk;
 
 import util.Colours;
 import util.Draw;
@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Gallery;
-import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
 import game.screen.battle.Battle;
@@ -36,6 +35,7 @@ public class ModuleStats extends Mouser{
 		mousectivate(new BoxCollider(c.ship.player?0:Main.width-width, height*c.getIndex(), width, height));
 		component=c;
 		info=new ModuleInfo(c);
+		
 	}
 
 

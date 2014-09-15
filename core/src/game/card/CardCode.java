@@ -7,6 +7,7 @@ public class CardCode {
 		//General Specials//
 		DrawCard, IncreaseEffect, DiscardWhenPlayed, Augment, ReduceCost, GainEnergy, EnergyIfEmpty, MustBeMajorDamaged,
 		ModuleChooser, PermanentIncreaseEffect, EnergyIncome, SelfScramble, DiscardWhenChosen, BonusVsGenerator, BonusVsComputer,
+		GetCardFromChosenModule, RepairChosenModule, DiscardOthers,
 		
 		//Tutorial junk//
 		BonusVsModule0, BonusVsModule1,
@@ -16,7 +17,7 @@ public class CardCode {
 
 		//Shield Specials//
 		AddShieldPoints, Bubble, ShieldComputer, AbsorbDraw, ShieldOnlyDamaged, selfDamage, AbsorbEnergy, MustBeUndamaged,
-		ShieldWeapons, ThisInvuln, ShieldGenerator, ShieldChosenModule, GetCardFromChosenModule, RepairChosenModule,     
+		ShieldWeapons, ThisInvuln, ShieldGenerator, ShieldChosenModule, 
 	};
 
 	public enum AI{
@@ -37,7 +38,7 @@ public class CardCode {
 		AugmentWeapon, AugmentThis, AugmentAll,
 
 		//Augment Effects//
-		AugmentTargeted, AugmentDrawCard, AugmentDamage, AugmentAddShot
+		AugmentTargeted, AugmentDrawCard, AugmentDamage, AugmentAddShot, AugmentDiscard, AugmentAny, AugmentGainEnergy, AugmentAddBonusHandSize    
 	};
 	private ArrayList<CardSpecial> specials= new ArrayList<CardCode.CardSpecial>();
 	private ArrayList<AIclass> ais = new ArrayList<AIclass>();

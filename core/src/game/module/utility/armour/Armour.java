@@ -8,8 +8,8 @@ import game.module.utility.Utility;
 
 public abstract class Armour extends Utility{
 	private float multiplier;
-	public Armour(float multiplier, int tier, String modName, Pic modulePic, int variants, int numCards){
-		super(tier, modName, modulePic, variants, numCards);
+	public Armour(float multiplier, int tier, String modName, String passive, Pic modulePic, int variants, int numCards){
+		super(tier, modName, passive, modulePic, variants, numCards);
 		this.multiplier=multiplier;
 		
 		name[1]="Cycle";

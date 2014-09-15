@@ -26,7 +26,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import game.Main;
-import game.Main.ScreenType;
 import game.assets.Gallery;
 import game.screen.menu.Selector;
 

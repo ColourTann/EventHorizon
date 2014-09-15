@@ -11,9 +11,9 @@ import game.module.component.weapon.Laser;
 import game.module.component.weapon.Pulse;
 import game.module.component.weapon.Ray;
 import game.module.component.weapon.Tesla;
-import game.module.stuff.Buff;
-import game.module.stuff.DamagePoint;
-import game.module.stuff.Buff.BuffType;
+import game.module.junk.Buff;
+import game.module.junk.DamagePoint;
+import game.module.junk.Buff.BuffType;
 
 public class Attack {
 	public AttackGraphic atkgrphc;

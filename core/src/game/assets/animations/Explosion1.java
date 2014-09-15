@@ -1,6 +1,5 @@
 package game.assets.animations;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
@@ -21,7 +20,7 @@ public class Explosion1 extends Animation{
 		int radius=(int) (7+Math.random()*11);
 		int diameter=radius*2;
 		Pixmap pixmap=new Pixmap(diameter+1, diameter+1, Format.RGBA8888);
-		Color col=Colours.weaponCols8[(int) (5+Math.random()*2)];
+		//Color col=Colours.weaponCols8[(int) (5+Math.random()*2)];
 
 		//ParticleSystem.systems.add(new SmokeMachine(location.add(radius,radius).add(Pair.randomAnyVector().multiply(10)), .1f, 20, SmokeType.Damage));
 		//if(Math.random()>.9)Test.debris.add(new Debris(location, Math.random()>.5));

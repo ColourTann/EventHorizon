@@ -1,16 +1,10 @@
 package util.image;
 
-import game.screen.battle.interfaceJunk.Star;
-import game.ship.ShipGraphic;
-
 import java.util.ArrayList;
 
 import util.Colours;
 import util.Draw;
 import util.maths.Pair;
-import util.update.Mouser;
-import util.update.Updater;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;

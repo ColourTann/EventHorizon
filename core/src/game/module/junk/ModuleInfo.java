@@ -1,4 +1,4 @@
-package game.module.stuff;
+package game.module.junk;
 
 import java.util.ArrayList;
 

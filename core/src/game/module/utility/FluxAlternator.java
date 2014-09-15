@@ -2,33 +2,38 @@ package game.module.utility;
 
 import game.assets.Gallery;
 import game.card.Card;
+import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
-import game.module.Module.ModuleType;
+import util.image.Pic;
 
-public class RapidFire extends Utility{
+public class FluxAlternator extends Utility{
 
-	public RapidFire(int tier) {
-		super(tier, "Rapid Fire", "Weapons firing 3+ shots get 1 bonus shot", Gallery.blaster, 1, 10);
-		type=ModuleType.WEAPON;
+	public FluxAlternator(int tier) {
+		super(tier, "Flux Alternator", "+1 income if you end your turn with 7+ energy", Gallery.blaster, 1, 10);
 		
-		name[0]="Barrage";
-		cost[0]=2;
+		name[0]="Charge";
+		cost[0]=0;
 		cooldown[0]=0;
-		effect[0]=1;
-		rules[0]="";
-		shots[0]=3;
+		effect[0]=0;
+		rules[0]="+1 energy";
 		cardPic[0]=Gallery.armour;
+		code[0].add(Special.GainEnergy,1);
+		code[0].setPriority(2);
 		
-		name[1]="Duplicate";
-		cost[1]=1;
+		
+		name[1]="Repurpose";
+		cost[1]=0;
 		cooldown[1]=0;
 		effect[1]=0;
-		rules[1]="Augment weapon card: +1 shot";
+		rules[1]="Discard a card, +2 energy";
 		cardPic[1]=Gallery.armour;
-		code[1].add(Special.Augment);
-		code[1].add(Augment.AugmentWeapon);
-		code[1].add(Augment.AugmentAddShot, 1);
+		code[1].add(Special.DiscardOthers,1);
+		code[1].add(Augment.AugmentAny);
+		code[1].add(Augment.AugmentDiscard);
+		code[1].add(Augment.AugmentGainEnergy, 2);
+		code[1].add(AI.Ignore);
+		
 	}
 
 	@Override
@@ -58,9 +63,6 @@ public class RapidFire extends Utility{
 
 	@Override
 	public int getBonusShots(Card c, int baseShots) {
-		if(baseShots>=3&&c.type==ModuleType.WEAPON){
-			return 1;
-		}
 		return 0;
 	}
 

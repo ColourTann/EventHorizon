@@ -2,39 +2,17 @@ package game.module;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import util.Colours;
 import util.Draw;
-import util.assets.SoundClip;
-import util.assets.Font;
 import util.image.Pic;
 import util.maths.Pair;
-import util.update.TextWisp;
-import util.update.TextWisp.WispType;
-import util.update.Timer.Interp;
-import util.update.Timer;
 import game.Main;
-import game.assets.Gallery;
-import game.assets.Sounds;
 import game.card.Card;
 import game.card.CardCode;
-import game.card.CardCode.Special;
 import game.module.component.SpecialComponent;
-import game.module.component.weapon.Tesla;
-import game.module.component.weapon.Weapon;
-import game.module.stuff.Buff;
-import game.module.stuff.DamagePoint;
-import game.module.stuff.ModuleInfo;
-import game.module.stuff.ModuleStats;
-import game.module.stuff.ShieldPoint;
-import game.module.stuff.Buff.BuffType;
-import game.screen.battle.Battle;
-import game.screen.battle.Battle.State;
+import game.module.junk.ModuleInfo;
+import game.module.junk.Buff.BuffType;
 import game.ship.Ship;
 import game.ship.ShipGraphic;
-import game.ship.niche.Niche;
 
 
 public abstract class Module {

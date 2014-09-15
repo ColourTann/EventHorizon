@@ -1,4 +1,4 @@
-package game.module.stuff;
+package game.module.junk;
 
 import util.image.Pic;
 import game.assets.Gallery;

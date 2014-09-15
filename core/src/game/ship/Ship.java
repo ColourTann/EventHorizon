@@ -1,10 +1,8 @@
 package game.ship;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import util.Draw;
-import util.assets.SoundClip;
 import util.assets.Font;
 import util.image.Pic;
 import util.maths.Pair;
@@ -17,7 +15,6 @@ import util.update.Timer.Interp;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
-import game.assets.Gallery;
 import game.assets.Sounds;
 import game.attack.Attack;
 import game.card.Card;
@@ -33,10 +30,12 @@ import game.module.component.SpecialComponent;
 import game.module.component.computer.Computer;
 import game.module.component.generator.Generator;
 import game.module.component.shield.Shield;
-import game.module.component.weapon.Laser;
 import game.module.component.weapon.Weapon;
-import game.module.stuff.ShieldPoint;
-import game.module.stuff.Buff.BuffType;
+import game.module.junk.ShieldPoint;
+import game.module.junk.Buff.BuffType;
+import game.module.utility.Cardifier;
+import game.module.utility.FluxAlternator;
+import game.module.utility.MaxDamage;
 import game.module.utility.RapidFire;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
@@ -465,6 +464,7 @@ public abstract class Ship {
 	public void drawToMaximum(){
 		if(Battle.isTutorial())return;
 		drawCard(getComputer().getMaximumHandSize()-hand.size());
+		getComputer().resetBonusCards();
 	}
 
 	public void drawCard(int number){
@@ -822,6 +822,24 @@ public abstract class Ship {
 	}
 	public Module getSpecialComponent() {
 		return specialComponent;
+	}
+
+	public int getBonusEffect(Card c, int side, int effect) {
+		int bonus=0;
+		for(Utility u:utilities){
+			bonus+=u.getBonusEffect(c, effect);
+		}
+		if(bonus>0)c.augmented[side]=true;
+		return bonus;
+	}
+	
+	public int getBonusShots(Card c, int side, int effect) {
+		int bonus=0;
+		for(Utility u:utilities){
+			bonus+=u.getBonusShots(c, effect);
+		}
+		if(bonus>0)c.augmented[side]=true;
+		return bonus;
 	}
 
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import util.Colours;
 import util.Draw;
-import util.assets.SoundClip;
 import util.image.Pic;
 import util.image.PicCut;
 import util.image.PicCut.Shard;
@@ -27,7 +26,6 @@ import game.Main;
 import game.assets.Gallery;
 import game.assets.Sounds;
 import game.assets.animations.Explosion1;
-import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
 import game.screen.battle.Battle;

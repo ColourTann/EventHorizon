@@ -21,7 +21,7 @@ public class HelpPanel extends Mouser{
 		text=s;
 		fadeIn(.5f, Interp.SQUARE);
 		if(high)y=150;
-		else y=250;
+		else y=252;
 	}
 
 	@Override
@@ -38,10 +38,13 @@ public class HelpPanel extends Mouser{
 
 	public void render(SpriteBatch batch) {
 		batch.setColor(1,1,1,alpha);
-		Texture t=Gallery.helpPanel.get();
-		Draw.draw(batch, t,Main.width/2-t.getWidth()/2,y);
+		int width=(int) Font.medium.getBounds(text).width+10;
+		Draw.drawScaled(batch, Gallery.helpPanelMid.get(), Main.width/2-width/2, y, width, 1);
+		Draw.draw(batch, Gallery.helpPanelEdge.get(), Main.width/2-width/2-Gallery.helpPanelEdge.getWidth(), y);
+		Draw.drawRotatedScaledFlipped(batch, Gallery.helpPanelEdge.get(), Main.width/2+width/2, y, 1,1,0, true, false);
+	
 		Font.medium.setColor(Colours.withAlpha(Colours.dark,alpha));
-		Font.medium.draw(batch, text, Main.width/2-Font.medium.getBounds(text).width/2, y+14);
+		Font.medium.draw(batch, text, Main.width/2-Font.medium.getBounds(text).width/2, y+13);
 		batch.setColor(1,1,1,1);
 	}
 	

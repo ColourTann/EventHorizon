@@ -1,4 +1,4 @@
-package game.module.stuff;
+package game.module.junk;
 
 import game.card.Card;
 

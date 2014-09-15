@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Main;
 import util.maths.Collider;
 import util.maths.Pair;
-import util.particleSystem.ParticleSystem;
-import util.update.Timer.Interp;
 
 public abstract class Mouser extends Updater{	
 	public static ArrayList<Mouser> mousers = new ArrayList<Mouser>();

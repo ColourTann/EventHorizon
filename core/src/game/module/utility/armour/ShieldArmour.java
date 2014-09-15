@@ -2,14 +2,13 @@ package game.module.utility.armour;
 
 import game.assets.Gallery;
 import game.card.Card;
-import game.module.Module;
 import game.module.component.Component;
-import game.module.stuff.ShieldPoint;
+import game.module.junk.ShieldPoint;
 
 public class ShieldArmour extends Armour{
 
 	public ShieldArmour(int tier) {
-		super(.6f+tier*.2f, tier, "Plating", Gallery.auroraComputer, 0, 0);
+		super(.6f+tier*.2f, tier, "Plating", "Shield all systems for 1 every turn", Gallery.auroraComputer, 0, 0);
 	}
 
 	@Override
@@ -31,6 +30,16 @@ public class ShieldArmour extends Armour{
 
 	@Override
 	public void afterBattle() {
+	}
+
+	@Override
+	public int getBonusEffect(Card c, int baseEffect) {
+		return 0;
+	}
+
+	@Override
+	public int getBonusShots(Card c, int baseShots) {
+		return 0;
 	}
 
 }

@@ -3,17 +3,12 @@ package game.ship.niche;
 import java.util.Arrays;
 
 import util.maths.Pair;
-import util.maths.PolygonCollider;
-
 import com.badlogic.gdx.math.Polygon;
 
-import game.Main;
-import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
 import game.module.component.weapon.Weapon;
 import game.ship.Ship;
-import game.ship.ShipGraphic;
 
 public class Niche{
 	public Component component;

@@ -2,13 +2,11 @@ package game.module.utility.armour;
 
 import game.assets.Gallery;
 import game.card.Card;
-import game.card.CardCode.AI;
-import game.card.CardCode.Special;
 
 public class BasicArmour extends Armour{
 
 	public BasicArmour(int tier) {
-		super(1+tier*.25f,tier, "Plating", Gallery.auroraComputer, 0, 0);
+		super(1+tier*.25f,tier, "Plating", "Basic armour", Gallery.auroraComputer, 0, 0);
 	}
 
 	@Override
@@ -31,6 +29,16 @@ public class BasicArmour extends Armour{
 
 	@Override
 	public void afterBattle() {
+	}
+
+	@Override
+	public int getBonusEffect(Card c, int baseEffect) {
+		return 0;
+	}
+
+	@Override
+	public int getBonusShots(Card c, int baseShots) {
+		return 0;
 	}
 
 }

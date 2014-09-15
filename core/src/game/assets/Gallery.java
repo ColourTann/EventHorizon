@@ -114,7 +114,8 @@ public class Gallery {
 	public static Pic majorDamageEnemy= new Pic("Interface/majordamageenemy");
 	public static Pic cardIconPlayer= new Pic("Interface/cardiconplayer");
 	public static Pic cardIconEnemy= new Pic("Interface/cardiconenemy");
-	public static Pic helpPanel = new Pic("Interface/helppanel");
+	public static Pic helpPanelMid = new Pic("Interface/helppanelmid");
+	public static Pic helpPanelEdge = new Pic("Interface/helppaneledge");
 	
 	public static Pic tutPanelBorder= new Pic("Interface/tutpanelborder");
 	public static Pic tutPanelMain= new Pic("Interface/tutpanelmain");

@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
-import game.Main.ScreenType;
 import game.assets.Gallery;
 
 public class GameChoice extends Mouser{

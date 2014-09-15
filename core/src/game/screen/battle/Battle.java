@@ -5,40 +5,30 @@ import java.util.ArrayList;
 import util.Colours;
 import util.Draw;
 import util.Noise;
-import util.assets.SoundClip;
 import util.assets.Font;
 import util.maths.Pair;
 import util.particleSystem.ParticleSystem;
 import util.update.Animation;
-import util.update.Mouser;
 import util.update.Screen;
 import util.update.TextWisp;
 import util.update.Timer;
 import util.update.Timer.Interp;
-import util.update.Updater;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import game.Main;
-import game.Main.ScreenType;
 import game.assets.Gallery;
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardGraphic;
 import game.card.CardIcon;
 import game.card.CardCode.Special;
-import game.module.Module;
 import game.module.component.Component;
-import game.module.stuff.DamagePoint;
-import game.module.stuff.ModuleInfo;
-import game.module.utility.armour.BasicArmour;
-import game.module.utility.armour.RegenArmour;
+import game.module.junk.ModuleInfo;
 import game.screen.battle.interfaceJunk.CycleButton;
 import game.screen.battle.interfaceJunk.HelpPanel;
 import game.screen.battle.interfaceJunk.PhaseButton;
@@ -49,10 +39,6 @@ import game.screen.battle.tutorial.Tutorial.Trigger;
 import game.screen.menu.Selector;
 import game.ship.Ship;
 import game.ship.niche.Niche;
-import game.ship.shipClass.Aurora;
-import game.ship.shipClass.Comet;
-import game.ship.shipClass.Eclipse;
-import game.ship.shipClass.Nova;
 
 public class Battle extends Screen{
 	public enum Phase{ShieldPhase, EnemyWeaponsFiring, WeaponPhase, EnemyShieldPhase, PlayerWeaponsFiring, EnemyWeaponPhase, End};
@@ -97,7 +83,7 @@ public class Battle extends Screen{
 	private static Battle me;
 	ArrayList<Animation> animations=new ArrayList<Animation>();
 	float animTicker=0;
-	private ScreenType type;
+
 	
 	static Timer victoryFadeInTimer=new Timer();
 	
@@ -365,9 +351,7 @@ public class Battle extends Screen{
 
 		
 		//amount is energy cost of card
-		Ship s=null;
-		if(player)s=getPlayer();
-		else s=getEnemy();
+
 		//if(!s.dead)Star.shake(player, amount);
 		
 		Pair shakeAdd=new Pair(amount*4, (float)(Math.random()-.5)*amount);
@@ -388,7 +372,7 @@ public class Battle extends Screen{
 		currentState=s;
 		switch(currentState){
 		case Augmenting:
-			help=new HelpPanel("Pick a card to augment",false);
+			
 			break;
 		case CycleDiscard:
 			help=new HelpPanel("Discard a card",false);

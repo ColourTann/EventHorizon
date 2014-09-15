@@ -60,7 +60,7 @@ public class FightStats extends Mouser{
 		BitmapFont current = (ship.getEnergy()>9?Font.medium:Font.big);
 		current.setColor(c);
 		String s=""+ship.getEnergy();
-		current.draw(batch, s, energyX-current.getBounds(s).width/2+(ship.getEnergy()>9?45:47), y+20-current.getBounds(s).height/2);
+		current.draw(batch, s, energyX-current.getBounds(s).width/2+(ship.getEnergy()>9?45:47), y+19-current.getBounds(s).height/2);
 		Draw.drawScaled(batch, Gallery.iconEnergy.get(),energyX+5,y+6, 2,2);
 		Font.medium.setColor(c);
 		String inc="+"+ship.getIncome();
