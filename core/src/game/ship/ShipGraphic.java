@@ -38,7 +38,7 @@ public class ShipGraphic extends Updater{
 	public static Pair offset=new Pair(175, 90);
 	public static int height=270;
 	public static int width=390;
-	Pic composite;
+	public Pic composite;
 	PicCut picCut;
 	ArrayList<Animation> animations= new ArrayList<Animation>();
 	ArrayList<Shard> shards= new ArrayList<Shard>();

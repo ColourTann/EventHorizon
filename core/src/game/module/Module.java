@@ -17,7 +17,7 @@ import game.ship.ShipGraphic;
 
 public abstract class Module {
 
-	public enum ModuleType{WEAPON,SHIELD,GENERATOR,COMPUTER}
+	public enum ModuleType{WEAPON,SHIELD,GENERATOR,COMPUTER, UTILITY}
 
 
 	public Ship ship;
@@ -74,7 +74,9 @@ public abstract class Module {
 	//Card stuff//
 
 	public Card getCard(int number){
-		return new Card(this,number);
+		Card c=new Card(this);
+		c.remakeCard(number);
+		return c;
 	}
 
 	public Card getNextCard(){
@@ -83,6 +85,10 @@ public abstract class Module {
 			return null;
 		}
 		return getCard(getNextCardSide());
+	}
+	
+	public Card makeCard(){
+		return new Card(this);
 	}
 
 	@SuppressWarnings("unchecked")

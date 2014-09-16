@@ -33,7 +33,7 @@ import game.ship.Ship;
 public class Main extends ApplicationAdapter  {
 
 	public static float version=0.221f;
-	public static boolean debug=true;
+	public static boolean debug=false;
 
 	public static int height=700;
 	public static int width=1280;

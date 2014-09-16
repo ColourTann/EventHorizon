@@ -273,6 +273,7 @@ public class Tutorial extends Updater{
 				Battle.setTutorial(false);
 				player.drawToMaximum();
 				enemy.drawToMaximum();
+				for(Card c:enemy.hand)c.remakeCard(1);
 				for(Component c:player.getRandomisedModules()){
 					c.removeSramble();
 				}
@@ -359,8 +360,9 @@ public class Tutorial extends Updater{
 						new Task("Click the red crossed swords to confirm",TaskType.EndWeaponPhase, true)
 				});
 				enemy.drawCard(enemy.getShield().getNextCard());
-				enemy.drawCard(new Card(enemy.getComponent(1),5));
-				enemy.drawCard(new Card(enemy.getComponent(1),6));
+				enemy.drawCard(enemy.getComponent(1).getCard(5));
+				enemy.drawCard(enemy.getComponent(1).getCard(6));
+				//enemy.drawCard(enemy.getComponent(1).getCard(6));
 				break;
 			case ShieldMajorList:
 				currentList=new Checklist(t, new Task[]{

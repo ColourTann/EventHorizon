@@ -450,7 +450,6 @@ public abstract class Component extends Module{
 			return 999; //99 if not taking
 		}
 		if(getUnshieldableIncoming()>=damageTotal-thresholds[keyThreshold]+1){
-			System.out.println("unshieldable so can't");
 			return 999;
 
 		}

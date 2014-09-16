@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import util.assets.Font;
 import util.maths.Pair;
 import util.update.Screen;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import game.Main;
 import game.screen.battle.Battle;
+import game.screen.customise.Customise;
 import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
@@ -32,8 +34,8 @@ public class Selector extends Screen{
 				new Battle(new Eclipse(true), new Aurora(false), false)));
 		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
 				new Battle(new Comet(true), new Nova(false), false)));
-		choices.add(new GameChoice(Main.width/2, 505, "hard", 	
-				new Battle(new Aurora(true), new Nova(false), false)));
+		choices.add(new GameChoice(Main.width/2, 505, "arena", 	
+				new Customise(new Aurora(true))));
 	}
 	
 	@Override

@@ -39,7 +39,7 @@ public class Card {
 	private int[] shots = new int[2];
 	private int bonusShots=0;
 	private CardCode[] code=new CardCode[2];
-	int specialSide;
+	public int specialSide=-1;
 	public ModuleType type;
 
 	//Random Fields//
@@ -54,11 +54,11 @@ public class Card {
 
 	
 	//Setting up card//
-	public Card(Module m, int side){
+	public Card(Module m){
 		mod=m;
 		
 		if(m instanceof Component)component=(Component) m;
-		specialSide=side;
+		/*specialSide=side;
 		for(int i=0;i<2;i++){
 			name[i]=mod.getName(i*specialSide);
 			cardPic[i]=mod.getPic(i*specialSide);
@@ -73,7 +73,7 @@ public class Card {
 				shots[i]=((Weapon)mod).getShots(i*specialSide);	
 			}
 		}
-		type=m.type;
+		type=m.type;*/
 		
 	}
 	
@@ -88,6 +88,10 @@ public class Card {
 		this.code=codes;
 		this.type=type;
 		this.shots=shots;
+	}
+	
+	public void finaliseSide(){
+		remakeCard(mod.getNextCardSide());
 	}
 	
 	public void remakeCard(int side){
@@ -814,7 +818,8 @@ public class Card {
 	public int getEffect(int pick){
 		if(baseEffect[pick]==0)return 0;
 		int effect= baseEffect[pick]+bonusEffect+mod.getBuffAmount(BuffType.BonusEffeect);
-		effect+=mod.ship.getBonusEffect(this, pick, effect);
+		if(mod.ship!=null)effect+=mod.ship.getBonusEffect(this, pick, effect);
+		
 		return effect;
 	}
 

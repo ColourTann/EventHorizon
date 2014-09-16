@@ -10,7 +10,7 @@ public abstract class Computer extends Component{
 	public int maxCards;
 	private int bonusCards;
 	public Computer(String modName,Pic p, int maxCards, int[] thresholds) {
-		super(0, modName, p,1,2,thresholds);
+		super(-1, modName, p,1,2,thresholds);
 		this.maxCards=maxCards;
 		type=ModuleType.COMPUTER;
 		name[0]="Lock-on";

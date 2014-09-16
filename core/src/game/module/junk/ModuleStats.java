@@ -14,10 +14,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Gallery;
+import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
 import game.screen.battle.Battle;
 import game.screen.battle.tutorial.Tutorial;
+import game.screen.customise.Customise;
+import game.screen.customise.Reward;
 
 public class ModuleStats extends Mouser{
 	static int height=Main.height/5;
@@ -35,7 +38,7 @@ public class ModuleStats extends Mouser{
 		mousectivate(new BoxCollider(c.ship.player?0:Main.width-width, height*c.getIndex(), width, height));
 		component=c;
 		info=new ModuleInfo(c);
-		
+
 	}
 
 
@@ -50,11 +53,18 @@ public class ModuleStats extends Mouser{
 			info.stopFading();
 			ModuleInfo.top=info;
 		}
+		if(Main.currentScreen instanceof Customise){
+			((Customise)Main.currentScreen).mouseOver(component);
+		}
 	}
 	@Override
 	public void mouseUp() {
+		if(Main.currentScreen instanceof Customise){
+			Customise.unMouse(component);
+		}
 		component.unmoused();
 		if(info!=null)info.fadeAll();
+
 	}
 	@Override
 	public void update(float delta) {
@@ -90,6 +100,19 @@ public class ModuleStats extends Mouser{
 		Draw.draw(batch, base.get(), collider.position.x, collider.position.y);
 
 		if(component.moused)Draw.draw(batch, Gallery.statsMoused.get(), collider.position.x, collider.position.y);
+		if(Main.currentScreen instanceof Customise){
+			if(Customise.selectedReward!=null){
+				Module selMod=Customise.selectedReward.getModule();
+				if(selMod!=null&&selMod.type==component.type){
+					batch.setColor(Reward.selectedColor);
+					Draw.draw(batch, Gallery.statsMoused.get(), collider.position.x, collider.position.y);
+					batch.setColor(Colours.white);
+				}
+			}
+
+
+		}
+
 		if(component.targeteds>0)	Draw.draw(batch, Gallery.statsTargeted.get(), collider.position.x, collider.position.y);
 		if(component.immune)Draw.draw(batch, Gallery.statsImmune.get(), collider.position.x, collider.position.y);
 
@@ -111,14 +134,14 @@ public class ModuleStats extends Mouser{
 		}
 		int index;
 		Pic[] p;
-	
+
 		int twin=0;
 		int slotLoc=0;
 		for(int i=0;i<component.maxHP;i++){
 			twin--;
-			
+
 			if(component.doubles[slotLoc]&&twin<=0) twin=2;
-			
+
 			p=Gallery.greenHP;
 			index=0;
 			boolean moused=false;
@@ -181,7 +204,7 @@ public class ModuleStats extends Mouser{
 			pos++;
 		}
 
-		info.render(batch);
+		if(Main.currentScreen instanceof Battle)info.render(batch);
 
 
 	}

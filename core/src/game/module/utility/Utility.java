@@ -11,6 +11,7 @@ public abstract class Utility extends Module{
 	public Utility(int tier, String name, String passive, Pic modulePic, int variants, int numCards) {
 		super(tier, name, modulePic, variants, numCards);
 		this.passive=passive;
+		type=ModuleType.UTILITY;
 	}
 
 	

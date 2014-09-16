@@ -120,7 +120,7 @@ public class Battle extends Screen{
 	}
 
 	public static boolean isTutorial(){
-		return me.tutorial;
+		return me!=null&&me.tutorial;
 	}
 
 	private void resetStatics() {

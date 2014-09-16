@@ -212,9 +212,12 @@ public class Pic {
 		}
 		if(iteration>0)return;
 		for(int dx=-1;dx<=1;dx++){	
-			for(int dy=-1;dy<=1;dy++){
-				outlinePath(pixmap, result, x+dx, y+dy, iteration+1);
-			}
+			
+				outlinePath(pixmap, result, x+dx, y, iteration+1);
+		
+		}
+		for(int dy=-1;dy<=1;dy++){
+			outlinePath(pixmap, result, x, y+dy, iteration+1);
 		}
 	}
 

@@ -7,7 +7,7 @@ import game.module.component.Component;
 public abstract class Generator extends Component{
 	public int energyIncome;
 	public Generator(String modName,Pic p, int energyIncome, int[] thresholds){
-		super(0, modName, p, 1, 2, thresholds);
+		super(-1, modName, p, 1, 2, thresholds);
 		this.energyIncome=energyIncome;
 		type=ModuleType.GENERATOR;
 		name[0]="Recharge";

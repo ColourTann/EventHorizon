@@ -476,6 +476,8 @@ public abstract class Ship {
 	}
 
 	public void drawCard(Card card) {
+		if(card.specialSide==-1)card.finaliseSide(); //for rigged draws//
+		
 		hand.add(card);
 		card.getGraphic().activate();
 		card.getGraphic().mousectivate(null);
@@ -541,38 +543,15 @@ public abstract class Ship {
 	}
 
 	public void makeDeck(){
-		ArrayList<Module> modules=new ArrayList<Module>();
+		deck.clear();
 
 		for(Module m:components){
 			if(m.destroyed)continue;
-			for(int i=0;i<m.numCards;i++)modules.add(m);
+			for(int i=0;i<m.numCards;i++)deck.add(m.makeCard());
 		}
-		for(Module m:utilities)for(int i=0;i<m.numCards;i++)modules.add(m);
+		for(Module m:utilities)for(int i=0;i<m.numCards;i++)deck.add(m.makeCard());
 
-		Draw.shuffle(modules);
-
-		while(modules.size()>0)deck.add(modules.remove(0).getNextCard());
-
-		/*for(int i=0;i<100;i++){
-			deck.add(new Card(
-					this,
-					new String[]{"hi","ho"},
-					new Pic[]{Gallery.pulseCard[1], Gallery.pulseCard[0]},
-					new int[]{0,5},
-					new int[]{0,4},
-					new int[]{0,0},
-					new int[]{5,2},
-					new String[]{"Bleeop","blaop"},
-					new CardCode[]{new CardCode(), new CardCode()},
-					ModuleType.WEAPON
-
-					));
-
-
-
-		}*/
-
-		//Draw.shuffle(deck);
+		Draw.shuffle(deck);
 	}
 
 	public void startFight(boolean goingFirst){
