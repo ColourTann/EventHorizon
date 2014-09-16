@@ -18,7 +18,7 @@ import game.module.junk.ModuleInfo;
 
 public class Reward extends Mouser{
 	Module module;
-	static int width=120;
+	static int width=136;
 	static int height=100;
 	static int offset=15;
 	static int y=600;
@@ -40,16 +40,16 @@ public class Reward extends Mouser{
 	}
 	
 	public void render(SpriteBatch batch){
-		batch.setColor(Colours.white);
+		batch.setColor(Colours.withAlpha(Colours.white, alpha));
 		Pic p=module.getPic(0);
 		Draw.drawScaled(batch, Gallery.rewardOutline.get(), position.x, position.y,4,4);
 		Draw.drawScaledCentered(batch, p.get(), position.x+width/2, position.y+height/2, 4, 4);
 		if(moused){
-			batch.setColor(Colours.light);
+			batch.setColor(Colours.withAlpha(Colours.light, alpha));
 			Draw.drawScaled(batch, Gallery.rewardOutline.getOutline(), position.x, position.y,4,4);
 		}
 		if(selected){
-			batch.setColor(selectedColor);
+			batch.setColor(Colours.withAlpha(selectedColor, alpha));
 			Draw.drawScaled(batch, Gallery.rewardOutline.getOutline(), position.x, position.y,4,4);
 		}
 	}

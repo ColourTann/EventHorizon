@@ -739,7 +739,7 @@ public abstract class Ship {
 		return result;
 	}
 
-	private void recalculateThresholds() {
+	public void recalculateThresholds() {
 		for(Component c:components)c.recalculateThresholds();	
 	}
 

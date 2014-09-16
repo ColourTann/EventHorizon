@@ -7,6 +7,7 @@ public class BasicArmour extends Armour{
 
 	public BasicArmour(int tier) {
 		super(1+tier*.25f,tier, "Plating", "Basic armour", Gallery.auroraComputer, 0, 0);
+		cardPic[0]=Gallery.basicArmour;
 	}
 
 	@Override

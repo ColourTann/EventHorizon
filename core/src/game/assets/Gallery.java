@@ -60,7 +60,7 @@ public class Gallery {
 	public static Pic[] repulsorCard= new Pic[5];
 	public static Pic repeller=new Pic("Module/Shield/Repeller/module", 3);
 	public static Pic[] repellerCard= new Pic[5];
-	
+		
 	//Computers//
 	public static Pic[] cardComputer= new Pic[4];
 	
@@ -69,6 +69,7 @@ public class Gallery {
 	
 	//UTILITY//
 	
+	public static Pic basicArmour=new Pic("Module/Utility/Armour/basicarmour");
 	public static Pic armour=new Pic("Module/Utility/cycle");
 	
 	//Armour//

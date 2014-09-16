@@ -1,5 +1,7 @@
 package util.update;
 
+import game.Main;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -17,4 +19,8 @@ public abstract class Screen {
 	public abstract void keyUp(int keyCode);
 	public abstract void mousePressed(Pair location, boolean left);
 	public abstract void scroll(int amount);
+	public static boolean isActiveType(Class<?> cl){
+		if(Main.currentScreen==null)return false;
+		return Main.currentScreen.getClass()==cl;
+	}
 }

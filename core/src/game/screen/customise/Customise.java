@@ -4,12 +4,18 @@ import java.util.ArrayList;
 
 import game.Main;
 import game.module.Module;
+import game.module.Module.ModuleType;
 import game.module.component.Component;
 import game.module.component.shield.Deflector;
+import game.module.component.shield.Shield;
+import game.module.component.weapon.Pulse;
 import game.module.component.weapon.Ray;
+import game.module.component.weapon.Tesla;
+import game.module.component.weapon.Weapon;
 import game.module.junk.ModuleInfo;
 import game.module.junk.ModuleStats;
 import game.module.utility.FluxAlternator;
+import game.module.utility.armour.BasicArmour;
 import game.ship.Ship;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,7 +29,7 @@ import util.update.Timer.Interp;
 public class Customise extends Screen{
 	static float fadeInSpeed=0f;
 	static float fadeOutSpeed=.3f;
-	Ship ship;
+	static Ship ship;
 	public ArrayList<ModuleStats> stats=new ArrayList<ModuleStats>();
 	public ArrayList<Reward> rewards=new ArrayList<Reward>();
 	public static Reward selectedReward;
@@ -38,11 +44,21 @@ public class Customise extends Screen{
 	
 	@Override
 	public void init() {
+		resetModuleStats();
+		addRewards();
+	}
+	
+	public void resetModuleStats(){
+		for(ModuleStats ms:stats)ms.demousectivate();
+		stats.clear();
 		for(Component c:ship.components){
 			stats.add(new ModuleStats(c));
 		}
-		rewards.add(new Reward(new Deflector(1), 0));
-		rewards.add(new Reward(new Ray(1), 1));
+	}
+	
+	public void addRewards(){
+		rewards.add(new Reward(new Pulse(1), 0));
+		rewards.add(new Reward(new BasicArmour(1), 1));
 		rewards.add(new Reward(new FluxAlternator(1), 2));
 	}
 
@@ -71,7 +87,7 @@ public class Customise extends Screen{
 	}
 	
 	public static void deselect() {
-		me.selectedReward=null;
+		Customise.selectedReward=null;
 	}
 	
 	public static void unMouse(Module module){
@@ -112,6 +128,7 @@ public class Customise extends Screen{
 
 	@Override
 	public void keyPress(int keycode) {
+		addRewards();
 	}
 
 	@Override
@@ -127,8 +144,39 @@ public class Customise extends Screen{
 	}
 
 	public static void select(Reward reward) {
-		if(me.selectedReward!=null)me.selectedReward.deselect();
-		me.selectedReward=reward;
+		if(selectedReward!=null)selectedReward.deselect();
+		selectedReward=reward;
+	}
+
+	public static ModuleType getReplaceableType() {
+		if(selectedReward==null)return null;
+		return selectedReward.module.type;
+	}
+	
+	public static void replace(Module m){
+		if(m instanceof Component){
+			Component comp=(Component) m;
+			(comp).getStats().demousectivate();
+			if(m instanceof Weapon){
+				ship.setWeapon((Weapon) selectedReward.module, comp.getIndex());	
+			}
+			if(m instanceof Shield){
+				ship.setShield((Shield) selectedReward.module);
+			}
+			ship.recalculateThresholds();
+			me.resetModuleStats();
+			ship.getGraphic().drawMap();
+			for(ModuleStats ms:me.stats)System.out.println(ms.component);
+			me.chosen();
+		}
+	}
+	
+	public void chosen(){
+		for(Reward rw:rewards){
+			rw.fadeOut(.3f, Interp.LINEAR);
+			rw.demousectivate();
+		}
+		selectedReward=null;
 	}
 
 	

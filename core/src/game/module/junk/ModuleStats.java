@@ -7,6 +7,7 @@ import util.image.Pic;
 import util.maths.BoxCollider;
 import util.maths.Pair;
 import util.update.Mouser;
+import util.update.Screen;
 import util.update.TextWisp;
 import util.update.TextWisp.WispType;
 
@@ -25,7 +26,7 @@ import game.screen.customise.Reward;
 public class ModuleStats extends Mouser{
 	static int height=Main.height/5;
 	public static int width=128;
-	Component component;
+	public Component component;
 	public ModuleInfo info;
 	static Pair hpLoc=new Pair(14, 9);
 	static Pair hpGap=new Pair(16,15);
@@ -44,7 +45,16 @@ public class ModuleStats extends Mouser{
 
 
 	@Override
-	public void mouseClicked(boolean left) {component.clicked();}
+	public void mouseClicked(boolean left) {
+		if(Screen.isActiveType(Customise.class)){
+			
+			if(Customise.getReplaceableType()==component.type){
+				Customise.replace(component);
+			}
+			
+		}
+		component.clicked();
+		}
 	@Override
 	public void mouseDown() {
 		component.moused();
@@ -100,16 +110,13 @@ public class ModuleStats extends Mouser{
 		Draw.draw(batch, base.get(), collider.position.x, collider.position.y);
 
 		if(component.moused)Draw.draw(batch, Gallery.statsMoused.get(), collider.position.x, collider.position.y);
-		if(Main.currentScreen instanceof Customise){
-			if(Customise.selectedReward!=null){
-				Module selMod=Customise.selectedReward.getModule();
-				if(selMod!=null&&selMod.type==component.type){
-					batch.setColor(Reward.selectedColor);
-					Draw.draw(batch, Gallery.statsMoused.get(), collider.position.x, collider.position.y);
-					batch.setColor(Colours.white);
-				}
+		if(Screen.isActiveType(Customise.class)){
+			if(Customise.getReplaceableType()==component.type){
+				batch.setColor(Reward.selectedColor);
+				Draw.draw(batch, Gallery.statsMoused.get(), collider.position.x, collider.position.y);
+				batch.setColor(Colours.white);
 			}
-
+	
 
 		}
 
