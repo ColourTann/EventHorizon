@@ -23,6 +23,12 @@ public class HelpPanel extends Mouser{
 		if(high)y=150;
 		else y=252;
 	}
+	
+	public HelpPanel(String s, int y) {
+		text=s;
+		fadeIn(.5f, Interp.SQUARE);
+		this.y=y;
+	}
 
 	@Override
 	public void mouseDown() {

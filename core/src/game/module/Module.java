@@ -17,7 +17,7 @@ import game.ship.ShipGraphic;
 
 public abstract class Module {
 
-	public enum ModuleType{WEAPON,SHIELD,GENERATOR,COMPUTER, UTILITY}
+	public enum ModuleType{WEAPON, SHIELD, GENERATOR, COMPUTER, UTILITY, ARMOUR}
 
 
 	public Ship ship;

@@ -10,7 +10,7 @@ import util.image.Pic;
 public class FluxAlternator extends Utility{
 
 	public FluxAlternator(int tier) {
-		super(tier, "Furnace", "+1 income if you end your turn with 7+ energy", Gallery.blaster, 1, 10);
+		super(tier, "Furnace", "+1 energy if you end your turn with 7+ energy", Gallery.blaster, 1, 1);
 		
 		name[0]="Charge";
 		cost[0]=0;

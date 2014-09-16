@@ -10,6 +10,7 @@ import util.update.Mouser;
 import util.update.Timer.Interp;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 
 import game.Main;
 import game.assets.Gallery;
@@ -17,19 +18,23 @@ import game.card.CardGraphic;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.computer.Computer;
+import game.module.utility.Utility;
+import game.module.utility.armour.Armour;
 
 public class ModuleInfo extends Mouser{
 	//279373
 	float width;
-	float height=373;
+	float height=CardGraphic.height*2-1;
 	public Module mod;
 	public ArrayList<CardGraphic> graphics = new ArrayList<CardGraphic>();
 	public static ModuleInfo top;
 	public ModuleInfo(Module m) {
 		mod=m;
-		width=CardGraphic.width*2;
-		if(mod.type==ModuleType.SHIELD||mod.type==ModuleType.WEAPON)width=CardGraphic.width*3;
-		
+		width=CardGraphic.width*2-2;
+		if(mod.type==ModuleType.SHIELD||mod.type==ModuleType.WEAPON)width=CardGraphic.width*3-3;
+		if(mod.getPic(1)==null){
+			width=CardGraphic.width-1;
+		}
 		if(mod.ship==null)return;
 		setPosition(new Pair(mod.ship.player?130+width/2:Main.width-130-width/2, 0));
 
@@ -41,6 +46,7 @@ public class ModuleInfo extends Mouser{
 		graphics.clear();
 		this.position=pos.add(-width/2,0);
 		if(mod.type==ModuleType.WEAPON||mod.type==ModuleType.SHIELD){
+
 			for(int i=0;i<=3;i++){
 				CardGraphic cg=mod.getCard(i+1).getHalfGraphic(true);
 				cg.setPosition(new Pair(position.x+(i%2)*139+139, position.y+((i/2))*124));
@@ -50,8 +56,11 @@ public class ModuleInfo extends Mouser{
 			cg.setPosition(new Pair(position.x,position.y+124));
 			graphics.add(cg);
 		}
+		else if (mod.type==ModuleType.ARMOUR){
+
+		}
 		else{
-			height-=124;
+			//height-=124;
 
 			CardGraphic cg=mod.getCard(0).getHalfGraphic(true);
 			cg.setPosition(new Pair(position.x+139, position.y));
@@ -93,25 +102,28 @@ public class ModuleInfo extends Mouser{
 	public void render(SpriteBatch batch) {
 
 		if (alpha<=0)return;
+		Font.small.setColor(Colours.withAlpha(Colours.light,alpha));
 		batch.setColor(1,1,1,alpha);
-		if(mod.type==ModuleType.SHIELD||mod.type==ModuleType.WEAPON){
-			Draw.draw(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y);
-		}
-		else{
-			Draw.draw(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y);
-			Draw.draw(batch, Gallery.cardBase.getMask(Colours.dark), position.x, position.y+CardGraphic.height/2);
-		}
+		Draw.drawScaled(batch, Gallery.cardBase.getMask(Colours.withAlpha(Colours.backgrounds1[0], alpha)), position.x, position.y, width/CardGraphic.width, height/CardGraphic.height);
+
+
 
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		String s=mod.moduleName;
 		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+17);
 		s="Cards:";
-		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+63);
+		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+70);
 		s=""+mod.numCards;
 		if(mod.ship!=null){
 			s+="/"+mod.ship.getTotalDeckSize();
 		}
-		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+88);
+		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+95);
+
+		if(mod instanceof Armour){
+			
+			s="HP multiplier "+((Armour)mod).multiplier;
+			Font.small.drawWrapped(batch, s, position.x, position.y+50, CardGraphic.width, HAlignment.CENTER);
+		}
 
 		if(mod.type==ModuleType.GENERATOR){
 			s="Energy";
@@ -129,7 +141,13 @@ public class ModuleInfo extends Mouser{
 			s=""+((Computer)mod).maxCards;
 			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+205);
 		}
-		Font.small.setColor(Colours.withAlpha(Colours.light,alpha));
+		if(mod instanceof Utility){
+			String passive=((Utility)mod).passive;
+			float offset=2;
+			Font.medium.setColor(Colours.withAlpha(Colours.player2[0],alpha));
+			Font.medium.drawWrapped(batch, passive, position.x+offset, position.y+CardGraphic.height/2+offset+7, CardGraphic.width-offset*2, HAlignment.CENTER);
+		}
+	
 		String words=mod.type+(mod.tier==-1?"":" Tier "+mod.tier);
 		Font.drawFontCentered(batch, words, Font.small, position.x+CardGraphic.width/2, position.y+42);
 		//Font.medium.drawWrapped(batch, s, width/4, 20, 500, HAlignment.CENTER);

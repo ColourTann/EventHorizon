@@ -6,8 +6,9 @@ import game.card.Card;
 public class BasicArmour extends Armour{
 
 	public BasicArmour(int tier) {
-		super(1+tier*.25f,tier, "Plating", "Basic armour", Gallery.auroraComputer, 0, 0);
+		super(1+tier*.25f,tier, "Plating", "Basic Armour", Gallery.auroraComputer, 0, 0);
 		cardPic[0]=Gallery.basicArmour;
+		name[0]="Basic Armour";
 	}
 
 	@Override

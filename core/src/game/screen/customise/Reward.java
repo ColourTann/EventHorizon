@@ -3,28 +3,32 @@ package game.screen.customise;
 
 import util.Colours;
 import util.Draw;
+import util.Draw.BlendType;
 import util.image.Pic;
 import util.maths.BoxCollider;
 import util.maths.Pair;
 import util.update.Mouser;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Gallery;
 import game.module.Module;
 import game.module.junk.ModuleInfo;
+import game.screen.battle.interfaceJunk.HelpPanel;
 
 public class Reward extends Mouser{
 	Module module;
-	static int width=136;
-	static int height=100;
+	static int width=Gallery.rewardOutline.getWidth()*4;
+	static int height=Gallery.rewardOutline.getHeight()*4;
 	static int offset=15;
-	static int y=600;
+	static int y=640;
 	private ModuleInfo info;
 	public boolean selected;
 	public static Color selectedColor=Colours.genCols5[3];
+	
 	public Reward (Module m, int index){
 		this.module=m;
 		
@@ -52,6 +56,11 @@ public class Reward extends Mouser{
 			batch.setColor(Colours.withAlpha(selectedColor, alpha));
 			Draw.drawScaled(batch, Gallery.rewardOutline.getOutline(), position.x, position.y,4,4);
 		}
+		batch.setColor(1,1,1,1);
+		/*batch.setBlendFunction(GL20.GL_ONE, GL20.GL_ZERO);
+		batch.setColor(1,0,0,.1f);
+		Draw.drawScaled(batch, Gallery.whiteSquare.get(), position.x, position.y, 100, 100);
+		Draw.setBlend(batch, BlendType.Normal);*/
 	}
 
 

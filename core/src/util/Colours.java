@@ -38,6 +38,8 @@ public class Colours {
 	public static Color[] shipHull7=new Color[]{make(236,250,212), make(196,207,173), make(153,146,115), make(109,156,164), make(88,135,99), make(52,94,84), make(61,57,84), make(30,28,49), make(28,45,61)};
 	public static Color transparent=new Color(0,0,0,0);
 
+	public static Color[] backgrounds1=new Color[]{make(28,44,60)};
+	
 	public static Color shiftedTowards(Color source, Color target, float amount){
 		if(amount>1) amount=1;
 		if(amount<0) amount=0;

@@ -9,7 +9,7 @@ import game.card.CardCode.Special;
 public class Cardifier extends Utility{
 
 	public Cardifier(int tier) {
-		super(tier, "Cardifier", "+1 hand size next turn if you use all cards this turn", Gallery.blaster, 1, 10);
+		super(tier, "Cardifier", "+1 card next turn if you use all cards", Gallery.blaster, 1, 10);
 		
 		name[0]="DrawTwo";
 		cost[0]=0;
