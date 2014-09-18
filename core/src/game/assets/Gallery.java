@@ -128,6 +128,8 @@ public class Gallery {
 	
 	public static Pic shitButton= new Pic("Interface/shitbutton");
 	public static Pic rewardOutline= new Pic("Interface/rewardoutline"); 
+	public static Pic energyDial= new Pic("Interface/energydial");
+	public static Pic energyMeter= new Pic("Interface/energymeter");
 	
 	//Map stuff//
 	public static Pic mapslice= new Pic("Interface/mapslice");

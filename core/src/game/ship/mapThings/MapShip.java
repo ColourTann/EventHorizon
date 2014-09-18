@@ -166,6 +166,6 @@ public class MapShip {
 	}
 
 	public float getPowerLevel() {
-		return ship.getPowerLevel();
+		return ship.getStats().power;
 	}
 }

@@ -35,7 +35,7 @@ public class Selector extends Screen{
 		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
 				new Battle(new Comet(true), new Nova(false), false)));
 		choices.add(new GameChoice(Main.width/2, 505, "arena", 	
-				new Customise(new Aurora(true))));
+				new Customise(new Eclipse(true))));
 	}
 	
 	@Override

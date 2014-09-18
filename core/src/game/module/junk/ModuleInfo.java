@@ -7,6 +7,7 @@ import util.Draw;
 import util.assets.Font;
 import util.maths.Pair;
 import util.update.Mouser;
+import util.update.Screen;
 import util.update.Timer.Interp;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,6 +21,7 @@ import game.module.Module.ModuleType;
 import game.module.component.computer.Computer;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
+import game.screen.customise.Customise;
 
 public class ModuleInfo extends Mouser{
 	//279373
@@ -76,6 +78,7 @@ public class ModuleInfo extends Mouser{
 
 	@Override
 	public void mouseDown() {
+	
 	}
 
 	@Override
@@ -114,7 +117,7 @@ public class ModuleInfo extends Mouser{
 		s="Cards:";
 		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+70);
 		s=""+mod.numCards;
-		if(mod.ship!=null){
+		if(mod.ship!=null&&mod.numCards>0){
 			s+="/"+mod.ship.getTotalDeckSize();
 		}
 		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+95);

@@ -47,14 +47,14 @@ public class ModuleStats extends Mouser{
 	@Override
 	public void mouseClicked(boolean left) {
 		if(Screen.isActiveType(Customise.class)){
-			
+
 			if(Customise.getReplaceableType()==component.type){
 				Customise.replace(component);
 			}
-			
+
 		}
 		component.clicked();
-		}
+	}
 	@Override
 	public void mouseDown() {
 		component.moused();
@@ -66,6 +66,15 @@ public class ModuleStats extends Mouser{
 		if(Main.currentScreen instanceof Customise){
 			((Customise)Main.currentScreen).mouseOver(component);
 		}
+
+		if(Screen.isActiveType(Customise.class)){
+
+			if(Customise.getReplaceableType()==component.type){
+				Customise.checkEnergy(new Module[]{component}, new Module[]{Customise.selectedReward.module});
+			}
+
+		}
+
 	}
 	@Override
 	public void mouseUp() {
@@ -116,7 +125,7 @@ public class ModuleStats extends Mouser{
 				Draw.draw(batch, Gallery.statsMoused.get(), collider.position.x, collider.position.y);
 				batch.setColor(Colours.white);
 			}
-	
+
 
 		}
 

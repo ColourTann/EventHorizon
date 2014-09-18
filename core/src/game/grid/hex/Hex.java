@@ -302,7 +302,7 @@ public class Hex {
 
 	public float howGood(MapShip ship){
 		float result=0;
-		float myPower=ship.ship.getPowerLevel();
+		float myPower=ship.ship.getStats().power;
 
 
 

@@ -56,6 +56,10 @@ public abstract class Ship {
 	public static ArrayList<Class<? extends Ship>> classes = new ArrayList<Class<? extends Ship>>();
 	public Niche[] niches= new Niche[5]; 
 	public Component[] components= new Component[5];
+
+	private Armour armour;
+	private Utility[] utilities=new Utility[2];
+
 	private ShipGraphic battleGraphic;
 	public Pic shipPic;
 	//Deck is stored as a list of modules so you can generate nice and easily!!//
@@ -71,10 +75,9 @@ public abstract class Ship {
 	private int energyAtEndOfPhase=0;
 	private float powerLevel=0;
 
+	private ShipStats shipStats;
 
-	private Armour armour;
-	private ArrayList<Utility> utilities=new ArrayList<Utility>();
-	
+
 	private ArrayList<Attack> attacks=new ArrayList<Attack>();
 
 	//Enemy ai stuff//
@@ -103,10 +106,10 @@ public abstract class Ship {
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
 		setArmour(new BasicArmour(0));
-		addUtility(new RapidFire(0));
+		//addUtility(new RapidFire(0));
 		specialComponent= new SpecialComponent();
 		specialComponent.ship=this;
-	
+
 	}
 
 
@@ -182,7 +185,7 @@ public abstract class Ship {
 		System.out.println("removing attack from "+card);
 		System.out.println(attacks.size());
 		for(int i=0;i<attacks.size();i++){
-			
+
 			Attack a=attacks.get(i);
 			if(a.card==card){
 				if(a.target!=null)a.target.targeteds--;
@@ -330,7 +333,7 @@ public abstract class Ship {
 	}
 
 	public Card pickCard(Phase p){
-		
+
 		//Checks to see if card is valid to play//
 		boolean shield=true;
 		boolean weapon=true;
@@ -477,7 +480,7 @@ public abstract class Ship {
 
 	public void drawCard(Card card) {
 		if(card.specialSide==-1)card.finaliseSide(); //for rigged draws//
-		
+
 		hand.add(card);
 		card.getGraphic().activate();
 		card.getGraphic().mousectivate(null);
@@ -549,7 +552,12 @@ public abstract class Ship {
 			if(m.destroyed)continue;
 			for(int i=0;i<m.numCards;i++)deck.add(m.makeCard());
 		}
-		for(Module m:utilities)for(int i=0;i<m.numCards;i++)deck.add(m.makeCard());
+		for(Module m:utilities){
+			if(m==null)continue;
+			for(int i=0;i<m.numCards;i++)deck.add(m.makeCard());
+		}
+		if(armour!=null)for(int i=0;i<armour.numCards;i++)deck.add(armour.makeCard());
+
 
 		Draw.shuffle(deck);
 	}
@@ -686,16 +694,14 @@ public abstract class Ship {
 		niches[4].install(c);
 	}
 	public void setArmour(Armour a){
-		utilities.remove(this.armour);
 		this.armour=a;
 		a.ship=this;
-		utilities.add(this.armour);
 		recalculateThresholds();
 	}
 
-	public void addUtility(Utility u){
+	public void setUtility(Utility u, int position){
 		if(u instanceof Armour) System.out.println("Watch out, setting armour as utility wuhohh!");
-		utilities.add(u);
+		utilities[position]=u;
 		u.ship=this;
 	}
 
@@ -736,6 +742,11 @@ public abstract class Ship {
 			result+=m.numCards;
 		}
 
+		for(Utility u:utilities){
+			if(u!=null)result+=u.numCards;
+		}
+		if(armour!=null)result+=armour.numCards;
+
 		return result;
 	}
 
@@ -743,51 +754,7 @@ public abstract class Ship {
 		for(Component c:components)c.recalculateThresholds();	
 	}
 
-	public float getPowerLevel(){
-		if(powerLevel!=0)return powerLevel;
-		deck.clear();
-		makeDeck();
-		float totalEffect=0;
-		float totalCost=0;
-		float deckSize=deck.size();
-		for(Card c:deck){
 
-			CardCode code=c.getCode();
-
-			totalEffect+=c.getEffect();
-			totalCost+=c.getCost();
-
-			deckSize-=code.getAmount(Augment.AugmentDrawCard);
-			deckSize-=code.getAmount(Special.DrawCard);
-			totalCost-=code.getAmount(Special.GainEnergy);
-		}
-
-		float averageCardCost=totalCost/deckSize;
-		float averageCardEffect=totalEffect/deckSize;
-
-		float handCost=averageCardCost*maxCards;
-		float handEffect=averageCardEffect*maxCards;
-
-		float ratio=getGenerator().getIncome()/handCost;
-
-		float handPower=handEffect*ratio;
-		boolean debug=false;
-		if(debug){
-			System.out.println("Power levels for "+this);
-			System.out.println("Total effect: "+totalEffect);
-			System.out.println("Total cost: "+totalCost);
-			System.out.println("Deck size: "+deckSize);
-			System.out.println("Average Card cost: "+averageCardCost);
-			System.out.println("Average Card effect: "+averageCardEffect);
-			System.out.println("Hand cost: "+handCost);
-			System.out.println("Hand effect: "+handEffect);
-			System.out.println("Proportion of hand played: "+ratio);
-			System.out.println("Final power level: "+handPower);
-		}
-
-		powerLevel=handPower;
-		return powerLevel;
-	}
 
 
 
@@ -806,12 +773,13 @@ public abstract class Ship {
 	public int getBonusEffect(Card c, int side, int effect) {
 		int bonus=0;
 		for(Utility u:utilities){
-			bonus+=u.getBonusEffect(c, effect);
+			if(u!=null)bonus+=u.getBonusEffect(c, effect);
+
 		}
 		if(bonus>0)c.augmented[side]=true;
 		return bonus;
 	}
-	
+
 	public int getBonusShots(Card c, int side, int effect) {
 		int bonus=0;
 		for(Utility u:utilities){
@@ -821,7 +789,111 @@ public abstract class Ship {
 		return bonus;
 	}
 
+	public Utility getUtility(int index) {
+		return utilities[index];
+	}
 
+	public Armour getArmour() {
+		return armour;
+	}
+
+
+	public ShipStats getStats(){
+		if(shipStats==null) recalculateStats();
+
+		return shipStats;
+	}
+	
+	public void recalculateStats(){
+		shipStats=calculateStats(null, null);
+	}
+
+	public ShipStats calculateSpecialStats(Module[] remove, Module[] add){
+		return calculateStats(remove, add);
+	}
+
+	private ShipStats calculateStats(Module[] remove, Module[] add){
+
+		deck.clear();
+		makeDeck();
+		float totalDefence=0;
+		float totalAttack=0;
+
+		float totalCost=0;
+
+		if(remove!=null){
+			for(int i=deck.size()-1;i>=0;i--){
+				Card c=deck.get(i);
+				for(Module m:remove)if(c.mod==m)deck.remove(c);
+			}
+		}
+
+		if(add!=null){
+			for(Module m:add){
+				for(int i=0;i<m.numCards;i++){
+					deck.add(m.getNextCard());
+				}
+			}
+		}
+
+		float deckSize=deck.size();
+		for(Card c:deck){
+			c.remakeCard(1);
+			CardCode code=c.getCode();
+			int thisCardEffect=c.getEffect();
+			if(c.mod.getShots(0)>0)thisCardEffect*=c.mod.getShots(0);
+
+			if(c.mod.type==ModuleType.WEAPON){
+				totalAttack+=thisCardEffect;
+			}
+			if(c.mod.type==ModuleType.SHIELD){
+				totalDefence+=thisCardEffect;
+			}
+			totalCost+=c.getCost();
+
+			deckSize-=code.getAmount(Augment.AugmentDrawCard);
+			deckSize-=code.getAmount(Special.DrawCard);
+			totalCost-=code.getAmount(Special.GainEnergy);
+		}
+
+		float averageCardCost=totalCost/deckSize;
+		float averageCardDefence=totalDefence/deckSize;
+		float averageCardAttack=totalAttack/deckSize;
+
+		float handCost=averageCardCost*maxCards;
+		float totalHandDefence=averageCardDefence*maxCards;
+		float totalHandAttack=averageCardAttack*maxCards;
+
+		float ratio=getGenerator().getIncome()/handCost;
+
+		float refinedRatio=ratio;
+
+		if(refinedRatio>1)refinedRatio-=(refinedRatio-1)/2f;
+
+		float attackPower=totalHandAttack*refinedRatio;
+		float defPower=totalHandDefence*refinedRatio;
+
+		return new ShipStats(ratio, attackPower, defPower, attackPower+defPower);
+		/*
+
+		float handPower=handEffect*ratio;
+		boolean debug=false;
+		if(debug){
+			System.out.println("Power levels for "+this);
+			System.out.println("Total effect: "+totalEffect);
+			System.out.println("Total cost: "+totalCost);
+			System.out.println("Deck size: "+deckSize);
+			System.out.println("Average Card cost: "+averageCardCost);
+			System.out.println("Average Card effect: "+averageCardEffect);
+			System.out.println("Hand cost: "+handCost);
+			System.out.println("Hand effect: "+handEffect);
+			System.out.println("Proportion of hand played: "+ratio);
+			System.out.println("Final power level: "+handPower);
+		}
+
+		powerLevel=handPower;
+		return powerLevel;*/
+	}
 
 
 

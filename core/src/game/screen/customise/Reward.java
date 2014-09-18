@@ -20,7 +20,7 @@ import game.module.junk.ModuleInfo;
 import game.screen.battle.interfaceJunk.HelpPanel;
 
 public class Reward extends Mouser{
-	Module module;
+	public Module module;
 	static int width=Gallery.rewardOutline.getWidth()*4;
 	static int height=Gallery.rewardOutline.getHeight()*4;
 	static int offset=15;
