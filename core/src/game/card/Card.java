@@ -1318,6 +1318,12 @@ public class Card {
 		return augmented[checkSide]||(component!=null&&component.isAugmented());
 	}
 
+	public void resetGraphic() {
+		cg.stopFading();
+		cg.alpha=0;
+		cg=null;
+	}
+
 	
 	
 }

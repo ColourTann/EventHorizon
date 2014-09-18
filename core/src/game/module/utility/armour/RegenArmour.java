@@ -7,7 +7,7 @@ import game.card.CardCode.Special;
 public class RegenArmour extends Armour{
 
 	public RegenArmour(int tier) {
-		super(.9f+tier*.2f, tier, "Plating", "Repair one extra damage between each fight", Gallery.auroraComputer, 1, 10);
+		super(.9f+tier*.2f, tier, "Plating", "Repair 1 extra damage between each fight", Gallery.auroraComputer, 1, 1);
 		name[0]="Repair";
 		cost[0]=0;
 		cooldown[0]=0;

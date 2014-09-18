@@ -63,12 +63,9 @@ public class ModuleStats extends Mouser{
 			info.stopFading();
 			ModuleInfo.top=info;
 		}
-		if(Main.currentScreen instanceof Customise){
-			((Customise)Main.currentScreen).mouseOver(component);
-		}
-
+		
 		if(Screen.isActiveType(Customise.class)){
-
+			Customise.mouseOver(component);
 			if(Customise.getReplaceableType()==component.type){
 				Customise.checkEnergy(new Module[]{component}, new Module[]{Customise.selectedReward.module});
 			}

@@ -571,7 +571,7 @@ public abstract class Ship {
 			currentEnergy=(int) Math.ceil(getGenerator().getIncome()/2f);
 		}
 		else currentEnergy=getGenerator().getIncome();
-		for(Utility u:utilities)u.startBattleEffect();
+		for(Utility u:utilities)if(u!=null)u.startBattleEffect();
 	}
 
 	private void initFightStats() {

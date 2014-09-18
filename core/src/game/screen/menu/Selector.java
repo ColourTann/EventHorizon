@@ -31,11 +31,11 @@ public class Selector extends Screen{
 		choices.add(new GameChoice(Main.width/2, 205, "tutorial", 
 				new Battle(new Nova(true), new Aurora(false), true)));
 		choices.add(new GameChoice(Main.width/2, 305, "easy", 
-				new Battle(new Eclipse(true), new Aurora(false), false)));
+				new Battle(new Aurora(true), new Aurora(false), false)));
 		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
 				new Battle(new Comet(true), new Nova(false), false)));
 		choices.add(new GameChoice(Main.width/2, 505, "arena", 	
-				new Customise(new Eclipse(true))));
+				new Customise(new Aurora(true))));
 	}
 	
 	@Override
@@ -55,14 +55,7 @@ public class Selector extends Screen{
 	public void keyPress(int keycode) {
 		switch(keycode){
 		case Input.Keys.A:
-			for(int i=0;i<100;i++){
-				Battle s = new Battle(new Aurora(true), new Aurora(false), false);
-				
-				s.init();
-				//Updater.clearAll();
-				s.dispose();
-			}
-			break;
+			
 		}
 	}
 

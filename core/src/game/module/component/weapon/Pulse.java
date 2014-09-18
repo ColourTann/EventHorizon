@@ -4,7 +4,6 @@ import game.assets.Gallery;
 import game.card.CardCode.AI;
 import game.card.CardCode.Special;
 
-
 public class Pulse extends Weapon{
 
 	public Pulse(int tier){

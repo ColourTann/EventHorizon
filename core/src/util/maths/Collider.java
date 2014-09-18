@@ -15,9 +15,9 @@ public abstract class Collider {
 		float cy=c.position.y;
 		float cr=c.r;
 		float left=b.position.x;
-		float right=left+b.w;
+		float right=left+b.width;
 		float bot=b.position.y;
-		float top=bot+b.h;
+		float top=bot+b.height;
 
 		//out of bounds
 		if(cx-cr>=right||

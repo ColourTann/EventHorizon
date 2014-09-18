@@ -396,12 +396,12 @@ public class CardGraphic extends Mouser {
 
 	public void hideLower() {
 		showLower = false;
-		((BoxCollider) collider).h=height/2;
+		((BoxCollider) collider).height=height/2;
 	}
 
 	public void showLower() {
 		showLower = true;
-		((BoxCollider) collider).h=height;
+		((BoxCollider) collider).height=height;
 	}
 
 	@Override

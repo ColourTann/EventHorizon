@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 
 import game.Main;
 import game.assets.Gallery;
+import game.card.Card;
 import game.card.CardGraphic;
 import game.module.Module;
 import game.module.Module.ModuleType;
@@ -28,25 +29,47 @@ public class ModuleInfo extends Mouser{
 	float width;
 	float height=CardGraphic.height*2-1;
 	public Module mod;
+	public Card[] consumableCards;
 	public ArrayList<CardGraphic> graphics = new ArrayList<CardGraphic>();
+	public boolean noDrawCards;
 	public static ModuleInfo top;
 	public ModuleInfo(Module m) {
 		mod=m;
 		width=CardGraphic.width*2-2;
+	
 		if(mod.type==ModuleType.SHIELD||mod.type==ModuleType.WEAPON)width=CardGraphic.width*3-3;
 		if(mod.getPic(1)==null){
 			width=CardGraphic.width-1;
 		}
 		if(mod.ship==null)return;
 		setPosition(new Pair(mod.ship.player?130+width/2:Main.width-130-width/2, 0));
-
-
-
+	}
+	
+	public ModuleInfo(Card[] cards){
+		this.consumableCards=cards;
+		width=CardGraphic.width*3-3;
 	}
 
 	public void setPosition(Pair pos){
-		graphics.clear();
+		
 		this.position=pos.add(-width/2,0);
+		this.position=position.floor();
+		if(mod==null){
+			
+			for (int i=0;i<consumableCards.length;i++){
+				
+				CardGraphic cg=consumableCards[i].getGraphic();
+				cg.setPosition(new Pair(position.x+i*Gallery.cardBase.getWidth(), position.y));
+				cg.override=true;
+				graphics.add(cg);
+				cg.demousectivate();
+			}
+			
+			
+			return;
+		}
+		graphics.clear();
+		
 		if(mod.type==ModuleType.WEAPON||mod.type==ModuleType.SHIELD){
 
 			for(int i=0;i<=3;i++){
@@ -109,8 +132,18 @@ public class ModuleInfo extends Mouser{
 		batch.setColor(1,1,1,alpha);
 		Draw.drawScaled(batch, Gallery.cardBase.getMask(Colours.withAlpha(Colours.backgrounds1[0], alpha)), position.x, position.y, width/CardGraphic.width, height/CardGraphic.height);
 
-
-
+		if(consumableCards!=null&&alpha>0){
+			if(noDrawCards)return;
+			for(Card c:consumableCards){
+				CardGraphic cg=c.getGraphic();
+				cg.finishFlipping();
+				cg.alpha=alpha;
+				cg.render(batch);
+			}
+			
+			return;
+		}
+		
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		String s=mod.moduleName;
 		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+17);

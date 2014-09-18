@@ -9,18 +9,18 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class BoxCollider extends Collider{
 
-	public float w;
-	public float h;
+	public float width;
+	public float height;
 	
-	public BoxCollider(float x, float y, float w, float h){
+	public BoxCollider(float x, float y, float width, float height){
 		position=new Pair(x,y);
-		this.h=h;
-		this.w=w;
+		this.height=height;
+		this.width=width;
 	}
 	
 	@Override
 	public boolean collidePoint(Pair s) {
-		if(s.x<position.x||s.x>position.x+w||s.y<position.y||s.y>position.y+h) return false;
+		if(s.x<position.x||s.x>position.x+width||s.y<position.y||s.y>position.y+height) return false;
 		
 		return true;
 	}
@@ -36,7 +36,7 @@ public class BoxCollider extends Collider{
 		sr.setColor(1, 0, 1, .1f);
 		if(override!=null) sr.setColor(override);
 		
-		sr.rect(position.x, position.y, w, h);
+		sr.rect(position.x, position.y, width, height);
 		sr.end();
 		sr.dispose();
 		
@@ -46,10 +46,10 @@ public class BoxCollider extends Collider{
 	public boolean collideWith(Collider c) {
 		if(c instanceof BoxCollider){
 			BoxCollider bc =(BoxCollider) c;
-			if(bc.position.x>position.x+w) return false;
-			if(bc.position.x+bc.w<position.x) return false;
-			if(bc.position.y>position.y+h) return false;
-			if(bc.position.y+bc.h<position.y) return false;
+			if(bc.position.x>position.x+width) return false;
+			if(bc.position.x+bc.width<position.x) return false;
+			if(bc.position.y>position.y+height) return false;
+			if(bc.position.y+bc.height<position.y) return false;
 			return true;
 		}
 		if(c instanceof CircleCollider){
