@@ -8,8 +8,7 @@ import game.card.CardCode.Special;
 public class MaxDamage extends Utility{
 
 	public MaxDamage(int tier) {
-		super(tier, "Flux Alternator", "Weapons that do 5 or more damage get +1 bonus damage", Gallery.blaster, 1, 10);
-		type=ModuleType.WEAPON;
+		super(tier, "Enhancer", "Weapons that do 5 or more damage get +1 bonus damage", Gallery.blaster, 1, 1);
 		name[0]="Strike";
 		cost[0]=3;
 		cooldown[0]=0;

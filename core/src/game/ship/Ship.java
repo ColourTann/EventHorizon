@@ -73,7 +73,6 @@ public abstract class Ship {
 	int maxCards;
 	private int majorDamageTaken=0;
 	private int energyAtEndOfPhase=0;
-	private float powerLevel=0;
 
 	private ShipStats shipStats;
 
@@ -114,13 +113,13 @@ public abstract class Ship {
 
 
 	//Phase stuff//
-	public void startTurn() {
+	public void startTurn () {
 		attacks.clear();
 		if(player)drawToMaximum();
 		currentEnergy+=getGenerator().getIncome();
 
 
-		for(Utility u:utilities)u.beginTurnEffect();
+		for(Utility u:utilities) if(u!=null) u.beginTurnEffect();
 
 	}
 

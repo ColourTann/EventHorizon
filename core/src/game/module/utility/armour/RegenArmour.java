@@ -17,6 +17,15 @@ public class RegenArmour extends Armour{
 		code[0].add(Special.ModuleChooser);
 		code[0].add(Special.RepairChosenModule, calc(1));
 		//code[0].add(AI.Ignore);
+		
+		name[1]="Repair";
+		cost[1]=0;
+		cooldown[1]=0;
+		effect[1]=0;
+		rules[1]="Repair "+calc(1)+" minor damage.";
+		cardPic[1]=Gallery.armour;
+		code[1].add(Special.ModuleChooser);
+		code[1].add(Special.RepairChosenModule, calc(1));
 	}
 
 	@Override

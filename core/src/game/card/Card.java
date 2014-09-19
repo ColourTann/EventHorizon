@@ -834,7 +834,7 @@ public class Card {
 
 	public int getShots(){return getShots(side);}
 	public int getShots(int pick){
-		if(type ==ModuleType.WEAPON){
+		if(mod.getShots(pick*specialSide)>0){
 			//TODO - single card
 			return mod.getShots(pick*specialSide)+bonusShots;
 		}

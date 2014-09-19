@@ -9,19 +9,18 @@ import game.module.Module.ModuleType;
 public class RapidFire extends Utility{
 
 	public RapidFire(int tier) {
-		super(tier, "Rapid Fire", "Weapons firing 3+ shots get 1 bonus shot", Gallery.blaster, 1, 10);
-		type=ModuleType.WEAPON;
+		super(tier, "Rapid Fire", "Weapons firing 3+ shots get 1 bonus shot", Gallery.blaster, 1, 1);
 		
 		name[0]="Barrage";
-		cost[0]=2;
+		cost[0]=1;
 		cooldown[0]=0;
 		effect[0]=1;
 		rules[0]="";
-		shots[0]=3;
+		shots[0]=calc(2);
 		cardPic[0]=Gallery.armour;
 		
 		name[1]="Duplicate";
-		cost[1]=1;
+		cost[1]=0;
 		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="Augment weapon card: +1 shot";

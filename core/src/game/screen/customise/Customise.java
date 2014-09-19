@@ -17,9 +17,13 @@ import game.module.component.weapon.Weapon;
 import game.module.junk.ModuleInfo;
 import game.module.junk.ModuleStats;
 import game.module.utility.FluxAlternator;
+import game.module.utility.Utility;
+import game.module.utility.armour.Armour;
 import game.module.utility.armour.BasicArmour;
 import game.module.utility.armour.RegenArmour;
+import game.module.utility.armour.ShieldArmour;
 import game.screen.battle.interfaceJunk.HelpPanel;
+import game.screen.customise.Reward.RewardType;
 import game.ship.Ship;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -102,58 +106,49 @@ public class Customise extends Screen{
 		}
 	}
 
+	
+	
 	public void addRewards(int tier){
 
 		rewards.clear();
-
+		
+		Draw.shuffle(Reward.typeList);
 
 		for(int i=0;i<3;i++){
-			double random=Math.random()*5;
-			Reward r;
-			if(random<=1){
-				//Weapon.getRandomWeapon(tier);
+			RewardType type= Reward.typeList[i];
+			
+			Reward r = null;
+			
+			switch(type){
+			case Armour:
+				r=new Reward(Armour.getRandomArmour(1), i);
+				break;
+			case Booster:
+				r=new Reward(new Card[]{new Deflector(3).getNextCard(),
+						new Deflector(3).getNextCard(),
+						new Deflector(3).getNextCard()},i);
+				break;
+			case Utility:
+				r=new Reward(Utility.getRandomUtility(1), i);
+				break;
+			case Shield:
+				r=new Reward(Shield.getRandomShield(1), i);
+				break;
+			case Weapon:
+				r=new Reward(Weapon.getRandomWeapon(1), i);
+				break;
+			default:
+				break;
+			
+			
 			}
-
-			else if(random<=2){
-
-
-			}
-
-			else if(random<=3){
-
-
-			}
-
-			else if(random<=4){
-
-
-			}
-
-			else if(random<=5){
-
-
-			}
-
-
-			rewards.add(new Reward(Weapon.getRandomWeapon(1), i));
-
-
+			rewards.add(r);
 		}
-
-
-
-
-
 		/*rewards.add(new Reward(new Pulse(1), 0));
 		rewards.add(new Reward(new Tesla(1), 1));
 		rewards.add(new Reward(new Card[]{new Deflector(0).getNextCard(),
 				new Deflector(0).getNextCard(),
 				new Deflector(0).getNextCard()},2));*/
-
-
-
-
-
 	}
 
 	public static void changeStats(ModuleInfo info){

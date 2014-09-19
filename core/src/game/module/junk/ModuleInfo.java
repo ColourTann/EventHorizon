@@ -20,6 +20,8 @@ import game.card.CardGraphic;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.computer.Computer;
+import game.module.component.shield.Shield;
+import game.module.component.weapon.Weapon;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
 import game.screen.customise.Customise;
@@ -37,7 +39,7 @@ public class ModuleInfo extends Mouser{
 		mod=m;
 		width=CardGraphic.width*2-2;
 	
-		if(mod.type==ModuleType.SHIELD||mod.type==ModuleType.WEAPON)width=CardGraphic.width*3-3;
+		if(mod instanceof Shield||mod instanceof Weapon)width=CardGraphic.width*3-3;
 		if(mod.getPic(1)==null){
 			width=CardGraphic.width-1;
 		}
@@ -70,7 +72,7 @@ public class ModuleInfo extends Mouser{
 		}
 		graphics.clear();
 		
-		if(mod.type==ModuleType.WEAPON||mod.type==ModuleType.SHIELD){
+		if(mod instanceof Weapon||mod instanceof Shield){
 
 			for(int i=0;i<=3;i++){
 				CardGraphic cg=mod.getCard(i+1).getHalfGraphic(true);
@@ -81,8 +83,8 @@ public class ModuleInfo extends Mouser{
 			cg.setPosition(new Pair(position.x,position.y+124));
 			graphics.add(cg);
 		}
-		else if (mod.type==ModuleType.ARMOUR){
-
+		else if(mod.numCards==0){
+			
 		}
 		else{
 			//height-=124;

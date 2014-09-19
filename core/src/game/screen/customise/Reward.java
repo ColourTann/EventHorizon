@@ -17,6 +17,7 @@ import game.Main;
 import game.assets.Gallery;
 import game.card.Card;
 import game.module.Module;
+import game.module.component.shield.Shield;
 import game.module.junk.ModuleInfo;
 import game.screen.battle.interfaceJunk.HelpPanel;
 
@@ -29,7 +30,8 @@ public class Reward extends Mouser{
 	static int y=640;
 	private ModuleInfo info;
 	public boolean selected;
-
+	public enum RewardType{Weapon, Shield, Armour, Utility, Booster}
+	public static RewardType[] typeList = new RewardType[]{RewardType.Weapon, RewardType.Weapon, RewardType.Shield, RewardType.Armour, RewardType.Utility, RewardType.Booster};
 	public static Color selectedColor=Colours.genCols5[3];
 
 	public Reward(Card[] cards, int index){
