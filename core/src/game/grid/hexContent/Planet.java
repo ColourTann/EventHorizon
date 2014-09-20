@@ -22,7 +22,7 @@ public class Planet extends HexContent{
 	public void render(SpriteBatch batch) {
 		batch.setColor(color);
 		Pair loc=hex.getPixel();
-		Draw.drawScaledCentered(batch, Gallery.circle32.get(), loc.x+offset.x, loc.y+offset.y, scale*Hex.size/30f, scale*Hex.size/30f);
+		Draw.drawCenteredScaled(batch, Gallery.circle32.get(), loc.x+offset.x, loc.y+offset.y, scale*Hex.size/30f, scale*Hex.size/30f);
 	}
 
 }

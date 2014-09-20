@@ -52,6 +52,8 @@ public class Gallery {
 	public static Pic[] rayCard= new Pic[5];
 	public static Pic tesla = new Pic("Module/Weapon/Tesla/module", 3);
 	public static Pic[] teslaCard= new Pic[5];
+	public static Pic swift= new Pic("Module/Weapon/Swift/module", 3);
+	public static Pic[] swiftCard= new Pic[5];
 	
 	//SHIELDS//
 	public static Pic deflector=new Pic("Module/Shield/Deflector/module", 3);
@@ -159,6 +161,7 @@ public class Gallery {
 	public static Pic[][] debris = new Pic[2][5];
 	public static Pic[] shipDamage = new Pic[9];
 	public static Pic shieldEffect= new Pic("Particle/shield");
+	public static Pic swiftParticle= new Pic("Particle/swiftparticle");
 	
 	//Pause stuff//
 	public static Pic pauseBase= new Pic("Interface/pausebase");
@@ -169,6 +172,7 @@ public class Gallery {
 	
 	//Runtime stuff//
 	public static Pic whiteSquare;
+	
 	
 	public static void init(){
 		for(int i=0;i<2;i++){
@@ -199,6 +203,7 @@ public class Gallery {
 			blueHP[i]=new Pic(baseHP[i], blueHPReplace);
 			pulseCard[i]=new Pic("Module/Weapon/Pulse/card"+i);
 			rayCard[i]=new Pic("Module/Weapon/Ray/card"+i);
+			swiftCard[i]=new Pic("Module/Weapon/Swift/card"+i);
 			laserCard[i]=new Pic("Module/Weapon/Laser/card"+i);
 			blasterCard[i]=new Pic("Module/Weapon/Blaster/card"+i);
 			teslaCard[i]=new Pic("Module/Weapon/Tesla/card"+i);

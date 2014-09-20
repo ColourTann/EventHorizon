@@ -10,8 +10,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
-import game.attack.particle.SmokeMachine;
-import game.attack.particle.Smoke.SmokeType;
+import game.assets.particles.SmokeMachine;
+import game.assets.particles.Smoke.SmokeType;
 
 public class NicheGraphic extends Updater{
 	Niche niche;

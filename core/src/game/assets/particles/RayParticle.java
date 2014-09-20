@@ -1,4 +1,4 @@
-package game.attack.particle;
+package game.assets.particles;
 
 import util.Colours;
 import util.Draw;

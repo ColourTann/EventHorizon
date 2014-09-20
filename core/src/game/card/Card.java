@@ -276,10 +276,11 @@ public class Card {
 		//Shield stuff//
 		if(code.contains(Special.AddShieldPoints))getShip().addShield(this,getEffect());
 		if(code.contains(Special.Bubble))getShip().shieldAll(this,getEffect());
+		if(code.contains(Special.ShieldShield))for(int i=0;i<getEffect();i++)getShip().getShield().shield(new ShieldPoint(this,i==0),false);
 		if(code.contains(Special.ShieldComputer))for(int i=0;i<getEffect();i++)getShip().getComputer().shield(new ShieldPoint(this,i==0),false);
 		if(code.contains(Special.ShieldGenerator))for(int i=0;i<getEffect();i++)getShip().getGenerator().shield(new ShieldPoint(this,i==0),false);
 		if(code.contains(Special.ShieldWeapons))for(Weapon w:ship.getWeapons())for(int i=0;i<getEffect();i++)w.shield(new ShieldPoint(this, i==0),false);
-		if(code.contains(Special.ThisInvuln))component.immune=true;
+	
 
 
 
@@ -521,7 +522,6 @@ public class Card {
 		ship.addIncome(-code.getAmount(Special.EnergyIncome));
 		ship.addEnergy(-code.getAmount(Special.GainEnergy));
 
-		if(code.contains(Special.ThisInvuln))component.immune=false;
 		//Clearing shields//
 		if(type==ModuleType.SHIELD)ship.unShield(this);
 		if(component!=null){

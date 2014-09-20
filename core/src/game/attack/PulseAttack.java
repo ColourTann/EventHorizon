@@ -8,7 +8,7 @@ import util.particleSystem.Particle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.assets.Sounds;
-import game.attack.particle.PulseParticle;
+import game.assets.particles.PulseParticle;
 
 public class PulseAttack extends AttackGraphic{
 

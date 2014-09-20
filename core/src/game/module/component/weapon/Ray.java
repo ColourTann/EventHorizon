@@ -32,7 +32,7 @@ public class Ray extends Weapon{
 		cooldown[2]=0;
 		effect[2]=calc(0);
 		shots[2]=1;
-		rules[2]="Targeted module takes +"+calc(0)+" damage from further shots this turn";
+		rules[2]="Modules hit by this take +"+calc(0)+" damage from further shots this turn";
 		code[2].add(Special.Targeted);
 		code[2].add(Special.MakeVulnerable,calc(0));
 		code[2].add(AI.OtherTargeted,2);

@@ -8,7 +8,7 @@ import util.particleSystem.Particle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.assets.Sounds;
-import game.attack.particle.RayParticle;
+import game.assets.particles.RayParticle;
 
 public class RayAttack extends AttackGraphic{
 	public Pair location;

@@ -62,7 +62,7 @@ public abstract class Updater {
 		
 		updateActives(delta);
 		Mouser.updateMoused();
-		ParticleSystem.updateAll(delta);
+		ParticleSystem.updateAllSystems(delta);
 		if(debug){
 			System.out.println("Mouseable count: "+Mouser.mousers.size());
 			System.out.println("Ticker count: "+tickers.size());

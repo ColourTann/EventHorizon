@@ -28,6 +28,7 @@ import game.screen.cardView.CardViewer;
 import game.screen.escape.EscapeMenu;
 import game.screen.map.Map;
 import game.screen.menu.Selector;
+import game.screen.test.Test;
 import game.ship.Ship;
 
 public class Main extends ApplicationAdapter  {
@@ -83,7 +84,7 @@ public class Main extends ApplicationAdapter  {
 		mainCam.setToOrtho(true);
 		
 		
-		
+		//currentScreen=new Test();currentScreen.init();
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
 		select=new Selector();currentScreen=select;select.init();

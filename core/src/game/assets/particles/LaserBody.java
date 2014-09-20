@@ -1,4 +1,4 @@
-package game.attack.particle;
+package game.assets.particles;
 
 import game.assets.Gallery;
 import util.Draw;
@@ -37,11 +37,11 @@ public class LaserBody extends Particle{
 	@Override
 	public void render(SpriteBatch sb) {
 		sb.setColor(new Color(1,1,1,alpha));
-		Draw.drawRotatedCentered(sb, Gallery.laserBody[0].get(), origin.x+vector.x*-3, origin.y+vector.y*-3, rotation);
+		Draw.drawCenteredRotated(sb, Gallery.laserBody[0].get(), origin.x+vector.x*-3, origin.y+vector.y*-3, rotation);
 		for(int i=0;i<distance;i++){
-			Draw.drawRotatedCentered(sb, Gallery.laserBody[1].get(), origin.x+vector.x*i, origin.y+vector.y*i, rotation);
+			Draw.drawCenteredRotated(sb, Gallery.laserBody[1].get(), origin.x+vector.x*i, origin.y+vector.y*i, rotation);
 		}
-		Draw.drawRotatedCentered(sb, Gallery.laserBody[2].get(), origin.x+vector.x*(distance+2), origin.y+vector.y*(distance+2), rotation);
+		Draw.drawCenteredRotated(sb, Gallery.laserBody[2].get(), origin.x+vector.x*(distance+2), origin.y+vector.y*(distance+2), rotation);
 	}
 	
 }

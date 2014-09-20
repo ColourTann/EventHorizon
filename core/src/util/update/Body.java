@@ -112,7 +112,7 @@ public class Body extends Mouser{
 		}
 		public void render(SpriteBatch batch, Pair location, float rotation){
 			if(ticks>textures.length)return;
-			Draw.drawRotatedCentered(batch, textures[(int) (ticks%textures.length)], location.x, location.y, rotation);
+			Draw.drawCenteredRotated(batch, textures[(int) (ticks%textures.length)], location.x, location.y, rotation);
 		}
 		
 		public ArrayList<Change> changes=new ArrayList<Change>();

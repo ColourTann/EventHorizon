@@ -11,10 +11,10 @@ import util.update.Timer.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.assets.Sounds;
-import game.attack.particle.LaserBody;
-import game.attack.particle.LaserCharge;
-import game.attack.particle.SmokeMachine;
-import game.attack.particle.Smoke.SmokeType;
+import game.assets.particles.LaserBody;
+import game.assets.particles.LaserCharge;
+import game.assets.particles.SmokeMachine;
+import game.assets.particles.Smoke.SmokeType;
 
 public class LaserAttack extends AttackGraphic{
 

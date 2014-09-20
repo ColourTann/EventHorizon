@@ -17,7 +17,7 @@ public class CardCode {
 
 		//Shield Specials//
 		AddShieldPoints, Bubble, ShieldComputer, AbsorbDraw, ShieldOnlyDamaged, selfDamage, AbsorbEnergy, MustBeUndamaged,
-		ShieldWeapons, ThisInvuln, ShieldGenerator, ShieldChosenModule, 
+		ShieldWeapons, ShieldGenerator, ShieldChosenModule, ShieldShield, 
 	};
 
 	public enum AI{

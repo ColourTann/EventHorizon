@@ -460,7 +460,7 @@ public class PicCut {
 		}
 		public void render(SpriteBatch batch) {
 			//if(size<5)return;
-			Draw.drawRotatedCentered(batch, texture, position.x, position.y, rotation);
+			Draw.drawCenteredRotated(batch, texture, position.x, position.y, rotation);
 		}
 		public void estimatePosition() {
 			position=new Pair(left+((right-left)/2f), top+((bottom-top)/2));

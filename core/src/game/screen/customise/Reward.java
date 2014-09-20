@@ -62,7 +62,7 @@ public class Reward extends Mouser{
 		if(module!=null){
 
 			Pic p=module.getPic(0);
-			Draw.drawScaledCentered(batch, p.get(), position.x+width/2, position.y+height/2, 4, 4);
+			Draw.drawCenteredScaled(batch, p.get(), position.x+width/2, position.y+height/2, 4, 4);
 		}
 		if(moused){
 			batch.setColor(Colours.withAlpha(Colours.light, alpha));

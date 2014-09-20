@@ -1,4 +1,4 @@
-package game.attack.particle;
+package game.assets.particles;
 
 import util.maths.Pair;
 import util.particleSystem.Particle;
@@ -6,7 +6,7 @@ import util.particleSystem.ParticleSystem;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import game.attack.particle.Smoke.SmokeType;
+import game.assets.particles.Smoke.SmokeType;
 
 public class SmokeMachine extends ParticleSystem{
 	Pair location;

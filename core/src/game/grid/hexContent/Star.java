@@ -20,7 +20,7 @@ public class Star extends HexContent{
 		batch.setColor(1,1,1,1);
 		Pair loc=hex.getPixel();
 		Texture t=Gallery.star.get();
-		Draw.drawScaledCentered(batch, t, loc.x, loc.y, Hex.size/30f, Hex.size/30f);
+		Draw.drawCenteredScaled(batch, t, loc.x, loc.y, Hex.size/30f, Hex.size/30f);
 		
 		
 	}

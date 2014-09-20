@@ -30,23 +30,23 @@ public class Draw {
 	//Centered stuff//
 	
 	public static void drawCentered(SpriteBatch batch, Texture t, float x, float y){
-		drawRotatedScaledCentered(batch, t, x, y, 1, 1, 0);
+		drawCenteredRotatedScaled(batch, t, x, y, 1, 1, 0);
 	}
 
-	public static void drawScaledCentered(SpriteBatch batch, Texture t, float x, float y, float scaleX, float scaleY){
-		drawRotatedScaledCentered(batch, t, x, y, scaleX, scaleY, 0);
+	public static void drawCenteredScaled(SpriteBatch batch, Texture t, float x, float y, float scaleX, float scaleY){
+		drawCenteredRotatedScaled(batch, t, x, y, scaleX, scaleY, 0);
 	}
 
-	public static void drawRotatedCentered(SpriteBatch batch, Texture t, float x, float y, float radianRotation){
-		drawRotatedScaledCentered(batch, t, x, y, 1, 1, radianRotation);
+	public static void drawCenteredRotated(SpriteBatch batch, Texture t, float x, float y, float radianRotation){
+		drawCenteredRotatedScaled(batch, t, x, y, 1, 1, radianRotation);
 	}
 
-	public static void drawRotatedScaledCentered(SpriteBatch batch, Texture t, float x, float y, float xScale, float yScale, float radianRotation){
-		drawRotatedScaledCenteredFlipped(batch, t, x, y, xScale, yScale, radianRotation, false, false);
+	public static void drawCenteredRotatedScaled(SpriteBatch batch, Texture t, float x, float y, float xScale, float yScale, float radianRotation){
+		drawCenteredRotatedScaledFlipped(batch, t, x, y, xScale, yScale, radianRotation, false, false);
 	}
 
-	public static void drawRotatedScaledCenteredFlipped(SpriteBatch batch, Texture t, float x, float y, float xScale, float yScale, float radianRotation, boolean xFlip, boolean yFlip){
-		batch.draw(t, (int)(x-t.getWidth()/2-xScale/2f), (int)(y-t.getHeight()/2-yScale/2f), t.getWidth()/2, t.getHeight()/2, t.getWidth(), t.getHeight(), xScale, yScale, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),xFlip,!yFlip);
+	public static void drawCenteredRotatedScaledFlipped(SpriteBatch batch, Texture t, float x, float y, float xScale, float yScale, float radianRotation, boolean xFlip, boolean yFlip){
+		batch.draw(t, (x-t.getWidth()/2-xScale/2f), (y-t.getHeight()/2-yScale/2f), t.getWidth()/2, t.getHeight()/2, t.getWidth(), t.getHeight(), xScale, yScale, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),xFlip,!yFlip);
 	}
 
 

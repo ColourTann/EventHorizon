@@ -144,7 +144,7 @@ public class MapShip {
 		if (ship == null)	return;
 		System.out.println(stretch.getFloat());
 		batch.setColor(1-stretch.getFloat(), 1-stretch.getFloat()/2, 1, 1);
-		Draw.drawRotatedScaledCentered(batch, ship.shipPic.get(),
+		Draw.drawCenteredRotatedScaled(batch, ship.shipPic.get(),
 				(int) (hex.getPixel().x + distance.x),
 				(int) (hex.getPixel().y + distance.y), 
 				(Hex.size / 300)*(1+stretch.getFloat()/1.3f),

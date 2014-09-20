@@ -1,4 +1,4 @@
-package game.attack.particle;
+package game.assets.particles;
 
 import game.assets.Gallery;
 import util.Colours;
@@ -42,11 +42,11 @@ public class Lightning extends Particle{
 		normal=normal.multiply((t.getWidth()/2+1)*scale);
 
 		//batch.setColor(1,1,1,.4f);
-		Draw.drawRotatedScaledCentered(batch, Gallery.lightning.get(), start.x+distance/2f, start.y+scale/2f, distance, scale, (float)angle);
+		Draw.drawCenteredRotatedScaled(batch, Gallery.lightning.get(), start.x+distance/2f, start.y+scale/2f, distance, scale, (float)angle);
 		//batch.setColor(1,1,1,1);
-		Draw.drawRotatedScaledCentered(batch, t, start.x-normal.x, start.y-normal.y, scale,scale, (float)angle);
+		Draw.drawCenteredRotatedScaled(batch, t, start.x-normal.x, start.y-normal.y, scale,scale, (float)angle);
 		
-		Draw.drawRotatedScaledCentered(batch, t, finish.x+normal.x, finish.y+normal.y, -scale,scale, (float)angle);
+		Draw.drawCenteredRotatedScaled(batch, t, finish.x+normal.x, finish.y+normal.y, -scale,scale, (float)angle);
 		
 		
 		Draw.setBlend(batch, BlendType.Normal);

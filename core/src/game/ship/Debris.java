@@ -31,7 +31,7 @@ public class Debris extends Updater{
 
 	
 	public void render(SpriteBatch batch){
-		Draw.drawRotatedScaledCentered(batch, t, position.x, position.y, 3, 3, rotation);
+		Draw.drawCenteredRotatedScaled(batch, t, position.x, position.y, 3, 3, rotation);
 	}
 
 	

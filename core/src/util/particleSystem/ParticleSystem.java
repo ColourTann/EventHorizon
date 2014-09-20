@@ -17,7 +17,7 @@ public abstract class ParticleSystem {
 	public static ArrayList<ParticleSystem> systems= new ArrayList<ParticleSystem>();
 	public static ArrayList<Particle> debugDontUse=new ArrayList<Particle>();
 	public float x,y,life,maxLife,ticks;
-	public Pair vector;
+	public Pair vector, position;
 	public ArrayList<Particle> particles = new ArrayList<Particle>();
 	public boolean disabled;
 	public abstract void update(float delta);
@@ -32,7 +32,7 @@ public abstract class ParticleSystem {
 			p.render(batch);
 		}
 	}
-	public static void updateAll(float delta){
+	public static void updateAllSystems(float delta){
 	
 		for(int i=0;i<systems.size();i++){
 			ParticleSystem sys=systems.get(i);

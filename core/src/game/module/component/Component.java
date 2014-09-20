@@ -491,9 +491,9 @@ public abstract class Component extends Module{
 		alpha*=Math.min(4, shieldIntensity);
 		batch.setColor(Colours.withAlpha(Colours.shieldCols6[3], alpha));
 
-		Draw.drawRotatedScaledCenteredFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);
+		Draw.drawCenteredRotatedScaledFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);
 		batch.setColor(1,1,1,shieldAlphaTimer.getFloat());
-		Draw.drawRotatedScaledCenteredFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);
+		Draw.drawCenteredRotatedScaledFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);
 	}
 
 	public ModuleStats getStats(){

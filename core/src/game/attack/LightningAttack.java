@@ -10,8 +10,8 @@ import util.particleSystem.Particle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.assets.Sounds;
-import game.attack.particle.Lightning;
-import game.attack.particle.Spark;
+import game.assets.particles.Lightning;
+import game.assets.particles.Spark;
 
 public class LightningAttack extends AttackGraphic{
 	static float frequency=15;

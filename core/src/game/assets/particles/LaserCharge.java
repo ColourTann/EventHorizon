@@ -1,4 +1,4 @@
-package game.attack.particle;
+package game.assets.particles;
 
 import game.assets.Gallery;
 import util.Colours;
@@ -31,7 +31,7 @@ public class LaserCharge extends Particle{
 	public void render(SpriteBatch sb) {
 		Draw.setBlend(sb, BlendType.Additive);
 		sb.setColor(Colours.withAlpha(colour,life/maxLife));
-		Draw.drawScaledCentered(sb, Gallery.fuzzBall.get(), position.x, position.y, .7f*(1-life/maxLife),.7f*(1-life/maxLife));
+		Draw.drawCenteredScaled(sb, Gallery.fuzzBall.get(), position.x, position.y, .7f*(1-life/maxLife),.7f*(1-life/maxLife));
 		Draw.setBlend(sb, BlendType.Normal);
 	
 	}

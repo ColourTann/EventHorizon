@@ -74,7 +74,7 @@ public class EscapeMenu extends Screen{
 	@Override
 	public void render(SpriteBatch batch) {
 		batch.setColor(1, 1, 1, alphaTimer.getFloat());
-		Draw.drawScaledCentered(batch, Gallery.pauseBase.get(), Main.width/2, Main.height/2, 1, 1);
+		Draw.drawCenteredScaled(batch, Gallery.pauseBase.get(), Main.width/2, Main.height/2, 1, 1);
 		for(SimpleButton sb:buttons){
 			sb.render(batch);
 		}

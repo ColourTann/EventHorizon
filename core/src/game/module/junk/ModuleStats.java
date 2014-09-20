@@ -131,7 +131,7 @@ public class ModuleStats extends Mouser{
 
 		if(component.type==ModuleType.WEAPON){
 			batch.setColor(1, 1, 1, .5f);
-			Draw.drawScaledCentered(batch, component.modulePic.get(), collider.position.x+37, collider.position.y+110, 2f/3f,2f/3f);
+			Draw.drawCenteredScaled(batch, component.modulePic.get(), collider.position.x+37, collider.position.y+110, 2f/3f,2f/3f);
 			batch.setColor(1, 1, 1, 1);
 			//Draw.drawTexture(batch, mod.modulePic.get(),collider.x+5,collider.y+5);
 		}

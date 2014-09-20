@@ -10,7 +10,7 @@ import game.module.component.Component;
 
 public abstract class Weapon extends Component{
 
-	static Class[] classes = new Class[]{Laser.class, Pulse.class, Ray.class, Tesla.class};
+	static Class[] classes = new Class[]{Laser.class, Pulse.class, Ray.class, Tesla.class, Swift.class};
 	public float weaponOffset;
 	public Weapon(String name, Pic p, int numCards, float xOffset, int[] thresholds, int tier){
 		super(tier, name, p,4, numCards, thresholds);

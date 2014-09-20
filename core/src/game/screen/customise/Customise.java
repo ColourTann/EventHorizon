@@ -216,9 +216,9 @@ public class Customise extends Screen{
 
 		Font.drawFontCentered(batch, "Shortage", Font.medium, energyX-135, 95);
 		Font.drawFontCentered(batch, "Surplus", Font.medium, energyX+145, 95);
-		Draw.drawScaledCentered(batch, Gallery.energyDial.get(), energyX, 170,4,4);
+		Draw.drawCenteredScaled(batch, Gallery.energyDial.get(), energyX, 170,4,4);
 
-		Draw.drawScaledCentered(batch, Gallery.energyMeter.get(), 
+		Draw.drawCenteredScaled(batch, Gallery.energyMeter.get(), 
 				energyX+meterPosition.getFloat(), 
 				170, 4, 4);
 		consumables.render(batch);

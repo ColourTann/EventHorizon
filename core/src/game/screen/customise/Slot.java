@@ -83,7 +83,7 @@ public class Slot extends Mouser{
 
 		batch.setColor(1,1,1,1);
 		if(getModule()!=null){
-			Draw.drawScaledCentered(batch, getModule().getPic(0).get(), position.x+width/2, position.y+height/2, 4, 4);
+			Draw.drawCenteredScaled(batch, getModule().getPic(0).get(), position.x+width/2, position.y+height/2, 4, 4);
 		}
 
 		batch.setColor(1,1,1,1);
