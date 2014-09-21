@@ -9,6 +9,7 @@ import game.module.component.computer.Gamma;
 import game.module.component.generator.Four;
 import game.module.component.shield.Deflector;
 import game.module.component.weapon.Ray;
+import game.module.component.weapon.Swift;
 import game.module.component.weapon.Tesla;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
@@ -44,7 +45,8 @@ public class Comet extends Ship{
 		niches[3].setup(generator);
 		niches[4].setup(computer);
 
-		setWeapon(new Ray(0), 0);
+		//setWeapon(new Ray(0), 0);
+		setWeapon(new Swift(0), 0);
 		setWeapon(new Tesla(0), 1);
 		setShield(new Deflector(0));
 		setGenerator(new Four());

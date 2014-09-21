@@ -39,11 +39,12 @@ public class CardIcon extends Mouser{
 
 	//Add icon to list and shuffle it all lovelily//
 	public static void addIcon(Card c){
+		for(CardIcon i:icons) if(i.cg.card==c) return;
 		if(c.wasScrambled)return;
 		icons.add(new CardIcon(c));
 		c.getGraphic().removeTopPic();
 		while(icons.size()>14){
-			icons.remove(0).fadeOut(.001f, Interp.LINEAR);;
+			icons.remove(0).fadeOut(.001f, Interp.LINEAR);
 		}
 		updateCardIconPositions();
 	}

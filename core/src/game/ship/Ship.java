@@ -170,7 +170,7 @@ public abstract class Ship {
 	public void addAttack(Card card, Component target){addAttack(new Attack(card,target));}
 
 	private void addAttack(Attack a){
-		System.out.println(player);
+		
 		a.atkgrphc.order=attacks.size();
 
 		attacks.add(a);
@@ -180,7 +180,7 @@ public abstract class Ship {
 	}
 
 	public void removeAttack(Card card){
-		System.out.println(player);
+		
 		System.out.println("removing attack from "+card);
 		System.out.println(attacks.size());
 		for(int i=0;i<attacks.size();i++){

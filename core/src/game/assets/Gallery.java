@@ -134,6 +134,9 @@ public class Gallery {
 	public static Pic energyMeter= new Pic("Interface/energymeter");
 	public static Pic bonusPool= new Pic("Interface/bonuspool");
 	
+	public static Pic difficultyMeter= new Pic("Interface/difficultymeter");
+	public static Pic difficultyDial= new Pic("Interface/difficultydial");
+	
 	//Map stuff//
 	public static Pic mapslice= new Pic("Interface/mapslice");
 	public static Pic mapsliceRight= new Pic("Interface/mapsliceright");

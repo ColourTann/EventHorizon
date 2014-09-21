@@ -38,14 +38,14 @@ public class CardGraphic extends Mouser {
 	public static Pair positionPic = new Pair(43, 31);
 	private static Pair positionArray[][] = new Pair[6][5];
 	private static Pair positionTitle = new Pair(70, 8);
-	private static Pair positionRules = new Pair(5, 78);
+	private static Pair positionRules = new Pair(5, 76);
 	private static Pair positionEnergy = new Pair(13, 38);
 	private static Pair positionCooldown = new Pair(119, 38);
 	private static Pair positionShots = new Pair(12, 21);
 	private static Pair positionTargeted = new Pair(116, 22);
-	private static Pair positionEffectStart = new Pair(5, 65);
-	private static Pair positionEffectMid = new Pair(9, 67);
-	private static Pair positionEffectEnd = new Pair(110, 65);
+	private static Pair positionEffectStart = new Pair(5, 64);
+	private static Pair positionEffectMid = new Pair(9, 66);
+	private static Pair positionEffectEnd = new Pair(110, 64);
 	private static Pair positionAugment = new Pair(Main.width / 2 - width / 2, 320);
 	private static float cooldownWidth = Gallery.iconCooldown.get().getWidth() * 3;
 	private static float cooldownGap = cooldownWidth + 6;
@@ -264,7 +264,7 @@ public class CardGraphic extends Mouser {
 
 
 		//Effect//
-		System.out.println(card.getShots(part));
+		
 		Pic[] effectPics=card.getShots(0)>0?Gallery.damageIcon:Gallery.shieldIcon;
 		int effect = card.getEffect(part);
 		if(card.wasScrambled)effect=0;

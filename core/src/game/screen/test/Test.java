@@ -1,14 +1,8 @@
 package game.screen.test;
 
-import java.util.ArrayList;
-
 import util.Draw;
-import util.image.PicCut;
-import util.image.PicCut.Shard;
 import util.maths.Pair;
-import util.particleSystem.Particle;
 import util.particleSystem.ParticleSystem;
-import util.update.Animation;
 import util.update.Screen;
 
 import com.badlogic.gdx.Input;
@@ -16,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import game.assets.Gallery;
-import game.assets.particles.SwiftSystem;
-import game.ship.Debris;
 
 public class Test extends Screen{
 
@@ -26,7 +18,7 @@ public class Test extends Screen{
 
 	@Override
 	public void init() {
-		ParticleSystem.systems.add(new SwiftSystem());
+		//ParticleSystem.systems.add(new SwiftSystem());
 	}
 	@Override
 	public void update(float delta) {

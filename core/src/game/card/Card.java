@@ -564,7 +564,6 @@ public class Card {
 	}
 	
 	public void fadeAndAddIcon(){
-		System.out.println("adding");
 		extraCardsToRender.add(getGraphic());
 		getGraphic().fadeOut(CardGraphic.fadeSpeed, CardGraphic.fadeType);
 		CardIcon.addIcon(this);
@@ -609,8 +608,6 @@ public class Card {
 		getShip().updateCardPositions();
 		getGraphic().moveUp();
 		getGraphic().hideLower();
-		
-		System.out.println(Battle.targetSource);
 	}
 
 
@@ -756,11 +753,17 @@ public class Card {
 			if(getShots(i)>0){
 				if(augCode.contains(Augment.AugmentTargeted)){
 					code[i].add(Special.Targeted);
-					augmented[i]=true;
+					
 				}
+			}
+			
+			if(getEffect(i)>0){
+				augmented[i]=true;
 			}
 		}
 
+		
+		
 		//Making the card icon of the augmenting card//
 
 	}
@@ -861,11 +864,9 @@ public class Card {
 			this.side=side;
 		}
 
-		System.out.println("Checking "+this);
 
 		if(code.contains(AI.OverrideIfOtherSideIgnore)){
 			if(getCode(1-side).contains(AI.Ignore)){
-				System.out.println("Overriding because other side is ignore");
 				return true;
 			}
 		}
@@ -1281,7 +1282,6 @@ public class Card {
 
 			}	
 		}
-		System.out.println("Ok to play "+this.mod);
 		return true;
 	}
 

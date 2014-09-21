@@ -14,7 +14,7 @@ import game.module.component.weapon.Tesla;
 import game.module.component.weapon.Weapon;
 
 public abstract class Shield extends Component{
-	static Class[] classes = new Class[]{Deflector.class, Repeller.class};
+	static Class[] classes = new Class[]{Deflector.class, Repeller.class, Repulsor.class};
 	public Shield(String name,Pic p, int numCards, int[] thresholds, int tier){
 		super(tier, name,p,4, numCards, thresholds);
 		type=ModuleType.SHIELD;

@@ -11,4 +11,7 @@ public class ShipStats {
 		this.defence=defence;
 		this.power=power;
 	}
+	public String toString(){
+		return "Power: "+power+", energy usage: "+energyUsage+", atk: "+attack+", def: "+defence;
+	}
 }

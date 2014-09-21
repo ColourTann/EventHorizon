@@ -9,7 +9,7 @@ import util.image.Pic;
 public class Swift extends Weapon{
 
 	public Swift(int tier) {
-		super("Swift",Gallery.swift, 4,0, new int[]{6,9,14}, tier);
+		super("Swift",Gallery.swift, 6,0, new int[]{6,9,14}, tier);
 		cardPic=Gallery.swiftCard;
 		
 		name[0]="Swift";

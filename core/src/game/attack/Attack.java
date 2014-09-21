@@ -10,6 +10,7 @@ import game.module.component.SpecialComponent;
 import game.module.component.weapon.Laser;
 import game.module.component.weapon.Pulse;
 import game.module.component.weapon.Ray;
+import game.module.component.weapon.Swift;
 import game.module.component.weapon.Tesla;
 import game.module.junk.Buff;
 import game.module.junk.DamagePoint;
@@ -32,6 +33,7 @@ public class Attack {
 		if(mod instanceof Ray)atkgrphc=new RayAttack(mod.getBarrel());
 		if(mod instanceof Pulse)atkgrphc=new PulseAttack(mod.getBarrel());
 		if(mod instanceof Tesla)atkgrphc=new LightningAttack(mod.getBarrel());
+		if(mod instanceof Swift)atkgrphc=new SwiftAttack(mod.getBarrel());
 		if(mod instanceof SpecialComponent)atkgrphc=new LaserAttack(mod.getBarrel());
 		if(atkgrphc==null)atkgrphc=new LaserAttack(mod.getBarrel());
 		
@@ -63,7 +65,7 @@ public class Attack {
 
 		
 		effect+=target.getBuffAmount(BuffType.TakesExtraDamage);
-		if(target.getDamage()==0)effect+=code.getAmount(Special.BonusVsPristine);
+		if(target.getDamage()+target.getTotalIncoming()==0)effect+=code.getAmount(Special.BonusVsPristine);
 		if(target.type==ModuleType.WEAPON)effect+=code.getAmount(Special.BonusVsWeapon);
 		if(target.currentThreshold>0)effect+=code.getAmount(Special.BonusVsMajorDamaged);
 		

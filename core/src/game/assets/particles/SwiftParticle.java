@@ -17,9 +17,10 @@ public class SwiftParticle extends Particle{
 	float orbitSpawner=0;
 	float spinTicks;
 	ArrayList<Orbiter> orbiters= new ArrayList<SwiftParticle.Orbiter>();
-	public SwiftParticle(Pair position) {
+	private boolean exploded;
+	public SwiftParticle(Pair position, Pair target) {
 		
-		vector=new Pair(750,Particle.random(500));
+		vector=target.subtract(position).multiply(.3f);
 		ticks=(float) (Math.random()*100);
 		this.position=position.add(0, -(float)Math.sin(ticks)*amplitude);
 		for(int i=0;i<10;i++){
@@ -32,6 +33,7 @@ public class SwiftParticle extends Particle{
 
 	@Override
 	public void update(float delta) {
+		if(!exploded){
 		position=position.add(vector.multiply(delta));
 		ticks+=delta*frequency;
 		orbitSpawner+=delta*30;
@@ -40,18 +42,36 @@ public class SwiftParticle extends Particle{
 			orbitSpawner-=1;
 			orbiters.add(new Orbiter());
 		}
+		if(position.x>1000){
+			explode();
+		}
+		}
 		for(Orbiter o:orbiters)o.update(delta);
+		
+	}
+
+	public void explode() {
+		exploded=true;
+		for(int i=0;i<100;i++){
+			Orbiter o=new Orbiter();
+			//o.update(i*5);
+			o.spinnerAmplitude=0;
+			o.spinnerSpeed=(float) (Math.random()*180);
+			o.spinnerFrequency=-(float) (12);
+			orbiters.add(o);
+		}
 	}
 
 	@Override
 	public void render(SpriteBatch batch) {
-		Draw.drawCenteredScaled(batch, Gallery.swiftParticle.get(), position.x, position.y+(float)Math.sin(ticks)*amplitude, 5, 5);
+		if(!exploded)Draw.drawCenteredScaled(batch, Gallery.swiftParticle.get(), position.x, position.y+(float)Math.sin(ticks)*amplitude, 5, 5);
 		for(Orbiter o:orbiters)o.render(batch);
 	}
 	
 	class Orbiter extends Particle{
 		float spinnerFrequency=-20;
 		float spinnerAmplitude=30;
+		float spinnerSpeed=50;
 		public Orbiter(){
 			ticks+=Math.random()*10;
 			maxLife=.7f;
@@ -60,7 +80,7 @@ public class SwiftParticle extends Particle{
 		@Override
 		public void update(float delta) {
 			ticks+=delta*spinnerFrequency;
-			spinnerAmplitude+=delta*50;
+			spinnerAmplitude+=delta*spinnerSpeed;
 			life-=delta;
 			ratio=life/maxLife;
 		}

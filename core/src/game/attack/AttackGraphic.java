@@ -19,7 +19,6 @@ public abstract class AttackGraphic extends ParticleSystem{
 
 	}
 	public void disable(){
-		System.out.println("disbaling atk");
 		disabled=true;
 	}
 	public abstract void fire(Pair target);
