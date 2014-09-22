@@ -84,7 +84,14 @@ public class Pair {
 		return new Pair(x,y);
 	}
 	public float getAngle(Pair to){
-		return (float) Math.atan2(to.y-y, to.x-x);
+		float result=(float) Math.atan2(to.y-y, to.x-x);
+		while(result<0)result+=Math.PI*2;
+		return result;
+	}
+	public float getAngle(){
+		float result= (float) Math.atan2(y, x);
+		while(result<0)result+=Math.PI*2;
+		return result;
 	}
 	public Pair floor() {
 		return new Pair((int)x,(int)y);

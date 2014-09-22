@@ -107,4 +107,9 @@ public class PulseAttack extends AttackGraphic{
 		}
 	}
 
+	@Override
+	public boolean finishedAttacking() {
+		return particles.size()==0;
+	}
+
 }

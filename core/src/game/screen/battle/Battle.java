@@ -109,6 +109,9 @@ public class Battle extends Screen{
 			player.addEnergy(6);
 			enemy.addEnergy(2);
 		}
+		for(Component c:player.components){
+			c.getStats().reset();
+		}
 	}
 
 	public static Ship getPlayer(){

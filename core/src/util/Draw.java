@@ -46,7 +46,7 @@ public class Draw {
 	}
 
 	public static void drawCenteredRotatedScaledFlipped(SpriteBatch batch, Texture t, float x, float y, float xScale, float yScale, float radianRotation, boolean xFlip, boolean yFlip){
-		batch.draw(t, (x-t.getWidth()/2-xScale/2f), (y-t.getHeight()/2-yScale/2f), t.getWidth()/2, t.getHeight()/2, t.getWidth(), t.getHeight(), xScale, yScale, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),xFlip,!yFlip);
+		batch.draw(t, (x-t.getWidth()/2), (y-t.getHeight()/2), t.getWidth()/2f, t.getHeight()/2f, t.getWidth(), t.getHeight(), xScale, yScale, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),xFlip,!yFlip);
 	}
 
 

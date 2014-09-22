@@ -23,4 +23,5 @@ public abstract class AttackGraphic extends ParticleSystem{
 	}
 	public abstract void fire(Pair target);
 	public abstract void impact();
+	public abstract boolean finishedAttacking();
 }

@@ -19,4 +19,8 @@ public class Sounds {
 	public static SoundClip ray=new SoundClip("Sound/ray.ogg");
 	public static SoundClip laser=new SoundClip("Sound/laser.ogg");
 	public static SoundClip lightning=new SoundClip("Sound/lightning.ogg");
+	public static SoundClip swift= new SoundClip("Sound/swift.ogg");
+	
+	public static SoundClip preBattleImpact= new SoundClip("Sound/prebattleimpact.ogg");
+	
 }

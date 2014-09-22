@@ -2,6 +2,7 @@ package game.screen.preBattle;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.card.CardGraphic;
 import game.module.Module;
 import game.module.component.Component;
@@ -68,6 +69,7 @@ public class PreBattle extends Screen{
 				powerRatio*=3f;
 				dialTimer=new Timer(0, powerRatio, .8f, Interp.SQUARE);
 				shake(15);
+				Sounds.preBattleImpact.play();
 			}
 		});
 

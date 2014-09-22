@@ -42,6 +42,7 @@ public class SwiftAttack extends AttackGraphic{
 					o.update(i*100);
 					particles.add(o);
 					o.update(i*10);
+					Sounds.swift.play();
 				}
 			}
 		});
@@ -106,11 +107,15 @@ public class SwiftAttack extends AttackGraphic{
 	public void render(SpriteBatch batch) {
 		batch.setColor(1,1,1,alpha);
 		if(fired&&!disabled){
-			//System.out.println(position);
 			Draw.drawCenteredScaled(batch, Gallery.swiftParticle.get(), position.x, position.y, 3, 3);
 		}
 		batch.setColor(1,1,1,1);
 		for(Particle p:particles)p.render(batch);
+	}
+
+	@Override
+	public boolean finishedAttacking() {
+		return particles.size()==0;
 	}
 
 }

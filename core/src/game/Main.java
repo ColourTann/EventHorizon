@@ -38,7 +38,7 @@ import game.ship.shipClass.Eclipse;
 public class Main extends ApplicationAdapter  {
 
 	public static float version=0.221f;
-	public static boolean debug=true;
+	public static boolean debug=false;
 
 	public static int height=700;
 	public static int width=1280;
@@ -88,13 +88,13 @@ public class Main extends ApplicationAdapter  {
 		mainCam.setToOrtho(true);
 		
 		
-//		currentScreen=new Test();currentScreen.init();
+		currentScreen=new Test();currentScreen.init();
 		
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
 		//select=new Selector();currentScreen=select;select.init();
 
-		currentScreen=new PreBattle(new Aurora(true), new Eclipse(false)); currentScreen.init();
+		//currentScreen=new PreBattle(new Aurora(true), new Eclipse(false)); currentScreen.init();
 		
 		//viewer=new CardViewer();currentScreen=viewer;
 

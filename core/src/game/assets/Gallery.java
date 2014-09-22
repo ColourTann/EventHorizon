@@ -165,6 +165,7 @@ public class Gallery {
 	public static Pic[] shipDamage = new Pic[9];
 	public static Pic shieldEffect= new Pic("Particle/shield");
 	public static Pic swiftParticle= new Pic("Particle/swiftparticle");
+	public static Pic rocket = new Pic("Particle/rocket");
 	
 	//Pause stuff//
 	public static Pic pauseBase= new Pic("Interface/pausebase");

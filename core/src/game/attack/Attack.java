@@ -35,7 +35,7 @@ public class Attack {
 		if(mod instanceof Tesla)atkgrphc=new LightningAttack(mod.getBarrel());
 		if(mod instanceof Swift)atkgrphc=new SwiftAttack(mod.getBarrel());
 		if(mod instanceof SpecialComponent)atkgrphc=new LaserAttack(mod.getBarrel());
-		if(atkgrphc==null)atkgrphc=new LaserAttack(mod.getBarrel());
+		if(atkgrphc==null)atkgrphc=new RocketAttack(mod.ship.getShield().getCenter());
 		
 		atkgrphc.atk=this;
 	}

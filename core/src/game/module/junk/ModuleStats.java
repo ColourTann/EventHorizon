@@ -221,4 +221,11 @@ public class ModuleStats extends Mouser{
 
 
 	}
+
+
+
+	public void reset() {
+		activate();
+		mousectivate(null);
+	}
 }

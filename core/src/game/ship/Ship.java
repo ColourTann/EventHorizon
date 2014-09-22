@@ -218,7 +218,7 @@ public abstract class Ship {
 
 		for (int i=0;i<attacks.size();i++){
 			Attack a=attacks.get(i);
-			if(a.atkgrphc.particles.size()==0){
+			if(a.atkgrphc.finishedAttacking()){
 				attacks.remove(i);
 				i--;
 			}

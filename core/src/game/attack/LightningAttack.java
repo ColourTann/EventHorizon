@@ -116,4 +116,9 @@ public class LightningAttack extends AttackGraphic{
 		}
 	}
 
+	@Override
+	public boolean finishedAttacking() {
+		return particles.size()==0;
+	}
+
 }
