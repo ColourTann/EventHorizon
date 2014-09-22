@@ -15,6 +15,7 @@ import util.update.Timer.Interp;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
+import game.assets.Gallery;
 import game.assets.Sounds;
 import game.attack.Attack;
 import game.card.Card;
@@ -52,47 +53,48 @@ import game.ship.shipClass.Eclipse;
 import game.ship.shipClass.Nova;
 
 public abstract class Ship {
+	private static ArrayList<Class> classes= new ArrayList<Class>();
+
+	public boolean player;
+	public Pic shipPic;
+
+
+
+
+	//Battle stuff//
 	//0-1 weapon 2 shield 3 gen 4 com
-	public static ArrayList<Class<? extends Ship>> classes = new ArrayList<Class<? extends Ship>>();
 	public Niche[] niches= new Niche[5]; 
 	public Component[] components= new Component[5];
-
 	private Armour armour;
 	private Utility[] utilities=new Utility[2];
 
-	private ShipGraphic battleGraphic;
-	public Pic shipPic;
-	//Deck is stored as a list of modules so you can generate nice and easily!!//
 	public ArrayList<Card> deck = new ArrayList<Card>();
 	public ArrayList<Card> hand = new ArrayList<Card>();
 	public ArrayList<Card> playList= new ArrayList<Card>();
+	private ArrayList<Attack> attacks=new ArrayList<Attack>();
 	public ArrayList<ShieldPoint> shieldPoints= new ArrayList<ShieldPoint>();
-	public boolean player;
-	//int energyIncome;
+	private ArrayList<Card> consumableStore= new ArrayList<Card>();
+
+	public FightStats fightStats;
+	private ShipStats shipStats;
+	private ShipGraphic battleGraphic;
+
 	private int currentEnergy;
-	int maxCards;
+	public boolean dead=false;
+	public boolean exploded=false;
 	private int majorDamageTaken=0;
 	private int energyAtEndOfPhase=0;
+	int maxCards;
 
-	private ShipStats shipStats;
-
-
-	private ArrayList<Attack> attacks=new ArrayList<Attack>();
+	private Component specialComponent; //this is a bit shit...//
 
 	//Enemy ai stuff//
 	public Component focusTarget;
-	public FightStats fightStats;
+	public Timer turnTimer = new Timer();
 
 	//Map stuff//
 	private MapShip mapShip;
 
-	public boolean dead=false;
-	public boolean exploded=false;
-
-
-
-	public Timer timer = new Timer();
-	private Component specialComponent;
 	public enum ShipType{Aurora,Comet,Eclipse,Nova}
 	public abstract void placeNiches();
 
@@ -170,7 +172,7 @@ public abstract class Ship {
 	public void addAttack(Card card, Component target){addAttack(new Attack(card,target));}
 
 	private void addAttack(Attack a){
-		
+
 		a.atkgrphc.order=attacks.size();
 
 		attacks.add(a);
@@ -180,7 +182,7 @@ public abstract class Ship {
 	}
 
 	public void removeAttack(Card card){
-		
+
 		System.out.println("removing attack from "+card);
 		System.out.println(attacks.size());
 		for(int i=0;i<attacks.size();i++){
@@ -319,13 +321,13 @@ public abstract class Ship {
 		}
 		notifyIncoming();
 
-		timer=new Timer(1, 0, 1/10f, Interp.LINEAR);
+		turnTimer=new Timer(1, 0, 1/10f, Interp.LINEAR);
 
 	}
 
 
 	public void enemyFadeAll(){
-		if(timer.getFloat()>0)return;
+		if(turnTimer.getFloat()>0)return;
 		for(Card c:playList) c.fadeAndAddIcon();
 		playList.clear();
 		endPhase();
@@ -557,7 +559,19 @@ public abstract class Ship {
 		}
 		if(armour!=null)for(int i=0;i<armour.numCards;i++)deck.add(armour.makeCard());
 
-
+		for(int i=0;i<10;i++){
+			Card c= new Card(
+					new String[]{"Rocket", "Rocket"},
+					new Pic[]{Gallery.armour, Gallery.armour},
+					new int[]{0,3}, 
+					new int[]{1,1},
+					new int[]{0,0},
+					new int[]{5,5},
+					new String[]{"",""},
+					new CardCode[]{new CardCode(), new CardCode()}, 
+					ModuleType.WEAPON);
+			deck.add(c);
+		}
 		Draw.shuffle(deck);
 	}
 
@@ -802,7 +816,7 @@ public abstract class Ship {
 
 		return shipStats;
 	}
-	
+
 	public void recalculateStats(){
 		shipStats=calculateStats(null, null);
 	}

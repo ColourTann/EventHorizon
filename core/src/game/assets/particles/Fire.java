@@ -1,4 +1,4 @@
-package game.screen.test;
+package game.assets.particles;
 
 import game.assets.Gallery;
 
@@ -7,13 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import util.Colours;
 import util.Draw;
 import util.maths.Pair;
+import util.particleSystem.Particle;
 import util.update.Updater;
 
-public class Fire {
-	boolean dead;
-	Pair position;
-	Pair vector;
-	float life, maxLife, ratio, scale;
+public class Fire extends Particle{
+
+	float  scale;
 	
 	public Fire(Pair position, float scale){
 		this.scale=scale;

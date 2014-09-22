@@ -19,7 +19,6 @@ public class Test extends Screen{
 
 	float ticks=0;
 
-	ArrayList<Rocket>rockets=new ArrayList<Rocket>();
 
 	@Override
 	public void init() {
@@ -28,13 +27,6 @@ public class Test extends Screen{
 	}
 	@Override
 	public void update(float delta) {
-		for(Rocket rocket:rockets){
-			if(Gdx.input.isKeyPressed(Input.Keys.UP))rocket.move(delta, 0);
-			if(Gdx.input.isKeyPressed(Input.Keys.DOWN))rocket.move(-delta, 0);
-			if(Gdx.input.isKeyPressed(Input.Keys.LEFT))rocket.move(0, -delta*3);
-			if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))rocket.move(0, delta*3);
-			rocket.update(delta);
-		}
 		
 		//System.out.println(rockets.size());
 	}
@@ -48,7 +40,7 @@ public class Test extends Screen{
 	@Override
 	public void render(SpriteBatch batch) {
 
-		for(Rocket rocket:rockets)rocket.render(batch);
+	
 	}
 
 	@Override
@@ -58,24 +50,13 @@ public class Test extends Screen{
 	@Override
 	public void keyPress(int keycode) {
 
-		/*switch(keycode){
-case Input.Keys.UP:
+		switch(keycode){
 
-			break;
-case Input.Keys.DOWN:
-	rocket.move(0.7f, 0);
-	break;
-case Input.Keys.LEFT:
-	rocket.move(1f, 1);
-	break;
-case Input.Keys.RIGHT:
-	rocket.move(1f, 1);
-	break;
 		case Input.Keys.CONTROL_LEFT:
 
 			break;
 		}
-		 */
+		 
 	}
 
 	@Override
@@ -84,7 +65,7 @@ case Input.Keys.RIGHT:
 
 	@Override
 	public void mousePressed(Pair location, boolean left) {
-		for(int i=0;i<10;i++) rockets.add(new Rocket(new Pair(50,300), location.add(Pair.randomAnyVector().multiply(40)), 3));
+
 		
 	}
 

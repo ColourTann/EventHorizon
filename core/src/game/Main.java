@@ -88,11 +88,11 @@ public class Main extends ApplicationAdapter  {
 		mainCam.setToOrtho(true);
 		
 		
-		currentScreen=new Test();currentScreen.init();
+		//currentScreen=new Test();currentScreen.init();
 		
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-		//select=new Selector();currentScreen=select;select.init();
+		select=new Selector();currentScreen=select;select.init();
 
 		//currentScreen=new PreBattle(new Aurora(true), new Eclipse(false)); currentScreen.init();
 		

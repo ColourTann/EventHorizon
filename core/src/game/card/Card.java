@@ -41,7 +41,7 @@ public class Card {
 	private CardCode[] code=new CardCode[2];
 	public int specialSide=-1;
 	public ModuleType type;
-
+	public boolean consumable;
 	//Random Fields//
 	public int side=0;
 	public boolean selected;
@@ -77,8 +77,8 @@ public class Card {
 		
 	}
 	
-	public Card(Ship s, String[] names, Pic[] cardpics, int[] baseCosts, int[] baseEffects, int[] baseCooldown, int[] shots, String[] rules, CardCode[] codes, ModuleType type){
-		mod=s.getSpecialComponent();
+	public Card(String[] names, Pic[] cardpics, int[] baseCosts, int[] baseEffects, int[] baseCooldown, int[] shots, String[] rules, CardCode[] codes, ModuleType type){
+		//mod=s.getSpecialComponent();
 		this.name=names;
 		this.cardPic=cardpics;
 		this.baseCost=baseCosts;
@@ -88,6 +88,7 @@ public class Card {
 		this.code=codes;
 		this.type=type;
 		this.shots=shots;
+		consumable=true;
 	}
 	
 	public void finaliseSide(){
@@ -95,6 +96,7 @@ public class Card {
 	}
 	
 	public void remakeCard(int side){
+		if(consumable)return;
 		specialSide=side;
 		for(int i=0;i<2;i++){
 			name[i]=mod.getName(i*specialSide);
@@ -805,7 +807,9 @@ public class Card {
 
 	//Big list of getter methods//
 	public String getName(){return getName(side);}
-	public String getName(int pick){return name[pick];}
+	public String getName(int pick){{
+		return name[pick];}
+	}
 
 	public Pic getImage(){return getImage(side);}
 	public Pic getImage(int pick){return cardPic[pick];}
@@ -837,6 +841,9 @@ public class Card {
 
 	public int getShots(){return getShots(side);}
 	public int getShots(int pick){
+		if(consumable){
+			return shots[pick]+bonusShots;
+		}
 		if(mod.getShots(pick*specialSide)>0){
 			//TODO - single card
 			return mod.getShots(pick*specialSide)+bonusShots;
