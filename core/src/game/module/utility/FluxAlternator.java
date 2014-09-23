@@ -5,12 +5,13 @@ import game.card.Card;
 import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
+import game.module.Module.ModuleType;
 import util.image.Pic;
 
 public class FluxAlternator extends Utility{
 
 	public FluxAlternator(int tier) {
-		super(tier, "Furnace", "+1 energy if you end your turn with 7+ energy", Gallery.blaster, 1, 1);
+		super(tier, ModuleType.UTILITY,"Furnace", "+1 energy if you end your turn with 7+ energy", Gallery.blaster, 1, 1);
 		
 		name[0]="Charge";
 		cost[0]=0;

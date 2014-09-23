@@ -2,6 +2,7 @@ package game.ship;
 
 import java.util.ArrayList;
 
+import util.Colours;
 import util.Draw;
 import util.assets.Font;
 import util.image.Pic;
@@ -24,6 +25,7 @@ import game.card.CardGraphic;
 import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
+import game.card.ConsumableCard;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
@@ -85,7 +87,7 @@ public abstract class Ship {
 	private int majorDamageTaken=0;
 	private int energyAtEndOfPhase=0;
 	int maxCards;
-
+	public boolean doubleHP;
 	private Component specialComponent; //this is a bit shit...//
 
 	//Enemy ai stuff//
@@ -107,10 +109,14 @@ public abstract class Ship {
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
 		setArmour(new BasicArmour(0));
-		//addUtility(new RapidFire(0));
+		setUtility(new RapidFire(0), 1);
 		specialComponent= new SpecialComponent();
 		specialComponent.ship=this;
 
+		for(int i=0;i<6;i++){
+			addConsumableCard(ConsumableCard.get(1));
+		}
+		
 	}
 
 
@@ -118,7 +124,7 @@ public abstract class Ship {
 	public void startTurn () {
 		attacks.clear();
 		if(player)drawToMaximum();
-		currentEnergy+=getGenerator().getIncome();
+	addEnergy(getIncome(), true);
 
 
 		for(Utility u:utilities) if(u!=null) u.beginTurnEffect();
@@ -232,7 +238,7 @@ public abstract class Ship {
 
 	public void endPhase() {	
 
-		addEnergy(energyAtEndOfPhase);
+		addEnergy(energyAtEndOfPhase, true);
 		energyAtEndOfPhase=0;
 		switch (Battle.getPhase()){
 		case WeaponPhase:
@@ -480,11 +486,16 @@ public abstract class Ship {
 	}
 
 	public void drawCard(Card card) {
+		card.active=true;
+		card.addToDeck=false;
+		card.getGraphic().activate();
+		
 		if(card.specialSide==-1)card.finaliseSide(); //for rigged draws//
 
 		hand.add(card);
 		card.getGraphic().activate();
 		card.getGraphic().mousectivate(null);
+		card.getGraphic().setPosition(CardGraphic.startPosition);
 		if(player)updateCardPositions();
 	}
 
@@ -559,23 +570,33 @@ public abstract class Ship {
 		}
 		if(armour!=null)for(int i=0;i<armour.numCards;i++)deck.add(armour.makeCard());
 
-		for(int i=0;i<10;i++){
+		for(int i=consumableStore.size()-1;i>=0;i--){
+			Card c=consumableStore.get(i);
+			if(c.addToDeck){
+				consumableStore.remove(c);
+				deck.add(c);
+			}
+		}
+		
+		for(int i=0;i<0;i++){
 			Card c= new Card(
 					new String[]{"Rocket", "Rocket"},
 					new Pic[]{Gallery.armour, Gallery.armour},
 					new int[]{0,3}, 
-					new int[]{1,1},
+					new int[]{1,5},
 					new int[]{0,0},
 					new int[]{5,5},
 					new String[]{"",""},
 					new CardCode[]{new CardCode(), new CardCode()}, 
 					ModuleType.WEAPON);
 			deck.add(c);
+			setupConsumableCard(c);
 		}
 		Draw.shuffle(deck);
 	}
 
 	public void startFight(boolean goingFirst){
+		deck.clear();
 		initModuleStats();
 		initFightStats();
 		if(!Battle.isTutorial())		drawCard(maxCards); //No leak here!//
@@ -666,7 +687,19 @@ public abstract class Ship {
 		if(player)return Battle.getEnemy();
 		return Battle.getPlayer();
 	}
-	public void addEnergy(int amount){currentEnergy+=amount;}
+	public void addEnergy(int amount, boolean notify){
+		if(notify&&amount!=0){
+			TextWisp.wisps.add(new TextWisp(
+					""+(amount>0?"+":"")+amount,
+					Font.big,
+					player?FightStats.playerEnergy.add(30,-20):FightStats.enemyEnergy.add(30,-20),
+					WispType.Regular,
+					Colours.genCols5[3]
+					));
+		}
+		currentEnergy+=amount;
+		
+	}
 	public int getEnergy(){return currentEnergy;}
 	public Weapon[] getWeapons(){return new Weapon[]{(Weapon) components[0],(Weapon) components[1]};}
 	public ArrayList<Component> getRandomisedModules(){
@@ -764,11 +797,14 @@ public abstract class Ship {
 	}
 
 	public void recalculateThresholds() {
+		for(Component c:components){
+			if(c.getMaxHP()>18){
+				System.out.println("double");
+				doubleHP=true;
+			}
+		}
 		for(Component c:components)c.recalculateThresholds();	
 	}
-
-
-
 
 
 	public abstract ArrayList<MapAbility> getMapAbilities();
@@ -796,7 +832,7 @@ public abstract class Ship {
 	public int getBonusShots(Card c, int side, int effect) {
 		int bonus=0;
 		for(Utility u:utilities){
-			bonus+=u.getBonusShots(c, effect);
+			if(u!=null)bonus+=u.getBonusShots(c, effect);
 		}
 		if(bonus>0)c.augmented[side]=true;
 		return bonus;
@@ -908,6 +944,17 @@ public abstract class Ship {
 		return powerLevel;*/
 	}
 
-
+	private void setupConsumableCard(Card c){
+		c.mod=getSpecialComponent();
+	}
+	
+	public void addConsumableCard(Card c){
+		setupConsumableCard(c);
+		consumableStore.add(c);
+	}
+	
+	public ArrayList<Card> getConsumables(){
+		return consumableStore;
+	}
 
 }

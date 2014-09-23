@@ -1,5 +1,6 @@
 package util.update;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import util.Draw;
@@ -14,6 +15,7 @@ public class SimpleButton extends Mouser{
 	public Pic pic;
 	public String name;
 	public int width,height;
+	public BitmapFont font=Font.medium;
 	public SimpleButton(Pair position, String name, Pic pic, Code code){
 		this.position=position;
 		this.pic=pic;
@@ -23,14 +25,14 @@ public class SimpleButton extends Mouser{
 		height=pic.get().getHeight();
 		mousectivate(new BoxCollider(position.x, position.y, width, height));
 	}
-	
+
 	public interface Code{
 		public void onPress();
 	}
 
 	@Override
 	public void mouseDown() {
-		
+
 	}
 
 	@Override
@@ -45,14 +47,14 @@ public class SimpleButton extends Mouser{
 	@Override
 	public void update(float delta) {
 	}
-	
+
 	public void render(SpriteBatch batch){
-		
+
 		Draw.draw(batch, pic.get(), position.x, position.y);
 		if(moused)Draw.draw(batch, pic.getOutline(), position.x, position.y);
-		Font.medium.setColor(batch.getColor());
-		Font.medium.draw(batch, name, position.x+width/2-Font.medium.getBounds(name).width/2, position.y+height/2-Font.medium.getBounds(name).height/2);
+		font.setColor(batch.getColor());
+		Font.drawFontCentered(batch, name, font, position.x+width/2, position.y+height/2);
 	}
-	
-		
+
+
 }

@@ -23,6 +23,7 @@ public class TextWisp extends Updater{
 	BitmapFont f=Font.medium;
 	Color c=Colours.black ;
 	public WispType type;
+	Color override;
 	public static ArrayList<TextWisp> wisps= new ArrayList<TextWisp>();
 	
 	public TextWisp(String text, BitmapFont font, Pair startPosition, WispType type) {
@@ -40,6 +41,22 @@ public class TextWisp extends Updater{
 		}
 		wisps.add(this);
 	}
+	public TextWisp(String text, BitmapFont font, Pair startPosition, WispType type, Color colour) {
+		this.text=text;
+		this.position=startPosition;
+		this.type=type;
+		f=font;
+		switch (type){
+		case HoldUntilFade:
+			holdTime=-1;
+			speed=0;
+			break;
+		case Regular:
+			break;
+		}
+		wisps.add(this);
+		override=colour;
+	}
 
 	
 	public void release(){
@@ -47,7 +64,13 @@ public class TextWisp extends Updater{
 	}
 
 	public void render(SpriteBatch batch) {
+		if(override!=null){
+			f.setColor(Colours.withAlpha(override, alpha));
+			f.draw(batch, text, position.x-f.getBounds(text).width/2, position.y-f.getBounds(text).height/2);
+			return;
+		}
 		f.setColor(Colours.withAlpha(Colours.white, alpha));
+		
 		f.draw(batch, text, position.x-f.getBounds(text).width/2, position.y-f.getBounds(text).height/2);
 		f.setColor(Colours.withAlpha(Colours.black, alpha));
 		f.draw(batch, text, position.x-f.getBounds(text).width/2+1, position.y-f.getBounds(text).height/2+1);

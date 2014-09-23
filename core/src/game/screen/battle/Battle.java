@@ -96,6 +96,8 @@ public class Battle extends Screen{
 
 	@Override
 	public void init() {
+		player.getGraphic().activate();
+		enemy.getGraphic().activate();
 		me=this;
 		playerCam.setToOrtho(true, viewport.x, viewport.y);
 		enemyCam.setToOrtho(true, viewport.x, viewport.y);
@@ -106,10 +108,13 @@ public class Battle extends Screen{
 		player.startFight(true);
 		enemy.startFight(false);
 		if(tutorial){
-			player.addEnergy(6);
-			enemy.addEnergy(2);
+			player.addEnergy(6, false);
+			enemy.addEnergy(2, false);
 		}
 		for(Component c:player.components){
+			c.getStats().reset();
+		}
+		for(Component c:enemy.components){
 			c.getStats().reset();
 		}
 	}
@@ -187,8 +192,7 @@ public class Battle extends Screen{
 	public static void setPhase(Phase s){
 		if(getPhase()==Phase.End)return;
 		currentPhase=s;
-		getEnemy().checkDefeat();
-		getPlayer().checkDefeat();
+	
 		
 		
 
@@ -200,7 +204,7 @@ public class Battle extends Screen{
 		case EnemyWeaponPhase:
 			getEnemy().clearShields();
 			PhaseButton.get().nextPhase();
-			getEnemy().checkDefeat();
+
 			getEnemy().enemyStartPhase();
 			break;
 		case EnemyWeaponsFiring:
@@ -245,6 +249,7 @@ public class Battle extends Screen{
 	}
 
 	public static void battleWon(Ship ship) {
+		
 		ship.getEnemy().dead=true;
 		ship.getEnemy().getGraphic().destroy();
 		setPhase(Phase.End);
@@ -266,7 +271,7 @@ public class Battle extends Screen{
 		switch (keyCode){
 
 		case Input.Keys.SPACE:
-			if(Main.debug){player.drawCard(1); player.addEnergy(1);
+			if(Main.debug){player.drawCard(1); player.addEnergy(1, true);
 			}
 			break;
 

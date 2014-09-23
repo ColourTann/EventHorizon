@@ -44,6 +44,6 @@ public class Font {
 
 	}
 	public static void drawFontCentered(SpriteBatch batch, String s, BitmapFont f, float x, float y){
-		f.draw(batch, s, x-f.getBounds(s).width/2, y-f.getBounds(s).height/2);
+		f.draw(batch, s, (int)(x-f.getBounds(s).width/2), (int)(y-f.getBounds(s).height/2));
 	}
 }

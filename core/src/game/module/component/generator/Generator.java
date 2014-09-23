@@ -10,6 +10,7 @@ public abstract class Generator extends Component{
 		super(-1, modName, p, 1, 2, thresholds);
 		this.energyIncome=energyIncome;
 		type=ModuleType.GENERATOR;
+		cardType=type;
 		name[0]="Recharge";
 		cost[0]=0;
 		cooldown[0]=0;

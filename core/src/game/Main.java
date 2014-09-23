@@ -34,12 +34,13 @@ import game.ship.Ship;
 import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
+import game.ship.shipClass.Nova;
 
 public class Main extends ApplicationAdapter  {
 
 	public static float version=0.221f;
-	public static boolean debug=false;
-
+	public static boolean debug=true;
+public static float ticks;
 	public static int height=700;
 	public static int width=1280;
 
@@ -71,6 +72,7 @@ public class Main extends ApplicationAdapter  {
 		init();
 	}
 	public void init(){
+		
 		Gdx.input.setInputProcessor(new InputHandler());
 		CardGraphic.init();
 		Gallery.init();
@@ -92,9 +94,9 @@ public class Main extends ApplicationAdapter  {
 		
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-		select=new Selector();currentScreen=select;select.init();
+		//select=new Selector();currentScreen=select;select.init();
 
-		//currentScreen=new PreBattle(new Aurora(true), new Eclipse(false)); currentScreen.init();
+		currentScreen=new PreBattle(new Comet(true), new Comet(false)); currentScreen.init();
 		
 		//viewer=new CardViewer();currentScreen=viewer;
 
@@ -155,7 +157,7 @@ public class Main extends ApplicationAdapter  {
 
 	public void update(float delta){
 		
-	
+	ticks+=delta;
 		currentScreen.update(delta);
 		Updater.updateAll(delta);
 

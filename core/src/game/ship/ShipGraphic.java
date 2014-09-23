@@ -44,17 +44,19 @@ public class ShipGraphic extends Updater{
 	ArrayList<Shard> shards= new ArrayList<Shard>();
 	Pixmap shipMap;
 	public static Pair topRightEnemyShipPosition= new Pair(500+Main.width-offset.x, offset.y);
-	
+
 	public ShipGraphic(Ship s){
 		ship=s;
-		drawMap();
+		drawMap(true);
 	}
 
-	public void drawMap(){
+	public void drawMap(boolean overwrite){
 		if(composite!=null)composite.dispose();
 		if(picCut!=null)picCut.dispose();
-		if(shipMap!=null)shipMap.dispose();
-		shipMap=new Pixmap(450, 270, Format.RGBA8888);
+		if(overwrite){
+			if(shipMap!=null)shipMap.dispose();
+			shipMap=new Pixmap(450, 270, Format.RGBA8888);
+		}
 		Pixmap.setBlending(Blending.SourceOver);
 
 		for(Niche n:ship.niches){
@@ -71,10 +73,7 @@ public class ShipGraphic extends Updater{
 						n.component.modulePic.get().getHeight());
 			}
 		}
-
-		shipMap.drawPixmap(ship.shipPic.getPixMap(), 0, 0, 0, 0, 390, 270);
-
-
+		if(overwrite) shipMap.drawPixmap(ship.shipPic.getPixMap(), 0, 0, 0, 0, 390, 270);
 
 
 		for(Niche n:ship.niches){
@@ -111,16 +110,16 @@ public class ShipGraphic extends Updater{
 
 	public void damage(Pair damageLoc){
 		Shard s=null;
-		if(Math.random()>.7){
 
-			for(int i=0;i<50;i++){
-				s=picCut.replaceSection(damageLoc.add(Pair.randomAnyVector().multiply(120)), Gallery.shipDamage[(int) (Math.random()*9)].get());
-				if(s!=null){
-					shards.add(s);
-					break;
-				}
+
+		for(int i=0;i<50;i++){
+			s=picCut.replaceSection(damageLoc.add(Pair.randomAnyVector().multiply(120)), Gallery.shipDamage[(int) (Math.random()*9)].get());
+			if(s!=null){
+
+				break;
 			}
 		}
+
 
 
 
@@ -138,18 +137,17 @@ public class ShipGraphic extends Updater{
 				s.position=topRightEnemyShipPosition.add(-s.position.x,s.position.y);
 			}
 
-			for(int i=0;i<2;i++)animations.add(new Explosion1(s.position));
+			//for(int i=0;i<2;i++)animations.add(new Explosion1(s.position));
 
 		}
-		else animations.add(new Explosion1(damageLoc.add(Pair.randomAnyVector().multiply(40))));
-
-
 
 	}
 
+	public void addExplosion(Pair damageLoc){
+		animations.add(new Explosion1(damageLoc.add(Pair.randomAnyVector().multiply(0))));
+	}
+
 	public void destroy(){
-
-
 		crack(true);
 		float speed=1f;
 		Timer t=new Timer(0,1,1/(speed/.5f),Interp.LINEAR);
@@ -199,10 +197,10 @@ public class ShipGraphic extends Updater{
 			damage(position);damage(position);damage(position);damage(position);damage(position);
 			for(int j=0;j<5;j++)animations.add(new Explosion1(position.add(Pair.randomAnyVector().multiply(60))));
 		}
-		for(int i=0;i<1;i++){
+		/*for(int i=0;i<1;i++){
 			Shard s=picCut.removeCut();
 			setupShard(s);
-		}
+		}*/
 
 		if(shake)Battle.shake(ship.player, 7);
 	}
@@ -239,12 +237,13 @@ public class ShipGraphic extends Updater{
 
 		for(Shard s:shards){
 
+
 			s.update(delta);
 			s.position.x+=(ship.player?Star.playerSpeed:Star.enemySpeed)*delta*2;
 
 		}
 		for(int i=0;i<animations.size();i++){
-			
+
 			Animation a= animations.get(i);
 			if(a.isDone()){
 				a.dispose();

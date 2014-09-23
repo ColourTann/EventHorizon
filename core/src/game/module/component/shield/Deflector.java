@@ -34,7 +34,7 @@ public class Deflector extends Shield{
 		cooldown[2]=0;
 		effect[2]=calc(0);
 		rules[2]="Shields all modules";
-		code[2].add(Special.Bubble);
+		code[2].add(Special.ShieldAll);
 		code[2].add(AI.ShieldAll,calc(0)*4);
 		code[2].setPriority(1);
 		

@@ -136,6 +136,7 @@ public class Gallery {
 	
 	public static Pic difficultyMeter= new Pic("Interface/difficultymeter");
 	public static Pic difficultyDial= new Pic("Interface/difficultydial");
+	public static Pic fightButton= new Pic("Interface/fightbutton");
 	
 	//Map stuff//
 	public static Pic mapslice= new Pic("Interface/mapslice");

@@ -54,7 +54,7 @@ public class Repulsor extends Shield{
 		cooldown[4]=1;
 		effect[4]=calc(1);
 		rules[4]="Shields all modules";
-		code[4].add(Special.Bubble);
+		code[4].add(Special.ShieldAll);
 		code[4].add(AI.ShieldAll,calc(5));
 		code[4].setPriority(1);
 	}

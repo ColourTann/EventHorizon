@@ -8,6 +8,7 @@ import util.maths.Pair;
 import game.Main;
 import game.card.Card;
 import game.card.CardCode;
+import game.module.Module.ModuleType;
 import game.module.component.SpecialComponent;
 import game.module.junk.ModuleInfo;
 import game.module.junk.Buff.BuffType;
@@ -23,6 +24,7 @@ public abstract class Module {
 	public Ship ship;
 
 	public ModuleType type;
+	public ModuleType cardType;
 
 	public String moduleName;
 
@@ -53,6 +55,8 @@ public abstract class Module {
 	private ModuleInfo info;
 
 	public boolean moused;
+
+
 
 	//Buff stuff//
 

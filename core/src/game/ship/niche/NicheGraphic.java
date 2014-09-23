@@ -51,7 +51,7 @@ public class NicheGraphic extends Updater{
 
 	@Override
 	public void update(float delta) {
-		ticks+=delta*area*.00025f*niche.component.currentThreshold;
+		ticks+=delta*area*.0001f*niche.component.currentThreshold;
 		if(ticks>1&&!niche.ship.dead){
 			ticks-=Math.random();
 			Rectangle r =niche.p.getBoundingRectangle();

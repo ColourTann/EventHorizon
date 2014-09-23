@@ -16,6 +16,7 @@ public abstract class Weapon extends Component{
 		super(tier, name, p,4, numCards, thresholds);
 		weaponOffset=xOffset;
 		type=ModuleType.WEAPON;
+		cardType=type;
 	}
 	public static Weapon getRandomWeapon(int tier) {
 		Draw.shuffle(classes);

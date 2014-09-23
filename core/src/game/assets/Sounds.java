@@ -23,5 +23,6 @@ public class Sounds {
 	public static SoundClip rocket= new SoundClip("Sound/rocket.ogg");
 	
 	public static SoundClip preBattleImpact= new SoundClip("Sound/prebattleimpact.ogg");
+	public static SoundClip bigAccept= new SoundClip("Sound/bigaccept.ogg");
 	
 }

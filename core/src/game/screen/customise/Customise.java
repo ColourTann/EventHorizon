@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import game.Main;
 import game.assets.Gallery;
 import game.card.Card;
+import game.card.ConsumableCard;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
@@ -66,6 +67,7 @@ public class Customise extends Screen{
 
 	@Override
 	public void init() {
+		System.out.println("initting");
 		resetModuleStats();
 		addRewards(1);
 		slots.add(new Slot(new Pair(170, 100), 2));
@@ -74,6 +76,7 @@ public class Customise extends Screen{
 		setPanel(PanelType.Choose);
 		retimeMeter(ship.getStats().energyUsage);
 		consumables=new ConsumableContainer();
+		System.out.println("finished initting");
 	}
 
 	public enum PanelType{Choose, Install, Add, None}; 
@@ -113,20 +116,23 @@ public class Customise extends Screen{
 		rewards.clear();
 		
 		Draw.shuffle(Reward.typeList);
-
+		int bonus=0;
 		for(int i=0;i<3;i++){
-			RewardType type= Reward.typeList[i];
+			RewardType type= Reward.typeList[i+bonus];
 			
 			Reward r = null;
 			
 			switch(type){
 			case Armour:
-				r=new Reward(Armour.getRandomArmour(1), i);
+				r=new Reward(Armour.getRandomArmour(3), i);
 				break;
 			case Booster:
-				r=new Reward(new Card[]{new Deflector(3).getNextCard(),
-						new Deflector(3).getNextCard(),
-						new Deflector(3).getNextCard()},i);
+				if(ship.getConsumables().size()>3){
+					bonus=1;
+					i--;
+					continue;
+				}
+				r=new Reward(new Card[]{ConsumableCard.get(1),ConsumableCard.get(1),ConsumableCard.get(1)},i);
 				break;
 			case Utility:
 				r=new Reward(Utility.getRandomUtility(1), i);
@@ -271,7 +277,7 @@ public class Customise extends Screen{
 		retimeMeter(ship.getStats().energyUsage);
 		ship.recalculateThresholds();
 		me.resetModuleStats();
-		ship.getGraphic().drawMap();
+		ship.getGraphic().drawMap(true);
 		me.chosen();
 
 	}

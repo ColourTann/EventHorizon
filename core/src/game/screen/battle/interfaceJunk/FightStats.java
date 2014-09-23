@@ -20,6 +20,8 @@ public class FightStats extends Mouser{
 	private static Pair damageStart= new Pair(8,27);
 	Ship ship;
 	boolean player;
+	public static Pair playerEnergy=new Pair(265, 360);
+	public static Pair enemyEnergy=new Pair(846, 360);
 	public FightStats(Ship s) {
 		this.ship=s;
 		player=s.player;

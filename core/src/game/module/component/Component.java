@@ -37,7 +37,7 @@ public abstract class Component extends Module{
 
 	public Niche niche;
 	public int index=-1;
-	
+
 	int damageAtEnd;
 	public boolean immune;
 	public int maxHP;
@@ -45,28 +45,28 @@ public abstract class Component extends Module{
 	private int[] baseThresholds;
 	public int[] thresholds=new int[3];
 	public boolean[] doubles= new boolean[18];
-	
+
 	float shieldIntensity=0;
-	
+
 	public ArrayList<DamagePoint> damage= new ArrayList<DamagePoint>();
 	public ArrayList<DamagePoint> incomingDamage= new ArrayList<DamagePoint>();
 	public ArrayList<DamagePoint> unshieldableIcoming= new ArrayList<DamagePoint>();
 	public ArrayList<ShieldPoint> shieldPoints= new ArrayList<ShieldPoint>(); 
 
-		private ModuleStats stats;
-	
-	
+	private ModuleStats stats;
 
-	
+
+
+
 	public int targeteds;
 	public Timer shieldAlphaTimer=new Timer();
-	
+
 	public ArrayList<Buff> buffs=new ArrayList<Buff>();
 
 	private Pair center;
 	private Pair barrel;
-	
-	
+
+
 	public Component(int tier, String name, Pic modulePic, int variants, int numCards, int baseThresholds[]){
 		super(tier, name, modulePic, variants, numCards);
 		this.baseThresholds=baseThresholds;
@@ -74,7 +74,14 @@ public abstract class Component extends Module{
 
 	public void recalculateThresholds(){
 		for(int i=0;i<3;i++){
+
 			thresholds[i]=(int)(baseThresholds[i]*ship.getArmourMultiplier());
+
+			if(ship.doubleHP){
+				if((thresholds[i]+i)%2==0){
+					thresholds[i]-=1;
+				}
+			}
 		}
 		maxHP=thresholds[2];
 
@@ -109,7 +116,7 @@ public abstract class Component extends Module{
 		}
 
 	}
-	
+
 	@SuppressWarnings("unused")
 	public void clicked(){
 		//CLICKED ON PLAYER MODULE//
@@ -119,7 +126,10 @@ public abstract class Component extends Module{
 			if(Battle.getState()==State.ModuleChoose){
 				CardCode code= Battle.moduleChooser.getCode();
 
-				for(int i=0;i<Battle.moduleChooser.getEffect();i++)shield(new ShieldPoint(Battle.moduleChooser, i==0), false);
+				if(code.contains(Special.ChooseWeapon)&&type!=ModuleType.WEAPON){
+					Sounds.error.play();
+					return;
+				}
 				if(code.contains(Special.GetCardFromChosenModule)){
 					if(this==Battle.moduleChooser.mod){
 						Sounds.error.play();
@@ -127,8 +137,10 @@ public abstract class Component extends Module{
 					}
 					else ship.drawCard(getNextCard());
 				}
+				if(code.contains(Special.ImmuneChosenModule))immune=true;
+				for(int i=0;i<Battle.moduleChooser.getEffect();i++)shield(new ShieldPoint(Battle.moduleChooser, i==0), false);
 
-				Battle.moduleChooser.moduleChosen();
+				Battle.moduleChooser.moduleChosen(this);
 				return;
 			}
 
@@ -160,7 +172,7 @@ public abstract class Component extends Module{
 			}
 		}
 	}
-	
+
 	public void moused(){
 		moused=true;
 	}
@@ -168,11 +180,10 @@ public abstract class Component extends Module{
 	public void unmoused(){
 		moused=false;
 	}
-	
+
 	public void damage(DamagePoint damagePoint) {
 		if(immune)return;
 		if(currentThreshold==3){
-			System.out.println("overdamaging "+this+", already destroyed");
 			return;
 		}
 		damage.add(damagePoint);
@@ -180,24 +191,32 @@ public abstract class Component extends Module{
 			majorDamage();
 
 		}
-		Battle.shake(ship.player,(float)(2.5f));
-		ship.getGraphic().damage(niche.location);
+		//Battle.shake(ship.player,(float)(2.5f));
+
+		if(Math.random()<20/maxHP){
+			ship.getGraphic().addExplosion(getCenter());
+		}
+		if(Math.random()<3/maxHP){
+			ship.getGraphic().damage(niche.location);	
+		}
 		Sounds.damageMinor.play();
 	}
-	
+
 	private void majorDamage() {
 		currentThreshold++;
 		ship.majorDamage();
+		ship.checkDefeat();
 		if(currentThreshold==3){
 			destroy();
 			return;
 		}
 		new TextWisp("Scrambled", Font.medium, getCenter().add(new Pair(0,-40)), WispType.Regular); 
 		scramble();
-		for(int i=0;i<5;i++)ship.getGraphic().damage(niche.location);
-		ship.checkDefeat();
+		for(int i=0;i<1;i++)ship.getGraphic().damage(niche.location);
+		for(int i=0;i<3;i++) ship.getGraphic().addExplosion(getCenter());
+
 	}
-	
+
 	private void destroy(){
 		destroyed=true;
 		new TextWisp("Destroyed", Font.medium, getCenter().add(new Pair(0,-40)), WispType.Regular);
@@ -215,9 +234,11 @@ public abstract class Component extends Module{
 				i--;
 			}
 		}
-		ship.getGraphic().drawMap();
+		ship.getGraphic().drawMap(false);
 	}
+
 	
+
 	public void calculateDamage(int damage, boolean unshieldable) {
 		if(unshieldable){
 			for(int i=0;i<damage;i++){
@@ -237,16 +258,16 @@ public abstract class Component extends Module{
 			}
 		}
 	}
-	
+
 	private void activateShield(ShieldPoint shield) {
 		if(immune)return;
 		if(!shield.firstAdded)return;
 		CardCode code=shield.card.getCode();
 		ship.drawCard(code.getAmount(Special.AbsorbDraw));
-		ship.addEnergy(code.getAmount(Special.AbsorbEnergy));
+		ship.addEnergy(code.getAmount(Special.AbsorbEnergy), true);
 		shieldAlphaTimer=new Timer(1,0,1,Interp.SQUARE);
 	}
-	
+
 	public boolean shield(ShieldPoint s, boolean overlapSound){
 		//#1Reason why not to shield//
 		System.out.println("shielding "+this);
@@ -270,7 +291,7 @@ public abstract class Component extends Module{
 			}
 		}
 	}
-	
+
 	public void removeIncoming(Card card) {
 		for(int i=0;i<incomingDamage.size();i++){
 			DamagePoint p=incomingDamage.get(i);
@@ -280,7 +301,7 @@ public abstract class Component extends Module{
 			}
 		}
 	}
-	
+
 	public void cardIconMoused(Card card) {
 		for(DamagePoint p:damage)p.checkMoused(card);
 		for(DamagePoint p:unshieldableIcoming)p.checkMoused(card);
@@ -291,14 +312,14 @@ public abstract class Component extends Module{
 		for(DamagePoint p:unshieldableIcoming)p.reset();
 		for(DamagePoint p:incomingDamage)p.reset();
 	}
-	
+
 	//Getters and setters//
-	
+
 	public int getIndex(){
 		if(index==-1)System.out.println(this+" isn't installed on a ship");
 		return index;
 	}
-	
+
 	public int getDamage(){
 		return damage.size();
 	}
@@ -349,9 +370,9 @@ public abstract class Component extends Module{
 	public Pair getCenter(){
 		if(center==null&&this instanceof SpecialComponent){
 			if(ship.player){
-			center=new Pair(
-					ShipGraphic.offset.x+ShipGraphic.width/2,
-					ShipGraphic.offset.y+ShipGraphic.height/2);
+				center=new Pair(
+						ShipGraphic.offset.x+ShipGraphic.width/2,
+						ShipGraphic.offset.y+ShipGraphic.height/2);
 			}
 			else{
 				center=new Pair(
@@ -360,7 +381,7 @@ public abstract class Component extends Module{
 			}
 		}
 		if(center==null){
-			
+
 			if(ship.player){
 				center=new Pair(
 						niche.location.x+niche.width/2+ShipGraphic.offset.x,
@@ -459,7 +480,7 @@ public abstract class Component extends Module{
 	public boolean isDead() {
 		return currentThreshold==3;
 	}
-	
+
 	public void endAdmin(){
 		targeteds=0;
 		currentCooldown=Math.max(0, currentCooldown-1);
@@ -500,7 +521,7 @@ public abstract class Component extends Module{
 		if(stats==null)stats=new ModuleStats(this);
 		return stats;
 	}
-	
+
 	public void updateIntensity(){
 		int count=0;
 		for(Attack atk:ship.getAttacks()){
@@ -509,10 +530,10 @@ public abstract class Component extends Module{
 		for(Attack atk:ship.getAttacks()){
 			atk.atkgrphc.intensity=count;
 		}
-	
+
 	}
-	
-	
+
+
 	public boolean isAugmented(){
 		for(Buff b:buffs){
 			switch (b.type){
@@ -528,12 +549,17 @@ public abstract class Component extends Module{
 				break;
 			default:
 				break;
-			
+
 			}
 		}
-		
-		
+
+
 		return false;
 	}
-	
+
+	public int getMaxHP(){
+		return (int) (baseThresholds[2]*ship.getArmourMultiplier());
+	}
+
+
 }

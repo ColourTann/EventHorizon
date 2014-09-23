@@ -13,6 +13,7 @@ public abstract class Computer extends Component{
 		super(-1, modName, p,1,2,thresholds);
 		this.maxCards=maxCards;
 		type=ModuleType.COMPUTER;
+		cardType=type;
 		name[0]="Lock-on";
 		cost[0]=0;
 		cooldown[0]=0;

@@ -9,25 +9,28 @@ import game.module.Module.ModuleType;
 public class RapidFire extends Utility{
 
 	public RapidFire(int tier) {
-		super(tier, "Rapid Fire", "Weapons firing 3+ shots get 1 bonus shot", Gallery.blaster, 1, 1);
+		super(tier, ModuleType.WEAPON, "Rapid Fire", "Weapons firing 3+ shots get 1 bonus shot", Gallery.blaster, 1, 1);
 		
-		name[0]="Barrage";
-		cost[0]=1;
+		name[0]="Duplicate";
+		cost[0]=0;
 		cooldown[0]=0;
-		effect[0]=1;
-		rules[0]="";
-		shots[0]=calc(2);
+		effect[0]=0;
+		rules[0]="Augment weapon card: +1 shot";
 		cardPic[0]=Gallery.armour;
+		code[0].add(Special.Augment);
+		code[0].add(Augment.AugmentWeapon);
+		code[0].add(Augment.AugmentAddShot, 1);
 		
-		name[1]="Duplicate";
+		name[1]="Fetch";
 		cost[1]=0;
 		cooldown[1]=0;
 		effect[1]=0;
-		rules[1]="Augment weapon card: +1 shot";
+		rules[1]="Get a card from either weapon module";
 		cardPic[1]=Gallery.armour;
-		code[1].add(Special.Augment);
-		code[1].add(Augment.AugmentWeapon);
-		code[1].add(Augment.AugmentAddShot, 1);
+		code[1].add(Special.ModuleChooser);
+		code[1].add(Special.ChooseWeapon);
+		code[1].add(Special.GetCardFromChosenModule);
+		code[1].add(Special.DiscardWhenChosen);
 	}
 
 	@Override

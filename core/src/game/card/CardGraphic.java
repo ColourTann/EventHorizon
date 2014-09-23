@@ -7,15 +7,18 @@ import util.image.Pic;
 import util.maths.BoxCollider;
 import util.maths.Pair;
 import util.update.Mouser;
+import util.update.Screen;
 import util.update.Timer.Interp;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.card.CardCode.Special;
 import game.module.Module.ModuleType;
 import game.module.junk.Buff;
@@ -24,6 +27,7 @@ import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.Battle.State;
 import game.screen.battle.interfaceJunk.CycleButton;
+import game.screen.preBattle.PreBattle;
 
 public class CardGraphic extends Mouser {
 	// POSITIONS//
@@ -34,7 +38,7 @@ public class CardGraphic extends Mouser {
 	public static float maxSelectedHeight = -26;
 	public static float fadeSpeed = .4f;
 	public static Interp fadeType = Interp.LINEAR;
-
+	public static Pair startPosition=new Pair(Main.width/2 - width/2, Main.height+height+10);
 	public static Pair positionPic = new Pair(43, 31);
 	private static Pair positionArray[][] = new Pair[6][5];
 	private static Pair positionTitle = new Pair(70, 8);
@@ -73,7 +77,7 @@ public class CardGraphic extends Mouser {
 	//public static CardGraphic augmentPicker;
 
 	public CardGraphic(Card c) {
-		position=new Pair(Main.width/2 - width/2, Main.height+height+10);
+		position=startPosition.copy();
 		this.card = c;
 		mousectivate(new BoxCollider(0, 0, width, height));
 	}
@@ -115,6 +119,7 @@ public class CardGraphic extends Mouser {
 			sidePositions[i] += (target - sidePositions[i]) * delta * flipSpeed;
 			if (Math.abs(sidePositions[i] - target) < 1f)sidePositions[i] = target;
 		}
+		collider.position=position.copy().add(0,selectedHeight);
 
 		//Animating selected card//
 		if(card.getShip()==null)return;
@@ -124,7 +129,7 @@ public class CardGraphic extends Mouser {
 
 
 		//Updating collider position//
-		collider.position=position.copy().add(0,selectedHeight);
+
 
 
 	}
@@ -140,10 +145,12 @@ public class CardGraphic extends Mouser {
 		boolean wrongState = false;
 
 		//Checking state//
-		if (Battle.getPhase() == Phase.ShieldPhase&&card.mod.type == ModuleType.WEAPON||
-				Battle.getPhase() == Phase.WeaponPhase&& card.mod.type == ModuleType.SHIELD) {
-			c = Colours.faded;
-			wrongState = true;
+		if(Screen.isActiveType(Battle.class)){
+			if (Battle.getPhase() == Phase.ShieldPhase&&card.type == ModuleType.WEAPON||
+					Battle.getPhase() == Phase.WeaponPhase&& card.type == ModuleType.SHIELD) {
+				c = Colours.faded;
+				wrongState = true;
+			}
 		}
 
 		//Checking cooldown//
@@ -199,7 +206,7 @@ public class CardGraphic extends Mouser {
 		}
 		Font.small.setColor(Colours.white);
 		batch.setColor(Colours.white);
-
+		
 
 	}
 
@@ -222,7 +229,7 @@ public class CardGraphic extends Mouser {
 
 		//Augment colouring//
 		if(!still&&card.isAugmented(part)){
-			float alpha=(float)Math.sin(Battle.ticks*5);
+			float alpha=(float)Math.sin(Main.ticks*5);
 
 			alpha+=2.3f;
 			alpha/=4;
@@ -230,6 +237,18 @@ public class CardGraphic extends Mouser {
 			Draw.draw(batch, Gallery.cardOutline.get(), position.x, baseHeight);
 			batch.setColor(1,1,1,1);
 		}
+
+		if(moused&&Screen.isActiveType(PreBattle.class)){
+			batch.setColor(Colours.light);
+			Draw.draw(batch, Gallery.cardOutline.get(), position.x, baseHeight);
+			batch.setColor(1,1,1,1);
+		}
+		if(card.addToDeck){
+			batch.setColor(Colours.compCols6[2]);
+			Draw.draw(batch, Gallery.cardOutline.get(), position.x, baseHeight);
+			batch.setColor(1,1,1,1);
+		}
+
 		//Card image//
 		if (drawTopPic || part != card.side){
 
@@ -264,7 +283,7 @@ public class CardGraphic extends Mouser {
 
 
 		//Effect//
-		
+
 		Pic[] effectPics=card.getShots(0)>0?Gallery.damageIcon:Gallery.shieldIcon;
 		int effect = card.getEffect(part);
 		if(card.wasScrambled)effect=0;
@@ -308,7 +327,14 @@ public class CardGraphic extends Mouser {
 		if (card.hasSpecial(Special.Targeted, part))Draw.draw(batch, Gallery.iconTargeted.get(), position.x + positionTargeted.x, baseHeight + positionTargeted.y-17);
 
 
-		//Cost//
+
+		if(scrambled){
+			if(!card.wasScrambled&&card.mod.ship.player){
+				Draw.draw(batch, Gallery.iconJammed.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
+			}
+		}
+
+
 		if(scrambled){
 			if(!card.wasScrambled&&card.mod.ship.player){
 				Draw.draw(batch, Gallery.iconJammed.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
@@ -316,11 +342,6 @@ public class CardGraphic extends Mouser {
 		}
 
 		//Cost//
-		if(scrambled){
-			if(!card.wasScrambled&&card.mod.ship.player){
-				Draw.draw(batch, Gallery.iconJammed.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
-			}
-		}
 		else{
 			int cost = card.getCost(part);
 			if(card.wasScrambled)cost=0;
@@ -329,8 +350,12 @@ public class CardGraphic extends Mouser {
 				for (int i = 0; i < cost; i++)	Draw.draw(batch, Gallery.iconEnergy.get(), position.x + positionEnergy.x+ positionArray[cost][i].x, baseHeight+ positionEnergy.y + positionArray[cost][i].y);
 			} 
 			else {
+				BitmapFont font = Font.medium;
+				if(cost>9)font=Font.small;
+				font.setColor(darkText);
 				Draw.draw(batch, Gallery.iconEnergy.get(), position.x + positionEnergy.x+ positionArray[5][0].x-1, baseHeight + positionEnergy.y+ positionArray[5][0].y);
-				Font.medium.draw(batch, "" + cost, position.x + positionEnergy.x + 6,baseHeight + positionEnergy.y + positionArray[5][0].y);
+				Font.drawFontCentered(batch, "" + cost, font, position.x + positionEnergy.x + 14,baseHeight + positionEnergy.y + positionArray[5][0].y+7);
+				//	font.draw(batch, "" + cost, position.x + positionEnergy.x + 6,baseHeight + positionEnergy.y + positionArray[5][0].y);
 			}
 		}
 
@@ -354,7 +379,7 @@ public class CardGraphic extends Mouser {
 
 
 		batch.setColor(Colours.white);
-		if(part==card.side&&moused){
+		if(part==card.side&&moused&&Screen.isActiveType(Battle.class)){
 			Draw.draw(batch, Gallery.cardBase.getOutline(), position.x, baseHeight);
 		}
 
@@ -413,6 +438,21 @@ public class CardGraphic extends Mouser {
 
 	@Override
 	public void mouseClicked(boolean left) {
+
+		if(Screen.isActiveType(PreBattle.class)){
+
+			card.addToDeck=!card.addToDeck;
+
+			if(card.addToDeck){
+				Sounds.cardSelect.play();	
+			}
+			else{
+				Sounds.cardDeselect.play();
+			}
+
+			return;
+		}
+
 		if (!left) {
 			if(card.getShip().player)card.rightClick();
 			return;
@@ -422,19 +462,26 @@ public class CardGraphic extends Mouser {
 
 	@Override
 	public void mouseDown() {
-		if(Battle.getPlayer().hand.contains(card))onTopGraphic=this;
-		card.getShip().cardOrIconMoused(card);
-		moveToTop();
-	}
+		if(Screen.isActiveType(Battle.class)){
 
-	@Override
-	public void mouseUp() {
-		onTopGraphic=null;
-		card.getShip().cardOrIconUnmoused();
-	}
+			if(Battle.getPlayer().hand.contains(card))onTopGraphic=this;
+			if(card.getShip()!=null){
+				card.getShip().cardOrIconMoused(card);
+			}
+			moveToTop();
+			}
+		}
+
+		@Override
+		public void mouseUp() {
+			if(Screen.isActiveType(Battle.class)){
+			onTopGraphic=null;
+			if(card.getShip()!=null)card.getShip().cardOrIconUnmoused();
+			}
+		}
 
 
-	/*public static void setAugmentOrTarget(CardGraphic augmenter){
+		/*public static void setAugmentOrTarget(CardGraphic augmenter){
 		resetOffCuts();
 		augmentPicker=augmenter;
 	}
@@ -443,15 +490,15 @@ public class CardGraphic extends Mouser {
 		augmentPicker=null;
 	}*/
 
-	public static void renderOffCuts(SpriteBatch batch){
-		if(Battle.augmentSource!=null)Battle.augmentSource.getGraphic().render(batch);
-		if(Battle.moduleChooser!=null)Battle.moduleChooser.getGraphic().render(batch);
-		if(Battle.targetSource!=null)Battle.targetSource.getGraphic().render(batch);
-		if(onTopGraphic!=null)onTopGraphic.render(batch);
-		for(Card c:CycleButton.choices)c.getGraphic().render(batch);
-		for(CardGraphic cg:Battle.enemyHandList)cg.render(batch);
-		//if(Card.)
+		public static void renderOffCuts(SpriteBatch batch){
+			if(Battle.augmentSource!=null)Battle.augmentSource.getGraphic().render(batch);
+			if(Battle.moduleChooser!=null)Battle.moduleChooser.getGraphic().render(batch);
+			if(Battle.targetSource!=null)Battle.targetSource.getGraphic().render(batch);
+			if(onTopGraphic!=null)onTopGraphic.render(batch);
+			for(Card c:CycleButton.choices)c.getGraphic().render(batch);
+			for(CardGraphic cg:Battle.enemyHandList)cg.render(batch);
+			//if(Card.)
+		}
+
+
 	}
-
-
-}

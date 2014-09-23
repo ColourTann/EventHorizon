@@ -22,6 +22,7 @@ import game.screen.battle.Battle;
 import game.screen.battle.tutorial.Tutorial;
 import game.screen.customise.Customise;
 import game.screen.customise.Reward;
+import game.screen.preBattle.PreBattle;
 
 public class ModuleStats extends Mouser{
 	static int height=Main.height/5;
@@ -59,7 +60,6 @@ public class ModuleStats extends Mouser{
 	public void mouseDown() {
 		component.moused();
 		if(!Battle.isTutorial()){
-			Tutorial.next();
 			info.stopFading();
 			ModuleInfo.top=info;
 		}
@@ -153,7 +153,14 @@ public class ModuleStats extends Mouser{
 		for(int i=0;i<component.maxHP;i++){
 			twin--;
 
-			if(component.doubles[slotLoc]&&twin<=0) twin=2;
+			if(component.ship.doubleHP&&twin<=0) {
+				boolean doit=true;
+				for(int thre=0;thre<3;thre++){
+					if(component.thresholds[thre]==i+1)doit=false;
+				}
+				if(doit)twin=2;
+				
+			}
 
 			p=Gallery.greenHP;
 			index=0;
@@ -217,7 +224,7 @@ public class ModuleStats extends Mouser{
 			pos++;
 		}
 
-		if(Main.currentScreen instanceof Battle)info.render(batch);
+		if(Main.currentScreen instanceof Battle|| Main.currentScreen instanceof PreBattle)info.render(batch);
 
 
 	}

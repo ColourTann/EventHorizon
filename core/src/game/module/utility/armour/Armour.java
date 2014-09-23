@@ -19,7 +19,7 @@ public abstract class Armour extends Utility{
 	static Class[] classes = new Class[]{BasicArmour.class, RegenArmour.class, ShieldArmour.class};
 	public float multiplier;
 	public Armour(float multiplier, int tier, String modName, String passive, Pic modulePic, int variants, int numCards){
-		super(tier, modName, passive, modulePic, variants, numCards);
+		super(tier, ModuleType.UTILITY, modName, passive, modulePic, variants, numCards);
 		this.multiplier=multiplier;
 
 		type=ModuleType.ARMOUR;

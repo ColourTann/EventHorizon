@@ -17,10 +17,11 @@ import util.image.Pic;
 public abstract class Utility extends Module{
 	static Class[] classes = new Class[]{Cardifier.class, FluxAlternator.class, MaxDamage.class, RapidFire.class};
 	public String passive;
-	public Utility(int tier, String name, String passive, Pic modulePic, int variants, int numCards) {
+	public Utility(int tier, ModuleType cardType, String name, String passive, Pic modulePic, int variants, int numCards) {
 		super(tier, name, modulePic, variants, numCards);
 		this.passive=passive;
 		type=ModuleType.UTILITY;
+		this.cardType=cardType;
 	}
 
 	ArrayList<Card> card=new ArrayList<Card>();
