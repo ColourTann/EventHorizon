@@ -224,7 +224,8 @@ public class CardGraphic extends Mouser {
 
 		//Card base//
 
-		Draw.draw(batch, Gallery.cardBase.get(), position.x, baseHeight);
+		if(card.consumable) Draw.draw(batch, Gallery.cardBaseConsumable.get(), position.x, baseHeight);
+		else Draw.draw(batch, Gallery.cardBase.get(), position.x, baseHeight);
 
 
 		//Augment colouring//
@@ -239,12 +240,12 @@ public class CardGraphic extends Mouser {
 		}
 
 		if(moused&&Screen.isActiveType(PreBattle.class)){
-			batch.setColor(Colours.light);
+			batch.setColor(Colours.genCols5[1]);
 			Draw.draw(batch, Gallery.cardOutline.get(), position.x, baseHeight);
 			batch.setColor(1,1,1,1);
 		}
 		if(card.addToDeck){
-			batch.setColor(Colours.compCols6[2]);
+			batch.setColor(Colours.light);
 			Draw.draw(batch, Gallery.cardOutline.get(), position.x, baseHeight);
 			batch.setColor(1,1,1,1);
 		}

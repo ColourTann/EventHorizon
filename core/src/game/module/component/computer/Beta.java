@@ -18,7 +18,7 @@ public class Beta extends Computer{
 		effect[1]=0;
 		rules[1]="Get a card from any module";
 		code[1].add(Special.ModuleChooser);
-		code[1].add(Special.GetCardFromChosenModule);
+		code[1].add(Special.GetCardFromChosenModule, 1);
 		code[1].add(Special.DiscardWhenChosen);
 		code[1].add(AI.Ignore);
 		

@@ -56,7 +56,7 @@ public class Card {
 	public boolean[] augmented=new boolean[]{false, false};
 	public boolean active;
 	public boolean addToDeck;
-
+	private int effectItHad;
 
 	//Setting up card//
 	public Card(Module m){
@@ -112,19 +112,15 @@ public class Card {
 			baseCooldown[i]=mod.getCooldown(i*specialSide);
 			rules[i]=mod.getRules(i*specialSide);
 			code[i]=mod.getCode(i*specialSide);
+			shots[i]=mod.getShots(i*specialSide);	
 		}
-		if(type== ModuleType.WEAPON){
-			for(int i=0;i<2;i++){
-				shots[i]=mod.getShots(i*specialSide);	
-			}
-		}
+				
 		type=mod.cardType;
 	}
 
 	//Checking whose card clicked on//
 	public void click(){
 		if(getShip().player){
-			System.out.println("is player card");
 			playerClick();
 		}
 	}
@@ -265,6 +261,10 @@ public class Card {
 
 		ship.drawCard(code.getAmount(Special.DrawCard));
 		ship.addEnergy(code.getAmount(Special.GainEnergy), false);
+		if(code.contains(Special.RemoveEnemyEnergy)){
+			effectItHad=Math.min(ship.getEnemy().getEnergy(), code.getAmount(Special.RemoveEnemyEnergy));
+			ship.getEnemy().addEnergy(-effectItHad, false);
+		}
 		ship.addToEnergyAtEndOfPhase(code.getAmount(Special.EnergyIfEmpty));
 
 
@@ -445,7 +445,6 @@ public class Card {
 
 			for(int i=0;i<getShots();i++){
 				ship.addAttack(this, target);
-				//TODO attacks from single cards
 			}
 		}
 
@@ -530,6 +529,10 @@ public class Card {
 
 		ship.addIncome(-code.getAmount(Special.EnergyIncome));
 		ship.addEnergy(-code.getAmount(Special.GainEnergy), false);
+		if(code.contains(Special.RemoveEnemyEnergy)){
+			ship.getEnemy().addEnergy(effectItHad, false);	
+		}
+
 
 		//Clearing shields//
 		if(type==ModuleType.SHIELD)ship.unShield(this);
@@ -544,7 +547,6 @@ public class Card {
 			if(getShots()>0){
 				ship.removeAttack(this);
 			}
-			//TODO single attacks
 		}
 
 		//Getting resources back
@@ -555,14 +557,14 @@ public class Card {
 
 		//deselecting modchoose stuff//
 		if(code.contains(Special.ModuleChooser)){
-			
+
 			if(code.contains(Special.ImmuneChosenModule)){
 				chosenModule.immune=false;
 			}
-			
-			
+
+
 		}
-		
+
 		if(playSound)Sounds.cardDeselect.play();
 	}
 
@@ -580,12 +582,14 @@ public class Card {
 		if(((getCode().contains(Special.DiscardWhenPlayed)||getCode().contains(Special.Augment))&&getShip().player))
 			return;
 
-		if(getCode().contains(Special.DestroyEnemyShield)){
+		if(code.contains(Special.DestroyEnemyShield)){
 			Component enemyShield=getShip().getEnemy().getShield();
 			for(int i=0;i<enemyShield.maxHP;i++){
 				enemyShield.damage(new DamagePoint(this));
 			}
 		}
+
+		if(code.contains(Special.ResetCycle)) CycleButton.resetCost();
 
 	}
 
@@ -828,7 +832,6 @@ public class Card {
 	public void flip(){side=1-side;}
 	public Ship getShip(){
 		return mod.ship;
-		//TODO - single cards	
 	}
 
 
@@ -870,15 +873,16 @@ public class Card {
 
 	public int getShots(){return getShots(side);}
 	public int getShots(int pick){
+		if(shots[pick]==0)return 0;
+		
+		int numShots = shots[pick]+bonusShots+mod.getBuffAmount(BuffType.BonusShot);
 
-		if(type==ModuleType.WEAPON){
-			//TODO - single card
-			int effect=mod.getShots(pick*specialSide)+bonusShots;
-			if(active)effect+=mod.ship.getBonusShots(this, pick, effect);
-			return effect;
-		}
-		return 0;
+
+		if(active)numShots+=mod.ship.getBonusShots(this, pick, numShots);
+		return numShots;
 	}
+
+
 
 	public boolean hasSpecial(Special test){return code[side].contains(test);}
 	public boolean hasSpecial(Special test, int pick){return code[pick].contains(test);}

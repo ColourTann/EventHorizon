@@ -15,11 +15,11 @@ public class MaxDamage extends Utility{
 		cost[0]=1;
 		cooldown[0]=0;
 		effect[0]=0;
-		rules[0]="Augment weapon card: +2 damage";
+		rules[0]="Augment weapon card: +"+calc(1,1)+" damage";
 		cardPic[0]=Gallery.armour;
 		code[0].add(Special.Augment);
 		code[0].add(Augment.AugmentWeapon);
-		code[0].add(Augment.AugmentDamage, 2);
+		code[0].add(Augment.AugmentDamage, calc(1,1));
 		
 		name[1]="Fetch";
 		cost[1]=0;

@@ -7,7 +7,7 @@ public class CardCode {
 		//General Specials//
 		DrawCard, IncreaseEffect, DiscardWhenPlayed, Augment, ReduceCost, GainEnergy, EnergyIfEmpty, MustBeMajorDamaged,
 		ModuleChooser, PermanentIncreaseEffect, EnergyIncome, SelfScramble, DiscardWhenChosen, BonusVsGenerator, BonusVsComputer,
-		GetCardFromChosenModule, RepairChosenModule, DiscardOthers, ChooseWeapon,
+		GetCardFromChosenModule, RepairChosenModule, DiscardOthers, ChooseWeapon, RemoveEnemyEnergy,
 		
 		//Tutorial junk//
 		BonusVsModule0, BonusVsModule1,
@@ -17,7 +17,7 @@ public class CardCode {
 
 		//Shield Specials//
 		AddShieldPoints, ShieldAll, ShieldComputer, AbsorbDraw, ShieldOnlyDamaged, selfDamage, AbsorbEnergy, MustBeUndamaged,
-		ShieldWeapons, ShieldGenerator, ShieldChosenModule, ShieldShield, DestroyEnemyShield, ImmuneChosenModule, 
+		ShieldWeapons, ShieldGenerator, ShieldChosenModule, ShieldShield, DestroyEnemyShield, ImmuneChosenModule, ResetCycle, 
 	};
 
 	public enum AI{

@@ -12,7 +12,7 @@ public class RapidFire extends Utility{
 		super(tier, ModuleType.WEAPON, "Rapid Fire", "Weapons firing 3+ shots get 1 bonus shot", Gallery.blaster, 1, 1);
 		
 		name[0]="Duplicate";
-		cost[0]=0;
+		cost[0]=2;
 		cooldown[0]=0;
 		effect[0]=0;
 		rules[0]="Augment weapon card: +1 shot";

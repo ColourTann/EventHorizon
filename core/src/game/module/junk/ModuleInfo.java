@@ -148,14 +148,15 @@ public class ModuleInfo extends Mouser{
 		
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		String s=mod.moduleName;
-		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+17);
+		Font.drawFontCentered(batch, s, Font.small, position.x+CardGraphic.width/2, position.y+25);
+		//Font.small.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+17);
 		s="Cards:";
-		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+70);
+		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+60);
 		s=""+mod.numCards;
 		if(mod.ship!=null&&mod.numCards>0){
 			s+="/"+mod.ship.getTotalDeckSize();
 		}
-		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+95);
+		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+85);
 
 		if(mod instanceof Armour){
 			

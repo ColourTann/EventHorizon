@@ -29,11 +29,11 @@ public class Repeller extends Shield{
 		code[1].add(Special.ShieldGenerator);
 		code[1].add(AI.IncomingGenerator,1);
 		
-		name[2]="Phase";
+		name[2]="Kinetic Field";
 		cost[2]=1;
 		cooldown[2]=0;
 		effect[2]=calc(4);
-		rules[2]="Shields your shield system for "+calc(4);
+		rules[2]="Shields your shield system";
 		code[2].add(Special.ShieldShield);
 		code[2].add(AI.TotalIncomingThis,calc(2));
 		code[2].setPriority(1);

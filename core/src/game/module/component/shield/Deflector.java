@@ -47,7 +47,7 @@ public class Deflector extends Shield{
 		code[3].add(Special.AbsorbDraw,1);
 		code[3].add(AI.IncomingComputer,1);
 		
-		name[4]="Flux field";
+		name[4]="Flux Field";
 		cost[4]=1;
 		cooldown[4]=0;
 		effect[4]=calc(2);

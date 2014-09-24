@@ -135,7 +135,7 @@ public abstract class Component extends Module{
 						Sounds.error.play();
 						return;
 					}
-					else ship.drawCard(getNextCard());
+					else for (int i=0;i< code.getAmount(Special.GetCardFromChosenModule);i++) ship.drawCard(getNextCard());
 				}
 				if(code.contains(Special.ImmuneChosenModule))immune=true;
 				for(int i=0;i<Battle.moduleChooser.getEffect();i++)shield(new ShieldPoint(Battle.moduleChooser, i==0), false);

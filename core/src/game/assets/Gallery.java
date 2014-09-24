@@ -30,6 +30,7 @@ public class Gallery {
 	
 	//CARD STUFF//
 	public static Pic cardBase=new Pic("Interface/cardbase");
+	public static Pic cardBaseConsumable=new Pic("Interface/cardbaseconsumable");
 	public static Pic cardOutline=new Pic("Interface/cardoutline");
 	public static Pic iconEnergy=new Pic("Icon/energy");
 	public static Pic iconCooldown=new Pic("Icon/cooldown");
@@ -77,6 +78,21 @@ public class Gallery {
 	//Armour//
 	
 	public static Pic repair=new Pic("Module/Utility/Armour/repair");
+	
+	//Consumables//
+	
+	public static Pic phase= new Pic("ConsumableCard/phase");
+	public static Pic flow= new Pic("ConsumableCard/flow");
+	public static Pic inverseSort= new Pic("ConsumableCard/inversesort");
+	public static Pic radialSort= new Pic("ConsumableCard/radialsort");
+	public static Pic consume= new Pic("ConsumableCard/consume");
+	public static Pic ignite= new Pic("ConsumableCard/ignite");
+	public static Pic refresh= new Pic("ConsumableCard/refresh");
+	public static Pic kindle= new Pic("ConsumableCard/kindle");
+	public static Pic swarm= new Pic("ConsumableCard/swarm");
+	public static Pic replicate= new Pic("ConsumableCard/replicate");
+	public static Pic bomb= new Pic("ConsumableCard/bomb");
+	public static Pic magnify= new Pic("ConsumableCard/magnify");
 	
 	//MOD STAT STUFF//
 	public static Pic baseModuleStats= new Pic("Interface/basestats");
