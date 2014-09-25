@@ -235,6 +235,7 @@ public class Battle extends Screen{
 		if(!isPlayerTurn())return;
 		if(getState()!=State.Nothing)return;
 		if(getPlayer().hasSpendableShields())return;
+		
 		getPlayer().playCards();
 
 		if(getPhase()==Phase.ShieldPhase){

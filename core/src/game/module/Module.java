@@ -48,7 +48,7 @@ public abstract class Module {
 	public int tier=-5;
 	public boolean destroyed;
 
-	
+
 
 
 
@@ -90,7 +90,7 @@ public abstract class Module {
 		}
 		return getCard(getNextCardSide());
 	}
-	
+
 	public Card makeCard(){
 		return new Card(this);
 	}
@@ -169,6 +169,13 @@ public abstract class Module {
 		return (int) base;
 	}
 
+	public static int statiCalc(int cost, int extraCost, int tier){
+		double base = ((1+cost)*(tier/2d+1));
+		base+=(extraCost*(tier/2d+1))/2d;
+		return (int)base;
+	}
+
+
 	public String toString(){
 		if(this instanceof SpecialComponent)return "Special Component";
 		return name[0];
@@ -179,12 +186,12 @@ public abstract class Module {
 			return new Pair(
 					ShipGraphic.offset.x+ShipGraphic.width/2,
 					ShipGraphic.offset.y+ShipGraphic.height/2);
-			}
-			else{
-				return new Pair(
-						500+Main.width-ShipGraphic.offset.x-ShipGraphic.width/2,
-						ShipGraphic.offset.y+ShipGraphic.height/2);
-			}
+		}
+		else{
+			return new Pair(
+					500+Main.width-ShipGraphic.offset.x-ShipGraphic.width/2,
+					ShipGraphic.offset.y+ShipGraphic.height/2);
+		}
 	}
 
 	public int getBuffAmount(BuffType check) {

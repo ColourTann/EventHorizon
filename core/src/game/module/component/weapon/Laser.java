@@ -29,7 +29,7 @@ public class Laser extends Weapon{
 		code[1].add(Special.Unshieldable);
 		code[1].add(AI.OtherCardsThisSystem,1);
 		
-		name[2]="Overheat";
+		name[2]="Incinerate";
 		cost[2]=6;
 		cooldown[2]=1;
 		effect[2]=calc(2,4);

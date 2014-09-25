@@ -6,12 +6,12 @@ import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
 
-public class Cardifier extends Utility{
+public class AuxiliaryDrive extends Utility{
 
-	public Cardifier(int tier) {
-		super(tier, ModuleType.UTILITY,"Cardifier", "+1 card next turn if you use all cards", Gallery.blaster, 1, 1);
+	public AuxiliaryDrive(int tier) {
+		super(tier, ModuleType.UTILITY,"Auxiliary Drive", "-1 hand size, +2 cards next turn if you use all cards", Gallery.blaster, 1, 1);
 		
-		name[0]="DrawTwo";
+		name[0]="Crunch";
 		cost[0]=0;
 		cooldown[0]=0;
 		effect[0]=0;
@@ -22,7 +22,7 @@ public class Cardifier extends Utility{
 		code[0].setPriority(2);
 		
 		
-		name[1]="Flurble";
+		name[1]="Store";
 		cost[1]=0;
 		cooldown[1]=0;
 		effect[1]=0;
@@ -34,10 +34,13 @@ public class Cardifier extends Utility{
 		code[1].add(Augment.AugmentAddBonusHandSize, 2);
 		code[1].add(AI.Ignore);
 		
+		cardType=ModuleType.UTILITY;
+		
 	}
 
 	@Override
 	public void startBattleEffect() {
+		ship.getComputer().addBonusCards(-1);
 	}
 
 	@Override
@@ -46,10 +49,12 @@ public class Cardifier extends Utility{
 
 	@Override
 	public void endTurnEffect() {
+		ship.getComputer().addBonusCards(-1);
+		if(ship.hand.size()==0)ship.getComputer().addBonusCards(2);
 	}
 
 	@Override
-	public void playCard(Card c) {
+	public void playCardEffect(Card c) {
 	}
 
 	@Override
@@ -64,5 +69,15 @@ public class Cardifier extends Utility{
 	@Override
 	public int getBonusShots(Card c, int baseShots) {
 		return 0;
+	}
+
+	@Override
+	public int getBonusCost(Card c, int baseCost) {
+		return 0;
+	}
+
+	@Override
+	public boolean overrideDefeat() {
+		return false;
 	}
 }

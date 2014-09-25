@@ -39,11 +39,11 @@ public class Repulsor extends Shield{
 		code[2].add(Special.PermanentIncreaseEffect, calc(0));
 		
 			
-		name[3]="Overcycle";
+		name[3]="Overheat";
 		cost[3]=2;
-		cooldown[3]=1;
+		cooldown[3]=4;
 		effect[3]=calc(6);
-		rules[3]="Triple scrambles this system";
+		rules[3]="Warning: High cooldown";
 		code[3].add(Special.SelfScramble,3);
 		code[3].add(Special.AddShieldPoints);
 		code[3].add(AI.RegularShield);

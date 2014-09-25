@@ -2,21 +2,26 @@ package game.module.utility.armour;
 
 import game.assets.Gallery;
 import game.card.Card;
+import util.image.Pic;
 
-public class BasicArmour extends Armour{
+public class ChargedHull extends Armour{
 
-	public BasicArmour(int tier) {
-		super(1+tier*.25f,tier, "Plating", "Basic Armour", Gallery.basicArmour, 0, 0);
+	public ChargedHull(int tier){
+		super(.8f+tier*.25f,tier, "Charged hull", "Start each battle with +3 energy", Gallery.auroraComputer, 0, 0);
+	}
+
+	@Override
+	public void onTakeMajorDamage() {
 	}
 
 	@Override
 	public void startBattleEffect() {
-
+		System.out.println("adding energy");
+		ship.addEnergy(3, true);
 	}
 
 	@Override
 	public void beginTurnEffect() {
-
 	}
 
 	@Override
@@ -25,10 +30,6 @@ public class BasicArmour extends Armour{
 
 	@Override
 	public void playCardEffect(Card c) {
-	}
-
-	@Override
-	public void afterBattle() {
 	}
 
 	@Override
@@ -52,7 +53,7 @@ public class BasicArmour extends Armour{
 	}
 
 	@Override
-	public void onTakeMajorDamage() {
+	public void afterBattle() {
 	}
 
 }

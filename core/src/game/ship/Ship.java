@@ -36,13 +36,19 @@ import game.module.component.shield.Shield;
 import game.module.component.weapon.Weapon;
 import game.module.junk.ShieldPoint;
 import game.module.junk.Buff.BuffType;
-import game.module.utility.Cardifier;
-import game.module.utility.FluxAlternator;
-import game.module.utility.MaxDamage;
-import game.module.utility.RapidFire;
+import game.module.utility.AuxiliaryDrive;
+import game.module.utility.Furnace;
+import game.module.utility.Scrambler;
+import game.module.utility.ArcSocket;
+import game.module.utility.PhaseArray;
+import game.module.utility.Repeater;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
 import game.module.utility.armour.BasicArmour;
+import game.module.utility.armour.ChargedHull;
+import game.module.utility.armour.CrystalLattice;
+import game.module.utility.armour.GalvanicSkin;
+import game.module.utility.armour.ShockbackHull;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.interfaceJunk.FightStats;
@@ -68,7 +74,7 @@ public abstract class Ship {
 	public Niche[] niches= new Niche[5]; 
 	public Component[] components= new Component[5];
 	private Armour armour;
-	private Utility[] utilities=new Utility[2];
+	private Utility[] utilities=new Utility[3];
 
 	public ArrayList<Card> deck = new ArrayList<Card>();
 	public ArrayList<Card> hand = new ArrayList<Card>();
@@ -108,15 +114,15 @@ public abstract class Ship {
 		placeNiches();
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
-		setArmour(new BasicArmour(0));
-		setUtility(new RapidFire(0), 1);
+		setArmour(new ShockbackHull(0));
+		//setUtility(new Shieldier(0), 1);
 		specialComponent= new SpecialComponent();
 		specialComponent.ship=this;
 
 		for(int i=0;i<6;i++){
 			addConsumableCard(ConsumableCard.get(1));
 		}
-		
+
 	}
 
 
@@ -124,11 +130,13 @@ public abstract class Ship {
 	public void startTurn () {
 		attacks.clear();
 		if(player)drawToMaximum();
-	addEnergy(getIncome(), true);
-
-
+		addEnergy(getIncome(), true);
+		resetMaximumHandSize();
 		for(Utility u:utilities) if(u!=null) u.beginTurnEffect();
 
+	}
+
+	private void resetMaximumHandSize() {
 	}
 
 	public void enemyStartTurn(){	
@@ -148,24 +156,37 @@ public abstract class Ship {
 	private void endTurn(){
 		focusTarget=null;
 		for(Component c:components)c.endAdmin();
-
 		shieldPoints.clear();
+		for(Utility u:utilities){
+			if(u!=null)u.endTurnEffect();
+		}
 	}
 
 	public void checkDefeat(){
-		if(majorDamageTaken>=5&&!dead){
+		if(majorDamageTaken>=5&&!dead&&!overrideDefeat()){
 			Battle.battleWon(getEnemy());
 		}
 	}
 
+	private boolean overrideDefeat() {
+		for(Utility u:utilities) if(u!=null) if(u.overrideDefeat())return true;
+		return false;
+	}
+
 	public void playCards() {
+		lockAttackEffects();
 		for(Card c:playList){
 			hand.remove(c);
 			if(player)c.playerPlay();
+			else c.play();
 
 		}
-		playList.clear();
+		if(player)playList.clear();
 		if(player)updateCardPositions();
+	}
+
+	public void lockAttackEffects(){
+		for(Attack a:attacks)a.lockEffect();
 	}
 
 	public void notifyIncoming(){
@@ -208,7 +229,7 @@ public abstract class Ship {
 	public ArrayList<Attack> getAttacks(){return attacks;}
 
 	public void fireAll() {
-
+		System.out.println(attacks.size());
 		for(Attack atk:attacks){
 			atk.fire();
 		}
@@ -275,9 +296,10 @@ public abstract class Ship {
 	}
 
 	public void enemyEndTurn(){
-		drawToMaximum();
+
 		checkTooManyShields();
 		endTurn();
+		drawToMaximum();
 	}
 
 	//This is to stop abusing the enemy by only playing unshieldable//
@@ -286,9 +308,8 @@ public abstract class Ship {
 		for(Card c:hand){
 			if(c.mod.type==ModuleType.SHIELD)shields++;
 		}
-		if(shields>=hand.size()-1){
+		if(shields>=hand.size()-1&&hand.size()==getComputer().getMaximumHandSize()){
 			discardHand();
-			drawToMaximum();
 		}
 
 	}
@@ -307,7 +328,7 @@ public abstract class Ship {
 		Card c=pickCard(p);
 		int i=0;
 		while(c!=null){
-			c.enemySelectAndPlay();
+			c.enemySelect();
 			if(c.getCode().contains(AI.RegularShield)){
 				enemySpendShields(true);
 				enemySpendShields(false);
@@ -325,10 +346,13 @@ public abstract class Ship {
 		if(i==0){
 			endPhase();
 		}
-		notifyIncoming();
+
 
 		turnTimer=new Timer(1, 0, 1/10f, Interp.LINEAR);
 
+		playCards();
+
+		notifyIncoming();
 	}
 
 
@@ -348,6 +372,7 @@ public abstract class Ship {
 		if(p==Phase.EnemyWeaponPhase||p==Phase.WeaponPhase) shield=false;
 		//First play any scrambled cards//
 		for(Card c:hand){
+			if(c.selected) continue;
 			if(c.mod.getBuffAmount(BuffType.Scrambled)>0){
 				return c;
 			}
@@ -474,6 +499,9 @@ public abstract class Ship {
 	public void drawToMaximum(){
 		if(Battle.isTutorial())return;
 		drawCard(getComputer().getMaximumHandSize()-hand.size());
+		while(hand.size()>getComputer().getMaximumHandSize()){
+			discard(hand.get(hand.size()-1));
+		}
 		getComputer().resetBonusCards();
 	}
 
@@ -489,7 +517,7 @@ public abstract class Ship {
 		card.active=true;
 		card.addToDeck=false;
 		card.getGraphic().activate();
-		
+
 		if(card.specialSide==-1)card.finaliseSide(); //for rigged draws//
 
 		hand.add(card);
@@ -577,7 +605,7 @@ public abstract class Ship {
 				deck.add(c);
 			}
 		}
-		
+
 		for(int i=0;i<0;i++){
 			Card c= new Card(
 					new String[]{"Rocket", "Rocket"},
@@ -599,13 +627,16 @@ public abstract class Ship {
 		deck.clear();
 		initModuleStats();
 		initFightStats();
-		if(!Battle.isTutorial())		drawCard(maxCards); //No leak here!//
 
-		if(!goingFirst){
-			currentEnergy=(int) Math.ceil(getGenerator().getIncome()/2f);
-		}
-		else currentEnergy=getGenerator().getIncome();
+		if(goingFirst)currentEnergy=getGenerator().getIncome();
+		else currentEnergy=(int) Math.ceil(getGenerator().getIncome()/2f);
+
 		for(Utility u:utilities)if(u!=null)u.startBattleEffect();
+
+		if(!Battle.isTutorial()) drawToMaximum();;
+
+
+
 	}
 
 	private void initFightStats() {
@@ -642,6 +673,7 @@ public abstract class Ship {
 	//Setters and getters//
 	public void addToEnergyAtEndOfPhase(int amount){energyAtEndOfPhase+=amount;}
 	public void majorDamage() {
+		if(getArmour()!=null)getArmour().onTakeMajorDamage();
 		Battle.shake(player,3);
 		Sounds.damageMajor.play();
 		majorDamageTaken++;
@@ -656,7 +688,7 @@ public abstract class Ship {
 		}
 		return total;
 	}
-	public Component getRandomUndestroyedModule(){
+	public Component getRandomUndestroyedComponent(){
 		ArrayList<Integer> ints = new ArrayList<Integer>();
 		for(int i=0;i<5;i++){
 			ints.add(i);
@@ -693,12 +725,12 @@ public abstract class Ship {
 					""+(amount>0?"+":"")+amount,
 					Font.big,
 					player?FightStats.playerEnergy.add(30,-20):FightStats.enemyEnergy.add(30,-20),
-					WispType.Regular,
-					Colours.genCols5[3]
+							WispType.Regular,
+							Colours.genCols5[3]
 					));
 		}
 		currentEnergy+=amount;
-		
+
 	}
 	public int getEnergy(){return currentEnergy;}
 	public Weapon[] getWeapons(){return new Weapon[]{(Weapon) components[0],(Weapon) components[1]};}
@@ -740,9 +772,11 @@ public abstract class Ship {
 		niches[4].install(c);
 	}
 	public void setArmour(Armour a){
+		utilities[2]=a;
 		this.armour=a;
 		a.ship=this;
 		recalculateThresholds();
+		
 	}
 
 	public void setUtility(Utility u, int position){
@@ -797,9 +831,9 @@ public abstract class Ship {
 	}
 
 	public void recalculateThresholds() {
+		doubleHP=false;
 		for(Component c:components){
 			if(c.getMaxHP()>18){
-				System.out.println("double");
 				doubleHP=true;
 			}
 		}
@@ -825,7 +859,6 @@ public abstract class Ship {
 			if(u!=null)bonus+=u.getBonusEffect(c, effect);
 
 		}
-		if(bonus>0)c.augmented[side]=true;
 		return bonus;
 	}
 
@@ -834,7 +867,6 @@ public abstract class Ship {
 		for(Utility u:utilities){
 			if(u!=null)bonus+=u.getBonusShots(c, effect);
 		}
-		if(bonus>0)c.augmented[side]=true;
 		return bonus;
 	}
 
@@ -947,14 +979,21 @@ public abstract class Ship {
 	private void setupConsumableCard(Card c){
 		c.mod=getSpecialComponent();
 	}
-	
+
 	public void addConsumableCard(Card c){
 		setupConsumableCard(c);
 		consumableStore.add(c);
 	}
-	
+
 	public ArrayList<Card> getConsumables(){
 		return consumableStore;
+	}
+
+	public boolean preventScramble(){
+		for(Utility u:utilities){
+			if(u instanceof Scrambler)return true;
+		}
+		return false;
 	}
 
 }

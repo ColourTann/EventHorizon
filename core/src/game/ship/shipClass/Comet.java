@@ -45,8 +45,8 @@ public class Comet extends Ship{
 		niches[3].setup(generator);
 		niches[4].setup(computer);
 
-		//setWeapon(new Ray(0), 0);
-		setWeapon(new Swift(0), 0);
+		setWeapon(new Ray(0), 0);
+		//setWeapon(new Swift(0), 0);
 		setWeapon(new Tesla(0), 1);
 		setShield(new Deflector(0));
 		setGenerator(new Four());

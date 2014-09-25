@@ -7,30 +7,32 @@ public class CardCode {
 		//General Specials//
 		DrawCard, IncreaseEffect, DiscardWhenPlayed, Augment, ReduceCost, GainEnergy, EnergyIfEmpty, MustBeMajorDamaged,
 		ModuleChooser, PermanentIncreaseEffect, EnergyIncome, SelfScramble, DiscardWhenChosen, BonusVsGenerator, BonusVsComputer,
-		GetCardFromChosenModule, RepairChosenModule, DiscardOthers, ChooseWeapon, RemoveEnemyEnergy,
+		GetCardFromChosenModule, DiscardOthers, ChooseWeapon, RemoveEnemyEnergy, ChooseEnemyModule,  
+		ScrambleChosenModule,  BonusEffectToShield,
 		
 		//Tutorial junk//
 		BonusVsModule0, BonusVsModule1,
 
 		//Weapon Specials//
-		Targeted, Unshieldable, MakeVulnerable, BonusVsWeapon, BonusVsPristine, BonusVsMajorDamaged, BonusShots,
+		Targeted, Unshieldable, MakeVulnerable, BonusVsWeapon, BonusVsPristine, BonusVsMajorDamaged, BonusShots, BonusEffectPerOtherWeapon,
 
 		//Shield Specials//
 		AddShieldPoints, ShieldAll, ShieldComputer, AbsorbDraw, ShieldOnlyDamaged, selfDamage, AbsorbEnergy, MustBeUndamaged,
 		ShieldWeapons, ShieldGenerator, ShieldChosenModule, ShieldShield, DestroyEnemyShield, ImmuneChosenModule, ResetCycle, 
+		BonusPerMajorDamage,
 	};
 
 	public enum AI{
 		//General AI
 		Ignore, CheckOriginalFirst, LowEnergy, SurplusEnergy, OtherCardsThisSystem, LowChance, EvenChance, HighChance, ReduceCost, 
-		DamageSelf, OtherUntargeted, Singleton, DamagedModules, OverrideIfOtherSideIgnore,
+		DamageSelf, OtherUntargeted, Singleton, DamagedModules, OverrideIfOtherSideIgnore, WeaponCards,
 
 		//Weapon AI
 		PlayerPristineSystems, BetterAgainstSpecificSystem, MajorDamagedEnemySystems,
 
 		//Shield AI
 		RegularShield, OtherTargeted, IncomingComputer, IncomingOnMajorDamaged, IncomingAll, TotalIncoming, IncomingGenerator,
-		TotalIncomingThis, IncomingWeapons, ShieldAll, SingleModuleIncoming,  
+		TotalIncomingThis, IncomingWeapons, ShieldAll, SingleModuleIncoming, 
 	};
 
 	public enum Augment{

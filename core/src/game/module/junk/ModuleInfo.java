@@ -35,6 +35,7 @@ public class ModuleInfo extends Mouser{
 	public ArrayList<CardGraphic> graphics = new ArrayList<CardGraphic>();
 	public boolean noDrawCards;
 	public static ModuleInfo top;
+	float offset=2;
 	public ModuleInfo(Module m) {
 		mod=m;
 		width=CardGraphic.width*2-2;
@@ -148,20 +149,22 @@ public class ModuleInfo extends Mouser{
 		
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		String s=mod.moduleName;
-		Font.drawFontCentered(batch, s, Font.small, position.x+CardGraphic.width/2, position.y+25);
+		float nameHeight=Font.medium.getWrappedBounds(s, CardGraphic.width-offset*2).height;
+		Font.medium.drawWrapped(batch, s, position.x+offset, position.y+25-nameHeight/2, CardGraphic.width-offset*2, HAlignment.CENTER);
+		//Font.drawFontCentered(batch, s, Font.medium, position.x+CardGraphic.width/2, position.y+25);
 		//Font.small.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+17);
 		s="Cards:";
-		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+60);
+		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+80);
 		s=""+mod.numCards;
 		if(mod.ship!=null&&mod.numCards>0){
 			s+="/"+mod.ship.getTotalDeckSize();
 		}
-		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+85);
+		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+100);
 
 		if(mod instanceof Armour){
 			
 			s="HP multiplier "+((Armour)mod).multiplier;
-			Font.small.drawWrapped(batch, s, position.x, position.y+50, CardGraphic.width, HAlignment.CENTER);
+			Font.small.drawWrapped(batch, s, position.x, position.y+50+nameHeight/2, CardGraphic.width, HAlignment.CENTER);
 		}
 
 		if(mod.type==ModuleType.GENERATOR){
@@ -182,13 +185,14 @@ public class ModuleInfo extends Mouser{
 		}
 		if(mod instanceof Utility){
 			String passive=((Utility)mod).passive;
-			float offset=2;
+			
 			Font.medium.setColor(Colours.withAlpha(Colours.player2[0],alpha));
-			Font.medium.drawWrapped(batch, passive, position.x+offset, position.y+CardGraphic.height/2+offset+7, CardGraphic.width-offset*2, HAlignment.CENTER);
+			float fHeight=Font.medium.getWrappedBounds(passive, CardGraphic.width-offset*2).height;
+			Font.medium.drawWrapped(batch, passive, position.x+offset, position.y+CardGraphic.height*3/4-fHeight/2-7, CardGraphic.width-offset*2, HAlignment.CENTER);
 		}
 	
 		String words=mod.type+(mod.tier==-1?"":" Tier "+mod.tier);
-		Font.drawFontCentered(batch, words, Font.small, position.x+CardGraphic.width/2, position.y+42);
+		Font.drawFontCentered(batch, words, Font.small, position.x+CardGraphic.width/2, position.y+42+nameHeight/2);
 		//Font.medium.drawWrapped(batch, s, width/4, 20, 500, HAlignment.CENTER);
 		if(alpha>0){
 			for(CardGraphic cg:graphics){

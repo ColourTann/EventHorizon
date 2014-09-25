@@ -26,6 +26,7 @@ public class Attack {
 	public int order;
 	public int damage;
 	public boolean unshieldable;
+	int lockedEffect;
 	public Attack(Card c){
 		this.card=c;
 		this.mod=c.mod;
@@ -39,6 +40,11 @@ public class Attack {
 		
 		atkgrphc.atk=this;
 	}
+	
+	public void lockEffect(){
+		lockedEffect=card.getEffect();
+	}
+	
 	public Attack(Card c, Component target){
 		this(c);
 		this.target=target;
@@ -58,10 +64,10 @@ public class Attack {
 		activated=true;
 		
 		CardCode code=card.getCode();
-		int effect=card.getEffect();
+		int effect=lockedEffect;
 		
 		//Choosing target if not targeted//
-		if(target==null)target = mod.ship.getEnemy().getRandomUndestroyedModule();
+		if(target==null)target = mod.ship.getEnemy().getRandomUndestroyedComponent();
 
 		
 		effect+=target.getBuffAmount(BuffType.TakesExtraDamage);

@@ -17,12 +17,12 @@ import game.module.component.weapon.Tesla;
 import game.module.component.weapon.Weapon;
 import game.module.junk.ModuleInfo;
 import game.module.junk.ModuleStats;
-import game.module.utility.FluxAlternator;
+import game.module.utility.Furnace;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
 import game.module.utility.armour.BasicArmour;
-import game.module.utility.armour.RegenArmour;
-import game.module.utility.armour.ShieldArmour;
+import game.module.utility.armour.OrganicShell;
+import game.module.utility.armour.GalvanicSkin;
 import game.screen.battle.interfaceJunk.HelpPanel;
 import game.screen.customise.Reward.RewardType;
 import game.ship.Ship;
@@ -67,7 +67,6 @@ public class Customise extends Screen{
 
 	@Override
 	public void init() {
-		System.out.println("initting");
 		resetModuleStats();
 		addRewards(1);
 		slots.add(new Slot(new Pair(170, 100), 2));
@@ -76,7 +75,6 @@ public class Customise extends Screen{
 		setPanel(PanelType.Choose);
 		retimeMeter(ship.getStats().energyUsage);
 		consumables=new ConsumableContainer();
-		System.out.println("finished initting");
 	}
 
 	public enum PanelType{Choose, Install, Add, None}; 
@@ -188,6 +186,7 @@ public class Customise extends Screen{
 	}
 
 	public static void unMouse(Module module){
+		if(me.infoBox==null)return;
 		if(me.infoBox.mod==module||module==null){
 			me.oldInfoBox=me.infoBox;
 			me.oldInfoBox.fadeOut(fadeOutSpeed, Interp.LINEAR);

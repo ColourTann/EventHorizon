@@ -14,7 +14,7 @@ public class Ray extends Weapon{
 		name[0]="Ray";
 		cost[0]=1;
 		cooldown[0]=0;
-		effect[0]=calc(1);
+		effect[0]=calc(1)+5;
 		shots[0]=1;
 		rules[0]="";
 		

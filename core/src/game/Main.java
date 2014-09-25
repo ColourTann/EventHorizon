@@ -94,15 +94,16 @@ public static float ticks;
 		
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-		//select=new Selector();currentScreen=select;select.init();
+		select=new Selector();currentScreen=select;select.init();
 
-		currentScreen=new PreBattle(new Comet(true), new Comet(false)); currentScreen.init();
+		//currentScreen=new PreBattle(new Comet(true), new Comet(false)); currentScreen.init();
 		
 		//viewer=new CardViewer();currentScreen=viewer;
 
 		//map=new Map();currentScreen=map;
 
 		//currentScreen=new Test();
+
 	}	
 
 

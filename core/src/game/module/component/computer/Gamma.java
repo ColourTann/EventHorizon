@@ -20,6 +20,7 @@ public class Gamma extends Computer{
 		rules[1]="Augment all cards in hand: targeted";
 		code[1].add(Special.DiscardWhenPlayed);
 		code[1].add(Augment.AugmentAll);
+		code[1].add(Augment.AugmentWeapon);
 		code[1].add(Augment.AugmentTargeted);
 		code[1].add(AI.OtherUntargeted, 3);
 		code[1].add(AI.Singleton);

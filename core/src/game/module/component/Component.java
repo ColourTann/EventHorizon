@@ -28,6 +28,7 @@ import game.module.junk.DamagePoint;
 import game.module.junk.ModuleStats;
 import game.module.junk.ShieldPoint;
 import game.module.junk.Buff.BuffType;
+import game.module.utility.Utility;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.State;
 import game.ship.ShipGraphic;
@@ -121,30 +122,45 @@ public abstract class Component extends Module{
 	public void clicked(){
 		//CLICKED ON PLAYER MODULE//
 		if(destroyed)return;
-		if(ship.player){
 
-			if(Battle.getState()==State.ModuleChoose){
-				CardCode code= Battle.moduleChooser.getCode();
-
-				if(code.contains(Special.ChooseWeapon)&&type!=ModuleType.WEAPON){
-					Sounds.error.play();
-					return;
-				}
-				if(code.contains(Special.GetCardFromChosenModule)){
-					if(this==Battle.moduleChooser.mod){
-						Sounds.error.play();
-						return;
-					}
-					else for (int i=0;i< code.getAmount(Special.GetCardFromChosenModule);i++) ship.drawCard(getNextCard());
-				}
-				if(code.contains(Special.ImmuneChosenModule))immune=true;
-				for(int i=0;i<Battle.moduleChooser.getEffect();i++)shield(new ShieldPoint(Battle.moduleChooser, i==0), false);
-
-				Battle.moduleChooser.moduleChosen(this);
+		
+		if(Battle.getState()==State.ModuleChoose){
+			CardCode code=Battle.moduleChooser.getCode();
+			if(ship.player==code.contains(Special.ChooseEnemyModule)){
+				Sounds.error.play();
 				return;
 			}
 
 
+			if(code.contains(Special.ChooseWeapon)&&type!=ModuleType.WEAPON){
+
+				return;
+			}
+			if(code.contains(Special.GetCardFromChosenModule)){
+				if(this==Battle.moduleChooser.mod){
+					Sounds.error.play();
+					return;
+				}
+				else for (int i=0;i< code.getAmount(Special.GetCardFromChosenModule);i++) ship.drawCard(getNextCard());
+			}
+			if(code.contains(Special.ImmuneChosenModule))immune=true;
+			for(int i=0;i<code.getAmount(Special.ScrambleChosenModule); i++)scramble();
+
+			for(int i=0;i<Battle.moduleChooser.getEffect();i++)shield(new ShieldPoint(Battle.moduleChooser, i==0), false);
+
+			Battle.moduleChooser.moduleChosen(this);
+			return;
+		}
+
+
+
+
+
+
+
+		//shielding
+
+		if(ship.player){
 			if(ship.shieldPoints.size()>0&&getShieldableIncoming()>0){
 				for(ShieldPoint p: ship.shieldPoints){
 					if(shield(ship.shieldPoints.get(0),true)){
@@ -158,7 +174,7 @@ public abstract class Component extends Module{
 
 		}
 
-		//CLICKED ON ENEMY MODULE//
+		//Targeting ENEMY MODULE//
 
 		if(!ship.player){
 			if(Battle.getState()==State.Targeting){
@@ -210,7 +226,7 @@ public abstract class Component extends Module{
 			destroy();
 			return;
 		}
-		new TextWisp("Scrambled", Font.medium, getCenter().add(new Pair(0,-40)), WispType.Regular); 
+		
 		scramble();
 		for(int i=0;i<1;i++)ship.getGraphic().damage(niche.location);
 		for(int i=0;i<3;i++) ship.getGraphic().addExplosion(getCenter());
@@ -237,7 +253,7 @@ public abstract class Component extends Module{
 		ship.getGraphic().drawMap(false);
 	}
 
-	
+
 
 	public void calculateDamage(int damage, boolean unshieldable) {
 		if(unshieldable){
@@ -417,7 +433,12 @@ public abstract class Component extends Module{
 	}
 
 	public void scramble(){
+		if(ship.preventScramble()){
+			new TextWisp("Immune", Font.medium, getCenter().add(new Pair(ship.player?0:-500,-40)), WispType.Regular); 
+			return;
+		}
 		buffs.add(new Buff(BuffType.Scrambled, 1, null, true));
+		new TextWisp("Scrambled", Font.medium, getCenter().add(new Pair(ship.player?0:-500,-40)), WispType.Regular); 
 	}
 
 	public void addBuff(Buff b){

@@ -2,21 +2,28 @@ package game.module.utility.armour;
 
 import game.assets.Gallery;
 import game.card.Card;
+import game.card.CardCode.AI;
+import game.card.CardCode.Augment;
+import game.card.CardCode.Special;
+import game.module.component.Component;
+import game.module.junk.ShieldPoint;
 
-public class BasicArmour extends Armour{
+public class GalvanicSkin extends Armour{
 
-	public BasicArmour(int tier) {
-		super(1+tier*.25f,tier, "Plating", "Basic Armour", Gallery.basicArmour, 0, 0);
+	public GalvanicSkin(int tier) {
+		super(.7f+tier*.15f, tier, "Galvanic Skin", "Shield all systems for "+statiCalc(0,0,tier) +" every turn", Gallery.auroraComputer, 0, 0);
+	
 	}
 
 	@Override
 	public void startBattleEffect() {
-
 	}
 
 	@Override
 	public void beginTurnEffect() {
-
+		for(Component c:ship.components){
+			for(int i=0;i<calc(0);i++)c.shield(new ShieldPoint(null, false), false);
+		}
 	}
 
 	@Override

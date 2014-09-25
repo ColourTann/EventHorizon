@@ -2,21 +2,20 @@ package game.module.utility.armour;
 
 import game.assets.Gallery;
 import game.card.Card;
+import util.image.Pic;
 
-public class BasicArmour extends Armour{
+public class CrystalLattice extends Armour{
 
-	public BasicArmour(int tier) {
-		super(1+tier*.25f,tier, "Plating", "Basic Armour", Gallery.basicArmour, 0, 0);
+	public CrystalLattice(int tier){
+		super(.95f+tier*.25f,tier, "Crystal Lattice", "6 major damage required to destroy", Gallery.auroraComputer, 0, 0);
 	}
 
 	@Override
 	public void startBattleEffect() {
-
 	}
 
 	@Override
 	public void beginTurnEffect() {
-
 	}
 
 	@Override
@@ -25,10 +24,6 @@ public class BasicArmour extends Armour{
 
 	@Override
 	public void playCardEffect(Card c) {
-	}
-
-	@Override
-	public void afterBattle() {
 	}
 
 	@Override
@@ -47,8 +42,12 @@ public class BasicArmour extends Armour{
 	}
 
 	@Override
+	public void afterBattle() {
+	}
+
+	@Override
 	public boolean overrideDefeat() {
-		return false;
+		return ship.getMajorDamage()<6;
 	}
 
 	@Override
