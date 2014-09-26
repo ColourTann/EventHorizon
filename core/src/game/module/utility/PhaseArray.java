@@ -13,13 +13,14 @@ public class PhaseArray extends Utility{
 	public PhaseArray(int tier) {
 		super(tier, ModuleType.WEAPON, "Phase Array", "If you play 3+ cards from one weapon, they get +"+statiCalc(0, 0, tier)+" damage", Gallery.blaster, 1, 1);
 		
+		for(int i=0;i<2;i++) cardPic[i]= Gallery.phaseArray[i];
+		
 		name[0]="Surge";
 		cost[0]=1;
 		cooldown[0]=0;
 		effect[0]=calc(0,1);
 		shots[0]=1;
 		rules[0]="+1 damage for each other weapon card played this turn";
-		cardPic[0]=Gallery.armour;
 		code[0].add(Special.BonusEffectPerOtherWeapon, 1);
 		
 		name[1]="Fetch";
@@ -27,7 +28,6 @@ public class PhaseArray extends Utility{
 		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="Get a card from either weapon module";
-		cardPic[1]=Gallery.armour;
 		code[1].add(Special.ModuleChooser);
 		code[1].add(Special.ChooseWeapon);
 		code[1].add(Special.GetCardFromChosenModule, 1);

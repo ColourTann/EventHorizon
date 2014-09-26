@@ -36,19 +36,19 @@ import game.module.component.shield.Shield;
 import game.module.component.weapon.Weapon;
 import game.module.junk.ShieldPoint;
 import game.module.junk.Buff.BuffType;
-import game.module.utility.AuxiliaryDrive;
+import game.module.utility.ParticleCore;
 import game.module.utility.Furnace;
-import game.module.utility.Scrambler;
+import game.module.utility.Exploiter;
 import game.module.utility.ArcSocket;
 import game.module.utility.PhaseArray;
 import game.module.utility.Repeater;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
-import game.module.utility.armour.BasicArmour;
+import game.module.utility.armour.Plating;
 import game.module.utility.armour.ChargedHull;
 import game.module.utility.armour.CrystalLattice;
 import game.module.utility.armour.GalvanicSkin;
-import game.module.utility.armour.ShockbackHull;
+import game.module.utility.armour.VoltaicCarapace;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.interfaceJunk.FightStats;
@@ -114,8 +114,8 @@ public abstract class Ship {
 		placeNiches();
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
-		setArmour(new ShockbackHull(0));
-		//setUtility(new Shieldier(0), 1);
+		setArmour(new Plating(0));
+		setUtility(new ArcSocket(0), 1);
 		specialComponent= new SpecialComponent();
 		specialComponent.ship=this;
 
@@ -606,20 +606,6 @@ public abstract class Ship {
 			}
 		}
 
-		for(int i=0;i<0;i++){
-			Card c= new Card(
-					new String[]{"Rocket", "Rocket"},
-					new Pic[]{Gallery.armour, Gallery.armour},
-					new int[]{0,3}, 
-					new int[]{1,5},
-					new int[]{0,0},
-					new int[]{5,5},
-					new String[]{"",""},
-					new CardCode[]{new CardCode(), new CardCode()}, 
-					ModuleType.WEAPON);
-			deck.add(c);
-			setupConsumableCard(c);
-		}
 		Draw.shuffle(deck);
 	}
 
@@ -811,7 +797,7 @@ public abstract class Ship {
 		return false;
 	}
 
-	public float getArmourMultiplier(){
+	public double getArmourMultiplier(){
 		return armour.getMultuplier();
 	}
 
@@ -862,6 +848,16 @@ public abstract class Ship {
 		return bonus;
 	}
 
+	public int getBonusCost(Card c, int side, int effect) {
+		int bonus=0;
+		
+		for(Utility u:utilities){
+			if(u!=null)bonus+=u.getBonusCost(c, effect);
+		}
+		
+		return bonus;
+	}
+	
 	public int getBonusShots(Card c, int side, int effect) {
 		int bonus=0;
 		for(Utility u:utilities){
@@ -991,9 +987,11 @@ public abstract class Ship {
 
 	public boolean preventScramble(){
 		for(Utility u:utilities){
-			if(u instanceof Scrambler)return true;
+			if(u instanceof Exploiter)return true;
 		}
 		return false;
 	}
+
+	
 
 }

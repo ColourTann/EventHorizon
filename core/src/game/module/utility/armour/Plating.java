@@ -3,10 +3,10 @@ package game.module.utility.armour;
 import game.assets.Gallery;
 import game.card.Card;
 
-public class BasicArmour extends Armour{
+public class Plating extends Armour{
 
-	public BasicArmour(int tier) {
-		super(1+tier*.25f,tier, "Plating", "Basic Armour", Gallery.basicArmour, 0, 0);
+	public Plating(int tier) {
+		super(1+tier*.25,tier, "Plating", "Basic Armour", Gallery.basicArmour, 0, 0);
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import util.image.Pic;
 public class ChargedHull extends Armour{
 
 	public ChargedHull(int tier){
-		super(.8f+tier*.25f,tier, "Charged hull", "Start each battle with +3 energy", Gallery.auroraComputer, 0, 0);
+		super(.8+tier*.25,tier, "Charged hull", "Start each battle with +3 energy", Gallery.chargedHull, 0, 0);
 	}
 
 	@Override

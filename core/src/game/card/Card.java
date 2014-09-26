@@ -839,10 +839,18 @@ public class Card {
 
 	public int getCost(){return getCost(side);}
 	public int getCost(int pick){
+		int effect;
 		if(getCode(pick).contains(Special.ReduceCost)){
-			return baseCost[pick];
+			effect= baseCost[pick];
 		}
-		return Math.max(0, baseCost[pick]-mod.getBuffAmount(BuffType.ReduceCost));}
+		else effect=Math.max(0, baseCost[pick]-mod.getBuffAmount(BuffType.ReduceCost));
+		
+		if(active){
+			effect+=getShip().getBonusCost(this, side, effect);
+		}
+		
+		return effect;
+	}
 
 	public int getEffect(){return getEffect(side);}
 	public int getEffect(int pick){
@@ -1359,6 +1367,7 @@ public class Card {
 	}
 
 	public boolean isAugmented(int checkSide) {
+		if(getShip()==null)return false;
 		if(selected&&side!=checkSide)return false;
 		if(code[checkSide].contains(Special.ReduceCost))return false;
 		if(code[checkSide].contains(Special.IncreaseEffect))return false;

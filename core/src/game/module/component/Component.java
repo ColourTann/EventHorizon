@@ -74,10 +74,12 @@ public abstract class Component extends Module{
 	}
 
 	public void recalculateThresholds(){
+
 		for(int i=0;i<3;i++){
-
+			
 			thresholds[i]=(int)(baseThresholds[i]*ship.getArmourMultiplier());
-
+			System.out.println(thresholds[i]);
+			
 			if(ship.doubleHP){
 				if((thresholds[i]+i)%2==0){
 					thresholds[i]-=1;
@@ -109,6 +111,7 @@ public abstract class Component extends Module{
 			if(hpLeft>boxesLeft){
 				hpLeft--;
 				boxesLeft--;
+				System.out.println(boxesLeft);
 				doubles[boxesLeft]=true;
 				continue;
 			}
@@ -341,7 +344,7 @@ public abstract class Component extends Module{
 	}
 	public int getShieldableIncoming() {
 		if(immune)return 0;
-		return incomingDamage.size()-shieldPoints.size();
+		return Math.max(0, incomingDamage.size()-shieldPoints.size());
 	}
 	public int getSimpleIncoming(){
 		return incomingDamage.size();

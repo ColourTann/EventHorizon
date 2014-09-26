@@ -33,15 +33,18 @@ public class Reward extends Mouser{
 	public enum RewardType{Weapon, Shield, Armour, Utility, Booster}
 	public static RewardType[] typeList = new RewardType[]{RewardType.Weapon, RewardType.Weapon, RewardType.Shield, RewardType.Armour, RewardType.Utility, RewardType.Booster};
 	public static Color selectedColor=Colours.genCols5[3];
-
+	int index;
 	public Reward(Card[] cards, int index){
 		this.cards=cards;
-		this.position=new Pair(Customise.shipX-width-offset+width*index+offset*index-width/2, y-height/2);
-		mousectivate(new BoxCollider(position.x, position.y, width, height));
+		this.index=index;
 	}
 
 	public Reward (Module m, int index){
 		this.module=m;
+		this.index=index;
+	}
+	
+	public void confirm() {
 		this.position=new Pair(Customise.shipX-width-offset+width*index+offset*index-width/2, y-height/2);
 		mousectivate(new BoxCollider(position.x, position.y, width, height));
 	}
@@ -118,6 +121,8 @@ public class Reward extends Mouser{
 	public Module getModule() {
 		return module;
 	}
+
+	
 	
 	
 }

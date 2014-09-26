@@ -7,7 +7,7 @@ import game.card.CardCode.Special;
 public class OrganicShell extends Armour{
 
 	public OrganicShell(int tier) {
-		super(.9f+tier*.2f, tier, "Organic Shell", "Repair 2 extra damage between each fight", Gallery.auroraComputer, 0, 0);
+		super(.95+tier*.25, tier, "Organic Shell", "Repair 2 extra damage between each fight", Gallery.organicShell, 0, 0);
 		
 	}
 

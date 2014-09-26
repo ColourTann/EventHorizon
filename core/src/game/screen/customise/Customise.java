@@ -20,7 +20,7 @@ import game.module.junk.ModuleStats;
 import game.module.utility.Furnace;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
-import game.module.utility.armour.BasicArmour;
+import game.module.utility.armour.Plating;
 import game.module.utility.armour.OrganicShell;
 import game.module.utility.armour.GalvanicSkin;
 import game.screen.battle.interfaceJunk.HelpPanel;
@@ -107,28 +107,26 @@ public class Customise extends Screen{
 		}
 	}
 
-	
-	
+
+
 	public void addRewards(int tier){
 
 		rewards.clear();
-		
+
 		Draw.shuffle(Reward.typeList);
 		int bonus=0;
 		for(int i=0;i<3;i++){
 			RewardType type= Reward.typeList[i+bonus];
-			
+
 			Reward r = null;
-			
+			boolean cancel=false;
 			switch(type){
 			case Armour:
 				r=new Reward(Armour.getRandomArmour(3), i);
 				break;
 			case Booster:
 				if(ship.getConsumables().size()>3){
-					bonus=1;
-					i--;
-					continue;
+					cancel=true;
 				}
 				r=new Reward(new Card[]{ConsumableCard.get(1),ConsumableCard.get(1),ConsumableCard.get(1)},i);
 				break;
@@ -140,19 +138,28 @@ public class Customise extends Screen{
 				break;
 			case Weapon:
 				r=new Reward(Weapon.getRandomWeapon(1), i);
+				for(Reward rew:rewards){
+					if(rew!=null && rew!=r && rew.module.getClass()==r.module.getClass()){
+						cancel=true;
+					}
+				}
 				break;
 			default:
 				break;
-			
-			
+
+
 			}
+			
+			if(cancel){
+				i--;
+				bonus+=1;
+				continue;
+			}
+			
 			rewards.add(r);
+			r.confirm();
+			bonus=0;
 		}
-		/*rewards.add(new Reward(new Pulse(1), 0));
-		rewards.add(new Reward(new Tesla(1), 1));
-		rewards.add(new Reward(new Card[]{new Deflector(0).getNextCard(),
-				new Deflector(0).getNextCard(),
-				new Deflector(0).getNextCard()},2));*/
 	}
 
 	public static void changeStats(ModuleInfo info){

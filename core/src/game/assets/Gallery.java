@@ -72,12 +72,22 @@ public class Gallery {
 	
 	//UTILITY//
 	
-	public static Pic basicArmour=new Pic("Module/Utility/Armour/basicarmour");
-	public static Pic armour=new Pic("Module/Utility/cycle");
+	public static Pic[] arcSocket= new Pic[2];
+	public static Pic[] exploiter= new Pic[2];
+	public static Pic[] furnace= new Pic[2];
+	public static Pic[] particleCore= new Pic[2];
+	public static Pic[] phaseArray= new Pic[2];
+	public static Pic[] repeater= new Pic[2];
+	//public static Pic armour=new Pic("Module/Utility/cycle");
 	
 	//Armour//
-	
+	public static Pic basicArmour=new Pic("Module/Utility/Armour/basicarmour");
+	public static Pic chargedHull= new Pic("Module/Utility/Armour/chargedhull");
 	public static Pic repair=new Pic("Module/Utility/Armour/repair");
+	public static Pic crystalLattice =new Pic("Module/Utility/Armour/crystallattice");
+	public static Pic galvanicSkin =new Pic("Module/Utility/Armour/galvanicskin");
+	public static Pic organicShell =new Pic("Module/Utility/Armour/organicshell");
+	public static Pic voltaicCarapce =new Pic("Module/Utility/Armour/voltaiccarapace");
 	
 	//Consumables//
 	
@@ -198,6 +208,13 @@ public class Gallery {
 	public static void init(){
 		for(int i=0;i<2;i++){
 			fiveIcon[i]=new Pic("Icon/fiveiconoverlay"+i);
+			
+			arcSocket[i]=new Pic("Module/Utility/ArcSocket/card"+i);
+			exploiter[i]=new Pic("Module/Utility/Exploiter/card"+i);
+			furnace[i]=new Pic("Module/Utility/Furnace/card"+i);
+			particleCore[i]=new Pic("Module/Utility/ParticleCore/card"+i);
+			phaseArray[i]=new Pic("Module/Utility/PhaseArray/card"+i);
+			repeater[i]=new Pic("Module/Utility/Repeater/card"+i);
 			
 		}
 		for(int i=0;i<3;i++){

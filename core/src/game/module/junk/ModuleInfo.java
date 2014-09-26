@@ -162,6 +162,7 @@ public class ModuleInfo extends Mouser{
 		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+100);
 
 		if(mod instanceof Armour){
+	
 			
 			s="HP multiplier "+((Armour)mod).multiplier;
 			Font.small.drawWrapped(batch, s, position.x, position.y+50+nameHeight/2, CardGraphic.width, HAlignment.CENTER);

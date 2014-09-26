@@ -10,10 +10,10 @@ import util.maths.Pair;
 import util.update.TextWisp;
 import util.update.TextWisp.WispType;
 
-public class ShockbackHull extends Armour{
+public class VoltaicCarapace extends Armour{
 
-	public ShockbackHull(int tier) {
-		super(.8f+tier*.2f, tier, "Shockback", "When you take major damage, damages a random enemy module for "+statiCalc(1,0,tier), Gallery.auroraComputer, 0, 0);
+	public VoltaicCarapace(int tier) {
+		super(.8+tier*.2, tier, "Voltaic Carapace", "On taking major damage: hit an enemy module for "+statiCalc(1,0,tier), Gallery.voltaicCarapce, 0, 0);
 	}
 
 	@Override

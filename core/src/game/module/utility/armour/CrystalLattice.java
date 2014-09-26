@@ -7,7 +7,7 @@ import util.image.Pic;
 public class CrystalLattice extends Armour{
 
 	public CrystalLattice(int tier){
-		super(.95f+tier*.25f,tier, "Crystal Lattice", "6 major damage required to destroy", Gallery.auroraComputer, 0, 0);
+		super(.95+tier*.25,tier, "Crystal Lattice", "6 major damage required to destroy", Gallery.crystalLattice, 0, 0);
 	}
 
 	@Override

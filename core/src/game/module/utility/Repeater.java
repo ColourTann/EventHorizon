@@ -12,12 +12,13 @@ public class Repeater extends Utility{
 	public Repeater(int tier) {
 		super(tier, ModuleType.UTILITY, "Repeater", "Weapons cards with 3+ shots get 1 bonus shot", Gallery.blaster, 1, 1);
 		
+		for(int i=0;i<2;i++) cardPic[i]= Gallery.repeater[i];
+		
 		name[0]="Duplicate";
 		cost[0]=2;
 		cooldown[0]=0;
 		effect[0]=0;
 		rules[0]="Augment weapon card: +1 shot";
-		cardPic[0]=Gallery.armour;
 		code[0].add(Special.Augment);
 		code[0].add(Augment.AugmentWeapon);
 		code[0].add(Augment.AugmentAddShot, 1);
@@ -29,7 +30,6 @@ public class Repeater extends Utility{
 		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="Get a card from either weapon module";
-		cardPic[1]=Gallery.armour;
 		code[1].add(Special.ModuleChooser);
 		code[1].add(Special.ChooseWeapon);
 		code[1].add(Special.GetCardFromChosenModule);
