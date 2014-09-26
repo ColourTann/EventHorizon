@@ -8,7 +8,7 @@ import game.card.CardCode.Special;
 public class ArcSocket extends Utility{
 
 	public ArcSocket(int tier) {
-		super(tier, ModuleType.SHIELD, "Arc socket", "If you've taken 3+ major damage: shields -1 cost, +1 effect", Gallery.blaster, 1, 1);
+		super(tier, ModuleType.SHIELD, "Arc socket", "If you've taken 3+ major damage: shields -1 cost, +"+statiCalc(0,0,tier)+" effect", Gallery.blaster, 1, 1);
 		
 		for(int i=0;i<2;i++) cardPic[i]= Gallery.arcSocket[i];
 		
@@ -53,7 +53,7 @@ public class ArcSocket extends Utility{
 	@Override
 	public int getBonusEffect(Card c, int baseEffect) {
 		if(ship.getMajorDamage()>=3 && c.type==ModuleType.SHIELD){
-			return 1;
+			return calc(0);
 		}
 		return 0;
 	}

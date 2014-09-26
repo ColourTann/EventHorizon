@@ -49,7 +49,7 @@ public class Map extends Screen{
 		Hex.init();
 		MapAbility.init();
 		grid=Grid.MakeGrid();
-		player=new MapShip(new Nova(true), grid.getHex(55, 50));
+		player=new MapShip(new Nova(true, 0), grid.getHex(55, 50));
 		Map.explosion=grid.getHex(45, 48);
 		
 		for(int i=0;i<player.mapAbilities.size();i++){

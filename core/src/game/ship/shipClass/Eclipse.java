@@ -16,8 +16,8 @@ import game.ship.mapThings.mapAbility.genAbility.Teleport;
 
 public class Eclipse extends Ship{
 
-	public Eclipse(boolean player) {
-		super(player,Gallery.shipEclipse, Gallery.eclipseGenerator, Gallery.eclipseComputer);
+	public Eclipse(boolean player, float tier) {
+		super(player, tier,Gallery.shipEclipse, Gallery.eclipseGenerator, Gallery.eclipseComputer);
 	}
 
 	@Override

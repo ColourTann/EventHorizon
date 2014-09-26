@@ -69,7 +69,6 @@ public class ModuleStats extends Mouser{
 			if(Customise.getReplaceableType()==component.type){
 				Customise.checkEnergy(new Module[]{component}, new Module[]{Customise.selectedReward.module});
 			}
-
 		}
 
 	}
@@ -225,7 +224,7 @@ public class ModuleStats extends Mouser{
 		}
 
 		if(Main.currentScreen instanceof Battle|| Main.currentScreen instanceof PreBattle)info.render(batch);
-
+		
 
 	}
 

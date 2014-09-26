@@ -12,6 +12,8 @@ public class Repeater extends Utility{
 	public Repeater(int tier) {
 		super(tier, ModuleType.UTILITY, "Repeater", "Weapons cards with 3+ shots get 1 bonus shot", Gallery.blaster, 1, 1);
 		
+		rocketSize=2;
+		
 		for(int i=0;i<2;i++) cardPic[i]= Gallery.repeater[i];
 		
 		name[0]="Duplicate";
@@ -35,6 +37,8 @@ public class Repeater extends Utility{
 		code[1].add(Special.GetCardFromChosenModule);
 		code[1].add(Special.DiscardWhenChosen);
 		code[1].add(AI.Ignore);
+		
+		overridePowerLevel=calc(2);
 	}
 
 	@Override

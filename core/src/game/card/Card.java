@@ -40,6 +40,7 @@ public class Card {
 	private int[] baseCooldown = new int[2];
 	private String[] rules = new String[2];
 	private int[] shots = new int[2];
+	
 	private int bonusShots=0;
 	private CardCode[] code=new CardCode[2];
 	public int specialSide=-1;
@@ -57,6 +58,8 @@ public class Card {
 	public boolean active;
 	public boolean addToDeck;
 	private int effectItHad;
+	
+	public float rocketSize; //only used for consumable or utility attacks//
 
 	//Setting up card//
 	public Card(Module m){

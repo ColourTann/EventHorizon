@@ -42,13 +42,14 @@ public abstract class Module {
 	protected int[] shots = new int[7];
 	protected String[] rules = new String[7];
 	protected CardCode[] code = new CardCode[7];
+	public int rocketSize=0;
 	protected ArrayList<Integer> cardOrder= new ArrayList<Integer>();
 	private ArrayList<Integer> nextCards= new ArrayList<Integer>();
 	protected int currentCooldown=0;
 	public int tier=-5;
 	public boolean destroyed;
 
-
+	public int overridePowerLevel=-1;
 
 
 
@@ -178,7 +179,7 @@ public abstract class Module {
 
 	public String toString(){
 		if(this instanceof SpecialComponent)return "Special Component";
-		return name[0];
+		return moduleName;
 	}
 
 	public Pair getBarrel(){

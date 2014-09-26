@@ -78,7 +78,7 @@ public abstract class Component extends Module{
 		for(int i=0;i<3;i++){
 			
 			thresholds[i]=(int)(baseThresholds[i]*ship.getArmourMultiplier());
-			System.out.println(thresholds[i]);
+			
 			
 			if(ship.doubleHP){
 				if((thresholds[i]+i)%2==0){
@@ -544,6 +544,10 @@ public abstract class Component extends Module{
 	public ModuleStats getStats(){
 		if(stats==null)stats=new ModuleStats(this);
 		return stats;
+	}
+	
+	public void resetStats(){
+		stats=null;
 	}
 
 	public void updateIntensity(){

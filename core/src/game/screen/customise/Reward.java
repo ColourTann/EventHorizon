@@ -18,7 +18,10 @@ import game.assets.Gallery;
 import game.card.Card;
 import game.module.Module;
 import game.module.component.shield.Shield;
+import game.module.component.weapon.Weapon;
 import game.module.junk.ModuleInfo;
+import game.module.utility.Utility;
+import game.module.utility.armour.Armour;
 import game.screen.battle.interfaceJunk.HelpPanel;
 
 public class Reward extends Mouser{
@@ -58,14 +61,30 @@ public class Reward extends Mouser{
 	}
 
 	public void render(SpriteBatch batch){
-		batch.setColor(Colours.withAlpha(Colours.white, alpha));
+		batch.setColor(1,1,1,alpha);
 
 		Draw.drawScaled(batch, Gallery.rewardOutline.get(), position.x, position.y,4,4);
-
+		
+		Color col=null;
 		if(module!=null){
-
+			if(module instanceof Weapon)col=Colours.weaponCols8[4];
+			if(module instanceof Shield)col=Colours.shieldCols6[4];
+			if(module instanceof Utility)col=Colours.compCols6[2];
+			if(module instanceof Armour)col=Colours.shipHull7[2];
+		}
+		if(col==null)col=Colours.orangeHPCols[1];
+		batch.setColor(Colours.withAlpha(col, alpha));
+		
+		Draw.drawScaled(batch, Gallery.rewardHighlights.get(), position.x, position.y,4,4);
+		
+		batch.setColor(1,1,1,alpha);
+		
+		if(module!=null){
 			Pic p=module.getPic(0);
 			Draw.drawCenteredScaled(batch, p.get(), position.x+width/2, position.y+height/2, 4, 4);
+		}
+		else{
+			Draw.drawCenteredScaled(batch, Gallery.threeCards.get(), position.x+width/2, position.y+height/2, 4, 4);
 		}
 		if(moused){
 			batch.setColor(Colours.withAlpha(Colours.light, alpha));

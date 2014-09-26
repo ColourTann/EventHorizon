@@ -35,7 +35,7 @@ public class ModuleInfo extends Mouser{
 	public ArrayList<CardGraphic> graphics = new ArrayList<CardGraphic>();
 	public boolean noDrawCards;
 	public static ModuleInfo top;
-	float offset=2;
+	float offset=3;
 	public ModuleInfo(Module m) {
 		mod=m;
 		width=CardGraphic.width*2-2;
@@ -149,8 +149,8 @@ public class ModuleInfo extends Mouser{
 		
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		String s=mod.moduleName;
-		float nameHeight=Font.medium.getWrappedBounds(s, CardGraphic.width-offset*2).height;
-		Font.medium.drawWrapped(batch, s, position.x+offset, position.y+25-nameHeight/2, CardGraphic.width-offset*2, HAlignment.CENTER);
+		float nameHeight=Font.medium.getWrappedBounds(s, CardGraphic.width).height;
+		Font.medium.drawWrapped(batch, s, position.x+offset, position.y+25-nameHeight/2, CardGraphic.width, HAlignment.CENTER);
 		//Font.drawFontCentered(batch, s, Font.medium, position.x+CardGraphic.width/2, position.y+25);
 		//Font.small.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+17);
 		s="Cards:";

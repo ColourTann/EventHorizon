@@ -206,7 +206,7 @@ public class CardGraphic extends Mouser {
 		}
 		Font.small.setColor(Colours.white);
 		batch.setColor(Colours.white);
-		
+
 
 	}
 
@@ -372,8 +372,9 @@ public class CardGraphic extends Mouser {
 				for (int i = 0; i < cooldown; i++) Draw.draw(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[cooldown][i].x, baseHeight+ positionCooldown.y + positionArray[cooldown][i].y);
 			} 
 			else {
+				Font.small.setColor(darkText);
 				Draw.draw(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[5][0].x, baseHeight + positionCooldown.y+ positionArray[5][0].y);
-				Font.medium.draw(batch, "" + cooldown, position.x + positionCooldown.x + 6,baseHeight + positionCooldown.y + positionArray[5][0].y+ 23);
+				Font.drawFontCentered(batch, "" + cooldown, Font.small, position.x + positionCooldown.x + 12,baseHeight + positionCooldown.y + positionArray[5][0].y+ 7);
 			}
 		}
 
@@ -464,25 +465,27 @@ public class CardGraphic extends Mouser {
 	@Override
 	public void mouseDown() {
 		if(Screen.isActiveType(Battle.class)){
-
 			if(Battle.getPlayer().hand.contains(card))onTopGraphic=this;
 			if(card.getShip()!=null){
 				card.getShip().cardOrIconMoused(card);
 			}
 			moveToTop();
-			}
 		}
+		if(Screen.isActiveType(PreBattle.class)){
+			PreBattle.mousedGraphic=this;
+		}
+	}
 
-		@Override
-		public void mouseUp() {
-			if(Screen.isActiveType(Battle.class)){
+	@Override
+	public void mouseUp() {
+		if(Screen.isActiveType(Battle.class)){
 			onTopGraphic=null;
 			if(card.getShip()!=null)card.getShip().cardOrIconUnmoused();
-			}
 		}
+	}
 
 
-		/*public static void setAugmentOrTarget(CardGraphic augmenter){
+	/*public static void setAugmentOrTarget(CardGraphic augmenter){
 		resetOffCuts();
 		augmentPicker=augmenter;
 	}
@@ -491,15 +494,15 @@ public class CardGraphic extends Mouser {
 		augmentPicker=null;
 	}*/
 
-		public static void renderOffCuts(SpriteBatch batch){
-			if(Battle.augmentSource!=null)Battle.augmentSource.getGraphic().render(batch);
-			if(Battle.moduleChooser!=null)Battle.moduleChooser.getGraphic().render(batch);
-			if(Battle.targetSource!=null)Battle.targetSource.getGraphic().render(batch);
-			if(onTopGraphic!=null)onTopGraphic.render(batch);
-			for(Card c:CycleButton.choices)c.getGraphic().render(batch);
-			for(CardGraphic cg:Battle.enemyHandList)cg.render(batch);
-			//if(Card.)
-		}
-
-
+	public static void renderOffCuts(SpriteBatch batch){
+		if(Battle.augmentSource!=null)Battle.augmentSource.getGraphic().render(batch);
+		if(Battle.moduleChooser!=null)Battle.moduleChooser.getGraphic().render(batch);
+		if(Battle.targetSource!=null)Battle.targetSource.getGraphic().render(batch);
+		if(onTopGraphic!=null)onTopGraphic.render(batch);
+		for(Card c:CycleButton.choices)c.getGraphic().render(batch);
+		for(CardGraphic cg:Battle.enemyHandList)cg.render(batch);
+		//if(Card.)
 	}
+
+
+}

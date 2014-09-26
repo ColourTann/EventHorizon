@@ -11,7 +11,7 @@ import game.module.Module.ModuleType;
 public class PhaseArray extends Utility{
 
 	public PhaseArray(int tier) {
-		super(tier, ModuleType.WEAPON, "Phase Array", "If you play 3+ cards from one weapon, they get +"+statiCalc(0, 0, tier)+" damage", Gallery.blaster, 1, 1);
+		super(tier, ModuleType.WEAPON, "Phase Array", "If you play 3+ cards from one weapon, they get +"+statiCalc(0, 0, tier)+" dmg", Gallery.blaster, 1, 1);
 		
 		for(int i=0;i<2;i++) cardPic[i]= Gallery.phaseArray[i];
 		
@@ -33,6 +33,8 @@ public class PhaseArray extends Utility{
 		code[1].add(Special.GetCardFromChosenModule, 1);
 		code[1].add(Special.DiscardWhenChosen);
 		code[1].add(AI.Ignore);
+		
+		overridePowerLevel=calc(2);
 		
 	}
 

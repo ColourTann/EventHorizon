@@ -11,7 +11,7 @@ import util.image.Pic;
 public class Furnace extends Utility{
 
 	public Furnace(int tier) {
-		super(tier, ModuleType.UTILITY,"Fusion Furnace", "+1 energy if you end your turn with 7+ energy", Gallery.blaster, 1, 10);
+		super(tier, ModuleType.UTILITY,"Fusion Furnace", "+1 energy if you end your turn with 7+ energy", Gallery.blaster, 1, 1);
 		
 		for(int i=0;i<2;i++) cardPic[i]= Gallery.furnace[i];
 		

@@ -155,7 +155,9 @@ public class Gallery {
 	public static Pic darkDot= new Pic("Interface/darkdot");
 	
 	public static Pic shitButton= new Pic("Interface/shitbutton");
-	public static Pic rewardOutline= new Pic("Interface/rewardoutline"); 
+	public static Pic rewardOutline= new Pic("Interface/rewardoutline");
+	public static Pic rewardHighlights= new Pic("Interface/rewardhighlights");
+	public static Pic threeCards= new Pic("Interface/threecards");
 	public static Pic energyDial= new Pic("Interface/energydial");
 	public static Pic energyMeter= new Pic("Interface/energymeter");
 	public static Pic bonusPool= new Pic("Interface/bonuspool");

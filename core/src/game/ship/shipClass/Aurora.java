@@ -16,8 +16,8 @@ import game.ship.mapThings.mapAbility.genAbility.Teleport;
 
 public class Aurora extends Ship{
 
-	public Aurora(boolean player) {
-		super(player, Gallery.shipAurora, Gallery.auroraGenerator, Gallery.auroraComputer);
+	public Aurora(boolean player, float tier) {
+		super(player, tier, Gallery.shipAurora, Gallery.auroraGenerator, Gallery.auroraComputer);
 	}
 
 	@Override

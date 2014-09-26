@@ -1,5 +1,6 @@
 package game.ship;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import util.Colours;
@@ -105,24 +106,104 @@ public abstract class Ship {
 
 	public enum ShipType{Aurora,Comet,Eclipse,Nova}
 	public abstract void placeNiches();
-
-	public Ship(boolean player, Pic shipPic, Pic genPic, Pic comPic){
+	float tier;
+	public Ship(boolean player, float tier, Pic shipPic, Pic genPic, Pic comPic){
+		this.tier=Math.min(12.7f, tier);
 		this.player=player;
 		this.shipPic=shipPic;
-
+		
 		setupNiches();
 		placeNiches();
+		
+		
+		setArmour(new Plating(0));
+		//setUtility(new ArcSocket(0), 1);
+		
+		setupTiers();
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
-		setArmour(new Plating(0));
-		setUtility(new ArcSocket(0), 1);
+		
+		
 		specialComponent= new SpecialComponent();
 		specialComponent.ship=this;
 
-		for(int i=0;i<6;i++){
+		for(int i=0;i<0;i++){
 			addConsumableCard(ConsumableCard.get(1));
 		}
 
+	}
+
+
+	private void setupTiers() {
+		System.out.println("-------------------");
+		int baseTier=(int) (tier/3);
+		
+		
+		int shieldTier=baseTier;
+		int[] weaponTier = new int[]{baseTier,baseTier};
+		int[] utilityTier= new int[]{-1,-1};
+		
+		
+		
+		float bigRemainder=(int) (tier%3);
+		float smallRemainder=tier%1;
+		
+		if(bigRemainder>=1){
+			weaponTier[(int)(Math.random()*2)]++;
+		}
+		if(bigRemainder>=2){
+			shieldTier++;
+		}
+		if(smallRemainder>.3){
+			utilityTier[0]=baseTier+1;
+		}
+		if(smallRemainder>.6){
+			utilityTier[1]=baseTier+1;
+		}
+		System.out.println("setting up tiers "+tier);
+		System.out.println("basetier: "+baseTier );
+		System.out.println("shiledtier " +shieldTier);
+		System.out.println("weapontiers");
+		for(int i:weaponTier)System.out.println(i);
+		System.out.println("utility tiers");
+		for(int i:utilityTier)System.out.println(i);
+		
+		System.out.println("-------------------");
+
+
+
+
+		try {
+			
+			setShield((Shield) getShield().getClass().getConstructor(int.class).newInstance(shieldTier));
+			setWeapon(getWeapons()[0].getClass().getConstructor(int.class).newInstance(weaponTier[0]), 0);
+			setWeapon(getWeapons()[1].getClass().getConstructor(int.class).newInstance(weaponTier[1]), 1);
+			for(int i=0;i<2;i++){
+				if(utilityTier[i]>-1){
+					setUtility(Utility.getRandomUtility(utilityTier[i]), i);
+				}
+			}
+			if(baseTier>0){
+				System.out.println("should be setting armour");
+				System.out.println(Armour.getRandomArmour(baseTier));
+				setArmour(Armour.getRandomArmour(baseTier));
+				System.out.println(getArmour());
+			}
+
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		recalculateThresholds();
 	}
 
 
@@ -210,8 +291,6 @@ public abstract class Ship {
 
 	public void removeAttack(Card card){
 
-		System.out.println("removing attack from "+card);
-		System.out.println(attacks.size());
 		for(int i=0;i<attacks.size();i++){
 
 			Attack a=attacks.get(i);
@@ -220,7 +299,7 @@ public abstract class Ship {
 				attacks.remove(i);
 				a.disable();
 				i--;
-				System.out.println("removing attack");
+
 			}
 		}
 		updateIntensities();
@@ -229,7 +308,7 @@ public abstract class Ship {
 	public ArrayList<Attack> getAttacks(){return attacks;}
 
 	public void fireAll() {
-		System.out.println(attacks.size());
+
 		for(Attack atk:attacks){
 			atk.fire();
 		}
@@ -384,7 +463,7 @@ public abstract class Ship {
 		//First check the alternate side//
 		Card c;
 		for(int pri=2;pri>=-1;pri--){
-			System.out.println("Priority: "+pri);
+
 			c=decideBest(pri, weapon, shield, false);
 			if(c!=null){
 				return c;
@@ -399,10 +478,10 @@ public abstract class Ship {
 
 		//if priority == 0, check targeted then normal//
 		if(priority==0&&targetedOnly==false){
-			System.out.println("checking targeted");
+
 			Card c=decideBest(0, weapon, shield, true);
 			if(c!=null)return c;
-			System.out.println("checking others");
+
 		}
 
 		for(Card c:hand){
@@ -420,13 +499,13 @@ public abstract class Ship {
 
 				if(code.getPriority()==priority){
 					if(c.enemyDecide(side)) return c;
-					System.out.println();	
+
 				}
 
 				if(focusTarget!=null&&code.contains(Special.Targeted)){
-					System.out.println("overriding priority due to focus");
+
 					if(c.enemyDecide(side)) return c;
-					System.out.println();
+
 				}
 
 
@@ -445,7 +524,7 @@ public abstract class Ship {
 			if(shieldPoints.size()==0)return;
 			//Need to put in reasons not to shield//
 			if(shieldPoints.get(0).card.getCode().contains(Special.ShieldOnlyDamaged)){
-				System.out.println("can't use shield becaus not major damaged");
+
 				if(c.currentThreshold==0)continue;
 			}
 
@@ -758,11 +837,12 @@ public abstract class Ship {
 		niches[4].install(c);
 	}
 	public void setArmour(Armour a){
+		System.out.println("setting armour as "+a );
 		utilities[2]=a;
 		this.armour=a;
 		a.ship=this;
 		recalculateThresholds();
-		
+		System.out.println(getArmour());
 	}
 
 	public void setUtility(Utility u, int position){
@@ -850,14 +930,14 @@ public abstract class Ship {
 
 	public int getBonusCost(Card c, int side, int effect) {
 		int bonus=0;
-		
+
 		for(Utility u:utilities){
 			if(u!=null)bonus+=u.getBonusCost(c, effect);
 		}
-		
+
 		return bonus;
 	}
-	
+
 	public int getBonusShots(Card c, int side, int effect) {
 		int bonus=0;
 		for(Utility u:utilities){
@@ -918,6 +998,7 @@ public abstract class Ship {
 			c.remakeCard(1);
 			CardCode code=c.getCode();
 			int thisCardEffect=c.getEffect();
+			if(c.mod.overridePowerLevel>0) thisCardEffect=c.mod.overridePowerLevel;
 			if(c.mod.getShots(0)>0)thisCardEffect*=c.mod.getShots(0);
 
 			if(c.mod.type==ModuleType.WEAPON){
@@ -992,6 +1073,6 @@ public abstract class Ship {
 		return false;
 	}
 
-	
+
 
 }

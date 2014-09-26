@@ -29,13 +29,13 @@ public class Selector extends Screen{
 	public void init() {
 		choices.clear();
 		choices.add(new GameChoice(Main.width/2, 205, "tutorial", 
-				new Battle(new Nova(true), new Aurora(false), true)));
+				new Battle(new Nova(true, 0), new Aurora(false, 0), true)));
 		choices.add(new GameChoice(Main.width/2, 305, "easy", 
-				new Battle(new Aurora(true), new Aurora(false), false)));
+				new Battle(new Aurora(true, 0), new Aurora(false, 0), false)));
 		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
-				new Battle(new Comet(true), new Nova(false), false)));
+				new Battle(new Comet(true, 0), new Nova(false, 0), false)));
 		choices.add(new GameChoice(Main.width/2, 505, "arena", 	
-				new Customise(new Aurora(true))));
+				new Customise(new Aurora(true, 0))));
 	}
 	
 	@Override

@@ -26,7 +26,7 @@ public class ConsumableCard {
 	private static int[] cost = new int[2];
 	private static int[] effect = new int[2];
 	private static int[] shots = new int[2];
-
+	private static int rocketSize=0;
 	private static CardCode[] code = new CardCode[]{new CardCode(), new CardCode()};
 	private static ModuleType type;
 	static int calcTier=0;
@@ -142,7 +142,9 @@ public class ConsumableCard {
 		effect[1]=0;
 		code[1].add(Special.GainEnergy, 4);
 
-		makeCard(tier, 1);
+		rocketSize=2;
+		
+		makeCard(tier, 2);
 
 		///////////////////////////////////////////////////////////////////
 
@@ -164,8 +166,12 @@ public class ConsumableCard {
 		code[1].add(Special.Augment);
 		code[1].add(Augment.AugmentWeapon);
 		code[1].add(Augment.AugmentDamage, calc(2));
-		makeCard(tier, 1);
+		
+		rocketSize=4;
+		
+		makeCard(tier, 2);
 
+		
 		///////////////////////////////////////////////////////////////////
 
 
@@ -176,6 +182,7 @@ public class ConsumableCard {
 	private static void makeCard(int tier, int amount){
 		for(int i=0;i<amount;i++){
 			Card c = new Card(name, pic, cost, effect, new int[]{0,0}, shots, rules, code, type);
+			c.rocketSize=rocketSize;
 			c.mod=blankModule;
 			decks[tier].add(c);
 		}
@@ -186,6 +193,7 @@ public class ConsumableCard {
 		shots=new int[]{0,0};
 		rules=new String[]{"Setme!", "Setme!"};
 		code= new CardCode[]{new CardCode(), new CardCode()};
+		rocketSize=0;
 		
 	}
 

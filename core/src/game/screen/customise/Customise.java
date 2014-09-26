@@ -68,10 +68,10 @@ public class Customise extends Screen{
 	@Override
 	public void init() {
 		resetModuleStats();
-		addRewards(1);
-		slots.add(new Slot(new Pair(170, 100), 2));
-		slots.add(new Slot(new Pair(170, 350), 0));
-		slots.add(new Slot(new Pair(170, 500), 1));
+		addRewards(0);
+		slots.add(new Slot(ship, new Pair(170, 100), 2));
+		slots.add(new Slot(ship, new Pair(170, 350), 0));
+		slots.add(new Slot(ship, new Pair(170, 500), 1));
 		setPanel(PanelType.Choose);
 		retimeMeter(ship.getStats().energyUsage);
 		consumables=new ConsumableContainer();
@@ -122,7 +122,7 @@ public class Customise extends Screen{
 			boolean cancel=false;
 			switch(type){
 			case Armour:
-				r=new Reward(Armour.getRandomArmour(3), i);
+				r=new Reward(Armour.getRandomArmour(tier), i);
 				break;
 			case Booster:
 				if(ship.getConsumables().size()>3){
@@ -131,15 +131,15 @@ public class Customise extends Screen{
 				r=new Reward(new Card[]{ConsumableCard.get(1),ConsumableCard.get(1),ConsumableCard.get(1)},i);
 				break;
 			case Utility:
-				r=new Reward(Utility.getRandomUtility(1), i);
+				r=new Reward(Utility.getRandomUtility(tier), i);
 				break;
 			case Shield:
-				r=new Reward(Shield.getRandomShield(1), i);
+				r=new Reward(Shield.getRandomShield(tier), i);
 				break;
 			case Weapon:
-				r=new Reward(Weapon.getRandomWeapon(1), i);
+				r=new Reward(Weapon.getRandomWeapon(tier), i);
 				for(Reward rew:rewards){
-					if(rew!=null && rew!=r && rew.module.getClass()==r.module.getClass()){
+					if(rew!=null && rew.module!=null && rew!=r && rew.module.getClass()==r.module.getClass()){
 						cancel=true;
 					}
 				}
@@ -252,7 +252,8 @@ public class Customise extends Screen{
 		to-=centerEnergy;
 		to=Math.min(1.1f, to); // have to set a maximum or it goes off the edge
 		boolean bigger=to>0;
-		to=to*(bigger?upMuliplier:downMultiplier); // weird thing but it's important 
+		to=to*(bigger?upMuliplier:downMultiplier); // weird thing but it looks nicer like this
+		to=Math.max(-180, to); // set a minimum
 		me.meterPosition=new Timer(me.meterPosition.getFloat(), to, .5f, Interp.SQUARE);
 	}
 

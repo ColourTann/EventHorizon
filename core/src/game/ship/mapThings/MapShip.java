@@ -45,8 +45,8 @@ public class MapShip {
 
 	public void init() {
 		Ship s=null;
-		if(Math.random()>.5)s=new Aurora(false);
-		else s=new Eclipse(false);
+		if(Math.random()>.5)s=new Aurora(false, 0);
+		else s=new Eclipse(false, 0);
 		init(s);
 	}
 	
