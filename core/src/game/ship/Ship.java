@@ -2,6 +2,7 @@ package game.ship;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import util.Colours;
 import util.Draw;
@@ -17,7 +18,6 @@ import util.update.Timer.Interp;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
-import game.assets.Gallery;
 import game.assets.Sounds;
 import game.attack.Attack;
 import game.card.Card;
@@ -37,19 +37,10 @@ import game.module.component.shield.Shield;
 import game.module.component.weapon.Weapon;
 import game.module.junk.ShieldPoint;
 import game.module.junk.Buff.BuffType;
-import game.module.utility.ParticleCore;
-import game.module.utility.Furnace;
 import game.module.utility.Exploiter;
-import game.module.utility.ArcSocket;
-import game.module.utility.PhaseArray;
-import game.module.utility.Repeater;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
 import game.module.utility.armour.Plating;
-import game.module.utility.armour.ChargedHull;
-import game.module.utility.armour.CrystalLattice;
-import game.module.utility.armour.GalvanicSkin;
-import game.module.utility.armour.VoltaicCarapace;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.interfaceJunk.FightStats;
@@ -59,11 +50,12 @@ import game.ship.niche.Niche;
 import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
+import game.ship.shipClass.Hornet;
 import game.ship.shipClass.Nova;
 
 public abstract class Ship {
-	private static ArrayList<Class> classes= new ArrayList<Class>();
-
+	public static Class[] classes= new Class[]{Aurora.class, Nova.class, Hornet.class, Comet.class, Eclipse.class};
+	private static ArrayList<Integer> shipGenPool = new ArrayList<Integer>();
 	public boolean player;
 	public Pic shipPic;
 
@@ -107,47 +99,48 @@ public abstract class Ship {
 	public enum ShipType{Aurora,Comet,Eclipse,Nova}
 	public abstract void placeNiches();
 	float tier;
-	public Ship(boolean player, float tier, Pic shipPic, Pic genPic, Pic comPic){
+	public String shipName;
+	public Ship(boolean player, float tier, String shipName, Pic shipPic, Pic genPic, Pic comPic){
+		this.shipName=shipName;
 		this.tier=Math.min(12.7f, tier);
 		this.player=player;
 		this.shipPic=shipPic;
-		
+
 		setupNiches();
 		placeNiches();
-		
-		
+
+
 		setArmour(new Plating(0));
 		//setUtility(new ArcSocket(0), 1);
-		
+
 		setupTiers();
 		getGenerator().modulePic=genPic;
 		getComputer().modulePic=comPic;
-		
-		
+
+
 		specialComponent= new SpecialComponent();
 		specialComponent.ship=this;
 
 		for(int i=0;i<0;i++){
 			addConsumableCard(ConsumableCard.get(1));
 		}
-
 	}
 
 
 	private void setupTiers() {
-		System.out.println("-------------------");
+
 		int baseTier=(int) (tier/3);
-		
-		
+
+
 		int shieldTier=baseTier;
 		int[] weaponTier = new int[]{baseTier,baseTier};
 		int[] utilityTier= new int[]{-1,-1};
-		
-		
-		
+
+
+
 		float bigRemainder=(int) (tier%3);
 		float smallRemainder=tier%1;
-		
+
 		if(bigRemainder>=1){
 			weaponTier[(int)(Math.random()*2)]++;
 		}
@@ -160,21 +153,21 @@ public abstract class Ship {
 		if(smallRemainder>.6){
 			utilityTier[1]=baseTier+1;
 		}
-		System.out.println("setting up tiers "+tier);
+		/*System.out.println("setting up tiers "+tier);
 		System.out.println("basetier: "+baseTier );
 		System.out.println("shiledtier " +shieldTier);
 		System.out.println("weapontiers");
 		for(int i:weaponTier)System.out.println(i);
 		System.out.println("utility tiers");
 		for(int i:utilityTier)System.out.println(i);
-		
-		System.out.println("-------------------");
+
+		System.out.println("-------------------");*/
 
 
 
 
 		try {
-			
+
 			setShield((Shield) getShield().getClass().getConstructor(int.class).newInstance(shieldTier));
 			setWeapon(getWeapons()[0].getClass().getConstructor(int.class).newInstance(weaponTier[0]), 0);
 			setWeapon(getWeapons()[1].getClass().getConstructor(int.class).newInstance(weaponTier[1]), 1);
@@ -184,10 +177,7 @@ public abstract class Ship {
 				}
 			}
 			if(baseTier>0){
-				System.out.println("should be setting armour");
-				System.out.println(Armour.getRandomArmour(baseTier));
 				setArmour(Armour.getRandomArmour(baseTier));
-				System.out.println(getArmour());
 			}
 
 		} catch (InstantiationException e) {
@@ -282,6 +272,7 @@ public abstract class Ship {
 	private void addAttack(Attack a){
 
 		a.atkgrphc.order=attacks.size();
+		System.out.println(attacks.size());
 
 		attacks.add(a);
 		ParticleSystem.systems.add(a.atkgrphc);
@@ -383,11 +374,7 @@ public abstract class Ship {
 
 	//This is to stop abusing the enemy by only playing unshieldable//
 	private void checkTooManyShields() {
-		int shields=0;
-		for(Card c:hand){
-			if(c.mod.type==ModuleType.SHIELD)shields++;
-		}
-		if(shields>=hand.size()-1&&hand.size()==getComputer().getMaximumHandSize()){
+		if(hand.size()>getComputer().getMaximumHandSize()-1){
 			discardHand();
 		}
 
@@ -658,10 +645,10 @@ public abstract class Ship {
 	//Setup junk//
 
 	public static void init(){
-		classes.add(Aurora.class);
+		/*classes.add(Aurora.class);
 		classes.add(Nova.class);
 		classes.add(Comet.class);
-		classes.add(Eclipse.class);
+		classes.add(Eclipse.class);*/
 	}
 
 	public void makeDeck(){
@@ -688,7 +675,18 @@ public abstract class Ship {
 		Draw.shuffle(deck);
 	}
 
+	public void cleanupAfterFight(){
+		for(Component c:components){
+			c.repair(0);
+			c.finishBattle();
+		}
+		getGenerator().resetIncome();
+		getComputer().resetBonusCards();
+		majorDamageTaken=0;
+	}
+
 	public void startFight(boolean goingFirst){
+		if(!Battle.isTutorial())hand.clear();
 		deck.clear();
 		initModuleStats();
 		initFightStats();
@@ -795,6 +793,7 @@ public abstract class Ship {
 					));
 		}
 		currentEnergy+=amount;
+		currentEnergy=Math.min(99, currentEnergy);
 
 	}
 	public int getEnergy(){return currentEnergy;}
@@ -811,6 +810,7 @@ public abstract class Ship {
 	public Component getShield(){return components[2];}
 	public Generator getGenerator(){return (Generator) components[3];}
 	public Computer getComputer(){return (Computer) components[4];}
+
 	public ShipGraphic getGraphic(){
 		if(battleGraphic==null)battleGraphic=new ShipGraphic(this);
 		return battleGraphic;
@@ -837,12 +837,10 @@ public abstract class Ship {
 		niches[4].install(c);
 	}
 	public void setArmour(Armour a){
-		System.out.println("setting armour as "+a );
 		utilities[2]=a;
 		this.armour=a;
 		a.ship=this;
 		recalculateThresholds();
-		System.out.println(getArmour());
 	}
 
 	public void setUtility(Utility u, int position){
@@ -1073,6 +1071,43 @@ public abstract class Ship {
 		return false;
 	}
 
+	public static Ship makeIntegerShip(boolean player, float power, int number){
+		try {
+			return (Ship) classes[number].getConstructor(boolean.class, float.class).newInstance(player, power);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
+	public static Ship makeRandomShip(boolean player, float power){
+		if(shipGenPool.size()==0){
+			for(int i=0;i<classes.length;i++){
+				shipGenPool.add(i);
+			}
+			Collections.shuffle(shipGenPool);
+		}
+		return makeIntegerShip(player, power, shipGenPool.remove(0));
+	}
 
+	public void dispose(){
+		for(Component c:components){
+			c.getStats().dispose();
+		}
+		getGraphic().dispose();
+		for(Niche n:niches){
+			n.getGraphic().dispose();
+		}
+		for(Card c:deck)c.getGraphic().deactivate();
+	}
 }

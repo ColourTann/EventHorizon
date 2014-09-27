@@ -12,6 +12,7 @@ import util.update.Animation;
 import util.update.Screen;
 import util.update.TextWisp;
 import util.update.Timer;
+import util.update.Timer.Finisher;
 import util.update.Timer.Interp;
 
 import com.badlogic.gdx.Gdx;
@@ -36,7 +37,8 @@ import game.screen.battle.interfaceJunk.Star;
 import game.screen.battle.tutorial.Tutorial;
 import game.screen.battle.tutorial.UndoButton;
 import game.screen.battle.tutorial.Tutorial.Trigger;
-import game.screen.menu.Selector;
+import game.screen.customise.Customise;
+import game.screen.menu.Menu;
 import game.ship.Ship;
 import game.ship.niche.Niche;
 
@@ -83,15 +85,15 @@ public class Battle extends Screen{
 	private static Battle me;
 	ArrayList<Animation> animations=new ArrayList<Animation>();
 	float animTicker=0;
+	public static boolean arena;
 
-	
 	static Timer victoryFadeInTimer=new Timer();
-	
-	public Battle(Ship player, Ship enemy, boolean tutorial){
+
+	public Battle(Ship player, Ship enemy, boolean tutorial, boolean arena){
 		this.player=player;
 		this.enemy=enemy;
 		this.tutorial=tutorial;
-
+		this.arena=arena;
 	}
 
 	@Override
@@ -192,9 +194,9 @@ public class Battle extends Screen{
 	public static void setPhase(Phase s){
 		if(getPhase()==Phase.End)return;
 		currentPhase=s;
-	
-		
-		
+
+
+
 
 		switch(s){
 		case EnemyShieldPhase:
@@ -211,7 +213,7 @@ public class Battle extends Screen{
 			getEnemy().fireAll();
 			break;
 		case PlayerWeaponsFiring:
-			
+
 			getPlayer().fireAll();
 			break;
 		case ShieldPhase:
@@ -235,7 +237,7 @@ public class Battle extends Screen{
 		if(!isPlayerTurn())return;
 		if(getState()!=State.Nothing)return;
 		if(getPlayer().hasSpendableShields())return;
-		
+
 		getPlayer().playCards();
 
 		if(getPhase()==Phase.ShieldPhase){
@@ -250,12 +252,37 @@ public class Battle extends Screen{
 	}
 
 	public static void battleWon(Ship ship) {
-		
+
 		ship.getEnemy().dead=true;
 		ship.getEnemy().getGraphic().destroy();
 		setPhase(Phase.End);
 		System.out.println("ended");
 		victor=ship;
+		if(!arena){
+			Timer t=new Timer(0,1,5,Interp.LINEAR);
+
+			t.addFinisher(new Finisher() {
+
+				@Override
+				public void finish() {
+					Main.changeScreen(new Menu());
+				}
+			});
+		}
+		if(victor.player){
+			if(arena){
+				Timer t=new Timer(0,1,5,Interp.LINEAR);
+
+				t.addFinisher(new Finisher() {
+
+					@Override
+					public void finish() {
+						Main.changeScreen(new Customise(victor, false),1);
+					}
+				});
+			}
+
+		}
 		victoryFadeInTimer=new Timer(0,1,5,Interp.LINEAR);
 	}
 
@@ -278,7 +305,7 @@ public class Battle extends Screen{
 
 			//case Input.Keys.F:player=Ship.getRandomShip(true);enemy=Ship.getRandomShip(false);break;
 		case Input.Keys.D:
-			
+
 
 			break;
 		case Input.Keys.Q:
@@ -329,7 +356,7 @@ public class Battle extends Screen{
 			break;
 
 		case Input.Keys.ESCAPE:
-			Main.changeScreen(new Selector());
+			Main.changeScreen(new Menu());
 			break;
 
 		}
@@ -357,15 +384,15 @@ public class Battle extends Screen{
 	}
 
 	public static void shake(boolean player, float amount){
+	
 
-		
 		//amount is energy cost of card
 
 		//if(!s.dead)Star.shake(player, amount);
-		
+
 		Pair shakeAdd=new Pair(amount*4, (float)(Math.random()-.5)*amount);
 		if(player){
-			
+
 			playerKnockBackTarget=playerKnockBackTarget.add(shakeAdd);
 			playerShakeIntensity+=amount;
 		}
@@ -381,7 +408,7 @@ public class Battle extends Screen{
 		currentState=s;
 		switch(currentState){
 		case Augmenting:
-			
+
 			break;
 		case CycleDiscard:
 			help=new HelpPanel("Discard a card",false);
@@ -424,7 +451,7 @@ public class Battle extends Screen{
 			Tutorial.goBack();
 			return;
 		}
-		
+
 	}
 
 	public static void advance() {
@@ -433,7 +460,7 @@ public class Battle extends Screen{
 
 	@Override
 	public void update(float delta) {
-		
+
 
 		playerShakeIntensity*=Math.pow(shakeDrag, delta);
 		enemyShakeIntensity*=Math.pow(shakeDrag, delta);
@@ -447,7 +474,7 @@ public class Battle extends Screen{
 		if(!player.exploded){
 			playerBonus=new Pair(Noise.noise(Battle.ticks/4, 100), 
 					Noise.noise(Battle.ticks/4, 300)).multiply(new Pair(15,3)).add(playerKnockBack);
-					
+
 			playerBonus=playerBonus.floor();
 		}
 		playerBonus=playerBonus.add(new Pair(bonusX*playerShakeIntensity, bonusY*playerShakeIntensity));
@@ -461,8 +488,8 @@ public class Battle extends Screen{
 		playerCam.position.set(basePlayerCamPosition.x ,basePlayerCamPosition.y, 0);
 		enemyBonus=new Pair();
 		if(!enemy.exploded){
-		enemyBonus=new Pair(Noise.noise(Battle.ticks/4, 1100), Noise.noise(Battle.ticks/4, 1300)).multiply(new Pair(15,3).add(enemyKnockBack));
-		enemyBonus=enemyBonus.floor();
+			enemyBonus=new Pair(Noise.noise(Battle.ticks/4, 1100), Noise.noise(Battle.ticks/4, 1300)).multiply(new Pair(15,3).add(enemyKnockBack));
+			enemyBonus=enemyBonus.floor();
 		}
 		enemyBonus=enemyBonus
 				.add(new Pair(bonusX*enemyShakeIntensity, bonusY*enemyShakeIntensity));
@@ -567,14 +594,19 @@ public class Battle extends Screen{
 		}
 
 		if(getPhase()==Phase.End){
-			String s=victor.player?"You win!":"You lose.";
+			String s=victor.player?"You win!":"You lose";
 			Font.big.setColor(Colours.withAlpha(Colours.light,victoryFadeInTimer.getFloat()));
-			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 205);
-			s="(esc to return)";
-			Font.big.draw(batch, s, Main.width/2-Font.big.getBounds(s).width/2, 245);
+			Font.drawFontCentered(batch, s, Font.big, Main.width/2, 205);
+			
+			
+			
+			if(!victor.player){
+				if(arena) Font.drawFontCentered(batch, "You defeated "+Customise.total+" ship"+(Customise.total==1?"":"s"), Font.big, Main.width/2, 100);
+				Font.drawFontCentered(batch, "esc to return", Font.big, Main.width/2, 130);
+			}
 		}
 		//	debugRender(batch);
-
+	
 
 		//Draw.drawScaledCentered(batch, Gallery.whiteSquare.get(), Mouser.getMousePosition().x, Mouser.getMousePosition().y, 200, 200);
 	}
@@ -624,9 +656,9 @@ public class Battle extends Screen{
 
 	@Override
 	public void dispose() {
-	//Updater.clearAll();
-	player.getGraphic().dispose();
-	enemy.getGraphic().dispose();
+		//Updater.clearAll();
+		//player.getGraphic().dispose();
+		enemy.dispose();
 	}
 
 

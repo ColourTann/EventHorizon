@@ -2,6 +2,7 @@ package game.screen.customise;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.card.Card;
 import game.card.CardGraphic;
 import game.module.component.shield.Deflector;
@@ -25,6 +26,9 @@ public class ConsumableContainer extends Mouser{
 	Pair position=new Pair(Customise.energyX-width/2, 400);
 	public ConsumableContainer(){
 		mousectivate(new BoxCollider(position.x, position.y, width, height));
+		cards.addAll(Customise.ship.getConsumables());
+		for(Card c:Customise.ship.getConsumables())c.getGraphic().activate();
+		updateCardPositions();
 	}
 	
 	@Override
@@ -42,13 +46,15 @@ public class ConsumableContainer extends Mouser{
 		if(Customise.consumableSelected()){
 			for(int i=0;i<Customise.selectedReward.cards.length;i++){
 				Card c=Customise.selectedReward.cards[i];
+				Customise.ship.addConsumableCard(c);
 				cards.add(c);
 				CardGraphic cg=c.getGraphic();
-				cg.override=true;
+				//cg.override=true;
 				cg.alpha=0;
 				cg.fadeIn(1, Interp.LINEAR);
 				cg.setPosition(position.copy());
 				updateCardPositions();
+				Sounds.shieldUse.play();
 			}
 			
 			Customise.rewardChosen();
@@ -57,6 +63,7 @@ public class ConsumableContainer extends Mouser{
 	}
 
 	private void updateCardPositions() {
+		if(cards.size()==0)return;
 		float start=position.x;
 		
 		float gap=width/(cards.size());

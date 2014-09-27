@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Gallery;
+import game.card.CardGraphic;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
@@ -204,10 +205,11 @@ public class ModuleStats extends Mouser{
 		if(damage+unshieldable+incoming>component.maxHP){
 			Draw.draw(batch, ext.get(), collider.position.x+hpLoc.x+hpGap.x*(component.maxHP%row),collider.position.y+hpLoc.y+hpGap.y*(component.maxHP/row));
 			//Off the edge number//
-			if(ext==Gallery.orangeHP[3]){
+			
+			if(ext==Gallery.orangeHP[5]){
 				Font.small.setColor(Colours.weaponCols8[6]);
 				String s=damage+unshieldable+incoming-shields-component.maxHP+"";
-				Font.small.draw(batch, s, collider.position.x+hpLoc.x+hpGap.x*(component.maxHP%row)+12-Font.small.getBounds(s).width/2,  collider.position.y+hpLoc.y+hpGap.y*(component.maxHP/row)+4);
+				Font.small.draw(batch, s, collider.position.x+hpLoc.x+hpGap.x*(component.maxHP%row)+11-Font.small.getBounds(s).width/2,  collider.position.y+hpLoc.y+hpGap.y*(component.maxHP/row)+6);
 			}
 		}
 
@@ -233,5 +235,16 @@ public class ModuleStats extends Mouser{
 	public void reset() {
 		activate();
 		mousectivate(null);
+	}
+	
+	public void dispose(){
+		deactivate();
+		demousectivate();
+		info.deactivate();
+		info.demousectivate();
+		for(CardGraphic cg:info.graphics){
+			cg.demousectivate();
+			cg.deactivate();
+		}
 	}
 }

@@ -143,7 +143,9 @@ public class CardGraphic extends Mouser {
 		Color c = Colours.white;
 		//Faded is used for cards from the wrong phase, cards cooling down and cards that can't be augmented//
 		boolean wrongState = false;
-
+		
+		
+		
 		//Checking state//
 		if(Screen.isActiveType(Battle.class)){
 			if (Battle.getPhase() == Phase.ShieldPhase&&card.type == ModuleType.WEAPON||

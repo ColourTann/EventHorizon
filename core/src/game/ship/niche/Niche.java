@@ -54,7 +54,7 @@ public class Niche{
 			Pair start=new Pair(p.getTransformedVertices()[0], p.getTransformedVertices()[1]);
 			float tWidth=c.modulePic.get().getWidth()*(ship.player?1:-1);
 			float tHeight=c.modulePic.get().getHeight(); 
-			start.y-=tHeight/2;
+			start.y-=tHeight/4;
 			if(type==ModuleType.WEAPON){
 				start.x+=((Weapon) component).weaponOffset*(ship.player?1:-1);
 			}

@@ -1,6 +1,5 @@
 package game.screen.preBattle;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import game.Main;
@@ -8,10 +7,10 @@ import game.assets.Gallery;
 import game.assets.Sounds;
 import game.card.Card;
 import game.card.CardGraphic;
-import game.module.Module;
 import game.module.component.Component;
 import game.module.junk.ModuleInfo;
 import game.screen.battle.Battle;
+import game.screen.customise.Customise;
 import game.screen.customise.Slot;
 import game.ship.Ship;
 import game.ship.ShipGraphic;
@@ -20,7 +19,6 @@ import util.update.SimpleButton.Code;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import util.update.SimpleButton.Code;
 import util.Colours;
 import util.Draw;
 import util.assets.Font;
@@ -52,7 +50,7 @@ public class PreBattle extends Screen{
 	ArrayList<Slot> slots=new ArrayList<Slot>();
 	ModuleInfo slotInfo;
 	static PreBattle me;
-	float power=0;
+
 	public PreBattle(Ship player, Ship enemy){
 		this.player=player;
 		this.enemy=enemy;
@@ -60,6 +58,8 @@ public class PreBattle extends Screen{
 
 	@Override
 	public void init() {
+		flashTimer=new Timer();
+		
 		me=this;
 		mousedGraphic=null;
 		consumables=player.getConsumables();
@@ -82,8 +82,9 @@ public class PreBattle extends Screen{
 				flashed=true;
 
 				float totalPower=player.getStats().power+enemy.getStats().power;
+				System.out.println(player.getStats().power/totalPower);
 				powerRatio=1-(player.getStats().power/totalPower);
-				//System.out.println(powerRatio);
+				
 				powerRatio-=.5f;
 				powerRatio*=3f;
 				dialTimer=new Timer(0, powerRatio, .8f, Interp.SQUARE);
@@ -99,7 +100,11 @@ public class PreBattle extends Screen{
 				float y=Main.height-CardGraphic.height;
 
 
-
+				for(Card c:player.getConsumables()){
+					c.getGraphic().activate();
+					c.getGraphic().mousectivate(null);
+					c.getGraphic().setPosition(new Pair(Main.width/2, Main.height));
+				}
 
 
 				if(width>CardGraphic.width*player.getConsumables().size()){
@@ -107,7 +112,7 @@ public class PreBattle extends Screen{
 					float gap=(width-player.getConsumables().size()*CardGraphic.width)/(player.getConsumables().size()+1);
 					for(int i=0;i<player.getConsumables().size();i++){
 						CardGraphic c=player.getConsumables().get(i).getGraphic();
-						c.activate();
+						
 						c.slide(new Pair(start+gap*(i+1)+CardGraphic.width*i, y), .5f, Interp.SQUARE);
 						c.finishFlipping();
 					}
@@ -117,6 +122,7 @@ public class PreBattle extends Screen{
 					float gap=funnyWidth/(player.getConsumables().size()-1);
 					for(int i=0;i<player.getConsumables().size();i++){
 						CardGraphic c=player.getConsumables().get(i).getGraphic();
+						
 						c.slide(new Pair(start+gap*i, y), .5f, Interp.SQUARE);
 						c.finishFlipping();
 					}
@@ -141,15 +147,19 @@ public class PreBattle extends Screen{
 			@Override
 			public void onPress() {
 				Sounds.bigAccept.play();
-				Main.changeScreen(new Battle(player, enemy, false));
+				Main.changeScreen(new Battle(player, enemy, false, true));
 			}
 		});
 		fightButton.font=Font.big;
+		for(Component c:player.components){
+			c.getStats().mousectivate(null);
+			c.getStats().alpha=0;
+		}
 	}
 
 	private void resetJunk() {
 		for(Slot s:slots)s.demousectivate();
-		
+
 		slots.clear();
 		int ex=140;
 		slots.add(new Slot(enemy, new Pair(Main.width-ex-Slot.width, 300), 2));
@@ -159,7 +169,7 @@ public class PreBattle extends Screen{
 		slots.add(new Slot(player, new Pair(ex, 300), 2));
 		slots.add(new Slot(player, new Pair(ex, 450), 0));
 		slots.add(new Slot(player, new Pair(ex, 570), 1));
-		
+
 	}
 
 	private void deactivateJunk(){
@@ -168,7 +178,7 @@ public class PreBattle extends Screen{
 			c.getStats().deactivate();
 		}
 	}
-	
+
 	public void shake(float amount){
 		shakeAmplitude=amount;
 	}
@@ -182,6 +192,7 @@ public class PreBattle extends Screen{
 		ticks+=delta;
 		shakeAmplitude*=Math.pow(shakeDrag, delta);
 		Main.setCam(new Pair(Math.round(Main.width/2+Math.sin(ticks*shakeFrequency)*shakeAmplitude),Math.round(Main.height/2)));
+	
 	}
 
 	@Override
@@ -207,6 +218,7 @@ public class PreBattle extends Screen{
 			Font.drawFontCentered(batch, "Hard", Font.big, Main.width-270, 35);
 
 			Draw.drawScaled(batch, Gallery.difficultyDial.get(), difficultyStart.x, difficultyStart.y, 3, 3);
+		
 			Draw.drawScaled(batch, Gallery.difficultyMeter.get(), 
 					(int)(Main.width/2-Gallery.difficultyMeter.getWidth()*3/2+
 							dialTimer.getFloat()*Gallery.difficultyDial.getWidth()*3) ,
@@ -231,7 +243,6 @@ public class PreBattle extends Screen{
 			for(Slot s:slots)s.render(batch);
 			if(slotInfo!=null)slotInfo.render(batch);
 		}
-
 		batch.setColor(Colours.withAlpha(Colours.enemy2[1], flashTimer.getFloat()));
 		Draw.drawScaled(batch, Gallery.whiteSquare.get(), 0, 0, Main.width, Main.height);
 	}
@@ -242,23 +253,10 @@ public class PreBattle extends Screen{
 
 	@Override
 	public void keyPress(int keycode) {
-		power+=.7f;
-		try {
+		if(Main.debug){
 			deactivateJunk();
-			enemy=enemy.getClass().getConstructor(boolean.class, float.class).newInstance(false, power);
+			enemy=Customise.makeEnemyShip();
 			resetJunk();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
 		}
 	}
 

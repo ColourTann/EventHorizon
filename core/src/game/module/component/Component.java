@@ -2,6 +2,8 @@ package game.module.component;
 
 import java.util.ArrayList;
 
+import javafx.collections.SetChangeListener;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -111,7 +113,6 @@ public abstract class Component extends Module{
 			if(hpLeft>boxesLeft){
 				hpLeft--;
 				boxesLeft--;
-				System.out.println(boxesLeft);
 				doubles[boxesLeft]=true;
 				continue;
 			}
@@ -210,7 +211,7 @@ public abstract class Component extends Module{
 			majorDamage();
 
 		}
-		//Battle.shake(ship.player,(float)(2.5f));
+		Battle.shake(ship.player,(float)(2.5f));
 
 		if(Math.random()<20/maxHP){
 			ship.getGraphic().addExplosion(getCenter());
@@ -225,15 +226,16 @@ public abstract class Component extends Module{
 		currentThreshold++;
 		ship.majorDamage();
 		ship.checkDefeat();
+		scramble();
+		for(int i=0;i<1;i++)ship.getGraphic().damage(niche.location);
+		for(int i=0;i<3;i++) ship.getGraphic().addExplosion(getCenter());
+
 		if(currentThreshold==3){
 			destroy();
 			return;
 		}
 		
-		scramble();
-		for(int i=0;i<1;i++)ship.getGraphic().damage(niche.location);
-		for(int i=0;i<3;i++) ship.getGraphic().addExplosion(getCenter());
-
+		
 	}
 
 	private void destroy(){
@@ -526,7 +528,7 @@ public abstract class Component extends Module{
 
 	public void drawShield(SpriteBatch batch) {
 
-
+		if(ship.dead)return;
 		float delta= Gdx.graphics.getDeltaTime();
 
 		shieldIntensity+=(shieldPoints.size()-shieldIntensity)*delta*5;
@@ -535,7 +537,7 @@ public abstract class Component extends Module{
 		alpha/=4;
 		alpha*=Math.min(4, shieldIntensity);
 		batch.setColor(Colours.withAlpha(Colours.shieldCols6[3], alpha));
-
+		
 		Draw.drawCenteredRotatedScaledFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);
 		batch.setColor(1,1,1,shieldAlphaTimer.getFloat());
 		Draw.drawCenteredRotatedScaledFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);
@@ -589,5 +591,24 @@ public abstract class Component extends Module{
 		return (int) (baseThresholds[2]*ship.getArmourMultiplier());
 	}
 
+	public void repair(int amount) {
+		while(!onMajorDamage()){
+			damage.remove(0);
+		}
+	}
+	
+	public boolean onMajorDamage(){
+		if(damage.size()==0)return true;
+		for(int i:thresholds){
+			if(damage.size()==i)return false; /// Disabled repairing for now ///
+		}
+		return false;
+	}
 
+	public void finishBattle() {
+		buffs.clear();
+		currentThreshold=0;
+		currentCooldown=0;
+		destroyed=false;
+	}
 }

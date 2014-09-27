@@ -4,28 +4,27 @@ import java.util.ArrayList;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.card.Card;
 import game.card.ConsumableCard;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
-import game.module.component.shield.Deflector;
 import game.module.component.shield.Shield;
-import game.module.component.weapon.Pulse;
-import game.module.component.weapon.Ray;
-import game.module.component.weapon.Tesla;
 import game.module.component.weapon.Weapon;
 import game.module.junk.ModuleInfo;
 import game.module.junk.ModuleStats;
-import game.module.utility.Furnace;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
-import game.module.utility.armour.Plating;
-import game.module.utility.armour.OrganicShell;
-import game.module.utility.armour.GalvanicSkin;
 import game.screen.battle.interfaceJunk.HelpPanel;
 import game.screen.customise.Reward.RewardType;
+import game.screen.preBattle.PreBattle;
 import game.ship.Ship;
+import game.ship.shipClass.Aurora;
+import game.ship.shipClass.Comet;
+import game.ship.shipClass.Eclipse;
+import game.ship.shipClass.Hornet;
+import game.ship.shipClass.Nova;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -34,7 +33,12 @@ import util.Colours;
 import util.Draw;
 import util.assets.Font;
 import util.maths.Pair;
+import util.update.Mouser;
 import util.update.Screen;
+import util.update.SimpleButton;
+import util.update.Timer.Finisher;
+import util.update.Updater;
+import util.update.SimpleButton.*;
 import util.update.Timer;
 import util.update.Timer.Interp;
 
@@ -60,28 +64,120 @@ public class Customise extends Screen{
 	static float upMuliplier=180f;
 	static float shipX=(int)(Main.width/2-50);
 	Timer meterPosition=new Timer(centerEnergy, centerEnergy, 0, Interp.SQUARE);
-	public Customise(Ship s){
+	boolean first;
+	ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+	int shipNumber=2;
+	public static float power=0;
+	public static int total=0;
+	public static boolean repairing=false;
+	public Customise(Ship s, boolean first){
+		
 		me=this;
-		Customise.ship=s;
+		this.first=first;
+
+		if(first){
+			Customise.ship=Ship.makeIntegerShip(true, 0, shipNumber);
+		}
+		else Customise.ship=s;
+		Customise.ship.cleanupAfterFight();
 	}
+
+
 
 	@Override
 	public void init() {
 		resetModuleStats();
-		addRewards(0);
-		slots.add(new Slot(ship, new Pair(170, 100), 2));
-		slots.add(new Slot(ship, new Pair(170, 350), 0));
-		slots.add(new Slot(ship, new Pair(170, 500), 1));
-		setPanel(PanelType.Choose);
+		if(!first){
+			total++;
+			addRewards((int)(power/3)+1,false);
+		}
+		
+		if(first){
+			total=0;
+			setPanel(PanelType.PickShip);
+			buttons.add(new SimpleButton(new Pair(shipX-250, Main.height-108), "", Gallery.leftButton, new Code() {
+
+				@Override
+				public void onPress() {
+					Sounds.cardDeselect.play();
+					ship.dispose();
+					shipNumber--;
+					shipNumber+=Ship.classes.length;
+					shipNumber=shipNumber%Ship.classes.length;
+					ship=Ship.makeIntegerShip(true, 0, shipNumber);
+					resetModuleStats();
+
+				}
+			}));
+			buttons.add(new SimpleButton(new Pair(shipX-170, Main.height-108), "", Gallery.leftButton.getFlipped(), new Code() {
+
+				@Override
+				public void onPress() {
+					
+					Sounds.cardSelect.play();
+					ship.dispose();
+					shipNumber++;
+					
+					shipNumber=shipNumber%Ship.classes.length;
+					ship=Ship.makeIntegerShip(true, 0, shipNumber);
+					resetModuleStats();
+				}
+			}));
+
+			buttons.add(new SimpleButton(new Pair(shipX+120, Main.height-108), "", Gallery.tickButton, new Code() {
+
+				@Override
+				public void onPress() {
+					Sounds.shieldUse.play();
+					first=false;
+					setPanel(PanelType.Choose);
+					addRewards(0, true);
+					for(SimpleButton butt:buttons){
+						butt.demousectivate();
+						butt.fadeOut(.2f, Interp.LINEAR);
+					}
+				}
+
+				
+			}));
+
+			for(SimpleButton butt:buttons)butt.setScale(4);
+		}
+
+
 		retimeMeter(ship.getStats().energyUsage);
+
 		consumables=new ConsumableContainer();
+		
+		for(Component c:ship.components)c.getStats().mousectivate(null);
+	}
+	
+	public static Ship makeEnemyShip() {
+		Ship result =Ship.makeRandomShip(false, power);
+		
+		if(result instanceof Eclipse&&(power<.5f||ship instanceof Aurora)){
+			return makeEnemyShip();
+		}
+		if(result instanceof Aurora&&ship instanceof Eclipse){
+			return makeEnemyShip();
+		}
+		if(result.getClass()==ship.getClass()&&power<1){
+			return makeEnemyShip();
+		}
+		
+		power+=.55f;
+		return result;
+		
 	}
 
-	public enum PanelType{Choose, Install, Add, None}; 
+	public enum PanelType{Choose, Install, Add, None, PickShip}; 
 	public void setPanel(PanelType pt){
 		oldPanel=panel;
 		if(oldPanel!=null)oldPanel.fadeOut(.3f, Interp.LINEAR);
 		switch(pt){
+		case PickShip:
+			panel=new HelpPanel("Pick your ship", (int) shipX, 540);
+			break;
 		case Choose:
 			panel=new HelpPanel("Choose a salvaged reward!", (int) shipX, 540);
 			break;
@@ -99,55 +195,71 @@ public class Customise extends Screen{
 		}
 	}
 
+	public void clearStats(){
+
+	}
+
 	public void resetModuleStats(){
-		for(ModuleStats ms:stats)ms.demousectivate();
 		stats.clear();
+		
 		for(Component c:ship.components){
-			stats.add(new ModuleStats(c));
+			stats.add(c.getStats());
 		}
+		slots.clear();
+		slots.add(new Slot(ship, new Pair(170, 100), 2));
+		slots.add(new Slot(ship, new Pair(170, 350), 0));
+		slots.add(new Slot(ship, new Pair(170, 500), 1));
+
+		retimeMeter(ship.getStats().energyUsage);
+
 	}
 
 
 
-	public void addRewards(int tier){
+	public void addRewards(int tier, boolean start){
 
 		rewards.clear();
 
 		Draw.shuffle(Reward.typeList);
 		int bonus=0;
 		for(int i=0;i<3;i++){
+			if(i+bonus>=5)bonus=0;
 			RewardType type= Reward.typeList[i+bonus];
 
-			Reward r = null;
+			Reward reward = null;
 			boolean cancel=false;
+			if(start&&i==0)type=RewardType.Utility;
+			if(start&&i==1)type=RewardType.Booster;
+			if(start&&i==2)type=RewardType.Utility;
 			switch(type){
 			case Armour:
-				r=new Reward(Armour.getRandomArmour(tier), i);
+				reward=new Reward(Armour.getRandomArmour(tier), i);
 				break;
 			case Booster:
 				if(ship.getConsumables().size()>3){
+					System.out.println("canceling booster");
 					cancel=true;
 				}
-				r=new Reward(new Card[]{ConsumableCard.get(1),ConsumableCard.get(1),ConsumableCard.get(1)},i);
+				reward=new Reward(new Card[]{ConsumableCard.get(tier),ConsumableCard.get(tier),ConsumableCard.get(tier)},i);
 				break;
 			case Utility:
-				r=new Reward(Utility.getRandomUtility(tier), i);
+				reward=new Reward(Utility.getRandomUtility(tier), i);
 				break;
 			case Shield:
-				r=new Reward(Shield.getRandomShield(tier), i);
+				reward=new Reward(Shield.getRandomShield(tier), i);
 				break;
 			case Weapon:
-				r=new Reward(Weapon.getRandomWeapon(tier), i);
-				for(Reward rew:rewards){
-					if(rew!=null && rew.module!=null && rew!=r && rew.module.getClass()==r.module.getClass()){
-						cancel=true;
-					}
-				}
+				reward=new Reward(Weapon.getRandomWeapon(tier), i);
 				break;
 			default:
 				break;
+			}
 
-
+			
+			for(Reward rew:rewards){
+				if(rew!=null && rew.module!=null&& reward.module!=null && rew!=reward && rew.module.getClass()==reward.module.getClass()){
+					cancel=true;
+				}
 			}
 			
 			if(cancel){
@@ -155,10 +267,11 @@ public class Customise extends Screen{
 				bonus+=1;
 				continue;
 			}
-			
-			rewards.add(r);
-			r.confirm();
+
+			rewards.add(reward);
+			reward.confirm();
 			bonus=0;
+			setPanel(PanelType.Choose);
 		}
 	}
 
@@ -235,12 +348,24 @@ public class Customise extends Screen{
 				170, 4, 4);
 		consumables.render(batch);
 
+		if(first){
+			Font.drawFontCentered(batch, ship.shipName, Font.big, shipX, Main.height-80);
+			String s="Unset";
+			if(ship instanceof Aurora)s="Very hard";
+			if(ship instanceof Nova)s="Hard";
+			if(ship instanceof Hornet)s="Medium";
+			if(ship instanceof Comet)s="Easy";
+			if(ship instanceof Eclipse)s="Very Easy";
+			Font.drawFontCentered(batch, s, Font.medium, shipX, Main.height-40);
+		}
+
+		batch.setColor(1,1,1,1);
+
+		for(SimpleButton butt:buttons) butt.render(batch);
 	}
 
 	public static void select(Reward reward) {
 		if(selectedReward!=null){
-			System.out.println("deselcting");
-			//	me.setPanel(PanelType.Choose);
 			selectedReward.deselect();
 		}
 		selectedReward=reward;
@@ -286,7 +411,15 @@ public class Customise extends Screen{
 		me.resetModuleStats();
 		ship.getGraphic().drawMap(true);
 		me.chosen();
-
+		Timer t= new Timer(0,1,1,Interp.LINEAR);
+		t.addFinisher(new Finisher() {
+			
+			@Override
+			public void finish() {
+				Main.changeScreen(new PreBattle(ship, makeEnemyShip()),.5f);
+			}
+		});
+		
 	}
 
 	public void chosen(){
@@ -308,7 +441,7 @@ public class Customise extends Screen{
 
 	@Override
 	public void keyPress(int keycode) {
-		addRewards(1);
+
 	}
 
 	@Override

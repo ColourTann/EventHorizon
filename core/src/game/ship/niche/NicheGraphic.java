@@ -61,4 +61,10 @@ public class NicheGraphic extends Updater{
 			ParticleSystem.systems.add(new SmokeMachine(p, .2f, 20, SmokeType.Damage));
 		}
 	}
+
+
+
+	public void dispose() {
+		deactivate();
+	}
 }

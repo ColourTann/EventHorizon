@@ -18,7 +18,7 @@ import game.ship.mapThings.mapAbility.genAbility.Teleport;
 public class Comet extends Ship{
 
 	public Comet(boolean player, float tier) {
-		super(player, tier, Gallery.shipComet, Gallery.cometGenerator, Gallery.cometComputer);
+		super(player, tier, "Comet", Gallery.shipComet, Gallery.cometGenerator, Gallery.cometComputer);
 	}
 
 	@Override
@@ -46,7 +46,6 @@ public class Comet extends Ship{
 		niches[4].setup(computer);
 
 		setWeapon(new Ray(0), 0);
-		//setWeapon(new Swift(0), 0);
 		setWeapon(new Tesla(0), 1);
 		setShield(new Deflector(0));
 		setGenerator(new Four());

@@ -12,7 +12,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import game.Main;
 import game.assets.Gallery;
+import game.assets.particles.Lightning;
 
 public class Test extends Screen{
 
@@ -40,7 +42,7 @@ public class Test extends Screen{
 	@Override
 	public void render(SpriteBatch batch) {
 
-	
+		ParticleSystem.renderAll(batch);
 	}
 
 	@Override
@@ -53,7 +55,8 @@ public class Test extends Screen{
 		switch(keycode){
 
 		case Input.Keys.CONTROL_LEFT:
-
+			ParticleSystem.debugDontUse.add(new Lightning(new Pair(10,10), new Pair(700,400), 3, 1));
+			ParticleSystem.debugDontUse.add(new Lightning(new Pair(700,400), new Pair(Main.width-10,Main.height-10), 3, 1));
 			break;
 		}
 		 

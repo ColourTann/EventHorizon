@@ -24,16 +24,11 @@ public class PicCut {
 	int width;
 	int height;
 	public PicCut(Pic pic, Color color){
-
-
 		Pixmap pixMap=Pic.getPixMap(pic.get());
-
 		cutColor=color;
-
 		cutTexture=new Texture(pixMap);
 		width=cutTexture.getWidth();
 		height=cutTexture.getHeight();
-		//pixMap.dispose();
 	}
 
 	public Texture get(){
@@ -183,7 +178,7 @@ public class PicCut {
 	}
 
 	public Shard replaceSection(Pair location, Texture mask){
-
+		Pixmap.setBlending(Blending.SourceOver);
 		if(checkSection(mask, (int)location.x, (int)location.y)){
 			Shard s=fillSection(mask, (int)location.x, (int)location.y);
 			s.aPixelLocation=new Pair(location.x,location.y);
@@ -421,6 +416,10 @@ public class PicCut {
 		return c.a==0||Colours.equals(c, cutColor);
 	}
 
+	public void miniDispose(){
+		cutTexture.dispose();
+	}
+	
 	public void dispose() {
 		for(Shard s:shards){
 			s.dispose();

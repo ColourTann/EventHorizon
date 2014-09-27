@@ -22,6 +22,8 @@ public class Timer extends Updater{
 	
 	public Timer() {
 		ratio=0;
+		fromFloat=0;
+		toFloat=0;
 		dead=true;
 	}
 	
@@ -64,7 +66,7 @@ public class Timer extends Updater{
 	}
 
 	public float getFloat(){
-		
+		if(fromFloat==0&&toFloat==0)return 0;
 		
 		if(lerpType==null)return ratio;
 		return fromFloat+((toFloat-fromFloat)*get());
@@ -83,5 +85,7 @@ public class Timer extends Updater{
 		}
 	}
 
-	
+	public String toString(){
+		return "Timer, from "+fromFloat+" to "+toFloat+". ratio: "+ratio;
+	}
 }

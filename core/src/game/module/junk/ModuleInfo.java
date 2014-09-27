@@ -143,14 +143,13 @@ public class ModuleInfo extends Mouser{
 				cg.alpha=alpha;
 				cg.render(batch);
 			}
-			
 			return;
 		}
 		
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		String s=mod.moduleName;
 		float nameHeight=Font.medium.getWrappedBounds(s, CardGraphic.width).height;
-		Font.medium.drawWrapped(batch, s, position.x+offset, position.y+25-nameHeight/2, CardGraphic.width, HAlignment.CENTER);
+		Font.medium.drawWrapped(batch, s, position.x, position.y+25-nameHeight/2, CardGraphic.width, HAlignment.CENTER);
 		//Font.drawFontCentered(batch, s, Font.medium, position.x+CardGraphic.width/2, position.y+25);
 		//Font.small.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+17);
 		s="Cards:";

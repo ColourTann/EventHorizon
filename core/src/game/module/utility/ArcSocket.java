@@ -12,16 +12,16 @@ public class ArcSocket extends Utility{
 		
 		for(int i=0;i<2;i++) cardPic[i]= Gallery.arcSocket[i];
 		
-		name[0]="weirdname";
+		name[0]="Protect";
 		cost[0]=1;
 		cooldown[0]=0;
 		effect[0]=calc(1);
-		rules[0]="+1 effect per major damage taken";
-		code[0].add(Special.BonusPerMajorDamage, 1);
+		rules[0]="+"+calc(0)+" effect per major damage taken";
+		code[0].add(Special.BonusPerMajorDamage, calc(0));
 		code[0].add(Special.AddShieldPoints);
 		code[0].add(AI.RegularShield);
 		
-		name[1]="boossterer";
+		name[1]="Swell";
 		cost[1]=0;
 		cooldown[1]=0;
 		effect[1]=0;

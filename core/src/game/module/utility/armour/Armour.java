@@ -16,7 +16,7 @@ import game.module.component.weapon.Tesla;
 import game.module.utility.Utility;
 
 public abstract class Armour extends Utility{
-	static Class[] classes = new Class[]{ChargedHull.class, CrystalLattice.class, GalvanicSkin.class, OrganicShell.class, Plating.class, VoltaicCarapace.class};
+	static Class[] classes = new Class[]{ChargedHull.class, CrystalLattice.class, GalvanicSkin.class, Plating.class, VoltaicCarapace.class}; //DISABLED ORGAINING SHELL FOR NOW//
 	public double multiplier;
 	public Armour(double multiplier, int tier, String modName, String passive, Pic modulePic, int variants, int numCards){
 		super(tier, ModuleType.UTILITY, modName, passive, modulePic, variants, numCards);
@@ -34,8 +34,8 @@ public abstract class Armour extends Utility{
 	public static Armour getRandomArmour(int tier) {
 		Draw.shuffle(classes);
 		try {
-			return (Armour) (classes[0].getConstructor(int.class).newInstance(tier));
-		} catch (NoSuchMethodException e) {
+			return (Armour) (classes[0].getConstructor(int.class).newInstance(tier)); //DISABLED ORGAINING SHELL FOR NOW//
+		} catch (NoSuchMethodException e) { 
 			e.printStackTrace();
 		} catch (SecurityException e) {
 			e.printStackTrace();

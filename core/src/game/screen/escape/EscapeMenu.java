@@ -27,7 +27,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import game.Main;
 import game.assets.Gallery;
-import game.screen.menu.Selector;
+import game.screen.menu.Menu;
 
 public class EscapeMenu extends Screen{
 	
@@ -42,7 +42,7 @@ public class EscapeMenu extends Screen{
 			@Override
 			public void onPress() {
 				deactivate();
-				Main.changeScreen(new Selector());
+				Main.changeScreen(new Menu());
 			}
 		}));
 		

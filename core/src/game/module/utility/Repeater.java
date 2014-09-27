@@ -34,7 +34,7 @@ public class Repeater extends Utility{
 		rules[1]="Get a card from either weapon module";
 		code[1].add(Special.ModuleChooser);
 		code[1].add(Special.ChooseWeapon);
-		code[1].add(Special.GetCardFromChosenModule);
+		code[1].add(Special.GetCardFromChosenModule, 1);
 		code[1].add(Special.DiscardWhenChosen);
 		code[1].add(AI.Ignore);
 		

@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.Texture;
 
 
 public class Gallery {
+	
+	//Ships//
+	
 	public static Pic shipAurora=new Pic("Ship/Aurora/ship", 3);
 	public static Pic auroraGenerator= new Pic("Ship/Aurora/generator", 3);
 	public static Pic auroraComputer= new Pic("Ship/Aurora/computer", 3);
@@ -27,6 +30,10 @@ public class Gallery {
 	public static Pic shipEclipse=new Pic("Ship/Eclipse/ship", 3);
 	public static Pic eclipseGenerator= new Pic("Ship/Eclipse/generator", 3);
 	public static Pic eclipseComputer= new Pic("Ship/Eclipse/computer", 3);
+	
+	public static Pic shipHornet=new Pic("Ship/Hornet/ship", 3);
+	public static Pic hornetGenerator= new Pic("Ship/Hornet/generator", 3);
+	public static Pic hornetComputer= new Pic("Ship/Hornet/computer", 3);
 	
 	//CARD STUFF//
 	public static Pic cardBase=new Pic("Interface/cardbase");
@@ -155,12 +162,15 @@ public class Gallery {
 	public static Pic darkDot= new Pic("Interface/darkdot");
 	
 	public static Pic shitButton= new Pic("Interface/shitbutton");
+	public static Pic tickButton= new Pic("Interface/tickbutton");
+	public static Pic leftButton= new Pic("Interface/leftbutton");
 	public static Pic rewardOutline= new Pic("Interface/rewardoutline");
 	public static Pic rewardHighlights= new Pic("Interface/rewardhighlights");
 	public static Pic threeCards= new Pic("Interface/threecards");
 	public static Pic energyDial= new Pic("Interface/energydial");
 	public static Pic energyMeter= new Pic("Interface/energymeter");
 	public static Pic bonusPool= new Pic("Interface/bonuspool");
+	
 	
 	public static Pic difficultyMeter= new Pic("Interface/difficultymeter");
 	public static Pic difficultyDial= new Pic("Interface/difficultydial");

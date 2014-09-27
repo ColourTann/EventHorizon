@@ -151,7 +151,7 @@ public class Tutorial extends Updater{
 		add("", Trigger.PlayerWeaponPhase);
 		add("Now it's your turn to fight back.", Effect.hideNameWisps);
 		add("Cards have an energy cost.", new Pair(475,484));
-		add("And some cards have a cooldown, which means you must wait before playing another card from this module.",new Pair(579,484));
+		add("And some cards have a cooldown, which means you must wait before playing another card from that module.",new Pair(579,484));
 		add("Weapon and shield cards have bars which show how much damage or shielding they provide.", new Pair(528,521));
 		add("", Trigger.CheckList, Effect.PlayWeaponList);
 		add("", Trigger.PlayerShieldPhase);

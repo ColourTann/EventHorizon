@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.shield.Shield;
@@ -72,6 +73,7 @@ public class Slot extends Mouser{
 					Customise.ship.setArmour((Armour) Customise.selectedReward.module);
 					Customise.rewardChosen();
 					Customise.mouseOver(Customise.ship.getArmour());
+					Sounds.shieldUse.play();
 				}
 				return;
 			}
@@ -79,6 +81,7 @@ public class Slot extends Mouser{
 				Customise.ship.setUtility((Utility) Customise.selectedReward.module, index);
 				Customise.rewardChosen();
 				Customise.mouseOver(Customise.ship.getUtility(index));
+				Sounds.shieldUse.play();
 			}
 		}
 	}

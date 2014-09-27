@@ -6,6 +6,7 @@ import game.module.component.Component;
 
 public abstract class Generator extends Component{
 	public int energyIncome;
+	private int bonusIncome;
 	public Generator(String modName,Pic p, int energyIncome, int[] thresholds){
 		super(-1, modName, p, 1, 2, thresholds);
 		this.energyIncome=energyIncome;
@@ -20,9 +21,12 @@ public abstract class Generator extends Component{
 		code[0].setPriority(2);
 	}
 	public int getIncome(){
-		return (int) (destroyed?Math.ceil(energyIncome/2f):energyIncome);
+		return (int) (destroyed?Math.ceil(energyIncome/2f):energyIncome)+bonusIncome;
 	}
 	public void addIncome(int amount){
-		energyIncome+=amount;
+		bonusIncome+=amount;
+	}
+	public void resetIncome(){
+		bonusIncome=0;
 	}
 }

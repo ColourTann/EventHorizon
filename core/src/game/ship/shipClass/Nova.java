@@ -17,7 +17,7 @@ import game.ship.mapThings.mapAbility.genAbility.Teleport;
 public class Nova extends Ship{
 
 	public Nova(boolean player, float tier) {
-		super(player, tier, Gallery.shipNova, Gallery.novaGenerator, Gallery.novaComputer);
+		super(player, tier, "Nova", Gallery.shipNova, Gallery.novaGenerator, Gallery.novaComputer);
 	}
 
 	@Override

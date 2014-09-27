@@ -40,7 +40,7 @@ public class Card {
 	private int[] baseCooldown = new int[2];
 	private String[] rules = new String[2];
 	private int[] shots = new int[2];
-	
+
 	private int bonusShots=0;
 	private CardCode[] code=new CardCode[2];
 	public int specialSide=-1;
@@ -58,7 +58,7 @@ public class Card {
 	public boolean active;
 	public boolean addToDeck;
 	private int effectItHad;
-	
+
 	public float rocketSize; //only used for consumable or utility attacks//
 
 	//Setting up card//
@@ -521,7 +521,7 @@ public class Card {
 		if(code.contains(Special.ModuleChooser)){
 
 			if(code.contains(Special.ImmuneChosenModule)){
-				chosenModule.immune=false;
+				if(chosenModule!=null)chosenModule.immune=false;
 			}
 
 
@@ -532,10 +532,10 @@ public class Card {
 
 	public void checkUnplaySpecials(){
 		CardCode code=getCode();
-		
+
 		Special unplaySpecial=null;
 		ModuleType overrideType=null;
-		
+
 		if(code.contains(Special.ReduceCost))unplaySpecial=Special.ReduceCost;
 		if(code.contains(Special.IncreaseEffect))unplaySpecial=Special.IncreaseEffect;
 		if(code.contains(Special.BonusShots))unplaySpecial=Special.BonusShots;
@@ -548,7 +548,7 @@ public class Card {
 			for(int i=0;i<getShip().playList.size();i++){
 				Card c=getShip().playList.get(i);
 				CardCode checkCode=c.getCode();
-				if(c!=this&&c.mod==mod||c.type==overrideType){
+				if(c!=this&&c.mod.getClass()==mod.getClass()||c.type==overrideType){
 					if(checkCode.contains(unplaySpecial))continue;
 					if(c.wasScrambled)continue;
 					c.deselect(false);
@@ -556,8 +556,8 @@ public class Card {
 				}
 			}
 		}
-		
-		
+
+
 	}
 
 	//General Play method//
@@ -707,8 +707,8 @@ public class Card {
 		CardCode code=augmenter.getCode();
 		boolean checkForWeapon=code.contains(Augment.AugmentWeapon);
 		boolean checkForSameSystem=code.contains(Augment.AugmentThis);
-	
-		
+
+
 		if(augmenter==this)return false; //Same card
 		if(code.contains(Augment.AugmentAny))return true;
 		if(checkForWeapon&&type==ModuleType.WEAPON){
@@ -717,7 +717,7 @@ public class Card {
 			}
 			return true;
 		}
-		if(checkForSameSystem&&mod==augmenter.mod)return true;
+		if(checkForSameSystem&&mod.getClass()==augmenter.mod.getClass())return true;
 
 		return false;
 	}
@@ -842,16 +842,24 @@ public class Card {
 
 	public int getCost(){return getCost(side);}
 	public int getCost(int pick){
-		int effect;
+		int effect=0;
 		if(getCode(pick).contains(Special.ReduceCost)){
 			effect= baseCost[pick];
 		}
-		else effect=Math.max(0, baseCost[pick]-mod.getBuffAmount(BuffType.ReduceCost));
-		
+		else {
+			effect=Math.max(0, baseCost[pick]);
+			if(active){
+				for(Component c:mod.ship.components){
+					if(c.getClass()==mod.getClass())effect-=c.getBuffAmount(BuffType.ReduceCost);
+				}
+			}
+
+		}
+
 		if(active){
 			effect+=getShip().getBonusCost(this, side, effect);
 		}
-		
+
 		return effect;
 	}
 
@@ -860,8 +868,13 @@ public class Card {
 		CardCode code= getCode();
 		if(baseEffect[pick]==0)return 0;
 
-		int effect= baseEffect[pick]+bonusEffect+mod.getBuffAmount(BuffType.BonusEffeect);
+		int effect= baseEffect[pick]+bonusEffect;
+
+
 		if(active){
+			for(Component c:mod.ship.components){
+				if(c.getClass()==mod.getClass())effect+=c.getBuffAmount(BuffType.BonusEffeect);
+			}
 
 			if(code.contains(Special.BonusEffectPerOtherWeapon)){
 				for(Card c:getShip().hand){
@@ -871,7 +884,7 @@ public class Card {
 				}
 			}
 
-			if(mod.ship!=null)effect+=mod.ship.getBonusEffect(this, pick, effect);
+			effect+=mod.ship.getBonusEffect(this, pick, effect);
 
 			for(int i=0;i<code.getAmount(Special.BonusPerMajorDamage);i++){
 				effect+=getShip().getMajorDamage();
@@ -895,10 +908,18 @@ public class Card {
 	public int getShots(int pick){
 		if(shots[pick]==0)return 0;
 
-		int numShots = shots[pick]+bonusShots+mod.getBuffAmount(BuffType.BonusShot);
+		int numShots = shots[pick]+bonusShots;
 
 
-		if(active)numShots+=mod.ship.getBonusShots(this, pick, numShots);
+		
+
+		if(active){
+			numShots+=mod.ship.getBonusShots(this, pick, numShots);
+			for(Component c:mod.ship.components){
+				if(c.getClass()==mod.getClass())numShots+=c.getBuffAmount(BuffType.BonusShot);
+			}
+
+		}
 		return numShots;
 	}
 
@@ -1378,7 +1399,10 @@ public class Card {
 		if(bonusEffect>0&&getEffect(checkSide)>0)return true;
 		if(getShip().getBonusEffect(this, checkSide, baseEffect[checkSide])>0)return true;
 		if(getShip().getBonusShots(this, checkSide, shots[checkSide])>0)return true;
-		return augmented[checkSide]||(component!=null&&component.isAugmented());
+		for(Component c:getShip().components){
+			if(c.getClass()==mod.getClass()&&c.isAugmented())return true;
+		}
+		return augmented[checkSide];
 	}
 
 	public void resetGraphic() {

@@ -36,6 +36,7 @@ public abstract class Updater {
 
 	public void deactivate(){
 		dead=true;
+		tickers.remove(this);
 	}
 	
 	public void fadeIn(float seconds, Interp type){

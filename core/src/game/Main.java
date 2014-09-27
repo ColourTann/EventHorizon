@@ -27,19 +27,20 @@ import game.screen.battle.Battle;
 import game.screen.cardView.CardViewer;
 import game.screen.escape.EscapeMenu;
 import game.screen.map.Map;
-import game.screen.menu.Selector;
+import game.screen.menu.Menu;
 import game.screen.preBattle.PreBattle;
 import game.screen.test.Test;
 import game.ship.Ship;
 import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
+import game.ship.shipClass.Hornet;
 import game.ship.shipClass.Nova;
 
 public class Main extends ApplicationAdapter  {
 
-	public static float version=0.221f;
-	public static boolean debug=true;
+	public static float version=0.36f;
+	public static boolean debug=false;
 public static float ticks;
 	public static int height=700;
 	public static int width=1280;
@@ -53,7 +54,7 @@ public static float ticks;
 
 	public static Battle battle;  
 	public static CardViewer viewer;
-	public static Selector select;
+	public static Menu select;
 	public static Map map;
 
 	public static OrthographicCamera uiCam;
@@ -62,7 +63,7 @@ public static float ticks;
 	
 	public static Timer fadeTimer=new Timer();
 	
-	
+	static float fadeSpeed=.5f;
 	
 
 	//Escape menu//
@@ -74,6 +75,7 @@ public static float ticks;
 	public void init(){
 		
 		Gdx.input.setInputProcessor(new InputHandler());
+		
 		CardGraphic.init();
 		Gallery.init();
 		Font.init();
@@ -94,9 +96,9 @@ public static float ticks;
 		
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-		//select=new Selector();currentScreen=select;select.init();
+		select=new Menu();currentScreen=select;select.init();
 
-		currentScreen=new PreBattle(new Comet(true, 0), new Comet(false, 0)); currentScreen.init();
+		//currentScreen=new PreBattle(new Hornet(true, 0), new Hornet(false, 0)); currentScreen.init();
 		
 		//viewer=new CardViewer();currentScreen=viewer;
 
@@ -104,6 +106,19 @@ public static float ticks;
 
 		//currentScreen=new Test();
 	
+		
+		if(true){
+			System.out.println("---------Aurora------------");
+			System.out.println(new Aurora(true, 0).getStats());
+			System.out.println("---------Nova------------");
+			System.out.println(new Nova(true, 0).getStats());
+			System.out.println("---------Hornet------------");
+			System.out.println(new Hornet(true, 0).getStats());
+			System.out.println("---------Comet------------");
+			System.out.println(new Comet(true, 0).getStats());
+			System.out.println("---------Eclipse------------");
+			System.out.println(new Eclipse(true, 0).getStats());
+		}
 
 	}	
 
@@ -168,7 +183,7 @@ public static float ticks;
 				
 				TextWisp.wisps.clear();
 				Updater.clearAll();
-				fadeTimer=new Timer(1, 0, 1/2f, Interp.LINEAR);
+				fadeTimer=new Timer(1, 0, fadeSpeed, Interp.LINEAR);
 				nextScreen.init();
 				currentScreen.dispose();
 				
@@ -185,10 +200,19 @@ public static float ticks;
 
 	public enum ScreenType{EasyFight, MediumFight, HardFight, TutorialFight, Menu}
 	public static void changeScreen(Screen newScreen){
+		fadeSpeed=.5f;
 		//if(type==ScreenType.Menu&&currentScreen==select)return;
 		TextWisp.wisps.clear();
 		nextScreen=newScreen;
-		fadeTimer=new Timer(fadeTimer.getFloat(), 1, 1/2f, Interp.LINEAR);
+		fadeTimer=new Timer(fadeTimer.getFloat(), 1, fadeSpeed, Interp.LINEAR);
+	}
+	
+	public static void changeScreen(Screen newScreen, float seconds){
+		//if(type==ScreenType.Menu&&currentScreen==select)return;
+		fadeSpeed=seconds;
+		TextWisp.wisps.clear();
+		nextScreen=newScreen;
+		fadeTimer=new Timer(fadeTimer.getFloat(), 1, fadeSpeed, Interp.LINEAR);
 	
 	}
 

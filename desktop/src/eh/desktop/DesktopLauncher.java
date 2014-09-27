@@ -16,6 +16,7 @@ public class DesktopLauncher {
 		config.vSyncEnabled=false;
 		config.title="Event Horizon";
 		config.addIcon("Ship/Eclipse/computer.png", FileType.Internal);
+		config.resizable=false;
 		new LwjglApplication(new Main(), config);
 	}
 }

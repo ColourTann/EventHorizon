@@ -52,7 +52,7 @@ public class ShipGraphic extends Updater{
 
 	public void drawMap(boolean overwrite){
 		if(composite!=null)composite.dispose();
-		if(picCut!=null)picCut.dispose();
+		if(picCut!=null)picCut.miniDispose();
 		if(overwrite){
 			if(shipMap!=null)shipMap.dispose();
 			shipMap=new Pixmap(450, 270, Format.RGBA8888);
@@ -105,7 +105,8 @@ public class ShipGraphic extends Updater{
 
 		composite=new Pic(new Texture(shipMap));
 		picCut=new PicCut(composite, new Color(0,0,0,0));
-
+		
+	
 	}
 
 	public void damage(Pair damageLoc){
@@ -113,7 +114,7 @@ public class ShipGraphic extends Updater{
 
 
 		for(int i=0;i<50;i++){
-			s=picCut.replaceSection(damageLoc.add(Pair.randomAnyVector().multiply(120)), Gallery.shipDamage[(int) (Math.random()*9)].get());
+			s=picCut.replaceSection(damageLoc.add(Pair.randomAnyVector().multiply(50)), Gallery.shipDamage[(int) (Math.random()*9)].get());
 			if(s!=null){
 
 				break;
@@ -194,7 +195,10 @@ public class ShipGraphic extends Updater{
 			Pair position= picCut.addShatter();
 			if(ship.player)position=position.add(ShipGraphic.offset);
 			else position=new Pair(topRightEnemyShipPosition.x-position.x, topRightEnemyShipPosition.y+position.y);
-			damage(position);damage(position);damage(position);damage(position);damage(position);
+			for(int f=0;f<3;f++){
+			Pair damagePosition=Pair.randomAnyVector().multiply(new Pair(130*3, 90*3));
+			damage(damagePosition);
+			}
 			for(int j=0;j<5;j++)animations.add(new Explosion1(position.add(Pair.randomAnyVector().multiply(60))));
 		}
 		/*for(int i=0;i<1;i++){
@@ -302,6 +306,7 @@ public class ShipGraphic extends Updater{
 		shards.clear();
 		animations.clear();
 		picCut.shards.clear();
+		deactivate();
 	}
 
 

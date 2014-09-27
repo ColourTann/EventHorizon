@@ -23,6 +23,7 @@ public class Pic {
 	private Texture glowOutline;
 	private Texture monoChrome;
 	private Texture mask;
+	private Pic flipped;
 	private int scale=1;
 	private Pic basePic;
 	private Color[] replacers;
@@ -58,6 +59,20 @@ public class Pic {
 			}
 		}
 		return t;
+	}
+	
+	public Pic getFlipped(){
+		if(flipped==null){
+			Pixmap flippedMap=new Pixmap(getWidth(), getHeight(), Format.RGBA8888);
+			Pixmap base=getPixMap();
+			for(int x=0;x<getWidth();x++){
+				for(int y=0;y<getHeight();y++){
+					flippedMap.drawPixmap(base, x, y, getWidth()-x-1, getHeight()-y-1, 1, 1);
+				}
+			}
+			flipped=new Pic(new Texture(flippedMap));
+		}
+		return flipped;
 	}
 	
 	public PicCut getCut(){

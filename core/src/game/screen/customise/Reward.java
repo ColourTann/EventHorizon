@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.card.Card;
 import game.module.Module;
 import game.module.component.shield.Shield;
@@ -127,11 +128,13 @@ public class Reward extends Mouser{
 	}
 
 	public void select(){
+		Sounds.cardSelect.play();
 		selected=true;
 		Customise.select(this);
 	}
 
 	public void deselect() {
+		Sounds.cardDeselect.play();
 		moused=false;
 		selected=false;
 

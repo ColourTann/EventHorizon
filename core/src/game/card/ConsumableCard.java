@@ -140,7 +140,9 @@ public class ConsumableCard {
 		pic[1]= Gallery.replicate;
 		cost[1]=2;
 		effect[1]=0;
-		code[1].add(Special.GainEnergy, 4);
+		code[1].add(Special.Augment);
+		code[1].add(Augment.AugmentWeapon);
+		code[1].add(Augment.AugmentAddShot);
 
 		rocketSize=2;
 		
@@ -159,7 +161,7 @@ public class ConsumableCard {
 		shots[0]=1;
 
 		name[1]= "Magnify";
-		rules[1]="Augment weapon card: "+calc(2)+" damage";
+		rules[1]="Augment weapon card: +"+calc(2)+" damage";
 		pic[1]= Gallery.magnify;
 		cost[1]=1;
 		effect[1]=0;
