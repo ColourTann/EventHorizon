@@ -235,7 +235,7 @@ public class Tutorial extends Updater{
 		if(!t.triggered&&t.trig!=null){
 			switch(t.trig){
 			case PlayerShieldPhase:
-
+			
 				Battle.advance();
 				if(Battle.getPhase()!=Phase.ShieldPhase){
 
@@ -278,7 +278,6 @@ public class Tutorial extends Updater{
 					c.removeSramble();
 				}
 				tutorials.remove(0).fadeOut(.33f, Interp.LINEAR);
-				for(Card c:enemy.hand)c.getCode(1).add(AI.Ignore);
 				break;
 			case EnemyPlayCards:
 				Battle.zSet(Phase.EnemyWeaponPhase);
@@ -415,6 +414,7 @@ public class Tutorial extends Updater{
 						new Task("Play one of the other tesla card",TaskType.WeaponPlayed),
 						new Task(TaskType.EndWeaponPhase)
 				});
+				for(Card card:enemy.hand)card.getCode(1).add(AI.Ignore);
 				break;
 			case DrawMoreTeslas:
 				enemy.drawCard(enemy.getComponent(0).getNextCard());

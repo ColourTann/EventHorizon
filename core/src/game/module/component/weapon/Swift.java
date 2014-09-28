@@ -31,7 +31,7 @@ public class Swift extends Weapon{
 		code[1].add(AI.OtherCardsThisSystem,1);
 		
 		name[2]="Twist";
-		cost[2]=1;
+		cost[2]=2;
 		cooldown[2]=0;
 		effect[2]=0;
 		shots[2]=0;
@@ -57,7 +57,6 @@ public class Swift extends Weapon{
 		effect[4]=calc(1);
 		shots[4]=2;
 		rules[4]="Modules hit by this take +"+calc(0)+" damage from further shots this turn";
-		code[4].add(Special.BonusVsPristine, calc(2));
 		code[4].add(Special.MakeVulnerable,calc(0));
 		code[4].add(AI.SurplusEnergy,3);
 		code[4].setPriority(1);

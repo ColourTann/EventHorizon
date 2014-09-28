@@ -3,10 +3,8 @@ package game.module.utility;
 import game.assets.Gallery;
 import game.card.Card;
 import game.card.CardCode.AI;
-import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
 import game.module.Module;
-import game.module.Module.ModuleType;
 
 public class PhaseArray extends Utility{
 
@@ -35,7 +33,7 @@ public class PhaseArray extends Utility{
 		code[1].add(AI.Ignore);
 		
 		overridePowerLevel=calc(2);
-		
+		rocketSize=2;
 	}
 
 	@Override

@@ -86,18 +86,19 @@ public class Battle extends Screen{
 	ArrayList<Animation> animations=new ArrayList<Animation>();
 	float animTicker=0;
 	public static boolean arena;
-
+	private static Timer endTimer=new Timer();
 	static Timer victoryFadeInTimer=new Timer();
 
 	public Battle(Ship player, Ship enemy, boolean tutorial, boolean arena){
 		this.player=player;
 		this.enemy=enemy;
 		this.tutorial=tutorial;
-		this.arena=arena;
+		Battle.arena=arena;
 	}
 
 	@Override
 	public void init() {
+
 		player.getGraphic().activate();
 		enemy.getGraphic().activate();
 		me=this;
@@ -252,12 +253,16 @@ public class Battle extends Screen{
 	}
 
 	public static void battleWon(Ship ship) {
-
 		ship.getEnemy().dead=true;
 		ship.getEnemy().getGraphic().destroy();
 		setPhase(Phase.End);
 		System.out.println("ended");
 		victor=ship;
+		if(!ship.player){
+			endTimer.removeFinisher();
+			endTimer=new Timer();
+		}
+		if(getPlayer().dead)victor=getEnemy();
 		if(!arena){
 			Timer t=new Timer(0,1,5,Interp.LINEAR);
 
@@ -269,11 +274,11 @@ public class Battle extends Screen{
 				}
 			});
 		}
-		if(victor.player){
+		if(victor.player&&!victor.dead){
 			if(arena){
-				Timer t=new Timer(0,1,5,Interp.LINEAR);
+				endTimer=new Timer(0,1,5,Interp.LINEAR);
 
-				t.addFinisher(new Finisher() {
+				endTimer.addFinisher(new Finisher() {
 
 					@Override
 					public void finish() {
@@ -332,11 +337,10 @@ public class Battle extends Screen{
 
 
 		case Input.Keys.S:
-
-			battleWon(getEnemy());
+			if(Main.debug)battleWon(getEnemy());
 			break;
 		case Input.Keys.A:
-			battleWon(getPlayer());
+			if(Main.debug)battleWon(getPlayer());
 			break;
 
 
@@ -601,8 +605,9 @@ public class Battle extends Screen{
 			
 			
 			if(!victor.player){
-				if(arena) Font.drawFontCentered(batch, "You defeated "+Customise.total+" ship"+(Customise.total==1?"":"s"), Font.big, Main.width/2, 100);
+				if(arena){ Font.drawFontCentered(batch, "You defeated "+Customise.total+" ship"+(Customise.total==1?"":"s"), Font.big, Main.width/2, 100);
 				Font.drawFontCentered(batch, "esc to return", Font.big, Main.width/2, 130);
+				}
 			}
 		}
 		//	debugRender(batch);

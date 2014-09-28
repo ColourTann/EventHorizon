@@ -39,9 +39,9 @@ import game.ship.shipClass.Nova;
 
 public class Main extends ApplicationAdapter  {
 
-	public static float version=0.36f;
+	public static float version=0.376f;
 	public static boolean debug=false;
-public static float ticks;
+	public static float ticks;
 	public static int height=700;
 	public static int width=1280;
 
@@ -60,22 +60,22 @@ public static float ticks;
 	public static OrthographicCamera uiCam;
 
 	public static OrthographicCamera mainCam;
-	
+
 	public static Timer fadeTimer=new Timer();
-	
+
 	static float fadeSpeed=.5f;
-	
+
 
 	//Escape menu//
-	
+
 	@Override
 	public void create () {
 		init();
 	}
 	public void init(){
-		
+
 		Gdx.input.setInputProcessor(new InputHandler());
-		
+
 		CardGraphic.init();
 		Gallery.init();
 		Font.init();
@@ -90,23 +90,23 @@ public static float ticks;
 
 		mainCam=new OrthographicCamera(Main.width, Main.height);
 		mainCam.setToOrtho(true);
-		
-		
+
+
 		//currentScreen=new Test();currentScreen.init();
-		
+
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
 		select=new Menu();currentScreen=select;select.init();
 
 		//currentScreen=new PreBattle(new Hornet(true, 0), new Hornet(false, 0)); currentScreen.init();
-		
+
 		//viewer=new CardViewer();currentScreen=viewer;
 
 		//map=new Map();currentScreen=map;
 
 		//currentScreen=new Test();
-	
-		
+
+
 		if(true){
 			System.out.println("---------Aurora------------");
 			System.out.println(new Aurora(true, 0).getStats());
@@ -142,17 +142,17 @@ public static float ticks;
 		batch.setColor(Colours.white);
 
 		currentScreen.render(batch);
-		
+
 		//ParticleSystem.renderAll(batch);
-		
+
 		currentScreen.postRender(batch);
-		
+
 		for(TextWisp t:TextWisp.wisps)t.render(batch);
-		
+
 		//fading bit//
 		batch.setColor(Colours.withAlpha(Colours.dark, fadeTimer.getFloat()));
 		Draw.drawScaled(batch, Gallery.whiteSquare.get(), 0, 0, width, height);
-		
+
 		if(debug){
 			batch.end();
 			batch.setProjectionMatrix(uiCam.combined);
@@ -163,39 +163,39 @@ public static float ticks;
 
 		EscapeMenu.get().render(batch);
 		EscapeMenu.get().postRender(batch);
-		
-		
+
+
 		batch.end();
 
 
-	
+
 
 	}
 
 	public void update(float delta){
-		
-	ticks+=delta;
+
+		ticks+=delta;
 		currentScreen.update(delta);
 		Updater.updateAll(delta);
 
 		if(nextScreen!=null){
 			if(fadeTimer.getFloat()>=1){
-				
+
 				TextWisp.wisps.clear();
 				Updater.clearAll();
 				fadeTimer=new Timer(1, 0, fadeSpeed, Interp.LINEAR);
 				nextScreen.init();
 				currentScreen.dispose();
-				
+
 				currentScreen=nextScreen;
 				nextScreen=null;
 			}
 			return;
 		}
-		
+
 		mainCam.update();
-		
-		
+
+
 	}
 
 	public enum ScreenType{EasyFight, MediumFight, HardFight, TutorialFight, Menu}
@@ -206,14 +206,14 @@ public static float ticks;
 		nextScreen=newScreen;
 		fadeTimer=new Timer(fadeTimer.getFloat(), 1, fadeSpeed, Interp.LINEAR);
 	}
-	
+
 	public static void changeScreen(Screen newScreen, float seconds){
 		//if(type==ScreenType.Menu&&currentScreen==select)return;
 		fadeSpeed=seconds;
 		TextWisp.wisps.clear();
 		nextScreen=newScreen;
 		fadeTimer=new Timer(fadeTimer.getFloat(), 1, fadeSpeed, Interp.LINEAR);
-	
+
 	}
 
 	public static Pair getCam(){
@@ -223,12 +223,12 @@ public static float ticks;
 	public static void setCam(Pair cam){
 		mainCam.position.set(cam.x, cam.y, 0);
 	}
-	
+
 	public static Screen getCurrentInputScreen(){
 		if(EscapeMenu.get().active)return EscapeMenu.get();
 		return currentScreen;
 	}
-	
+
 	public static void keyPress(int keycode) {
 		if(keycode==Input.Keys.ESCAPE){
 			EscapeMenu.get().cycle();
@@ -236,7 +236,7 @@ public static float ticks;
 		}
 		getCurrentInputScreen().keyPress(keycode);
 	}
-	
+
 	public static void keyUp(int keyCode) {
 		getCurrentInputScreen().keyUp(keyCode);
 	}

@@ -35,7 +35,7 @@ public class Tesla extends Weapon{
 		cooldown[2]=1;
 		effect[2]=calc(4,1)+1;
 		shots[2]=1;
-		rules[2]="Damages this module for "+calc(1);
+		rules[2]="Damages this module for "+calc(5)/2;
 		code[2].add(Special.selfDamage,calc(5)/2);
 		code[2].add(AI.DamageSelf, calc(5)/2);
 		code[2].add(AI.EvenChance);

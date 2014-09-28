@@ -38,9 +38,11 @@ import game.module.component.weapon.Weapon;
 import game.module.junk.ShieldPoint;
 import game.module.junk.Buff.BuffType;
 import game.module.utility.Exploiter;
+import game.module.utility.PhaseArray;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
 import game.module.utility.armour.Plating;
+import game.module.utility.armour.VoltaicCarapace;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.interfaceJunk.FightStats;
@@ -111,7 +113,7 @@ public abstract class Ship {
 
 
 		setArmour(new Plating(0));
-		//setUtility(new ArcSocket(0), 1);
+		//setUtility(new PhaseArray(0), 1);
 
 		setupTiers();
 		getGenerator().modulePic=genPic;
@@ -374,7 +376,7 @@ public abstract class Ship {
 
 	//This is to stop abusing the enemy by only playing unshieldable//
 	private void checkTooManyShields() {
-		if(hand.size()>getComputer().getMaximumHandSize()-1){
+		if(hand.size()>getComputer().getMaximumHandSize()/2){
 			discardHand();
 		}
 
@@ -423,7 +425,10 @@ public abstract class Ship {
 
 
 	public void enemyFadeAll(){
-		if(turnTimer.getFloat()>0)return;
+		if(turnTimer.getFloat()>0){
+			System.out.println("returning due to turn timer");
+			return;
+		}
 		for(Card c:playList) c.fadeAndAddIcon();
 		playList.clear();
 		endPhase();
@@ -511,7 +516,6 @@ public abstract class Ship {
 			if(shieldPoints.size()==0)return;
 			//Need to put in reasons not to shield//
 			if(shieldPoints.get(0).card.getCode().contains(Special.ShieldOnlyDamaged)){
-
 				if(c.currentThreshold==0)continue;
 			}
 
@@ -566,11 +570,16 @@ public abstract class Ship {
 		if(Battle.isTutorial())return;
 		drawCard(getComputer().getMaximumHandSize()-hand.size());
 		while(hand.size()>getComputer().getMaximumHandSize()){
-			discard(hand.get(hand.size()-1));
+			putBack(hand.get(hand.size()-1));
 		}
 		getComputer().resetBonusCards();
 	}
 
+	public void putBack(Card c){
+		discard(c);
+		deck.add(0, c);
+	}
+	
 	public void drawCard(int number){
 		if(number<=0)return;
 		for(int i=0;i<number;i++){
@@ -583,7 +592,7 @@ public abstract class Ship {
 		card.active=true;
 		card.addToDeck=false;
 		card.getGraphic().activate();
-
+		card.getGraphic().override=false;
 		if(card.specialSide==-1)card.finaliseSide(); //for rigged draws//
 
 		hand.add(card);
@@ -687,6 +696,7 @@ public abstract class Ship {
 
 	public void startFight(boolean goingFirst){
 		if(!Battle.isTutorial())hand.clear();
+		attacks.clear();
 		deck.clear();
 		initModuleStats();
 		initFightStats();
@@ -864,6 +874,14 @@ public abstract class Ship {
 	}
 
 	public boolean hasSpendableShields() {
+		
+		for(ShieldPoint sp:shieldPoints){
+			if(!sp.card.getCode().contains(Special.ShieldOnlyDamaged)){
+				break;
+			}
+			return false;
+		}
+		
 		if(shieldPoints.size()>0){
 			for(Component c:components){
 				if(c.getShieldableIncoming()>0){
@@ -897,7 +915,7 @@ public abstract class Ship {
 	public void recalculateThresholds() {
 		doubleHP=false;
 		for(Component c:components){
-			if(c.getMaxHP()>18){
+			if(c.getMaxHP()>17){
 				doubleHP=true;
 			}
 		}

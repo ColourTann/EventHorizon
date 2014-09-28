@@ -154,6 +154,7 @@ public class PreBattle extends Screen{
 		for(Component c:player.components){
 			c.getStats().mousectivate(null);
 			c.getStats().alpha=0;
+			c.getStats().info.alpha=0;
 		}
 	}
 

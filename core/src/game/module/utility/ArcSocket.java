@@ -25,8 +25,8 @@ public class ArcSocket extends Utility{
 		cost[1]=0;
 		cooldown[1]=0;
 		effect[1]=0;
-		rules[1]="+1 shield effect this turn";
-		code[1].add(Special.BonusEffectToShield, 1);
+		rules[1]="+"+calc(0,1)+" shield effect this turn";
+		code[1].add(Special.BonusEffectToShield, calc(0,1));
 		code[1].add(AI.Ignore);
 		
 		

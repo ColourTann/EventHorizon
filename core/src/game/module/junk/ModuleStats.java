@@ -203,13 +203,13 @@ public class ModuleStats extends Mouser{
 			ext=Gallery.blueHP[5];
 		}
 		if(damage+unshieldable+incoming>component.maxHP){
-			Draw.draw(batch, ext.get(), collider.position.x+hpLoc.x+hpGap.x*(component.maxHP%row),collider.position.y+hpLoc.y+hpGap.y*(component.maxHP/row));
+			Draw.draw(batch, ext.get(), collider.position.x+hpLoc.x+hpGap.x*((slotLoc)%row),collider.position.y+hpLoc.y+hpGap.y*((slotLoc)/row));
 			//Off the edge number//
 			
 			if(ext==Gallery.orangeHP[5]){
 				Font.small.setColor(Colours.weaponCols8[6]);
 				String s=damage+unshieldable+incoming-shields-component.maxHP+"";
-				Font.small.draw(batch, s, collider.position.x+hpLoc.x+hpGap.x*(component.maxHP%row)+11-Font.small.getBounds(s).width/2,  collider.position.y+hpLoc.y+hpGap.y*(component.maxHP/row)+6);
+				Font.small.draw(batch, s, collider.position.x+hpLoc.x+hpGap.x*((slotLoc)%row)+11-Font.small.getBounds(s).width/2,  collider.position.y+hpLoc.y+hpGap.y*((slotLoc)/row)+6);
 			}
 		}
 

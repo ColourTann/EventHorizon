@@ -148,7 +148,7 @@ public abstract class Component extends Module{
 				else for (int i=0;i< code.getAmount(Special.GetCardFromChosenModule);i++) ship.drawCard(getNextCard());
 			}
 			if(code.contains(Special.ImmuneChosenModule))immune=true;
-			for(int i=0;i<code.getAmount(Special.ScrambleChosenModule); i++)scramble();
+			for(int i=0;i<code.getAmount(Special.ScrambleChosenModule); i++)scramble(Battle.moduleChooser);
 
 			for(int i=0;i<Battle.moduleChooser.getEffect();i++)shield(new ShieldPoint(Battle.moduleChooser, i==0), false);
 
@@ -183,7 +183,7 @@ public abstract class Component extends Module{
 		if(!ship.player){
 			if(Battle.getState()==State.Targeting){
 				Card targeter=Battle.targetSource;
-				Weapon source=(Weapon) targeter.mod;
+				Module source= targeter.mod;
 				targeter.targetChosen();
 				targeteds++;
 				for(int i=0;i<targeter.getShots();i++){
@@ -226,7 +226,7 @@ public abstract class Component extends Module{
 		currentThreshold++;
 		ship.majorDamage();
 		ship.checkDefeat();
-		scramble();
+		scramble(null);
 		for(int i=0;i<1;i++)ship.getGraphic().damage(niche.location);
 		for(int i=0;i<3;i++) ship.getGraphic().addExplosion(getCenter());
 
@@ -384,9 +384,9 @@ public abstract class Component extends Module{
 		return barrel;
 	}
 
-	public Pair getCorner(){
+	/*public Pair getCorner(){
 		return getCenter().add(-niche.width/2, -niche.height/2);
-	}
+	}*/
 
 	public Pair getCenter(){
 		if(center==null&&this instanceof SpecialComponent){
@@ -437,14 +437,16 @@ public abstract class Component extends Module{
 		}
 	}
 
-	public void scramble(){
+	public void scramble(Card source){ //Source is usually null//
 		if(ship.preventScramble()){
 			new TextWisp("Immune", Font.medium, getCenter().add(new Pair(ship.player?0:-500,-40)), WispType.Regular); 
 			return;
 		}
-		buffs.add(new Buff(BuffType.Scrambled, 1, null, true));
+		buffs.add(new Buff(BuffType.Scrambled, 1, source, true));
 		new TextWisp("Scrambled", Font.medium, getCenter().add(new Pair(ship.player?0:-500,-40)), WispType.Regular); 
 	}
+	
+	
 
 	public void addBuff(Buff b){
 		buffs.add(b);

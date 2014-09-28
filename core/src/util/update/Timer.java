@@ -88,4 +88,8 @@ public class Timer extends Updater{
 	public String toString(){
 		return "Timer, from "+fromFloat+" to "+toFloat+". ratio: "+ratio;
 	}
+
+	public void removeFinisher() {
+		this.f=null;
+	}
 }

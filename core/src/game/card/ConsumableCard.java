@@ -142,7 +142,7 @@ public class ConsumableCard {
 		effect[1]=0;
 		code[1].add(Special.Augment);
 		code[1].add(Augment.AugmentWeapon);
-		code[1].add(Augment.AugmentAddShot);
+		code[1].add(Augment.AugmentAddShot, 2);
 
 		rocketSize=2;
 		

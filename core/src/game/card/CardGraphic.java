@@ -148,8 +148,8 @@ public class CardGraphic extends Mouser {
 		
 		//Checking state//
 		if(Screen.isActiveType(Battle.class)){
-			if (Battle.getPhase() == Phase.ShieldPhase&&card.type == ModuleType.WEAPON||
-					Battle.getPhase() == Phase.WeaponPhase&& card.type == ModuleType.SHIELD) {
+			if ((Battle.getPhase() == Phase.ShieldPhase&&card.type == ModuleType.WEAPON)||
+					(Battle.getPhase() == Phase.WeaponPhase&& card.type == ModuleType.SHIELD)) {
 				c = Colours.faded;
 				wrongState = true;
 			}

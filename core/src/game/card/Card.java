@@ -448,7 +448,6 @@ public class Card {
 		}
 		Component c=ship.getEnemy().getRandomUndestroyedComponent();
 		for(int i=0;i<code.getAmount(Special.ScrambleChosenModule);i++){
-			c.scramble();
 		}
 		select();
 		//play();
@@ -502,6 +501,7 @@ public class Card {
 			component.removeIncoming(this);
 			component.removeBuffs(this);
 		}
+		
 
 		//Uncharing weapons//
 		if(type==ModuleType.WEAPON){
@@ -519,12 +519,13 @@ public class Card {
 
 		//deselecting modchoose stuff//
 		if(code.contains(Special.ModuleChooser)){
-
 			if(code.contains(Special.ImmuneChosenModule)){
 				if(chosenModule!=null)chosenModule.immune=false;
 			}
-
-
+		}
+		if(chosenModule!=null){
+			System.out.println("removing buffs");
+			chosenModule.removeBuffs(this);
 		}
 
 		if(playSound)Sounds.cardDeselect.play();
@@ -562,13 +563,14 @@ public class Card {
 
 	//General Play method//
 	public void play() {
+		if(wasScrambled) return;
 		CardCode code=getCode();
 		Ship ship = getShip();
 		ship.hand.remove(this);
 
 
 		//Enemies play cards normally, players play discardwhenclickeds immediately//
-		for(int i=0;i<code.getAmount(Special.SelfScramble);i++)component.scramble();
+		for(int i=0;i<code.getAmount(Special.SelfScramble);i++)component.scramble(null);
 		for(int i=0;i<code.getAmount(Special.selfDamage);i++)component.damage(new DamagePoint(this));
 
 		if(((getCode().contains(Special.DiscardWhenPlayed)||getCode().contains(Special.Augment))&&getShip().player))
@@ -608,12 +610,13 @@ public class Card {
 	}
 
 	private void scrambDeselect() {
-		component.scramble();
+		component.scramble(null);
 		for(Card c:getShip().hand){
 			if(c.selected&&!c.wasScrambled&&c.mod==mod){
 				c.deselect(false);
 			}
 		}
+		if(Battle.targetSource!=null&&Battle.targetSource.mod==mod)Battle.targetSource.deTarget();
 		selected=false;
 		wasScrambled=false;
 		Sounds.cardDeselect.play();
@@ -705,6 +708,7 @@ public class Card {
 
 	public boolean validAugmentTarget(Card augmenter){
 		CardCode code=augmenter.getCode();
+		if(wasScrambled)return false;
 		boolean checkForWeapon=code.contains(Augment.AugmentWeapon);
 		boolean checkForSameSystem=code.contains(Augment.AugmentThis);
 
@@ -1005,7 +1009,10 @@ public class Card {
 			 *  
 			 * 
 			 */
-
+			case Ignore:
+				no(aiclass,"");
+				return false;
+				
 			case SurplusEnergy:
 				if(currentEnergy>=cost+aiclass.number){
 					ok(aiclass, "excess energy is "+(currentEnergy-cost));
@@ -1102,9 +1109,8 @@ public class Card {
 
 			case CheckOriginalFirst:
 				break;
-			case Ignore:
-				no(aiclass,"");
-				return false;
+				
+			
 
 				/*
 				 * 
