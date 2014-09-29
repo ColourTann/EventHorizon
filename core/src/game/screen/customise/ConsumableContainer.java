@@ -23,7 +23,8 @@ public class ConsumableContainer extends Mouser{
 	ArrayList<Card> cards= new ArrayList<Card>();;
 	static int width=Gallery.cardBase.getWidth()*3;
 	static int height=Gallery.cardBase.getHeight()*2;
-	Pair position=new Pair(Customise.energyX-width/2, 400);
+	public static Pair position=new Pair(Customise.energyX-width/2, 400);
+	
 	public ConsumableContainer(){
 		mousectivate(new BoxCollider(position.x, position.y, width, height));
 		cards.addAll(Customise.ship.getConsumables());
@@ -66,12 +67,13 @@ public class ConsumableContainer extends Mouser{
 		if(cards.size()==0)return;
 		float start=position.x;
 		
-		float gap=width/(cards.size());
+		float gap=width-cards.size()*CardGraphic.width;
+		gap/=(cards.size()+1);
 		if(cards.size()<=3){
 			for(int i=0;i<cards.size();i++){
 				CardGraphic c=cards.get(i).getGraphic();
 				c.activate();
-				c.slide(new Pair(start+gap*(i+1)-CardGraphic.width, position.y), .5f, Interp.SQUARE);
+				c.slide(new Pair(start+gap*(i+1)+i*CardGraphic.width, position.y), .5f, Interp.SQUARE);
 				c.finishFlipping();
 			}
 		}
@@ -103,6 +105,8 @@ public class ConsumableContainer extends Mouser{
 		for(Card c:cards){
 			c.getGraphic().render(batch);
 		}
+		
+		
 		
 	}
 

@@ -37,7 +37,7 @@ public class LightningAttack extends AttackGraphic{
 			public void finish() {
 
 				fired=true;
-				Sounds.lightning.play();
+				Sounds.lightning.overlay();
 
 				impact();
 			}

@@ -27,7 +27,7 @@ public class Comet extends Ship{
 		Polygon weapon2= new Polygon(new float[]{216,188,0,0,0,0});
 		Polygon shield = new Polygon(new float[]{138,99,0,0,0,0});
 		Polygon generator = new Polygon(new float[]{
-				39,23,
+				39,24,
 				108,29,
 				108,240,
 				39,240});

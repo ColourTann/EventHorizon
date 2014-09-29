@@ -134,7 +134,7 @@ public class Gallery {
 	private static Color[] greyHPReplace= new Color[]{Colours.baseReplacers[0], Colours.greyHPCols[0], Colours.baseReplacers[1], Colours.greyHPCols[1], Colours.baseReplacers[2], Colours.greyHPCols[2]};
 	private static Color[] blueHPReplace= new Color[]{Colours.baseReplacers[0], Colours.blueHPCols[0], Colours.baseReplacers[1], Colours.blueHPCols[1], Colours.baseReplacers[2], Colours.blueHPCols[2]};
 	
-	
+	private static Color[] playerToEnemyColours=new Color[]{Colours.player2[0], Colours.enemy2[0], Colours.player2[1], Colours.enemy2[1]};
 
 	
 	//INTERFACE STUFF//
@@ -146,8 +146,12 @@ public class Gallery {
 	public static Pic cycleButton= new Pic("Interface/cyclebutton");
 	public static Pic playerEnergy = new Pic("Interface/playerenergy");
 	public static Pic enemyEnergy = new Pic("Interface/enemyenergy");
+	
 	public static Pic majorDamagePlayer= new Pic("Interface/majordamageplayer");
-	public static Pic majorDamageEnemy= new Pic("Interface/majordamageenemy");
+	public static Pic majorDamageEnemy= new Pic(majorDamagePlayer, playerToEnemyColours);
+	public static Pic majorDamagePlayerPlus= new Pic("Interface/majordamageplayerplus");
+	public static Pic majorDamageEnemyPlus= new Pic(majorDamagePlayerPlus, playerToEnemyColours);
+	
 	public static Pic cardIconPlayer= new Pic("Interface/cardiconplayer");
 	public static Pic cardIconEnemy= new Pic("Interface/cardiconenemy");
 	public static Pic helpPanelMid = new Pic("Interface/helppanelmid");

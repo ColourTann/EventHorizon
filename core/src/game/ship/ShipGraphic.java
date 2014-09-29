@@ -81,7 +81,7 @@ public class ShipGraphic extends Updater{
 
 			if(n.component.type==ModuleType.GENERATOR||n.component.type==ModuleType.COMPUTER){
 				Pixmap map=n.component.modulePic.getPixMap();
-				if(n.component.currentThreshold==3){
+				if(n.component.destroyed){
 					map=Pic.getPixMap(n.component.modulePic.getMonochrome());
 				}
 				shipMap.drawPixmap(map,

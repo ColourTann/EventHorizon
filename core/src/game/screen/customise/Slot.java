@@ -73,7 +73,7 @@ public class Slot extends Mouser{
 					Customise.ship.setArmour((Armour) Customise.selectedReward.module);
 					Customise.rewardChosen();
 					Customise.mouseOver(Customise.ship.getArmour());
-					Sounds.shieldUse.play();
+					Sounds.shieldUse.overlay();
 				}
 				return;
 			}
@@ -81,7 +81,7 @@ public class Slot extends Mouser{
 				Customise.ship.setUtility((Utility) Customise.selectedReward.module, index);
 				Customise.rewardChosen();
 				Customise.mouseOver(Customise.ship.getUtility(index));
-				Sounds.shieldUse.play();
+				Sounds.shieldUse.overlay();
 			}
 		}
 	}

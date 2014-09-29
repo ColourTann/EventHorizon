@@ -70,7 +70,7 @@ public class RayAttack extends AttackGraphic{
 				vector=vector.multiply(800);
 				intensity=0;
 				frequency=350;
-				Sounds.ray.play();
+				Sounds.ray.overlay();
 			}
 		});
 

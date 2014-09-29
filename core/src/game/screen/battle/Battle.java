@@ -29,6 +29,7 @@ import game.card.CardGraphic;
 import game.card.CardIcon;
 import game.card.CardCode.Special;
 import game.module.component.Component;
+import game.module.junk.DamagePoint;
 import game.module.junk.ModuleInfo;
 import game.screen.battle.interfaceJunk.CycleButton;
 import game.screen.battle.interfaceJunk.HelpPanel;
@@ -258,6 +259,9 @@ public class Battle extends Screen{
 		setPhase(Phase.End);
 		System.out.println("ended");
 		victor=ship;
+		
+		ship.endOfBattleCelebrations();
+		
 		if(!ship.player){
 			endTimer.removeFinisher();
 			endTimer=new Timer();
@@ -337,7 +341,11 @@ public class Battle extends Screen{
 
 
 		case Input.Keys.S:
-			if(Main.debug)battleWon(getEnemy());
+			if(Main.debug){
+				getPlayer().getGenerator().destroyed=true;
+				getPlayer().getComputer().destroyed=true;
+				getPlayer().getGraphic().drawMap(true);
+			}
 			break;
 		case Input.Keys.A:
 			if(Main.debug)battleWon(getPlayer());
@@ -605,7 +613,7 @@ public class Battle extends Screen{
 			
 			
 			if(!victor.player){
-				if(arena){ Font.drawFontCentered(batch, "You defeated "+Customise.total+" ship"+(Customise.total==1?"":"s"), Font.big, Main.width/2, 100);
+				if(arena){ Font.drawFontCentered(batch, "You defeated "+Customise.totalShipsDefeated+" ship"+(Customise.totalShipsDefeated==1?"":"s"), Font.big, Main.width/2, 100);
 				Font.drawFontCentered(batch, "esc to return", Font.big, Main.width/2, 130);
 				}
 			}

@@ -68,7 +68,7 @@ public class Customise extends Screen{
 	ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
 	int shipNumber=2;
 	public static float power=0;
-	public static int total=0;
+	public static int totalShipsDefeated=0;
 	public static boolean repairing=false;
 	public Customise(Ship s, boolean first){
 		
@@ -88,18 +88,18 @@ public class Customise extends Screen{
 	public void init() {
 		resetModuleStats();
 		if(!first){
-			total++;
+			totalShipsDefeated++;
 			addRewards((int)(power/3)+1,false);
 		}
 		
 		if(first){
-			total=0;
+			totalShipsDefeated=0;
 			setPanel(PanelType.PickShip);
 			buttons.add(new SimpleButton(new Pair(shipX-250, Main.height-108), "", Gallery.leftButton, new Code() {
 
 				@Override
 				public void onPress() {
-					Sounds.cardDeselect.play();
+					Sounds.cardDeselect.overlay();
 					ship.dispose();
 					shipNumber--;
 					shipNumber+=Ship.classes.length;
@@ -114,7 +114,7 @@ public class Customise extends Screen{
 				@Override
 				public void onPress() {
 					
-					Sounds.cardSelect.play();
+					Sounds.cardSelect.overlay();
 					ship.dispose();
 					shipNumber++;
 					
@@ -128,7 +128,7 @@ public class Customise extends Screen{
 
 				@Override
 				public void onPress() {
-					Sounds.shieldUse.play();
+					Sounds.shieldUse.overlay();
 					first=false;
 					setPanel(PanelType.Choose);
 					addRewards(0, true);
@@ -219,7 +219,7 @@ public class Customise extends Screen{
 	public void addRewards(int tier, boolean start){
 
 		rewards.clear();
-
+		tier=Math.min(4, tier);
 		Draw.shuffle(Reward.typeList);
 		int bonus=0;
 		for(int i=0;i<3;i++){
@@ -362,6 +362,9 @@ public class Customise extends Screen{
 		batch.setColor(1,1,1,1);
 
 		for(SimpleButton butt:buttons) butt.render(batch);
+		
+		
+		Font.drawFontCentered(batch, "Ships defeated: "+totalShipsDefeated, Font.big, ConsumableContainer.position.x+ConsumableContainer.width/2, 280);
 	}
 
 	public static void select(Reward reward) {

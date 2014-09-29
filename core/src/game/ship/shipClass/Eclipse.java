@@ -28,13 +28,13 @@ public class Eclipse extends Ship{
 		Polygon generator = new Polygon(new float[]{
 				120,117,
 				183,100,
-				176,65,
+				176,69,
 				105,85});
 		Polygon computer = new Polygon(new float[]{
 				192,132,
 				220,150,
 				243,130,
-				228,95});
+				228,99});
 
 		niches[0].setup(weapon1);
 		niches[1].setup(weapon2);

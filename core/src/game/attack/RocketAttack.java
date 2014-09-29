@@ -10,6 +10,9 @@ import util.Draw;
 import util.Draw.BlendType;
 import util.maths.Pair;
 import util.particleSystem.Particle;
+import util.update.Timer;
+import util.update.Timer.Finisher;
+import util.update.Timer.Interp;
 
 public class RocketAttack extends AttackGraphic{
 	float scale;
@@ -25,15 +28,24 @@ public class RocketAttack extends AttackGraphic{
 
 	@Override
 	public void fire(Pair target) {
-		fired=true;
+		
 		this.target=target;
-		target=target.add(Pair.randomAnyVector().multiply(0));
-		float rotate=(float) (Math.random()*1+.5);
+		
+		t=new Timer(0,1, 1/(10f/(order+.01f)), Interp.LINEAR);
+		t.addFinisher(new Finisher() {
 
-		if(Math.random()>.5)rotate=-rotate;
-		vector=vector.rotate(rotate);
-		vector=vector.normalise();
-		Sounds.rocket.play();
+
+			@Override
+			public void finish() {
+				fired=true;
+				float rotate=(float) (Math.random()*1+.5);
+				if(Math.random()>.5)rotate=-rotate;
+				vector=vector.rotate(rotate);
+				vector=vector.normalise();
+				Sounds.rocket.play();
+			}
+		});
+
 	}
 
 	@Override

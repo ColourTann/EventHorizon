@@ -48,7 +48,6 @@ public class Hornet extends Ship{
 		niches[4].setup(computer);
 
 		setWeapon(new Swift(0), 0);
-		//setWeapon(new Swift(0), 0);
 		setWeapon(new Ray(0), 1);
 		setShield(new Repulsor(0));
 		setGenerator(new Five());

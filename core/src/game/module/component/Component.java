@@ -78,10 +78,10 @@ public abstract class Component extends Module{
 	public void recalculateThresholds(){
 
 		for(int i=0;i<3;i++){
-			
+
 			thresholds[i]=(int)(baseThresholds[i]*ship.getArmourMultiplier());
-			
-			
+
+
 			if(ship.doubleHP){
 				if((thresholds[i]+i)%2==0){
 					thresholds[i]-=1;
@@ -122,16 +122,15 @@ public abstract class Component extends Module{
 
 	}
 
-	@SuppressWarnings("unused")
-	public void clicked(){
+	public void clicked(boolean left){
 		//CLICKED ON PLAYER MODULE//
 		if(destroyed)return;
 
-		
-		if(Battle.getState()==State.ModuleChoose){
+
+		if(left && Battle.getState()==State.ModuleChoose){
 			CardCode code=Battle.moduleChooser.getCode();
 			if(ship.player==code.contains(Special.ChooseEnemyModule)){
-				Sounds.error.play();
+				Sounds.error.overlay();
 				return;
 			}
 
@@ -142,7 +141,7 @@ public abstract class Component extends Module{
 			}
 			if(code.contains(Special.GetCardFromChosenModule)){
 				if(this==Battle.moduleChooser.mod){
-					Sounds.error.play();
+					Sounds.error.overlay();
 					return;
 				}
 				else for (int i=0;i< code.getAmount(Special.GetCardFromChosenModule);i++) ship.drawCard(getNextCard());
@@ -165,15 +164,23 @@ public abstract class Component extends Module{
 		//shielding
 
 		if(ship.player){
-			if(ship.shieldPoints.size()>0&&getShieldableIncoming()>0){
-				for(ShieldPoint p: ship.shieldPoints){
-					if(shield(ship.shieldPoints.get(0),true)){
-						ship.shieldPoints.remove(0);
-						return;
+			if(left){ //left click to add shields//
+				if(ship.shieldPoints.size()>0&&getShieldableIncoming()>0){
+					for(ShieldPoint p: ship.shieldPoints){
+						if(shield(ship.shieldPoints.get(0),true)){
+							ship.shieldPoints.remove(0);
+							return;
+						}
 					}
+					Sounds.error.overlay();
 				}
-				Sounds.error.play();
-
+			}
+			if(!left){ //right click to remove shields//
+				if(getShield()==0){
+					return;
+				}
+				ship.shieldPoints.add(shieldPoints.remove(shieldPoints.size()-1));
+				Sounds.shieldUnuse.overlay();
 			}
 
 		}
@@ -234,8 +241,8 @@ public abstract class Component extends Module{
 			destroy();
 			return;
 		}
-		
-		
+
+
 	}
 
 	private void destroy(){
@@ -423,7 +430,7 @@ public abstract class Component extends Module{
 	public int getBuffAmount(BuffType check) {
 		int total=0;
 		for(Buff b:buffs){
-			if(check==b.type)total+=1;
+			if(check==b.type)total+=Math.max(b.number, 1);
 		}
 		return total;
 	}
@@ -445,8 +452,8 @@ public abstract class Component extends Module{
 		buffs.add(new Buff(BuffType.Scrambled, 1, source, true));
 		new TextWisp("Scrambled", Font.medium, getCenter().add(new Pair(ship.player?0:-500,-40)), WispType.Regular); 
 	}
-	
-	
+
+
 
 	public void addBuff(Buff b){
 		buffs.add(b);
@@ -539,7 +546,7 @@ public abstract class Component extends Module{
 		alpha/=4;
 		alpha*=Math.min(4, shieldIntensity);
 		batch.setColor(Colours.withAlpha(Colours.shieldCols6[3], alpha));
-		
+
 		Draw.drawCenteredRotatedScaledFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);
 		batch.setColor(1,1,1,shieldAlphaTimer.getFloat());
 		Draw.drawCenteredRotatedScaledFlipped(batch, Gallery.shieldEffect.get(), getBarrel().x, getBarrel().y, 2, 6, 0,  !ship.player, false);
@@ -549,7 +556,7 @@ public abstract class Component extends Module{
 		if(stats==null)stats=new ModuleStats(this);
 		return stats;
 	}
-	
+
 	public void resetStats(){
 		stats=null;
 	}
@@ -598,7 +605,7 @@ public abstract class Component extends Module{
 			damage.remove(0);
 		}
 	}
-	
+
 	public boolean onMajorDamage(){
 		if(damage.size()==0)return true;
 		for(int i:thresholds){

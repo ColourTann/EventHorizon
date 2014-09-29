@@ -55,7 +55,7 @@ public class ModuleStats extends Mouser{
 			}
 
 		}
-		component.clicked();
+		component.clicked(left);
 	}
 	@Override
 	public void mouseDown() {

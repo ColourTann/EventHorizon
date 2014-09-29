@@ -128,13 +128,13 @@ public class Reward extends Mouser{
 	}
 
 	public void select(){
-		Sounds.cardSelect.play();
+		Sounds.cardSelect.overlay();
 		selected=true;
 		Customise.select(this);
 	}
 
 	public void deselect() {
-		Sounds.cardDeselect.play();
+		Sounds.cardDeselect.overlay();
 		moused=false;
 		selected=false;
 

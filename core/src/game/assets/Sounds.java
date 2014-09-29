@@ -5,6 +5,7 @@ import util.assets.SoundClip;
 public class Sounds {
 	public static SoundClip error= new SoundClip("Sound/error.ogg");
 	public static SoundClip shieldUse= new SoundClip("Sound/shielduse.ogg");
+	public static SoundClip shieldUnuse= new SoundClip("Sound/shieldunuse.ogg");
 	public static SoundClip shieldActivate=new SoundClip("Sound/shieldactivate.ogg");
 	public static SoundClip cardFlip= new SoundClip("Sound/flip.ogg");
 	public static SoundClip cardDeselect= new SoundClip("Sound/deselectcard.ogg");

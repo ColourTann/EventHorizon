@@ -114,7 +114,7 @@ public class Card {
 		if(Tutorial.stopClick())return;
 		//First check if you're in a playable phase//
 		if(Battle.getPhase()==Phase.End||Battle.getPhase()!=Phase.ShieldPhase&&Battle.getPhase()!=Phase.WeaponPhase){
-			Sounds.error.play();
+			Sounds.error.overlay();
 			return;	
 		}
 
@@ -134,23 +134,23 @@ public class Card {
 
 		if(Battle.getState()==State.CycleDiscard){
 			if(selected){
-				Sounds.error.play();
+				Sounds.error.overlay();
 				return;
 			}
 			getShip().discard(this);
 			Battle.help.done();
 			Battle.setState(State.CycleGet);
-			Sounds.cardDeselect.play();
+			Sounds.cardDeselect.overlay();
 			return;
 		}
 
 		if(Battle.getState()==State.CycleGet){
 			if(CycleButton.choices.contains(this)){
 				CycleButton.get().choose(this);
-				Sounds.cardSelect.play();
+				Sounds.cardSelect.overlay();
 				return;
 			}
-			Sounds.error.play();
+			Sounds.error.overlay();
 			return;
 		}
 
@@ -168,12 +168,12 @@ public class Card {
 		}
 
 		if((Battle.getPhase()==Phase.WeaponPhase&&type==ModuleType.SHIELD)||(Battle.getPhase()==Phase.ShieldPhase&&type==ModuleType.WEAPON)){
-			Sounds.error.play();
+			Sounds.error.overlay();
 			System.out.println("Wrong state"); return;						//Wrong phase//
 		}
 
 		if(mod.getBuffAmount(BuffType.Scrambled)>0){
-			Sounds.cardSelect.play();
+			Sounds.cardSelect.overlay();
 			scrambSelect();
 			return;
 		}
@@ -181,13 +181,13 @@ public class Card {
 		//If it's an augment, must be valid//
 		if(getCode().contains(Special.Augment)){
 			if(!validAugmentPlay()){
-				Sounds.error.play();
+				Sounds.error.overlay();
 				return;
 			}
 		}
 
 		if(Battle.getState()!=State.Nothing){
-			Sounds.error.play();
+			Sounds.error.overlay();
 			return;
 		}
 
@@ -198,11 +198,11 @@ public class Card {
 
 		//Then check to see if you are unable to play the card//
 		if(getShip().getEnergy()<getCost()){
-			Sounds.error.play();
+			Sounds.error.overlay();
 			System.out.println("Not enough energy to play "+this); return;	//Not enough Energy//			
 		}	
 		if(mod.getCurrentCooldown()>0){
-			Sounds.error.play();
+			Sounds.error.overlay();
 			System.out.println(this+" is cooling down"); return;			//Cooling down//
 		}
 
@@ -240,16 +240,17 @@ public class Card {
 		//General stuff//
 		if(code.contains(Special.IncreaseEffect))component.addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.IncreaseEffect), this, false));
 		if(code.contains(Special.BonusEffectToShield))getShip().getShield().addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.BonusEffectToShield), this, false));
-		if(code.contains(Special.PermanentIncreaseEffect))component.addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.PermanentIncreaseEffect), this, true));
+		if(code.contains(Special.PermanentIncreaseEffect)) component.addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.PermanentIncreaseEffect), this, true));
 		if(code.contains(Special.ReduceCost))component.addBuff(new Buff(BuffType.ReduceCost, code.getAmount(Special.ReduceCost), this, false));
 		if(code.contains(Special.BonusShots))component.addBuff(new Buff(BuffType.BonusShot, code.getAmount(Special.BonusShots), this, false));
 		ship.addIncome(code.getAmount(Special.EnergyIncome));
 
 		ship.drawCard(code.getAmount(Special.DrawCard));
 		ship.addEnergy(code.getAmount(Special.GainEnergy), false);
-		if(code.contains(Special.RemoveEnemyEnergy)){
-			effectItHad=Math.min(ship.getEnemy().getEnergy(), code.getAmount(Special.RemoveEnemyEnergy));
+		if(code.contains(Special.StealEnergy)){
+			effectItHad=Math.min(ship.getEnemy().getEnergy(), code.getAmount(Special.StealEnergy));
 			ship.getEnemy().addEnergy(-effectItHad, false);
+			getShip().addEnergy(effectItHad, false);
 		}
 		ship.addToEnergyAtEndOfPhase(code.getAmount(Special.EnergyIfEmpty));
 
@@ -293,15 +294,15 @@ public class Card {
 		Ship ship=getShip();
 		//special case//
 		if(code.contains(Special.EnergyIfEmpty)&&ship.getEnergy()!=0){
-			Sounds.error.play();
+			Sounds.error.overlay();
 			return;
 		}
 		if(code.contains(Special.MustBeMajorDamaged)&&component.currentThreshold==0){
-			Sounds.error.play();
+			Sounds.error.overlay();
 			return;
 		}
 		if(code.contains(Special.MustBeUndamaged)&&component.getDamage()>0){
-			Sounds.error.play();
+			Sounds.error.overlay();
 			return;
 		}
 		//Complicated bit about deselecting cards. First you have to deselect all cards that rely on this card. Currently only for reducecost//
@@ -317,8 +318,8 @@ public class Card {
 				}
 			}
 		}*/
-		if(!(type==ModuleType.SHIELD&&getEffect()>0&&!getCode().contains(Special.AddShieldPoints)))Sounds.cardSelect.play();
-		if(code.contains(Special.ShieldChosenModule))Sounds.cardSelect.play();
+		if(!(type==ModuleType.SHIELD&&getEffect()>0&&!getCode().contains(Special.AddShieldPoints)))Sounds.cardSelect.overlay();
+		if(code.contains(Special.ShieldChosenModule))Sounds.cardSelect.overlay();
 
 
 
@@ -464,9 +465,16 @@ public class Card {
 		//Reasons not to deselect//
 		//if(wasScrambled)return;
 		if(code.getAmount(Special.GainEnergy)>ship.getEnergy()){
-			Sounds.error.play();
+			Sounds.error.overlay();
 			return;
 		}
+		
+		if(code.contains(Special.StealEnergy)&&effectItHad>ship.getEnergy()){
+			Sounds.error.overlay();
+			return;
+		}
+		
+		
 
 
 		//ok unplaying!
@@ -490,8 +498,10 @@ public class Card {
 
 		ship.addIncome(-code.getAmount(Special.EnergyIncome));
 		ship.addEnergy(-code.getAmount(Special.GainEnergy), false);
-		if(code.contains(Special.RemoveEnemyEnergy)){
+		
+		if(code.contains(Special.StealEnergy)){
 			ship.getEnemy().addEnergy(effectItHad, false);	
+			getShip().addEnergy(-effectItHad, false);
 		}
 
 
@@ -528,7 +538,7 @@ public class Card {
 			chosenModule.removeBuffs(this);
 		}
 
-		if(playSound)Sounds.cardDeselect.play();
+		if(playSound)Sounds.cardDeselect.overlay();
 	}
 
 	public void checkUnplaySpecials(){
@@ -547,14 +557,20 @@ public class Card {
 		}
 		if(unplaySpecial!=null){
 			for(int i=0;i<getShip().playList.size();i++){
-				Card c=getShip().playList.get(i);
-				CardCode checkCode=c.getCode();
-				if(c!=this&&c.mod.getClass()==mod.getClass()||c.type==overrideType){
+				Card c=getShip().playList.get(i); //c is the the other card in the hand//
+				CardCode checkCode=c.getCode(); //Checkcode is its code//
+				
+				if(c==this) continue;
+				
+				if(c.mod.getClass()==mod.getClass()||c.type==overrideType){
 					if(checkCode.contains(unplaySpecial))continue;
 					if(c.wasScrambled)continue;
+					if(c.getEffect()==0)continue;
 					c.deselect(false);
 					i--;
 				}
+				
+				
 			}
 		}
 
@@ -619,7 +635,7 @@ public class Card {
 		if(Battle.targetSource!=null&&Battle.targetSource.mod==mod)Battle.targetSource.deTarget();
 		selected=false;
 		wasScrambled=false;
-		Sounds.cardDeselect.play();
+		Sounds.cardDeselect.overlay();
 		getShip().playList.remove(this);
 	}	
 
@@ -807,7 +823,7 @@ public class Card {
 		if(Battle.getPhase()==Phase.End||Battle.getState()!=State.Nothing)return;
 		if(selected)return;
 		if(Tutorial.stopFlip())return;
-		Sounds.cardFlip.play();
+		Sounds.cardFlip.overlay();
 		flip();
 	}
 
@@ -876,10 +892,18 @@ public class Card {
 
 
 		if(active){
+			
+			effect+=mod.ship.getBonusEffect(this, pick, effect);
+			
 			for(Component c:mod.ship.components){
-				if(c.getClass()==mod.getClass())effect+=c.getBuffAmount(BuffType.BonusEffeect);
+				if(c.getClass()==mod.getClass())effect+=c.getBuffAmount(BuffType.BonusEffeect);	
 			}
 
+			
+			if(type==ModuleType.SHIELD&&mod!=getShip().getShield()){ //Special because shields are a single entity ish and should affect utility cards//
+				effect+=getShip().getShield().getBuffAmount(BuffType.BonusEffeect);
+			}
+			
 			if(code.contains(Special.BonusEffectPerOtherWeapon)){
 				for(Card c:getShip().hand){
 					if(c.type==ModuleType.WEAPON&&c.selected&&c!=this){
@@ -888,11 +912,11 @@ public class Card {
 				}
 			}
 
-			effect+=mod.ship.getBonusEffect(this, pick, effect);
-
 			for(int i=0;i<code.getAmount(Special.BonusPerMajorDamage);i++){
 				effect+=getShip().getMajorDamage();
 			}
+			
+			
 		}
 
 
@@ -1309,7 +1333,7 @@ public class Card {
 				break;
 
 			case TotalIncomingThis:
-				int thisInc=component.getTotalIncoming();
+				int thisInc=component.getShieldableIncoming();
 				if(thisInc>=aiclass.number){
 					ok(aiclass, "incoming is "+thisInc);
 				}

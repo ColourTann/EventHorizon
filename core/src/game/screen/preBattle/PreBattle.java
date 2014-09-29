@@ -112,7 +112,7 @@ public class PreBattle extends Screen{
 					float gap=(width-player.getConsumables().size()*CardGraphic.width)/(player.getConsumables().size()+1);
 					for(int i=0;i<player.getConsumables().size();i++){
 						CardGraphic c=player.getConsumables().get(i).getGraphic();
-						
+						c.override=true;
 						c.slide(new Pair(start+gap*(i+1)+CardGraphic.width*i, y), .5f, Interp.SQUARE);
 						c.finishFlipping();
 					}
@@ -146,7 +146,7 @@ public class PreBattle extends Screen{
 
 			@Override
 			public void onPress() {
-				Sounds.bigAccept.play();
+				Sounds.bigAccept.overlay();
 				Main.changeScreen(new Battle(player, enemy, false, true));
 			}
 		});
@@ -234,7 +234,7 @@ public class PreBattle extends Screen{
 
 
 			Font.medium.setColor(Colours.light);
-			Font.drawFontCentered(batch, (player.getConsumables().size()>0?"Select consumable cards to use for this fight":"No consumable cards available"), Font.medium, Main.width/2, 430);
+			Font.drawFontCentered(batch, (player.getConsumables().size()>0?"Select consumable cards to use for this fight":"No consumable cards available"), Font.medium, Main.width/2, 400);
 			for(Card c: consumables){
 				c.getGraphic().render(batch);
 			}

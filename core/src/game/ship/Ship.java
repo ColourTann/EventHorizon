@@ -37,10 +37,12 @@ import game.module.component.shield.Shield;
 import game.module.component.weapon.Weapon;
 import game.module.junk.ShieldPoint;
 import game.module.junk.Buff.BuffType;
+import game.module.utility.ArcSocket;
 import game.module.utility.Exploiter;
 import game.module.utility.PhaseArray;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
+import game.module.utility.armour.CrystalLattice;
 import game.module.utility.armour.Plating;
 import game.module.utility.armour.VoltaicCarapace;
 import game.screen.battle.Battle;
@@ -104,7 +106,7 @@ public abstract class Ship {
 	public String shipName;
 	public Ship(boolean player, float tier, String shipName, Pic shipPic, Pic genPic, Pic comPic){
 		this.shipName=shipName;
-		this.tier=Math.min(12.7f, tier);
+		this.tier=Math.min(12f, tier);
 		this.player=player;
 		this.shipPic=shipPic;
 
@@ -113,7 +115,7 @@ public abstract class Ship {
 
 
 		setArmour(new Plating(0));
-		//setUtility(new PhaseArray(0), 1);
+		//setUtility(new ArcSocket(0), 1);
 
 		setupTiers();
 		getGenerator().modulePic=genPic;
@@ -589,6 +591,7 @@ public abstract class Ship {
 	}
 
 	public void drawCard(Card card) {
+		card.selected=false;
 		card.active=true;
 		card.addToDeck=false;
 		card.getGraphic().activate();
@@ -676,6 +679,8 @@ public abstract class Ship {
 		for(int i=consumableStore.size()-1;i>=0;i--){
 			Card c=consumableStore.get(i);
 			if(c.addToDeck){
+				c.selected=false;
+				c.addToDeck=false;
 				consumableStore.remove(c);
 				deck.add(c);
 			}
@@ -748,7 +753,7 @@ public abstract class Ship {
 	public void majorDamage() {
 		if(getArmour()!=null)getArmour().onTakeMajorDamage();
 		Battle.shake(player,3);
-		Sounds.damageMajor.play();
+		Sounds.damageMajor.overlay();
 		majorDamageTaken++;
 	}
 	public int getMajorDamage(){
@@ -939,8 +944,12 @@ public abstract class Ship {
 		int bonus=0;
 		for(Utility u:utilities){
 			if(u!=null)bonus+=u.getBonusEffect(c, effect);
-
 		}
+		
+		if(c.type==ModuleType.SHIELD&&c.mod!=getShield()){
+			
+		}
+		
 		return bonus;
 	}
 
@@ -1127,5 +1136,15 @@ public abstract class Ship {
 			n.getGraphic().dispose();
 		}
 		for(Card c:deck)c.getGraphic().deactivate();
+	}
+
+
+	public void endOfBattleCelebrations() {
+		for(Card c:hand){
+			if(!c.selected&&c.consumable)addConsumableCard(c);
+		}
+		for(Card c:deck){
+			if(!c.selected&&c.consumable)addConsumableCard(c);
+		}
 	}
 }

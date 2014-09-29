@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.assets.Gallery;
+import game.module.component.Component;
+import game.module.utility.armour.CrystalLattice;
 import game.ship.Ship;
 
 public class FightStats extends Mouser{
@@ -50,14 +52,16 @@ public class FightStats extends Mouser{
 			energyX=265;
 			damageX=345;
 			Draw.draw(batch, Gallery.playerEnergy.get(), energyX, y);
-			Draw.draw(batch, Gallery.majorDamagePlayer.get(), damageX, y);
+			if(ship.getArmour() instanceof CrystalLattice) Draw.draw(batch, Gallery.majorDamagePlayerPlus.get(), damageX, y);
+			else Draw.draw(batch, Gallery.majorDamagePlayer.get(), damageX, y);
 		}
 		else{
 			c=Colours.enemy2[1];
 			energyX=846;
 			damageX=925;
 			Draw.draw(batch, Gallery.enemyEnergy.get(),energyX,y);
-			Draw.draw(batch, Gallery.majorDamageEnemy.get(),damageX,y);
+			if(ship.getArmour() instanceof CrystalLattice) Draw.draw(batch, Gallery.majorDamageEnemyPlus.get(), damageX, y);
+			else Draw.draw(batch, Gallery.majorDamageEnemy.get(),damageX,y);
 		}
 		BitmapFont current = (ship.getEnergy()>9?Font.medium:Font.big);
 		current.setColor(c);
@@ -67,13 +71,55 @@ public class FightStats extends Mouser{
 		Font.medium.setColor(c);
 		String inc="+"+ship.getIncome();
 		Font.medium.draw(batch, inc, energyX-Font.medium.getBounds(inc).width/2+32, y+35);
-		/*if(!player){
-			String hs=""+ship.hand.size();
-			Font.big.draw(batch, hs, energyX-Font.big.getBounds(hs).width/2+122, y+45);
-		}*/
-		Texture icon=(player?Gallery.greenHP[1].get():Gallery.redHP[1].get());
-		for(int i=0;i<ship.getMajorDamage()&&i<5;i++){
+
+		/*Texture icon=(player?Gallery.greenHP[1].get():Gallery.redHP[1].get());
+		for(int i=0;i<ship.getMajorDamage()&&
+				(i<5  || (i<6&&ship.getArmour() instanceof CrystalLattice)  );i++){
 			Draw.draw(batch, icon, damageX+damageStart.x+damageGap*i, y+damageStart.y);
+		}*/
+		
+		//Horrible algorithm for determining about to takedness, woof!//
+		int reds=0;
+		int greys=0;
+		int oranges=0;
+		int blues=0;
+		reds=ship.getMajorDamage();
+		for(Component cmp: ship.components){
+			for(int thr:cmp.thresholds){
+				if(cmp.getDamage()>=thr) continue; //already damaged : ( //
+				if(cmp.getDamage()+cmp.getUnshieldableIncoming()>=thr){
+					greys++; //Unshieldable incoming//
+					continue;
+				}
+				if(cmp.getDamage()+cmp.getTotalIncoming()>=thr){
+					if(cmp.getDamage()+cmp.getTotalIncoming()-Math.min(cmp.incomingDamage.size(), cmp.getShield())<thr){
+						blues++; //Shielded, good job!//
+						continue;
+					}
+					oranges++; //Not shielded, get to work!//
+					continue;
+				}	
+			}
+		}
+		
+		int totalDrawn=0;
+		int max=ship.getArmour() instanceof CrystalLattice?6:5;
+		
+		for(int i=0;i<reds&&totalDrawn<max;i++){
+			Draw.draw(batch, ship.player?Gallery.greenHP[1].get():Gallery.redHP[1].get(), damageX+damageStart.x+damageGap*totalDrawn, y+damageStart.y);
+			totalDrawn++;
+		}
+		for(int i=0;i<greys&&totalDrawn<max;i++){
+			Draw.draw(batch, Gallery.greyHP[1].get(), damageX+damageStart.x+damageGap*totalDrawn, y+damageStart.y);
+			totalDrawn++;
+		}
+		for(int i=0;i<oranges&&totalDrawn<max;i++){
+			Draw.draw(batch, Gallery.orangeHP[1].get(), damageX+damageStart.x+damageGap*totalDrawn, y+damageStart.y);
+			totalDrawn++;
+		}
+		for(int i=0;i<blues&&totalDrawn<max;i++){
+			Draw.draw(batch, Gallery.blueHP[1].get(), damageX+damageStart.x+damageGap*totalDrawn, y+damageStart.y);
+			totalDrawn++;
 		}
 	}
 

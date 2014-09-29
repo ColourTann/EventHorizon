@@ -206,6 +206,14 @@ public abstract class Module {
 		return shots[i]==0?0:shots[i]+getBuffAmount(BuffType.BonusShot);
 	}
 
+	public void mouse() {
+		moused=true;
+	}
+
+	public void unmouse() {
+		moused=false;
+	}
+
 
 }
 

@@ -36,13 +36,12 @@ public class SwiftAttack extends AttackGraphic{
 			@Override
 			public void finish() {
 				fired=true;
-
+				Sounds.swift.overlay();
 				for(int i=0;i<10;i++){
 					Orbiter o = new Orbiter(position);
 					o.update(i*100);
 					particles.add(o);
 					o.update(i*10);
-					Sounds.swift.play();
 				}
 			}
 		});

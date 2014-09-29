@@ -91,8 +91,7 @@ public class ConsumableCard {
 		pic[0]= Gallery.consume;
 		cost[0]=0;
 		effect[0]=0;
-		code[0].add(Special.RemoveEnemyEnergy, 2);
-		code[0].add(Special.GainEnergy, 2);
+		code[0].add(Special.StealEnergy, 2);
 
 		name[1]= "Ignite";
 		rules[1]="+1 energy income";

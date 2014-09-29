@@ -97,7 +97,7 @@ public class CardGraphic extends Mouser {
 	public void setPosition(Pair s) {
 
 		position=s.copy();
-
+		position=position.floor();
 		if(collider!=null){
 			collider.position=s.copy();
 		}
@@ -221,8 +221,13 @@ public class CardGraphic extends Mouser {
 		float baseHeight = getBaseHeight(part);
 		Color lightText = Colours.withAlpha(Colours.multiply(Colours.light, c),c.a);
 		Color darkText = Colours.withAlpha(Colours.dark, c.a);
+		if(override) {
+			c=Colours.white;
+			lightText.a=1;
+			darkText.a=1;
+		}
 		batch.setColor(c);
-
+		
 
 		//Card base//
 
@@ -232,13 +237,14 @@ public class CardGraphic extends Mouser {
 
 		//Augment colouring//
 		if(!still&&card.isAugmented(part)){
-			float alpha=(float)Math.sin(Main.ticks*5);
+			float glowAlpha=(float)Math.sin(Main.ticks*5);
 
-			alpha+=2.3f;
-			alpha/=4;
-			batch.setColor(Colours.withAlpha(Colours.orangeHPCols[0], alpha));
+			glowAlpha+=2.3f;
+			glowAlpha/=4;
+			Color prevCol=batch.getColor();
+			batch.setColor(Colours.withAlpha(Colours.orangeHPCols[0], glowAlpha));
 			Draw.draw(batch, Gallery.cardOutline.get(), position.x, baseHeight);
-			batch.setColor(1,1,1,1);
+			batch.setColor(prevCol);
 		}
 
 		if(moused&&Screen.isActiveType(PreBattle.class)){
@@ -448,12 +454,12 @@ public class CardGraphic extends Mouser {
 			card.addToDeck=!card.addToDeck;
 
 			if(card.addToDeck){
-				Sounds.cardSelect.play();	
+				Sounds.cardSelect.overlay();	
 			}
 			else{
-				Sounds.cardDeselect.play();
+				Sounds.cardDeselect.overlay();
 			}
-
+			card.selected=!card.selected;
 			return;
 		}
 
@@ -467,6 +473,7 @@ public class CardGraphic extends Mouser {
 	@Override
 	public void mouseDown() {
 		if(Screen.isActiveType(Battle.class)){
+			card.mod.mouse();
 			if(Battle.getPlayer().hand.contains(card))onTopGraphic=this;
 			if(card.getShip()!=null){
 				card.getShip().cardOrIconMoused(card);
@@ -480,7 +487,9 @@ public class CardGraphic extends Mouser {
 
 	@Override
 	public void mouseUp() {
+		
 		if(Screen.isActiveType(Battle.class)){
+			card.mod.unmouse();
 			onTopGraphic=null;
 			if(card.getShip()!=null)card.getShip().cardOrIconUnmoused();
 		}

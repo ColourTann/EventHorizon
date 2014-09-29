@@ -62,7 +62,7 @@ public class CycleButton extends Mouser{
 		if(!Battle.isPlayerTurn())return;
 		if(Battle.getState()==State.Nothing){
 			if(Battle.getPlayer().getEnergy()<cost)return;
-			Sounds.cardSelect.play();
+			Sounds.cardSelect.overlay();
 			timer=new Timer(0,1,1/3f,Interp.SQUARE);
 			Battle.getPlayer().addEnergy(-cost, false);
 			Battle.setState(State.CycleDiscard);
@@ -70,7 +70,7 @@ public class CycleButton extends Mouser{
 		}
 
 		if(Battle.getState()==State.CycleDiscard){
-			Sounds.cardDeselect.play();
+			Sounds.cardDeselect.overlay();
 			timer=new Timer(timer.getFloat(),0,1/3f,Interp.SQUARE);
 			Battle.getPlayer().addEnergy(cost, false);
 			Battle.setState(State.Nothing);
