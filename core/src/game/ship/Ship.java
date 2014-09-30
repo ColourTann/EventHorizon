@@ -115,7 +115,7 @@ public abstract class Ship {
 
 
 		setArmour(new Plating(0));
-		//setUtility(new ArcSocket(0), 1);
+		//if(!player)setUtility(new Exploiter(0), 1);
 
 		setupTiers();
 		getGenerator().modulePic=genPic;
@@ -723,7 +723,7 @@ public abstract class Ship {
 
 	private void initModuleStats(){
 		for(Component c:components){
-			c.getStats();
+			c.getStats().info.alpha=0;;
 		}
 	}
 

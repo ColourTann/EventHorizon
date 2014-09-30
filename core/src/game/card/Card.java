@@ -449,6 +449,7 @@ public class Card {
 		}
 		Component c=ship.getEnemy().getRandomUndestroyedComponent();
 		for(int i=0;i<code.getAmount(Special.ScrambleChosenModule);i++){
+			c.scramble(this);
 		}
 		select();
 		//play();
@@ -906,7 +907,7 @@ public class Card {
 			
 			if(code.contains(Special.BonusEffectPerOtherWeapon)){
 				for(Card c:getShip().hand){
-					if(c.type==ModuleType.WEAPON&&c.selected&&c!=this){
+					if(c.type==ModuleType.WEAPON&&!c.wasScrambled&&c.selected&&c!=this){
 						effect+=code.getAmount(Special.BonusEffectPerOtherWeapon);
 					}
 				}

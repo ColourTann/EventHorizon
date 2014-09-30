@@ -235,7 +235,7 @@ public class Tutorial extends Updater{
 		if(!t.triggered&&t.trig!=null){
 			switch(t.trig){
 			case PlayerShieldPhase:
-			
+				
 				Battle.advance();
 				if(Battle.getPhase()!=Phase.ShieldPhase){
 
@@ -270,6 +270,7 @@ public class Tutorial extends Updater{
 		if(!t.activated&&t.eff!=null){
 			switch(t.eff){
 			case End:
+				
 				Battle.setTutorial(false);
 				player.drawToMaximum();
 				enemy.drawToMaximum();
@@ -417,7 +418,8 @@ public class Tutorial extends Updater{
 				for(Card card:enemy.hand)card.getCode(1).add(AI.Ignore);
 				break;
 			case DrawMoreTeslas:
-				enemy.drawCard(enemy.getComponent(0).getNextCard());
+				//enemy.drawCard(enemy.getComponent(0).getNextCard());
+				enemy.getComputer().maxCards=2;
 				enemy.drawCard(enemy.getComponent(1).getNextCard());
 				break;
 			case ShowPlayerNames:

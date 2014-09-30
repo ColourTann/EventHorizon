@@ -143,9 +143,9 @@ public class CardGraphic extends Mouser {
 		Color c = Colours.white;
 		//Faded is used for cards from the wrong phase, cards cooling down and cards that can't be augmented//
 		boolean wrongState = false;
-		
-		
-		
+
+
+
 		//Checking state//
 		if(Screen.isActiveType(Battle.class)){
 			if ((Battle.getPhase() == Phase.ShieldPhase&&card.type == ModuleType.WEAPON)||
@@ -222,12 +222,13 @@ public class CardGraphic extends Mouser {
 		Color lightText = Colours.withAlpha(Colours.multiply(Colours.light, c),c.a);
 		Color darkText = Colours.withAlpha(Colours.dark, c.a);
 		if(override) {
-			c=Colours.white;
-			lightText.a=1;
-			darkText.a=1;
+			c=new Color(1,1,1,alpha);
+
+			lightText.a=alpha;
+			darkText.a=alpha;
+			System.out.println(override);
 		}
 		batch.setColor(c);
-		
 
 		//Card base//
 
@@ -393,6 +394,8 @@ public class CardGraphic extends Mouser {
 			Draw.draw(batch, Gallery.cardBase.getOutline(), position.x, baseHeight);
 		}
 
+
+
 	}
 
 	//Setting up Energy icon positions//
@@ -473,7 +476,8 @@ public class CardGraphic extends Mouser {
 	@Override
 	public void mouseDown() {
 		if(Screen.isActiveType(Battle.class)){
-			card.mod.mouse();
+			if(!Battle.isTutorial())			card.mod.mouse();
+
 			if(Battle.getPlayer().hand.contains(card))onTopGraphic=this;
 			if(card.getShip()!=null){
 				card.getShip().cardOrIconMoused(card);
@@ -487,7 +491,7 @@ public class CardGraphic extends Mouser {
 
 	@Override
 	public void mouseUp() {
-		
+
 		if(Screen.isActiveType(Battle.class)){
 			card.mod.unmouse();
 			onTopGraphic=null;

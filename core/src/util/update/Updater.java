@@ -31,7 +31,6 @@ public abstract class Updater {
 	public void activate(){
 		dead=false;
 		stopFading();
-		alpha=1;
 		tickers.remove(this);
 		tickers.add(this);
 	}

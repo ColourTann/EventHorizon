@@ -118,7 +118,7 @@ public class Reward extends Mouser{
 		if(!selected)select();
 		else{
 			Customise.deselect();
-			deselect();
+			deselect(true);
 		}
 	}
 
@@ -133,8 +133,8 @@ public class Reward extends Mouser{
 		Customise.select(this);
 	}
 
-	public void deselect() {
-		Sounds.cardDeselect.overlay();
+	public void deselect(boolean sound) {
+		if(sound)Sounds.cardDeselect.overlay();
 		moused=false;
 		selected=false;
 

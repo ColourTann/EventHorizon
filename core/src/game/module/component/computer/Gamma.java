@@ -8,7 +8,7 @@ import game.card.CardCode.Special;
 public class Gamma extends Computer{
 
 	public Gamma() {
-		super("Gamma",null,6, new int[]{7,9,12});
+		super("Gamma",null,6, new int[]{4,9,15});
 		for(int i=0;i<=variants;i++){
 			cardPic[i]=Gallery.cardComputer[i*3];
 		}

@@ -101,8 +101,7 @@ public class Customise extends Screen{
 				public void onPress() {
 					Sounds.cardDeselect.overlay();
 					ship.dispose();
-					shipNumber--;
-					shipNumber+=Ship.classes.length;
+					shipNumber++;
 					shipNumber=shipNumber%Ship.classes.length;
 					ship=Ship.makeIntegerShip(true, 0, shipNumber);
 					resetModuleStats();
@@ -116,8 +115,8 @@ public class Customise extends Screen{
 					
 					Sounds.cardSelect.overlay();
 					ship.dispose();
-					shipNumber++;
-					
+					shipNumber--;
+					shipNumber+=Ship.classes.length;
 					shipNumber=shipNumber%Ship.classes.length;
 					ship=Ship.makeIntegerShip(true, 0, shipNumber);
 					resetModuleStats();
@@ -369,7 +368,7 @@ public class Customise extends Screen{
 
 	public static void select(Reward reward) {
 		if(selectedReward!=null){
-			selectedReward.deselect();
+			selectedReward.deselect(false);
 		}
 		selectedReward=reward;
 		if(consumableSelected()) me.setPanel(PanelType.Add);

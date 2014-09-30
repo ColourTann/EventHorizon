@@ -163,6 +163,7 @@ public class Battle extends Screen{
 		help=null;
 		victoryFadeInTimer=new Timer();
 		CardGraphic.onTopGraphic=null;
+		ModuleInfo.top=null;
 	}
 
 	private void initTutorial() {

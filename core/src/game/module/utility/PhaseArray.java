@@ -62,7 +62,7 @@ public class PhaseArray extends Utility{
 			Module m=c.mod;
 			int cardsFromModule=0;
 			for(Card card:ship.hand){
-				if(card.selected&&m==card.mod){
+				if(card.selected&&!card.wasScrambled&&m.getClass()==card.mod.getClass()){
 					cardsFromModule++;
 				}
 			}
