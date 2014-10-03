@@ -29,6 +29,7 @@ public class Swift extends Weapon{
 		code[1].add(Augment.AugmentThis);
 		code[1].add(Augment.AugmentDamage, calc(0));
 		code[1].add(AI.OtherCardsThisSystem,1);
+		code[1].setPriority(1);
 		
 		name[2]="Twist";
 		cost[2]=2;
@@ -40,6 +41,7 @@ public class Swift extends Weapon{
 		code[2].add(Augment.AugmentThis);
 		code[2].add(Augment.AugmentAddShot, 1);
 		code[2].add(AI.OtherCardsThisSystem,1);
+		code[2].setPriority(1);
 		
 		name[3]="High-impact";
 		cost[3]=4;

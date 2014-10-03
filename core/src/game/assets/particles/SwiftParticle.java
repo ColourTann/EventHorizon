@@ -42,25 +42,13 @@ public class SwiftParticle extends Particle{
 			orbitSpawner-=1;
 			orbiters.add(new Orbiter());
 		}
-		if(position.x>1000){
-			explode();
-		}
+		
 		}
 		for(Orbiter o:orbiters)o.update(delta);
 		
 	}
 
-	public void explode() {
-		exploded=true;
-		for(int i=0;i<100;i++){
-			Orbiter o=new Orbiter();
-			//o.update(i*5);
-			o.spinnerAmplitude=0;
-			o.spinnerSpeed=(float) (Math.random()*180);
-			o.spinnerFrequency=-(float) (12);
-			orbiters.add(o);
-		}
-	}
+	
 
 	@Override
 	public void render(SpriteBatch batch) {

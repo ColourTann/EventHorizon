@@ -38,7 +38,7 @@ public class SwiftAttack extends AttackGraphic{
 				fired=true;
 				Sounds.swift.overlay();
 				for(int i=0;i<10;i++){
-					Orbiter o = new Orbiter(position);
+					Orbiter o = new Orbiter(position, true);
 					o.update(i*100);
 					particles.add(o);
 					o.update(i*10);
@@ -51,24 +51,37 @@ public class SwiftAttack extends AttackGraphic{
 
 	@Override
 	public void impact() {
+		if(disabled) return;
 		disabled=true;
+		
+		for(Particle p: particles){
+			
+			Orbiter o=(Orbiter) p;
+			o.trails.clear();
+			o.trail=false;
+			o.spinnerFrequency=0;
+			
+			
+			
+		}
+		
 		if(atk.activateDamage()){
-			for(int i=0;i<100;i++){
-				Orbiter o=new Orbiter(position);
+			for(int i=0;i<50;i++){
+				Orbiter o=new Orbiter(position, true);
 				o.maxLife=(float)Math.random();
 				o.life=o.maxLife;
-				o.spinnerAmplitude=0;
-				o.spinnerSpeed=(float) (Math.random()*230);
-				o.spinnerFrequency=-(float) (4);
+				o.spinnerSpeed=(float) (Math.random()*150);
+				o.spinnerFrequency=0;
 				particles.add(o);
 			}
 		}
+		
 	}
 
 	@Override
 	public void update(float delta) {
 		for(Particle p:particles)p.update(delta);
-		ticks+=delta*40;
+		ticks+=delta*15;
 		if(disabled) return;		
 
 		if(fired){
@@ -77,7 +90,7 @@ public class SwiftAttack extends AttackGraphic{
 			alpha=Math.min(1, alpha);
 			if(ticks>1){
 				ticks-=1;
-				particles.add(new Orbiter(position));
+				particles.add(new Orbiter(position, true));
 			}
 
 
@@ -92,7 +105,7 @@ public class SwiftAttack extends AttackGraphic{
 
 			if(ticks>2){
 				ticks-=2;
-				Orbiter o = new Orbiter(position);
+				Orbiter o = new Orbiter(position, false);
 				o.spinnerFrequency/=4;
 				//o.spinnerSpeed/=2;
 				o.spinnerAmplitude=0;

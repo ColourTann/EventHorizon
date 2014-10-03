@@ -26,10 +26,10 @@ public class Aurora extends Ship{
 		Polygon weapon2= new Polygon(new float[]{260,69,0,0,0,0});
 		Polygon shield = new Polygon(new float[]{280,194,0,0,0,0});
 		Polygon generator = new Polygon(new float[]{
-				187,122,
+				187,129,
 				227,135,
-				237,157,
-				205,157,
+				237,150,
+				205,150,
 				183,135,
 				});
 		Polygon computer = new Polygon(new float[]{

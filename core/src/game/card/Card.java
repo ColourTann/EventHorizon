@@ -172,7 +172,7 @@ public class Card {
 			System.out.println("Wrong state"); return;						//Wrong phase//
 		}
 
-		if(mod.getBuffAmount(BuffType.Scrambled)>0){
+		if(mod.isScrambled()){
 			Sounds.cardSelect.overlay();
 			scrambSelect();
 			return;
@@ -725,7 +725,7 @@ public class Card {
 
 	public boolean validAugmentTarget(Card augmenter){
 		CardCode code=augmenter.getCode();
-		if(wasScrambled)return false;
+		if(wasScrambled||mod.isScrambled())return false;
 		boolean checkForWeapon=code.contains(Augment.AugmentWeapon);
 		boolean checkForSameSystem=code.contains(Augment.AugmentThis);
 
@@ -881,7 +881,7 @@ public class Card {
 			effect+=getShip().getBonusCost(this, side, effect);
 		}
 
-		return effect;
+		return Math.max(0,effect);
 	}
 
 	public int getEffect(){return getEffect(side);}
@@ -936,13 +936,14 @@ public class Card {
 	public int getShots(){return getShots(side);}
 	public int getShots(int pick){
 		if(shots[pick]==0)return 0;
-
+		
 		int numShots = shots[pick]+bonusShots;
 
 
 		
 
 		if(active){
+			
 			numShots+=mod.ship.getBonusShots(this, pick, numShots);
 			for(Component c:mod.ship.components){
 				if(c.getClass()==mod.getClass())numShots+=c.getBuffAmount(BuffType.BonusShot);

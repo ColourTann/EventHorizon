@@ -91,11 +91,11 @@ public class Checklist extends Mouser{
 		for(Task t:tasks){
 			if(t.isDone())Font.medium.setColor(Colours.withAlpha(Colours.player2[1],alpha));
 			else Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
-			Font.medium.drawWrapped(batch, t.s, x+offset, y+heightAdd+4, width-offset*2, HAlignment.CENTER);
+			Font.medium.drawWrapped(batch, t.s, x+offset, y+heightAdd+4, width-offset*2, HAlignment.LEFT);
 			heightAdd+=Font.medium.getWrappedBounds(t.s+"\n\n", width-offset*2).height;
 		}
 		if(drawDam){
-			Draw.draw(batch, Gallery.orangeHP[1].get(), 684,148);
+			Draw.draw(batch, Gallery.orangeHP[1].get(), 591,148);
 		}
 		//599 560
 

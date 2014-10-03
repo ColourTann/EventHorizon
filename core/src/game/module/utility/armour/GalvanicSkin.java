@@ -11,7 +11,7 @@ import game.module.junk.ShieldPoint;
 public class GalvanicSkin extends Armour{
 
 	public GalvanicSkin(int tier) {
-		super(.7+tier*.15, tier, "Galvanic Skin", "Shield all systems for "+statiCalc(0,0,tier) +" every turn", Gallery.galvanicSkin, 0, 0);
+		super(.7+tier*.35, tier, "Galvanic Skin", "Shield all systems for "+statiCalc(0,0,tier) +" every turn", Gallery.galvanicSkin, 0, 0);
 	
 	}
 

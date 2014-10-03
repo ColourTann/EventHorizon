@@ -340,8 +340,8 @@ public class Tutorial extends Updater{
 			case ShieldGenList:
 				currentList=new Checklist(t, new Task[]{
 						new Task("Play the shield card\n(click to play)",TaskType.PlayShield, firstShieldCard, 0), 
-						new Task("Use both shield points on your generator by clicking on it twice",TaskType.ShieldGen, Gallery.statsGenerator, new Pair(0,420)),
-						new Task("Click the blue shield button to confirm", TaskType.EndShieldPhase, true)
+						new Task("Use both shield points to protect your generator by clicking on it twice \n(on the left)",TaskType.ShieldGen, Gallery.statsGenerator, new Pair(0,420)),
+						new Task("Click the central blue shield button to confirm", TaskType.EndShieldPhase, true)
 				});
 				break;
 
@@ -357,7 +357,7 @@ public class Tutorial extends Updater{
 			case PlayWeaponList:
 				currentList=new Checklist(t, new Task[]{
 						new Task("Play at least one weapon card",TaskType.PlayWeapon), 
-						new Task("Click the red crossed swords to confirm",TaskType.EndWeaponPhase, true)
+						new Task("Click the central red swords icon to confirm",TaskType.EndWeaponPhase, true)
 				});
 				enemy.drawCard(enemy.getShield().getNextCard());
 				enemy.drawCard(enemy.getComponent(1).getCard(5));

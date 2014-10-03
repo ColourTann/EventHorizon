@@ -10,6 +10,7 @@ public class Colours {
 	public static final Color black=new Color(0,0,0,1);
 	public static final Color faded = new Color(.4f, .4f, .4f, 1);
 	
+	
 	public static final Color dark=Colours.make(7, 0, 22);
 	public static final Color light=Colours.make(236,250,212);
 	public static Color grey=Colours.make(92,107,110);
@@ -21,7 +22,7 @@ public class Colours {
 	public static final Color[] orangeHPCols =new Color[]{make(255,101,36), make(251,154,32), make(255,178,73)};
 	public static final Color[] greyHPCols =new Color[]{make(77,62,54), make(150,137,126), make(182,171,154)};
 	public static final Color[] redHPCols =new Color[]{make(98,43,79), make(138,43,49), make(191,94,79)};
-	
+	public static final Color tutorialHighlightColour = Colours.orangeHPCols[1];
 	
 	
 	public static final Color[] player2 = new Color[]{make(0,128,78),make(43,171,120)};

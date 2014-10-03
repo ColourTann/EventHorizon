@@ -14,7 +14,7 @@ import util.update.TextWisp.WispType;
 public class VoltaicCarapace extends Armour{
 
 	public VoltaicCarapace(int tier) {
-		super(.85+tier*.25, tier, "Voltaic Carapace", "On taking major damage: Scramble an enemy weapon", Gallery.voltaicCarapce, 0, 0);
+		super(.85+tier*.4, tier, "Voltaic Carapace", "On taking major damage: Scramble an enemy module", Gallery.voltaicCarapce, 0, 0);
 	}
 
 	@Override
@@ -59,11 +59,7 @@ public class VoltaicCarapace extends Armour{
 
 	@Override
 	public void onTakeMajorDamage() {
-		int random=(int)(Math.random()*2);
-		Weapon w=ship.getEnemy().getWeapons()[random];
-		if(!w.destroyed)w.scramble(null);
-		else ship.getEnemy().getWeapons()[1-random].scramble(null);
-		
+		ship.getEnemy().getRandomUndestroyedComponent().scramble(null);		
 	}
 
 }

@@ -22,6 +22,7 @@ import game.assets.Sounds;
 import game.attack.Attack;
 import game.card.Card;
 import game.card.CardCode;
+import game.card.CardCode.AI;
 import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.component.weapon.Weapon;
@@ -179,8 +180,15 @@ public abstract class Component extends Module{
 				if(getShield()==0){
 					return;
 				}
-				ship.shieldPoints.add(shieldPoints.remove(shieldPoints.size()-1));
-				Sounds.shieldUnuse.overlay();
+				for(int i=shieldPoints.size()-1;i>=0;i--){
+					Card shCard= shieldPoints.get(i).card;
+					if(shCard!=null&&shCard.getCode().contains(AI.RegularShield)){
+						ship.shieldPoints.add(shieldPoints.remove(shieldPoints.size()-1));
+						Sounds.shieldUnuse.overlay();
+						break;
+					}
+				}
+				
 			}
 
 		}

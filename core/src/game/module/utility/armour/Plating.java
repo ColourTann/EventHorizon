@@ -6,7 +6,7 @@ import game.card.Card;
 public class Plating extends Armour{
 
 	public Plating(int tier) {
-		super(1+tier*.25,tier, "Plating", "Basic Armour", Gallery.basicArmour, 0, 0);
+		super(1+tier*.5,tier, "Plating", "Basic Armour", Gallery.basicArmour, 0, 0);
 	}
 
 	@Override

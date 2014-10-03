@@ -241,15 +241,15 @@ public class Battle extends Screen{
 		if(getState()!=State.Nothing)return;
 		if(getPlayer().hasSpendableShields())return;
 
-		getPlayer().playCards();
+		
 
 		if(getPhase()==Phase.ShieldPhase){
 			getPlayer().endPhase();
 			PhaseButton.button.nextPhase();
 		}
 		else{
-			getPlayer().playerEndTurn();
 			getPlayer().endPhase();
+			getPlayer().playerEndTurn();
 			PhaseButton.button.nextPhase();
 		}
 	}
@@ -260,9 +260,9 @@ public class Battle extends Screen{
 		setPhase(Phase.End);
 		System.out.println("ended");
 		victor=ship;
-		
+
 		ship.endOfBattleCelebrations();
-		
+
 		if(!ship.player){
 			endTimer.removeFinisher();
 			endTimer=new Timer();
@@ -349,7 +349,11 @@ public class Battle extends Screen{
 			}
 			break;
 		case Input.Keys.A:
-			if(Main.debug)battleWon(getPlayer());
+			if(Main.debug){
+				getEnemy().getGenerator().destroyed=true;
+				getEnemy().getComputer().destroyed=true;
+				getEnemy().getGraphic().drawMap(true);
+			}
 			break;
 
 
@@ -397,7 +401,7 @@ public class Battle extends Screen{
 	}
 
 	public static void shake(boolean player, float amount){
-	
+
 
 		//amount is energy cost of card
 
@@ -610,9 +614,9 @@ public class Battle extends Screen{
 			String s=victor.player?"You win!":"You lose";
 			Font.big.setColor(Colours.withAlpha(Colours.light,victoryFadeInTimer.getFloat()));
 			Font.drawFontCentered(batch, s, Font.big, Main.width/2, 205);
-			
-			
-			
+
+
+
 			if(!victor.player){
 				if(arena){ Font.drawFontCentered(batch, "You defeated "+Customise.totalShipsDefeated+" ship"+(Customise.totalShipsDefeated==1?"":"s"), Font.big, Main.width/2, 100);
 				Font.drawFontCentered(batch, "esc to return", Font.big, Main.width/2, 130);
@@ -620,7 +624,7 @@ public class Battle extends Screen{
 			}
 		}
 		//	debugRender(batch);
-	
+
 
 		//Draw.drawScaledCentered(batch, Gallery.whiteSquare.get(), Mouser.getMousePosition().x, Mouser.getMousePosition().y, 200, 200);
 	}

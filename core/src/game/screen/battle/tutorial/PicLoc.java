@@ -43,7 +43,7 @@ public class PicLoc {
 	}
 	public void render(SpriteBatch batch){
 
-		batch.setColor(Colours.withAlpha(Colours.light, (float)Math.sin(Battle.ticks*4)/5+.3f));
+		batch.setColor(Colours.withAlpha(Colours.tutorialHighlightColour, (float)Math.sin(Battle.ticks*4)/5+.3f));
 		for(int x=-2;x<=2;x++){
 			for(int y=-2;y<=2;y++){
 				if(location!=null)Draw.draw(batch, pic.getOutline(), location.x+x, location.y+y);
@@ -55,7 +55,7 @@ public class PicLoc {
 		}
 	}
 	public void renderFuckingPhaseButtonStupidTutorial(SpriteBatch batch){
-		batch.setColor(Colours.withAlpha(Colours.light, (float)Math.sin(Battle.ticks*4)/5+.3f));
+		batch.setColor(Colours.withAlpha(Colours.tutorialHighlightColour, (float)Math.sin(Battle.ticks*4)/5+.3f));
 		for(int x=-2;x<=2;x++){
 			for(int y=-2;y<=2;y++){
 				if(phaseButton)if(PhaseButton.get().isDown())Draw.draw(batch, Gallery.endTurnWeapon.getOutline(), 605+x,356+y);	

@@ -7,7 +7,7 @@ import util.image.Pic;
 public class ChargedHull extends Armour{
 
 	public ChargedHull(int tier){
-		super(.8+tier*.25,tier, "Charged hull", "Start each battle with +3 energy", Gallery.chargedHull, 0, 0);
+		super(.8+tier*.4,tier, "Charged hull", "Start each battle with +2 energy", Gallery.chargedHull, 0, 0);
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public class ChargedHull extends Armour{
 	@Override
 	public void startBattleEffect() {
 		System.out.println("adding energy");
-		ship.addEnergy(3, true);
+		ship.addEnergy(2, true);
 	}
 
 	@Override

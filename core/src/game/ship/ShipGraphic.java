@@ -272,7 +272,7 @@ public class ShipGraphic extends Updater{
 
 		//Shitty tutorial shit shit shit//
 		if(ship.player&&Tutorial.index==0&&Battle.isTutorial()){
-			batch.setColor(Colours.withAlpha(Colours.light, (float)Math.sin(Battle.ticks*4)/5+.3f));
+			batch.setColor(Colours.withAlpha(Colours.tutorialHighlightColour, (float)Math.sin(Battle.ticks*4)/5+.3f));
 			for(int x=-1;x<=1;x+=2){
 				for(int y=-1;y<=1;y+=2){
 

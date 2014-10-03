@@ -39,8 +39,8 @@ import game.ship.shipClass.Nova;
 
 public class Main extends ApplicationAdapter  {
 
-	public static float version=0.4f;
-	public static boolean debug=true;
+	public static float version=0.41f;
+	public static boolean debug=false;
 	public static float ticks;
 	public static int height=700;
 	public static int width=1280;

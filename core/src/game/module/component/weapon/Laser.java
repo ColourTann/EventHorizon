@@ -37,14 +37,14 @@ public class Laser extends Weapon{
 		rules[2]="";
 		code[2].add(AI.SurplusEnergy,1);
 		
-		name[3]="Intensify";
+		name[3]="Targeting Laser";
 		cost[3]=1;
 		cooldown[3]=0;
 		effect[3]=0;
 		shots[3]=0;
-		rules[3]="Augment laser: +"+calc(0,1)+" damage, targeted";
+		rules[3]="Augment ANY weapon: +"+calc(0,1)+" damage, targeted";
 		code[3].add(Special.Augment);
-		code[3].add(Augment.AugmentThis);
+		code[3].add(Augment.AugmentWeapon);
 		code[3].add(Augment.AugmentDamage,calc(0,1));
 		code[3].add(Augment.AugmentTargeted);
 		code[3].add(AI.OtherCardsThisSystem,1);

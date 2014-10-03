@@ -17,6 +17,7 @@ import game.screen.preBattle.PreBattle;
 import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
+import game.ship.shipClass.Hornet;
 import game.ship.shipClass.Nova;
 
 public class Menu extends Screen{
@@ -35,8 +36,10 @@ public class Menu extends Screen{
 				new Battle(new Nova(true, 0), new Aurora(false, 0), true, false)));
 		choices.add(new GameChoice(Main.width/2, 305, "easy", 
 				new Battle(new Eclipse(true, 0), new Aurora(false, 0), false, false)));
+//		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
+//				new Battle(new Comet(true, 0), new Nova(false, 0), false, false)));
 		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
-				new Battle(new Comet(true, 0), new Nova(false, 0), false, false)));
+				new Battle(new Hornet(true, 0), new Aurora(false, 0), false, false)));
 		choices.add(new GameChoice(Main.width/2, 505, "arena", 	
 				new Customise(new Aurora(true, 0), true)));
 	}

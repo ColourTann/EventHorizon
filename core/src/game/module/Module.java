@@ -203,8 +203,10 @@ public abstract class Module {
 	}
 
 	public int getShots(int i){	
-		return shots[i]==0?0:shots[i]+getBuffAmount(BuffType.BonusShot);
+		return shots[i]==0?0:shots[i];
 	}
+	
+	
 
 	public void mouse() {
 		moused=true;
@@ -212,6 +214,10 @@ public abstract class Module {
 
 	public void unmouse() {
 		moused=false;
+	}
+	
+	public boolean isScrambled(){
+		return getBuffAmount(BuffType.Scrambled)>0;
 	}
 
 

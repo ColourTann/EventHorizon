@@ -235,6 +235,7 @@ public abstract class Ship {
 		for(Utility u:utilities){
 			if(u!=null)u.endTurnEffect();
 		}
+		playList.clear();
 	}
 
 	public void checkDefeat(){
@@ -256,7 +257,6 @@ public abstract class Ship {
 			else c.play();
 
 		}
-		if(player)playList.clear();
 		if(player)updateCardPositions();
 	}
 
@@ -333,6 +333,7 @@ public abstract class Ship {
 
 	public void endPhase() {	
 
+		if(player) playCards();
 		addEnergy(energyAtEndOfPhase, true);
 		energyAtEndOfPhase=0;
 		switch (Battle.getPhase()){
@@ -432,7 +433,7 @@ public abstract class Ship {
 			return;
 		}
 		for(Card c:playList) c.fadeAndAddIcon();
-		playList.clear();
+		
 		endPhase();
 	}
 
@@ -781,18 +782,6 @@ public abstract class Ship {
 		return null;
 	}
 
-
-
-	/*public static Ship getRandomShip(boolean player){
-		Class<? extends Ship> ship= classes.get((int)(Math.random()*classes.size()));
-		Ship s=null;
-		try {
-			s=(Ship) ship.getConstructors()[0].newInstance(player);
-		} catch(Exception e)  {
-			System.out.println("Broke when trying to make ship");
-		}
-		return s;
-	}*/
 	public Ship getEnemy(){
 		if(player)return Battle.getEnemy();
 		return Battle.getPlayer();

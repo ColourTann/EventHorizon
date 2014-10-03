@@ -26,25 +26,25 @@ public class Task {
 	public boolean phaseButton;
 	public enum TaskType{PlayShield, ShieldGen, EndShieldPhase, PlayWeapon, EndWeaponPhase, PreventAllMajor, TargetGenerator, PlayerAlternateSide, NoneScrambled, WeaponPlayed, WeirdPrevent, FlipCard}
 	public Task(String s, TaskType t){
-		this.s=s;
+		this.s="- "+s;
 		this.t=t;
 	}
 	public Task(String s, TaskType t, Pic pic, Pair location){
-		this.s=s;
+		this.s="- "+s;
 		this.t=t;
 		this.pic=pic;
 		this.location=location;
 	}
 
 	public Task(String s, TaskType t, Card card, int side){
-		this.s=s;
+		this.s="- "+s;
 		this.t=t;
 		this.card=card;
 		this.side=side;
 	}
 
 	public Task(String s, TaskType t, boolean phaseButton){
-		this.s=s;
+		this.s="- "+s;
 		this.t=t;
 		this.phaseButton=true;
 	}
