@@ -48,9 +48,14 @@ public class MusicClip extends Mouser{
 	}
 	
 	public float getVolume(){
-		if(Main.debug)return 0;
+		//if(Main.debug)return 0;
 		return musicLevel.getFloat()*volumeMultiplier;
 	}
+	
+	public float getTrackVolume(){
+		return volumeMultiplier;
+	}
+	
 	public void fadeOut(float speed){
 		this.fadeSpeed=-speed;
 		activate();
@@ -100,8 +105,9 @@ public class MusicClip extends Mouser{
 	@Override
 	public void mouseClicked(boolean left) {
 	}
-	public void setVolume(int i) {
-		volumeMultiplier=1;
+	public void setVolume(float i) {
+		volumeMultiplier=i;
+		get().setVolume(getVolume());
 	}
 	public void stopSongFading() {
 		this.fadeSpeed=0;

@@ -5,6 +5,7 @@ import game.card.Card;
 import game.card.CardCode.AI;
 import game.card.CardCode.Special;
 import game.module.Module;
+import game.module.component.Component;
 
 public class PhaseArray extends Utility{
 
@@ -99,6 +100,10 @@ public class PhaseArray extends Utility{
 	@Override
 	public boolean overrideDefeat() {
 		return false;
+	}
+
+	@Override
+	public void onScramble(Component c) {
 	}
 	
 	

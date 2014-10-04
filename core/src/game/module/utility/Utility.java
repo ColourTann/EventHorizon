@@ -2,6 +2,7 @@ package game.module.utility;
 
 import game.card.Card;
 import game.module.Module;
+import game.module.component.Component;
 import game.module.component.shield.Deflector;
 import game.module.component.shield.Shield;
 import game.module.utility.armour.Plating;
@@ -43,6 +44,8 @@ public abstract class Utility extends Module{
 	public abstract boolean overrideDefeat();
 	
 	public abstract void afterBattle();
+	
+	public abstract void onScramble(Component c);
 
 	public static Utility getRandomUtility(int tier) {
 

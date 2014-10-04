@@ -95,25 +95,26 @@ public class ModuleStats extends Mouser{
 	}
 
 	public void render(SpriteBatch batch) {
-		Pic base=null;
+		Pic overlay=null;
 		switch(component.type){
 		case COMPUTER:
-			base=Gallery.statsComputer;
+			overlay=Gallery.statsComputer;
 			break;
 		case GENERATOR:
-			base=Gallery.statsGenerator;
+			overlay=Gallery.statsGenerator;
 			break;
 		case SHIELD:
-			base=Gallery.statsShield;
+			overlay=Gallery.statsShield;
 			break;
 		case WEAPON:
-			base=Gallery.statsWeapon;
+			overlay=Gallery.statsWeapon;
 			break;
 		default:
-			base=Gallery.baseModuleStats;
+			overlay=Gallery.baseModuleStats;
 		}
 		batch.setColor(1,1,1,1);
-		Draw.draw(batch, base.get(), collider.position.x, collider.position.y);
+		Draw.draw(batch, Gallery.baseModuleStats.get(), collider.position.x, collider.position.y);
+		Draw.draw(batch, overlay.get(), collider.position.x, collider.position.y);
 
 		if(component.moused)Draw.draw(batch, Gallery.statsMoused.get(), collider.position.x, collider.position.y);
 		if(Screen.isActiveType(Customise.class)){

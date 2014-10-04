@@ -112,7 +112,7 @@ public class Gallery {
 	public static Pic magnify= new Pic("ConsumableCard/magnify");
 	
 	//MOD STAT STUFF//
-	public static Pic baseModuleStats= new Pic("Interface/basestats");
+	public static Pic baseModuleStats= new Pic("Interface/statsbase");
 	public static Pic statsGenerator= new Pic("Interface/statsgenerator");
 	public static Pic statsWeapon= new Pic("Interface/statsweapon");
 	public static Pic statsShield= new Pic("Interface/statsshield");
@@ -219,6 +219,7 @@ public class Gallery {
 	
 	//Runtime stuff//
 	public static Pic whiteSquare;
+	
 	
 	
 	public static void init(){

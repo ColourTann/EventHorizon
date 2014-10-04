@@ -6,6 +6,7 @@ import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
 import game.module.Module.ModuleType;
+import game.module.component.Component;
 
 public class Repeater extends Utility{
 
@@ -82,6 +83,10 @@ public class Repeater extends Utility{
 	@Override
 	public boolean overrideDefeat() {
 		return false;
+	}
+
+	@Override
+	public void onScramble(Component c) {
 	}
 
 }

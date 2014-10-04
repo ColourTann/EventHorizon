@@ -1,6 +1,7 @@
 package game.screen.menu;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import util.assets.Font;
 import util.maths.Pair;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import game.Main;
+import game.assets.Sounds;
 import game.screen.battle.Battle;
 import game.screen.customise.Customise;
 import game.screen.preBattle.PreBattle;
@@ -25,9 +27,9 @@ public class Menu extends Screen{
 	public Menu me;
 	ArrayList<GameChoice> choices= new ArrayList<GameChoice>();
 	public Menu(){
-		
+
 	}
-	
+
 	@Override
 	public void init() {
 		Customise.power=0;
@@ -36,14 +38,23 @@ public class Menu extends Screen{
 				new Battle(new Nova(true, 0), new Aurora(false, 0), true, false)));
 		choices.add(new GameChoice(Main.width/2, 305, "easy", 
 				new Battle(new Eclipse(true, 0), new Aurora(false, 0), false, false)));
-//		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
-//				new Battle(new Comet(true, 0), new Nova(false, 0), false, false)));
+		//		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
+		//				new Battle(new Comet(true, 0), new Nova(false, 0), false, false)));
 		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
 				new Battle(new Hornet(true, 0), new Aurora(false, 0), false, false)));
 		choices.add(new GameChoice(Main.width/2, 505, "arena", 	
 				new Customise(new Aurora(true, 0), true)));
-	}
+
+		Sounds.one.setVolume(0);
+		Sounds.two.setVolume(0);
+		Sounds.three.setVolume(0);
+		Sounds.one.play();
+		Sounds.two.play();
+		Sounds.three.play();
 	
+
+	}
+
 	@Override
 	public void update(float delta) {
 	}
@@ -60,9 +71,19 @@ public class Menu extends Screen{
 	@Override
 	public void keyPress(int keycode) {
 		switch(keycode){
-		case Input.Keys.A:
+		case Input.Keys.NUM_1:
 			
+			
+			break;
+		case Input.Keys.NUM_2:
+	
+			break;
+		case Input.Keys.NUM_3:
+
+			break;
 		}
+
+
 	}
 
 	@Override
@@ -86,5 +107,5 @@ public class Menu extends Screen{
 	public void dispose() {
 	}
 
-	
+
 }

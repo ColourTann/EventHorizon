@@ -7,6 +7,7 @@ import util.image.Pic;
 import game.assets.Gallery;
 import game.card.CardCode.AI;
 import game.card.CardCode.Special;
+import game.module.component.Component;
 import game.module.component.shield.Deflector;
 import game.module.component.shield.Shield;
 import game.module.component.weapon.Laser;
@@ -49,5 +50,10 @@ public abstract class Armour extends Utility{
 			e.printStackTrace();
 		}
 		return null;	
+	}
+	
+	public void onScramble(Component c){
+		
+		
 	}
 }

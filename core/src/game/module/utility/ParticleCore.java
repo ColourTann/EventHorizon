@@ -5,6 +5,7 @@ import game.card.Card;
 import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
+import game.module.component.Component;
 
 public class ParticleCore extends Utility{
 
@@ -79,5 +80,9 @@ public class ParticleCore extends Utility{
 	@Override
 	public boolean overrideDefeat() {
 		return false;
+	}
+
+	@Override
+	public void onScramble(Component c) {
 	}
 }

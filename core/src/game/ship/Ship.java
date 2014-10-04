@@ -1080,12 +1080,7 @@ public abstract class Ship {
 		return consumableStore;
 	}
 
-	public boolean preventScramble(){
-		for(Utility u:utilities){
-			if(u instanceof Exploiter)return true;
-		}
-		return false;
-	}
+
 
 	public static Ship makeIntegerShip(boolean player, float power, int number){
 		try {
@@ -1126,7 +1121,10 @@ public abstract class Ship {
 		}
 		for(Card c:deck)c.getGraphic().deactivate();
 	}
-
+	
+	public void onScramble(Component c){
+		for(Utility u:utilities) if(u!=null) u.onScramble(c);
+	}
 
 	public void endOfBattleCelebrations() {
 		for(Card c:hand){

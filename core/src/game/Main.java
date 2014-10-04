@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.card.CardGraphic;
 import game.screen.battle.Battle;
 import game.screen.cardView.CardViewer;
@@ -40,7 +41,7 @@ import game.ship.shipClass.Nova;
 public class Main extends ApplicationAdapter  {
 
 	public static float version=0.41f;
-	public static boolean debug=false;
+	public static boolean debug=true;
 	public static float ticks;
 	public static int height=700;
 	public static int width=1280;
@@ -78,6 +79,7 @@ public class Main extends ApplicationAdapter  {
 
 		CardGraphic.init();
 		Gallery.init();
+		Sounds.init();
 		Font.init();
 		Ship.init();
 		batch = new SpriteBatch();

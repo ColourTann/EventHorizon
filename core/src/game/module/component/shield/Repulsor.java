@@ -34,7 +34,7 @@ public class Repulsor extends Shield{
 		cost[2]=4;
 		cooldown[2]=0;
 		effect[2]=0;
-		rules[2]="+"+calc(0)+" effect to this module until end of battle";
+		rules[2]="+"+calc(0)+" shield to all cards from this module until end of battle";
 		code[2].add(AI.Ignore);
 		code[2].add(Special.PermanentIncreaseEffect, calc(0));
 		

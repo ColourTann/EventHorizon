@@ -188,7 +188,7 @@ public abstract class Component extends Module{
 						break;
 					}
 				}
-				
+
 			}
 
 		}
@@ -453,12 +453,15 @@ public abstract class Component extends Module{
 	}
 
 	public void scramble(Card source){ //Source is usually null//
-		if(ship.preventScramble()){
-			new TextWisp("Immune", Font.medium, getCenter().add(new Pair(ship.player?0:-500,-40)), WispType.Regular); 
-			return;
-		}
+		int preScramble=getBuffAmount(BuffType.Scrambled);
 		buffs.add(new Buff(BuffType.Scrambled, 1, source, true));
-		new TextWisp("Scrambled", Font.medium, getCenter().add(new Pair(ship.player?0:-500,-40)), WispType.Regular); 
+		ship.onScramble(this);
+		if(getBuffAmount(BuffType.Scrambled)>preScramble){
+			new TextWisp("Scrambled", Font.medium, getCenter().add(new Pair(ship.player?0:-500,-40)), WispType.Regular);
+		}
+		else {
+			new TextWisp("Immune", Font.medium, getCenter().add(new Pair(ship.player?0:-500,-40)), WispType.Regular);
+		}
 	}
 
 

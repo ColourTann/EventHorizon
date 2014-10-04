@@ -25,16 +25,15 @@ public class Laser extends Weapon{
 		effect[1]=calc(0,1);
 		shots[1]=1;
 		rules[1]="Unshieldable";
-		code[1].add(Special.Targeted);
 		code[1].add(Special.Unshieldable);
 		code[1].add(AI.OtherCardsThisSystem,1);
 		
 		name[2]="Incinerate";
-		cost[2]=6;
+		cost[2]=5;
 		cooldown[2]=1;
-		effect[2]=calc(2,4);
+		effect[2]=calc(4);
 		shots[2]=1;
-		rules[2]="";
+		rules[2]="Scramble the module this hits";
 		code[2].add(AI.SurplusEnergy,1);
 		
 		name[3]="Targeting Laser";
@@ -42,7 +41,7 @@ public class Laser extends Weapon{
 		cooldown[3]=0;
 		effect[3]=0;
 		shots[3]=0;
-		rules[3]="Augment ANY weapon: +"+calc(0,1)+" damage, targeted";
+		rules[3]="Augment *any* weapon: +"+calc(0,1)+" damage, targeted";
 		code[3].add(Special.Augment);
 		code[3].add(Augment.AugmentWeapon);
 		code[3].add(Augment.AugmentDamage,calc(0,1));
@@ -50,14 +49,16 @@ public class Laser extends Weapon{
 		code[3].add(AI.OtherCardsThisSystem,1);
 		code[3].setPriority(1);
 		
-		name[4]="Overwhelm";
-		cost[4]=3;
-		cooldown[4]=1;
+		name[4]="Sunder";
+		cost[4]=2;
+		cooldown[4]=0;
 		effect[4]=calc(1);
 		shots[4]=1;
-		rules[4]="+"+calc(2)+" damage against undamaged modules";
-		code[4].add(Special.BonusVsPristine, calc(2));
-		code[4].add(AI.PlayerPristineSystems,3);
+		rules[4]="Targeted module takes +"+calc(0)+" damage from further shots";
+		code[4].add(Special.Targeted);
+		code[4].add(Special.MakeVulnerable,calc(0));
+		code[4].add(AI.OtherTargeted,2);
+		code[4].setPriority(1);
 		
 		name[5]="Laser";
 		cost[5]=1;

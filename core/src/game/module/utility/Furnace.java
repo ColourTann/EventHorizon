@@ -6,6 +6,7 @@ import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
 import game.module.Module.ModuleType;
+import game.module.component.Component;
 import util.image.Pic;
 
 public class Furnace extends Utility{
@@ -77,6 +78,10 @@ public class Furnace extends Utility{
 	@Override
 	public boolean overrideDefeat() {
 		return false;
+	}
+
+	@Override
+	public void onScramble(Component c) {
 	}
 
 }
