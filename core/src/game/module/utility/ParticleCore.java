@@ -10,13 +10,12 @@ import game.module.component.Component;
 public class ParticleCore extends Utility{
 
 	public ParticleCore(int tier) {
-		super(tier, ModuleType.UTILITY,"Particle Core", "-1 hand size, +2 cards next turn if you use all cards", Gallery.blaster, 1, 1);
+		super(tier, ModuleType.UTILITY,"Particle Core", "+1 card next turn if you use all cards", Gallery.blaster, 1, 1);
 		
 		for(int i=0;i<2;i++) cardPic[i]= Gallery.particleCore[i];
 		
 		name[0]="Flush";
 		cost[0]=0;
-		cooldown[0]=0;
 		effect[0]=0;
 		rules[0]="Draw 2 cards";
 		code[0].add(Special.DrawCard,2);
@@ -26,7 +25,6 @@ public class ParticleCore extends Utility{
 		
 		name[1]="Accumulate";
 		cost[1]=0;
-		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="Discard a card, +2 hand size next turn";
 		code[1].add(Augment.AugmentAny);
@@ -41,7 +39,7 @@ public class ParticleCore extends Utility{
 
 	@Override
 	public void startBattleEffect() {
-		ship.getComputer().addBonusCards(-1);
+	
 	}
 
 	@Override
@@ -50,8 +48,7 @@ public class ParticleCore extends Utility{
 
 	@Override
 	public void endTurnEffect() {
-		ship.getComputer().addBonusCards(-1);
-		if(ship.hand.size()==0)ship.getComputer().addBonusCards(2);
+		if(ship.hand.size()==0)ship.getComputer().addBonusCards(1);
 	}
 
 	@Override

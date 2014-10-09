@@ -14,14 +14,12 @@ public class Laser extends Weapon{
 		}
 		name[0]="Laser";
 		cost[0]=2;
-		cooldown[0]=1;
 		effect[0]=calc(2);
 		shots[0]=1;
 		rules[0]="";
 		
 		name[1]="Narrow beam";
 		cost[1]=1;
-		cooldown[1]=0;
 		effect[1]=calc(0,1);
 		shots[1]=1;
 		rules[1]="Unshieldable";
@@ -30,7 +28,6 @@ public class Laser extends Weapon{
 		
 		name[2]="Incinerate";
 		cost[2]=5;
-		cooldown[2]=1;
 		effect[2]=calc(4);
 		shots[2]=1;
 		rules[2]="Scramble the module this hits";
@@ -38,7 +35,6 @@ public class Laser extends Weapon{
 		
 		name[3]="Targeting Laser";
 		cost[3]=1;
-		cooldown[3]=0;
 		effect[3]=0;
 		shots[3]=0;
 		rules[3]="Augment *any* weapon: +"+calc(0,1)+" damage, targeted";
@@ -51,7 +47,6 @@ public class Laser extends Weapon{
 		
 		name[4]="Sunder";
 		cost[4]=2;
-		cooldown[4]=0;
 		effect[4]=calc(1);
 		shots[4]=1;
 		rules[4]="Targeted module takes +"+calc(0)+" damage from further shots";
@@ -62,7 +57,6 @@ public class Laser extends Weapon{
 		
 		name[5]="Laser";
 		cost[5]=1;
-		cooldown[5]=0;
 		effect[5]=7;
 		shots[5]=1;
 		rules[5]="";
@@ -73,7 +67,6 @@ public class Laser extends Weapon{
 		
 		name[6]="Laser";
 		cost[6]=1;
-		cooldown[6]=0;
 		effect[6]=7;
 		shots[6]=1;
 		rules[6]="";

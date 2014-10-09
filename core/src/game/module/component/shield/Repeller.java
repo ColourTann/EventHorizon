@@ -14,7 +14,6 @@ public class Repeller extends Shield{
 
 		name[0]="Deflect";
 		cost[0]=1;
-		cooldown[0]=0;
 		effect[0]=calc(1);
 		rules[0]="";
 		code[0].add(Special.AddShieldPoints);
@@ -22,7 +21,6 @@ public class Repeller extends Shield{
 		
 		name[1]="Consume";
 		cost[1]=0;
-		cooldown[1]=0;
 		effect[1]=calc(0);
 		rules[1]="Shields generator\nAbsorb: +1 energy";
 		code[1].add(Special.AbsorbEnergy,1);
@@ -31,7 +29,6 @@ public class Repeller extends Shield{
 		
 		name[2]="Kinetic Field";
 		cost[2]=1;
-		cooldown[2]=0;
 		effect[2]=calc(4);
 		rules[2]="Shields your shield system";
 		code[2].add(Special.ShieldShield);
@@ -40,7 +37,6 @@ public class Repeller extends Shield{
 		
 		name[3]="Precision";
 		cost[3]=1;
-		cooldown[3]=0;
 		effect[3]=calc(2);
 		rules[3]="Play only if your shield is undamaged";
 		code[3].add(Special.AddShieldPoints);
@@ -49,7 +45,6 @@ public class Repeller extends Shield{
 		
 		name[4]="Prioritise";
 		cost[4]=2;
-		cooldown[4]=0;
 		effect[4]=calc(1);
 		rules[4]="Shields both your weapons";
 		code[4].add(Special.ShieldWeapons);
@@ -59,7 +54,6 @@ public class Repeller extends Shield{
 		//tutorishit//
 		name[5]="";
 		cost[5]=0;
-		cooldown[5]=0;
 		effect[5]=0;
 		rules[5]="";
 		cardPic[5]=Gallery.nothing;

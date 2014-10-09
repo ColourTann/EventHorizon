@@ -14,7 +14,6 @@ public class Beta extends Computer{
 		
 		name[1]="Search";
 		cost[1]=0;
-		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="Get a card from any module";
 		code[1].add(Special.ModuleChooser);

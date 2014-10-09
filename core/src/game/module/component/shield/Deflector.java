@@ -13,7 +13,6 @@ public class Deflector extends Shield{
 		}
 		name[0]="Deflect";
 		cost[0]=0;
-		cooldown[0]=0;
 		effect[0]=calc(0);
 		rules[0]="";
 		code[0].add(Special.AddShieldPoints);
@@ -21,7 +20,6 @@ public class Deflector extends Shield{
 		
 		name[1]="Amplify";
 		cost[1]=1;
-		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="+"+calc(0)+" shield to all shield cards this turn";
 		code[1].add(Special.IncreaseEffect, calc(0));
@@ -31,7 +29,6 @@ public class Deflector extends Shield{
 		
 		name[2]="Shell";
 		cost[2]=3;
-		cooldown[2]=0;
 		effect[2]=calc(0);
 		rules[2]="Shields all modules";
 		code[2].add(Special.ShieldAll);
@@ -40,7 +37,6 @@ public class Deflector extends Shield{
 		
 		name[3]="Energise";
 		cost[3]=0;
-		cooldown[3]=0;
 		effect[3]=calc(0);
 		rules[3]="Shields computer.\nAbsorb: draw a card";
 		code[3].add(Special.ShieldComputer);
@@ -49,7 +45,6 @@ public class Deflector extends Shield{
 		
 		name[4]="Flux Field";
 		cost[4]=1;
-		cooldown[4]=0;
 		effect[4]=calc(2);
 		rules[4]="Shields only systems with major damage";
 		code[4].add(Special.AddShieldPoints);

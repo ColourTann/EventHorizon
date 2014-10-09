@@ -13,7 +13,6 @@ public class Four extends Generator{
 
 		name[1]="Stoke";
 		cost[1]=0;
-		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="+2 energy, 2 damage to this system";
 		code[1].add(Special.GainEnergy, 2);

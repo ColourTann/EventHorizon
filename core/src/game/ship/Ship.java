@@ -35,16 +35,12 @@ import game.module.component.computer.Computer;
 import game.module.component.generator.Generator;
 import game.module.component.shield.Shield;
 import game.module.component.weapon.Weapon;
+import game.module.junk.ModuleStats;
 import game.module.junk.ShieldPoint;
 import game.module.junk.Buff.BuffType;
-import game.module.utility.ArcSocket;
-import game.module.utility.Exploiter;
-import game.module.utility.PhaseArray;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
-import game.module.utility.armour.CrystalLattice;
 import game.module.utility.armour.Plating;
-import game.module.utility.armour.VoltaicCarapace;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.interfaceJunk.FightStats;
@@ -83,7 +79,8 @@ public abstract class Ship {
 	public FightStats fightStats;
 	private ShipStats shipStats;
 	private ShipGraphic battleGraphic;
-
+	private ModuleStats[] utilityStats= new ModuleStats[3];
+	
 	private int currentEnergy;
 	public boolean dead=false;
 	public boolean exploded=false;
@@ -109,7 +106,7 @@ public abstract class Ship {
 		this.tier=Math.min(12f, tier);
 		this.player=player;
 		this.shipPic=shipPic;
-
+		
 		setupNiches();
 		placeNiches();
 
@@ -1120,6 +1117,9 @@ public abstract class Ship {
 			n.getGraphic().dispose();
 		}
 		for(Card c:deck)c.getGraphic().deactivate();
+		for(ModuleStats ums:utilityStats){
+			ums.deactivate();
+		}
 	}
 	
 	public void onScramble(Component c){
@@ -1133,5 +1133,25 @@ public abstract class Ship {
 		for(Card c:deck){
 			if(!c.selected&&c.consumable)addConsumableCard(c);
 		}
+	}
+
+
+	public ModuleStats[] getUtilityStats() {
+		if(utilityStats[0]==null){
+			for(int index=0;index<3;index++){
+				utilityStats[index]= new ModuleStats(utilities[index], index, player);
+			}
+		}
+		return utilityStats;
+		
+			
+			
+	}
+
+
+	public void clearUtilStats() {
+		if(utilityStats[0]!=null)for(ModuleStats ms:utilityStats)ms.dispose();
+		
+		utilityStats=new ModuleStats[3];
 	}
 }

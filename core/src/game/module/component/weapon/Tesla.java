@@ -13,14 +13,12 @@ public class Tesla extends Weapon{
 		}
 		name[0]="Tesla";
 		cost[0]=3;
-		cooldown[0]=1;
 		effect[0]=calc(3);
 		shots[0]=1;
 		rules[0]="";
 		
 		name[1]="Spark";
 		cost[1]=2;
-		cooldown[1]=0;
 		effect[1]=0;
 		shots[1]=0;
 		rules[1]="Augment tesla card: +"+calc(1)+" damage";
@@ -32,7 +30,6 @@ public class Tesla extends Weapon{
 		
 		name[2]="Thunder";
 		cost[2]=4;
-		cooldown[2]=1;
 		effect[2]=calc(4,1)+1;
 		shots[2]=1;
 		rules[2]="Damages this module for "+calc(5)/2;
@@ -42,7 +39,6 @@ public class Tesla extends Weapon{
 		
 		name[3]="Lightning";
 		cost[3]=2;
-		cooldown[3]=1;
 		effect[3]=calc(4);
 		shots[3]=1;
 		rules[3]="Play only if this module has taken major damage";
@@ -50,7 +46,6 @@ public class Tesla extends Weapon{
 		
 		name[4]="Fork";
 		cost[4]=7;
-		cooldown[4]=1;
 		effect[4]=calc(3);
 		shots[4]=2;
 		rules[4]="";
@@ -58,7 +53,6 @@ public class Tesla extends Weapon{
 		
 		name[5]="";
 		cost[5]=0;
-		cooldown[5]=0;
 		effect[5]=0;
 		shots[5]=0;
 		rules[5]="";

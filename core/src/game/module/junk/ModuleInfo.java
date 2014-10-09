@@ -37,6 +37,7 @@ public class ModuleInfo extends Mouser{
 	public static ModuleInfo top;
 	float offset=3;
 	public ModuleInfo(Module m) {
+		if(m==null)return;
 		mod=m;
 		width=CardGraphic.width*2-2;
 	

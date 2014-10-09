@@ -19,6 +19,7 @@ import game.card.CardGraphic;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
+import game.module.utility.Utility;
 import game.screen.battle.Battle;
 import game.screen.battle.tutorial.Tutorial;
 import game.screen.customise.Customise;
@@ -26,13 +27,25 @@ import game.screen.customise.Reward;
 import game.screen.preBattle.PreBattle;
 
 public class ModuleStats extends Mouser{
-	static int height=Main.height/5;
+	static int height=Main.height/5-17;
 	public static int width=128;
 	public Component component;
 	public ModuleInfo info;
 	static Pair hpLoc=new Pair(14, 9);
 	static Pair hpGap=new Pair(16,15);
 	static int row=6;
+
+	//utility stuff//
+	boolean utilityStats;
+	Utility fUtil;
+	int index;
+	boolean player;
+	ModuleType type;
+
+	static int uWidth=60;
+	static int uHeight=32;
+	static int uYGap=8;
+	static int uXGap=2;
 
 	//Just for tutorial//
 	TextWisp nameWisp;
@@ -44,41 +57,87 @@ public class ModuleStats extends Mouser{
 
 	}
 
+	public ModuleStats(Utility aUtil, int aIndex, boolean player){
+		utilityStats=true;
+		this.player=player;
+		fUtil=aUtil;
+		index=aIndex;
+		if(index==2)type=ModuleType.ARMOUR;
+		else type=ModuleType.UTILITY;
+		int x=uXGap;
+		int y=Main.height-uHeight-uYGap;
+		switch(index){
+		case 0:
+			x+=uXGap+uWidth;
+			break;
+		case 1:
+			x+=uXGap+uWidth;
+			y-=uHeight;
+			y-=uYGap;
+			break;
+		case 2:
+			y-=uHeight/2;
+			y-=uYGap/2;
+			break;
+		}
 
+		if(!player) x=Main.width-x-uWidth;
+		position=new Pair(x,y);
+		mousectivate(new BoxCollider(position.x, position.y, uWidth, uHeight));
+		System.out.println("starting");
+		if(aUtil!=null)info=new ModuleInfo(aUtil);		
+	}
 
 	@Override
 	public void mouseClicked(boolean left) {
 		if(Screen.isActiveType(Customise.class)){
-
-			if(Customise.getReplaceableType()==component.type){
-				Customise.replace(component);
+			if(utilityStats){
+				if(Customise.getReplaceableType()==type){
+					Customise.replace(fUtil, index);
+				}
+			}
+			else if(Customise.getReplaceableType()==component.type){
+				Customise.replace(component,-1);
 			}
 
 		}
-		component.clicked(left);
+		if(component!=null)component.clicked(left);
 	}
 	@Override
 	public void mouseDown() {
-		component.moused();
+		if(component==null&&fUtil==null)return;
+		if(component!=null)component.moused();
+
+
+
 		if(!Battle.isTutorial()){
+			System.out.println("refreshing info");
 			info.stopFading();
 			ModuleInfo.top=info;
 		}
-		
+
 		if(Screen.isActiveType(Customise.class)){
-			Customise.mouseOver(component);
-			if(Customise.getReplaceableType()==component.type){
-				Customise.checkEnergy(new Module[]{component}, new Module[]{Customise.selectedReward.module});
+			if(component!=null){
+				Customise.mouseOver(component);
+				if(Customise.getReplaceableType()==component.type){
+					Customise.checkEnergy(new Module[]{component}, new Module[]{Customise.selectedReward.module});
+				}
 			}
+			else if(fUtil!=null){
+				Customise.mouseOver(fUtil);
+			}
+			else Customise.unMouse(null);
+
 		}
 
 	}
 	@Override
 	public void mouseUp() {
+		if(component==null&&fUtil==null)return;
 		if(Main.currentScreen instanceof Customise){
 			Customise.unMouse(component);
 		}
-		component.unmoused();
+		if(component!=null)component.unmoused();
 		if(info!=null)info.fadeAll();
 
 	}
@@ -95,6 +154,34 @@ public class ModuleStats extends Mouser{
 	}
 
 	public void render(SpriteBatch batch) {
+
+		if(Main.currentScreen instanceof Battle|| Main.currentScreen instanceof PreBattle){
+			if(info!=null)info.render(batch);
+		}
+		
+		if(utilityStats){
+			Draw.drawScaled(batch, Gallery.baseUtilityStats.get(), position.x, position.y, 2, 2);
+
+			if(fUtil!=null){
+				Draw.drawScaled(batch, fUtil.getPic(0).get(), position.x, position.y, 2, 2);
+			}
+
+			Draw.drawScaled(batch, Gallery.baseUtilityStatsOutline.get(), position.x, position.y, 2, 2);
+			if(moused){
+				batch.setColor(Colours.light);
+				Draw.drawScaled(batch, Gallery.baseUtilityStats.getOutline(),  position.x, position.y, 2, 2);
+				batch.setColor(1,1,1,1);	
+			}
+
+			if(Customise.getReplaceableType()==type){
+				System.out.println("highlighting");
+				batch.setColor(Reward.selectedColor);
+				Draw.drawScaled(batch, Gallery.baseUtilityStats.getOutline(), collider.position.x, collider.position.y,2,2);
+				batch.setColor(Colours.white);
+			}
+			return;
+		}
+
 		Pic overlay=null;
 		switch(component.type){
 		case COMPUTER:
@@ -125,6 +212,8 @@ public class ModuleStats extends Mouser{
 			}
 
 
+
+
 		}
 
 		if(component.targeteds>0)	Draw.draw(batch, Gallery.statsTargeted.get(), collider.position.x, collider.position.y);
@@ -132,7 +221,7 @@ public class ModuleStats extends Mouser{
 
 		if(component.type==ModuleType.WEAPON){
 			batch.setColor(1, 1, 1, .5f);
-			Draw.drawCenteredScaled(batch, component.modulePic.get(), collider.position.x+37, collider.position.y+110, 2f/3f,2f/3f);
+			Draw.drawCenteredScaled(batch, component.modulePic.get(), collider.position.x+37, collider.position.y+94, 2f/3f,2f/3f);
 			batch.setColor(1, 1, 1, 1);
 			//Draw.drawTexture(batch, mod.modulePic.get(),collider.x+5,collider.y+5);
 		}
@@ -160,7 +249,7 @@ public class ModuleStats extends Mouser{
 					if(component.thresholds[thre]==i+1)doit=false;
 				}
 				if(doit)twin=2;
-				
+
 			}
 
 			p=Gallery.greenHP;
@@ -206,7 +295,7 @@ public class ModuleStats extends Mouser{
 		if(damage+unshieldable+incoming>component.maxHP){
 			Draw.draw(batch, ext.get(), collider.position.x+hpLoc.x+hpGap.x*((slotLoc)%row),collider.position.y+hpLoc.y+hpGap.y*((slotLoc)/row));
 			//Off the edge number//
-			
+
 			if(ext==Gallery.orangeHP[5]){
 				Font.small.setColor(Colours.weaponCols8[6]);
 				String s=damage+unshieldable+incoming-shields-component.maxHP+"";
@@ -226,8 +315,8 @@ public class ModuleStats extends Mouser{
 			pos++;
 		}
 
-		if(Main.currentScreen instanceof Battle|| Main.currentScreen instanceof PreBattle)info.render(batch);
-		
+	
+
 
 	}
 
@@ -237,15 +326,18 @@ public class ModuleStats extends Mouser{
 		activate();
 		mousectivate(null);
 	}
-	
+
 	public void dispose(){
 		deactivate();
 		demousectivate();
-		info.deactivate();
-		info.demousectivate();
-		for(CardGraphic cg:info.graphics){
-			cg.demousectivate();
-			cg.deactivate();
+		if(info!=null){
+			info.deactivate();
+			info.demousectivate();
+			for(CardGraphic cg:info.graphics){
+				cg.demousectivate();
+				cg.deactivate();
+			}
 		}
+		
 	}
 }

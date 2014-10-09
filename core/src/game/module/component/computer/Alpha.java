@@ -13,7 +13,6 @@ public class Alpha extends Computer{
 		
 		name[1]="Subroutine";
 		cost[1]=0;
-		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="Draw two cards";
 		code[1].add(Special.DrawCard, 2);

@@ -9,9 +9,9 @@ import game.card.Card;
 import game.card.CardGraphic;
 import game.module.component.Component;
 import game.module.junk.ModuleInfo;
+import game.module.junk.ModuleStats;
 import game.screen.battle.Battle;
 import game.screen.customise.Customise;
-import game.screen.customise.Slot;
 import game.ship.Ship;
 import game.ship.ShipGraphic;
 import util.update.SimpleButton.Code;
@@ -47,7 +47,7 @@ public class PreBattle extends Screen{
 	Pair difficultyStart=new Pair(Main.width/2-Gallery.difficultyDial.getWidth()*3/2, 10);
 	SimpleButton fightButton;
 	ArrayList<Card> consumables;
-	ArrayList<Slot> slots=new ArrayList<Slot>();
+	
 	ModuleInfo slotInfo;
 	static PreBattle me;
 
@@ -58,6 +58,8 @@ public class PreBattle extends Screen{
 
 	@Override
 	public void init() {
+		player.clearUtilStats();
+		enemy.clearUtilStats();
 		flashTimer=new Timer();
 		
 		me=this;
@@ -127,17 +129,6 @@ public class PreBattle extends Screen{
 						c.finishFlipping();
 					}
 				}
-
-
-
-				int ex=140;
-				slots.add(new Slot(enemy, new Pair(Main.width-ex-Slot.width, 300), 2));
-				slots.add(new Slot(enemy, new Pair(Main.width-ex-Slot.width, 450), 0));
-				slots.add(new Slot(enemy, new Pair(Main.width-ex-Slot.width, 570), 1));
-
-				slots.add(new Slot(player, new Pair(ex, 300), 2));
-				slots.add(new Slot(player, new Pair(ex, 450), 0));
-				slots.add(new Slot(player, new Pair(ex, 570), 1));
 			}
 		});
 
@@ -159,17 +150,6 @@ public class PreBattle extends Screen{
 	}
 
 	private void resetJunk() {
-		for(Slot s:slots)s.demousectivate();
-
-		slots.clear();
-		int ex=140;
-		slots.add(new Slot(enemy, new Pair(Main.width-ex-Slot.width, 300), 2));
-		slots.add(new Slot(enemy, new Pair(Main.width-ex-Slot.width, 450), 0));
-		slots.add(new Slot(enemy, new Pair(Main.width-ex-Slot.width, 570), 1));
-
-		slots.add(new Slot(player, new Pair(ex, 300), 2));
-		slots.add(new Slot(player, new Pair(ex, 450), 0));
-		slots.add(new Slot(player, new Pair(ex, 570), 1));
 
 	}
 
@@ -231,7 +211,8 @@ public class PreBattle extends Screen{
 			for(Component  c:enemy.components){
 				c.getStats().render(batch);
 			}
-
+			for(ModuleStats ms:player.getUtilityStats())ms.render(batch);
+			for(ModuleStats ms:enemy.getUtilityStats())ms.render(batch);
 
 			Font.medium.setColor(Colours.light);
 			Font.drawFontCentered(batch, (player.getConsumables().size()>0?"Select consumable cards to use for this fight":"No consumable cards available"), Font.medium, Main.width/2, 400);
@@ -241,8 +222,8 @@ public class PreBattle extends Screen{
 
 			fightButton.render(batch);
 			if(mousedGraphic!=null)mousedGraphic.render(batch);
-			for(Slot s:slots)s.render(batch);
-			if(slotInfo!=null)slotInfo.render(batch);
+			
+			//if(slotInfo!=null)slotInfo.render(batch);
 		}
 		batch.setColor(Colours.withAlpha(Colours.enemy2[1], flashTimer.getFloat()));
 		Draw.drawScaled(batch, Gallery.whiteSquare.get(), 0, 0, Main.width, Main.height);
@@ -275,21 +256,6 @@ public class PreBattle extends Screen{
 	public void scroll(int amount) {
 	}
 
-	public static void mouseSlot(Slot slot) {
-		if(slot.getModule()==null)return;
-
-		if(me.slotInfo!=null&&me.slotInfo.mod==slot.getModule()){
-			me.slotInfo.alpha=1;
-			me.slotInfo.stopFading();
-			return;
-		}
-		me.slotInfo=new ModuleInfo(slot.getModule());
-		me.slotInfo.alpha=1;
-	}
-
-	public static void unmouseSlot(Slot slot) {
-		if(me.slotInfo!=null)me.slotInfo.fadeAll();
-
-	}
+	
 
 }

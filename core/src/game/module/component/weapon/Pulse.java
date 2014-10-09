@@ -13,14 +13,12 @@ public class Pulse extends Weapon{
 		}
 		name[0]="Pulse";
 		cost[0]=0;
-		cooldown[0]=0;
 		effect[0]=calc(0);
 		shots[0]=1;
 		rules[0]="";
 		
 		name[1]="Rapid Fire";
 		cost[1]=5;
-		cooldown[1]=0;
 		effect[1]=calc(0);
 		shots[1]=5;
 		rules[1]="";
@@ -28,7 +26,6 @@ public class Pulse extends Weapon{
 		
 		name[2]="Heavy Shot";
 		cost[2]=2;
-		cooldown[2]=0;
 		effect[2]=calc(0,2);
 		shots[2]=1;
 		rules[2]="";
@@ -36,7 +33,6 @@ public class Pulse extends Weapon{
 		
 		name[3]="Shatter";
 		cost[3]=1;
-		cooldown[3]=0;
 		effect[3]=calc(0);
 		shots[3]=1;
 		rules[3]="+"+calc(0,2)+" damage if target has taken at least one major damage";
@@ -46,7 +42,6 @@ public class Pulse extends Weapon{
 		
 		name[4]="Resonate";
 		cost[4]=1;
-		cooldown[4]=0;
 		effect[4]=0;
 		shots[4]=0;
 		rules[4]="+1 shot to all pulse attacks this turn";
@@ -56,7 +51,6 @@ public class Pulse extends Weapon{
 		
 		name[5]="";
 		cost[5]=0;
-		cooldown[5]=0;
 		effect[5]=0;
 		shots[5]=0;
 		rules[5]="";
@@ -64,7 +58,6 @@ public class Pulse extends Weapon{
 		
 		name[6]="Pulse";
 		cost[6]=1;
-		cooldown[6]=0;
 		effect[6]=5;
 		shots[6]=1;
 		rules[6]="";

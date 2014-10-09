@@ -19,7 +19,6 @@ public class Repeater extends Utility{
 		
 		name[0]="Duplicate";
 		cost[0]=2;
-		cooldown[0]=0;
 		effect[0]=0;
 		rules[0]="Augment weapon card: +1 shot";
 		code[0].add(Special.Augment);
@@ -30,7 +29,6 @@ public class Repeater extends Utility{
 		
 		name[1]="Fetch";
 		cost[1]=0;
-		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="Get a card from either weapon module";
 		code[1].add(Special.ModuleChooser);

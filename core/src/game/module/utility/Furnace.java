@@ -18,7 +18,6 @@ public class Furnace extends Utility{
 		
 		name[0]="Divert";
 		cost[0]=0;
-		cooldown[0]=0;
 		effect[0]=0;
 		rules[0]="+1 energy";
 		code[0].add(Special.GainEnergy,1);
@@ -27,7 +26,6 @@ public class Furnace extends Utility{
 		
 		name[1]="Burn";
 		cost[1]=0;
-		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="Discard a card, +2 energy";
 		code[1].add(Special.DiscardOthers,1);

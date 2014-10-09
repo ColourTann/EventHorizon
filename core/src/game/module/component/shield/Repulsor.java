@@ -14,7 +14,6 @@ public class Repulsor extends Shield{
 
 		name[0]="Repulse";
 		cost[0]=2;
-		cooldown[0]=1;
 		effect[0]=calc(2);
 		rules[0]="";
 		code[0].add(Special.AddShieldPoints);
@@ -22,7 +21,6 @@ public class Repulsor extends Shield{
 		
 		name[1]="Reinforce";
 		cost[1]=3;
-		cooldown[1]=0;
 		effect[1]=calc(4);
 		rules[1]="Shields single system";
 		code[1].add(Special.ModuleChooser);
@@ -32,26 +30,22 @@ public class Repulsor extends Shield{
 		
 		name[2]="Charge";
 		cost[2]=4;
-		cooldown[2]=0;
 		effect[2]=0;
 		rules[2]="+"+calc(0)+" shield to all cards from this module until end of battle";
 		code[2].add(AI.Ignore);
 		code[2].add(Special.PermanentIncreaseEffect, calc(0));
 		
-			
 		name[3]="Overheat";
 		cost[3]=2;
 		cooldown[3]=4;
 		effect[3]=calc(6);
-		rules[3]="Warning: High cooldown";
-		code[3].add(Special.SelfScramble,3);
+		rules[3]="Warning: disables system for 4 turns";
 		code[3].add(Special.AddShieldPoints);
 		code[3].add(AI.RegularShield);
 		code[3].add(AI.DamagedModules, 3);
 		
 		name[4]="Encase";
 		cost[4]=5;
-		cooldown[4]=1;
 		effect[4]=calc(1);
 		rules[4]="Shields all modules";
 		code[4].add(Special.ShieldAll);

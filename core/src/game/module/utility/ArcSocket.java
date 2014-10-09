@@ -18,8 +18,7 @@ public class ArcSocket extends Utility{
 		
 		name[0]="Protect";
 		cost[0]=1;
-		cooldown[0]=0;
-		effect[0]=1;
+		effect[0]=2;
 		rules[0]="+1 effect per major damage taken";
 		code[0].add(Special.BonusPerMajorDamage, calc(0));
 		code[0].add(Special.AddShieldPoints);
@@ -27,7 +26,6 @@ public class ArcSocket extends Utility{
 		
 		name[1]="Swell";
 		cost[1]=0;
-		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="+1 shield effect this turn";
 		code[1].add(Special.BonusEffectToShield, calc(0,1));

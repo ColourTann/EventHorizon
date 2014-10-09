@@ -60,6 +60,7 @@ public class Card {
 	private int effectItHad;
 
 	public float rocketSize; //only used for consumable or utility attacks//
+	private boolean played;
 
 	//Setting up card//
 	public Card(Module m){
@@ -452,7 +453,7 @@ public class Card {
 			c.scramble(this);
 		}
 		select();
-		//play();
+	
 		//if(!(mod.type==ModuleType.SHIELD&&getEffect()>0))Clip.cardSelect.play();
 
 	}
@@ -580,6 +581,8 @@ public class Card {
 
 	//General Play method//
 	public void play() {
+		if(played)return;
+		played=true;
 		if(wasScrambled) return;
 		CardCode code=getCode();
 		Ship ship = getShip();
@@ -595,7 +598,7 @@ public class Card {
 
 		if(code.contains(Special.DestroyEnemyShield)){
 			Component enemyShield=getShip().getEnemy().getShield();
-			for(int i=0;i<enemyShield.maxHP;i++){
+			for(int i=0;i<=enemyShield.maxHP;i++){
 				enemyShield.damage(new DamagePoint(this));
 			}
 		}

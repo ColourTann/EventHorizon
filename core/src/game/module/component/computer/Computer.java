@@ -16,7 +16,6 @@ public abstract class Computer extends Component{
 		cardType=type;
 		name[0]="Lock-on";
 		cost[0]=0;
-		cooldown[0]=0;
 		effect[0]=0;
 		rules[0]="Augment weapon card: Targeted.\nThen draw a card";
 		code[0].add(Special.Augment);

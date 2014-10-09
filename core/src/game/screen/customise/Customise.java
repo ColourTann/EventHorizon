@@ -45,10 +45,10 @@ import util.update.Timer.Interp;
 public class Customise extends Screen{
 	static float fadeInSpeed=0f;
 	static float fadeOutSpeed=.3f;
-	static Ship ship;
+	public static Ship ship;
 	public ArrayList<ModuleStats> stats=new ArrayList<ModuleStats>();
 	public ArrayList<Reward> rewards=new ArrayList<Reward>();
-	public ArrayList<Slot> slots=new ArrayList<Slot>();
+	
 	ConsumableContainer consumables;
 
 	public static Reward selectedReward;
@@ -80,6 +80,7 @@ public class Customise extends Screen{
 		}
 		else Customise.ship=s;
 		Customise.ship.cleanupAfterFight();
+		Customise.ship.clearUtilStats();
 	}
 
 
@@ -204,10 +205,7 @@ public class Customise extends Screen{
 		for(Component c:ship.components){
 			stats.add(c.getStats());
 		}
-		slots.clear();
-		slots.add(new Slot(ship, new Pair(170, 100), 2));
-		slots.add(new Slot(ship, new Pair(170, 350), 0));
-		slots.add(new Slot(ship, new Pair(170, 500), 1));
+		ship.clearUtilStats();
 
 		retimeMeter(ship.getStats().energyUsage);
 
@@ -326,7 +324,7 @@ public class Customise extends Screen{
 		for(ModuleStats ms:stats) ms.render(batch);
 
 		for(Reward r:rewards) r.render(batch);
-		for(Slot s:slots) s.render(batch);
+		for(ModuleStats ms:ship.getUtilityStats())ms.render(batch);
 		Draw.drawCentered(batch, ship.getGraphic().composite.get(), shipX, 140);
 
 		if(infoBox!=null)infoBox.render(batch);
@@ -390,7 +388,7 @@ public class Customise extends Screen{
 		return selectedReward.module.type;
 	}
 
-	public static void replace(Module m){
+	public static void replace(Module m, int utilIndex){
 		if(m instanceof Component){
 			Component comp=(Component) m;
 			(comp).getStats().demousectivate();
@@ -400,8 +398,14 @@ public class Customise extends Screen{
 			if(m instanceof Shield){
 				ship.setShield((Shield) selectedReward.module);
 			}
-			rewardChosen();
+			
+			
+			
 		}
+		if(selectedReward.module instanceof Utility){
+			ship.setUtility((Utility) selectedReward.module, utilIndex);
+		}
+		rewardChosen();
 	}
 
 	public static void rewardChosen(){

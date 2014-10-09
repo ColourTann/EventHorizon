@@ -13,7 +13,6 @@ public class Three extends Generator{
 		
 		name[1]="Refill";
 		cost[1]=0;
-		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="+2 energy at end of phase if you use all energy";
 		code[1].add(Special.EnergyIfEmpty,2);

@@ -16,7 +16,6 @@ public class PhaseArray extends Utility{
 		
 		name[0]="Surge";
 		cost[0]=1;
-		cooldown[0]=0;
 		effect[0]=1;
 		shots[0]=1;
 		rules[0]="+1 damage for each other weapon card played this turn";
@@ -24,7 +23,6 @@ public class PhaseArray extends Utility{
 		
 		name[1]="Fetch";
 		cost[1]=0;
-		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="Get a card from either weapon module";
 		code[1].add(Special.ModuleChooser);

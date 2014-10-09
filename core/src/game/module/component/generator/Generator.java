@@ -14,7 +14,6 @@ public abstract class Generator extends Component{
 		cardType=type;
 		name[0]="Recharge";
 		cost[0]=0;
-		cooldown[0]=0;
 		effect[0]=0;
 		rules[0]="+1 energy";
 		code[0].add(Special.GainEnergy,1);

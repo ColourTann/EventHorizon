@@ -112,7 +112,10 @@ public class Gallery {
 	public static Pic magnify= new Pic("ConsumableCard/magnify");
 	
 	//MOD STAT STUFF//
+	
 	public static Pic baseModuleStats= new Pic("Interface/statsbase");
+	public static Pic baseUtilityStats= new Pic("Interface/statsbaseutility");
+	public static Pic baseUtilityStatsOutline= new Pic("Interface/statsbaseutilityoutline");
 	public static Pic statsGenerator= new Pic("Interface/statsgenerator");
 	public static Pic statsWeapon= new Pic("Interface/statsweapon");
 	public static Pic statsShield= new Pic("Interface/statsshield");

@@ -31,6 +31,8 @@ import game.card.CardCode.Special;
 import game.module.component.Component;
 import game.module.junk.DamagePoint;
 import game.module.junk.ModuleInfo;
+import game.module.junk.ModuleStats;
+import game.module.utility.Utility;
 import game.screen.battle.interfaceJunk.CycleButton;
 import game.screen.battle.interfaceJunk.HelpPanel;
 import game.screen.battle.interfaceJunk.PhaseButton;
@@ -603,7 +605,7 @@ public class Battle extends Screen{
 		batch.setColor(1,1,1,1);
 		player.renderFightStats(batch);
 		enemy.renderFightStats(batch);
-		Draw.draw(batch, Gallery.battleScreen.get(), 128, 0);
+		Draw.draw(batch, Gallery.battleScreen.get(), 0, 0);
 		//debug phase text
 		if(Main.debug){
 			Font.medium.setColor(Colours.grey);
@@ -660,6 +662,13 @@ public class Battle extends Screen{
 		Tutorial.renderAll(batch);
 		for(Animation a:animations){
 			a.render(batch);
+		}
+		
+		for(ModuleStats ums:player.getUtilityStats()){
+			ums.render(batch);
+		}
+		for(ModuleStats ums:enemy.getUtilityStats()){
+			ums.render(batch);
 		}
 
 	}

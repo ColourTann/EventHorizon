@@ -13,7 +13,6 @@ public class Five extends Generator{
 
 		name[1]="Power up";
 		cost[1]=4;
-		cooldown[1]=0;
 		effect[1]=0;
 		rules[1]="+1 energy income";
 		code[1].add(Special.EnergyIncome, 1);

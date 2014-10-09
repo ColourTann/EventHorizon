@@ -44,9 +44,16 @@ public class CardGraphic extends Mouser {
 	private static Pair positionTitle = new Pair(70, 8);
 	private static Pair positionRules = new Pair(5, 76);
 	private static Pair positionEnergy = new Pair(13, 38);
-	private static Pair positionCooldown = new Pair(119, 38);
-	private static Pair positionShots = new Pair(12, 21);
-	private static Pair positionTargeted = new Pair(116, 22);
+	
+	
+	private static Pair bonusesCenter = new Pair(124,45);
+	private static int bonusGap= 20;
+	
+//	private static Pair positionShots = new Pair(12, 21);
+//	private static Pair positionTargeted = new Pair(115, 49);
+	
+	
+	
 	private static Pair positionEffectStart = new Pair(5, 64);
 	private static Pair positionEffectMid = new Pair(9, 66);
 	private static Pair positionEffectEnd = new Pair(110, 64);
@@ -226,12 +233,11 @@ public class CardGraphic extends Mouser {
 
 			lightText.a=alpha;
 			darkText.a=alpha;
-			System.out.println(override);
 		}
 		batch.setColor(c);
 
 		//Card base//
-
+		
 		if(card.consumable) Draw.draw(batch, Gallery.cardBaseConsumable.get(), position.x, baseHeight);
 		else Draw.draw(batch, Gallery.cardBase.get(), position.x, baseHeight);
 
@@ -327,14 +333,23 @@ public class CardGraphic extends Mouser {
 
 		// Weapon Junk//
 
-		//TODO - single card
 		int shots = card.getShots(part);
+		
+		int numSpecials= 0;
+		if(card.hasSpecial(Special.Targeted, part)) numSpecials++;
+		if(shots>1)numSpecials++;
+		
+		//MultiShots
 		if (shots > 1) {
-			Draw.draw(batch, Gallery.iconShots.get(), position.x + positionShots.x-5, baseHeight + positionShots.y-19);
+			
+			Draw.drawCentered(batch, Gallery.iconShots.get(), position.x + bonusesCenter.x+4, baseHeight + bonusesCenter.y+(numSpecials==1?0:bonusGap/2));
 			Font.small.setColor(darkText);
-			Font.small.draw(batch, "x" + shots, position.x + positionShots.x - 6, baseHeight + positionShots.y -7);
+			Font.drawFontCentered(batch, ""+shots, Font.small, position.x + bonusesCenter.x-6,   baseHeight + bonusesCenter.y+(numSpecials==1?0:bonusGap/2));
 		}
-		if (card.hasSpecial(Special.Targeted, part))Draw.draw(batch, Gallery.iconTargeted.get(), position.x + positionTargeted.x, baseHeight + positionTargeted.y-17);
+		//Targeted//
+		if (card.hasSpecial(Special.Targeted, part)){
+			Draw.drawCentered(batch, Gallery.iconTargeted.get(), position.x + bonusesCenter.x,  baseHeight + bonusesCenter.y-(numSpecials==1?0:bonusGap/5));
+		}
 
 
 
@@ -369,23 +384,23 @@ public class CardGraphic extends Mouser {
 			}
 		}
 
-		//Cooldown//
-		if(scrambled){
-			if(!card.wasScrambled&&card.mod.ship.player){
-				Draw.draw(batch, Gallery.iconJammed.get(),position.x+positionCooldown.x+positionArray[1][0].x-4,baseHeight+positionCooldown.y+positionArray[1][0].y-3);
-			}
-		}
-		else{
-			int cooldown = card.getCoodlown(part);
-			if (cooldown < 3) {
-				for (int i = 0; i < cooldown; i++) Draw.draw(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[cooldown][i].x, baseHeight+ positionCooldown.y + positionArray[cooldown][i].y);
-			} 
-			else {
-				Font.small.setColor(darkText);
-				Draw.draw(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[5][0].x, baseHeight + positionCooldown.y+ positionArray[5][0].y);
-				Font.drawFontCentered(batch, "" + cooldown, Font.small, position.x + positionCooldown.x + 12,baseHeight + positionCooldown.y + positionArray[5][0].y+ 7);
-			}
-		}
+		//Cooldown// Remove from the game for now
+//		if(scrambled){
+//			if(!card.wasScrambled&&card.mod.ship.player){
+//				Draw.draw(batch, Gallery.iconJammed.get(),position.x+positionCooldown.x+positionArray[1][0].x-4,baseHeight+positionCooldown.y+positionArray[1][0].y-3);
+//			}
+//		}
+//		else{
+//			int cooldown = card.getCoodlown(part);
+//			if (cooldown < 3) {
+//				for (int i = 0; i < cooldown; i++) Draw.draw(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[cooldown][i].x, baseHeight+ positionCooldown.y + positionArray[cooldown][i].y);
+//			} 
+//			else {
+//				Font.small.setColor(darkText);
+//				Draw.draw(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[5][0].x, baseHeight + positionCooldown.y+ positionArray[5][0].y);
+//				Font.drawFontCentered(batch, "" + cooldown, Font.small, position.x + positionCooldown.x + 12,baseHeight + positionCooldown.y + positionArray[5][0].y+ 7);
+//			}
+//		}
 
 
 
