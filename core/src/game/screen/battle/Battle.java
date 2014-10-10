@@ -102,6 +102,7 @@ public class Battle extends Screen{
 	@Override
 	public void init() {
 
+		
 		player.getGraphic().activate();
 		enemy.getGraphic().activate();
 		me=this;
@@ -166,6 +167,8 @@ public class Battle extends Screen{
 		victoryFadeInTimer=new Timer();
 		CardGraphic.onTopGraphic=null;
 		ModuleInfo.top=null;
+		player.clearUtilStats();
+		enemy.clearUtilStats();
 	}
 
 	private void initTutorial() {

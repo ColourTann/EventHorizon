@@ -8,7 +8,7 @@ public class CardCode {
 		DrawCard, IncreaseEffect, DiscardWhenPlayed, Augment, ReduceCost, GainEnergy, EnergyIfEmpty, MustBeMajorDamaged,
 		ModuleChooser, PermanentIncreaseEffect, EnergyIncome, SelfScramble, DiscardWhenChosen, BonusVsGenerator, BonusVsComputer,
 		GetCardFromChosenModule, DiscardOthers, ChooseWeapon, ChooseEnemyModule,  
-		ScrambleChosenModule, BonusEffectToShield,  StealEnergy,
+		ScrambleChosenModule, BonusEffectToShield,  StealEnergy,  DamageGenerator,
 		
 		//Tutorial junk//
 		BonusVsModule0, BonusVsModule1,

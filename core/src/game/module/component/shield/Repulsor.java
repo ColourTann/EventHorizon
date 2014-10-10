@@ -35,6 +35,7 @@ public class Repulsor extends Shield{
 		code[2].add(AI.Ignore);
 		code[2].add(Special.PermanentIncreaseEffect, calc(0));
 		
+		// gotta replace ooh shield an undamaged  module! cheaper costs 1
 		name[3]="Overheat";
 		cost[3]=2;
 		cooldown[3]=4;

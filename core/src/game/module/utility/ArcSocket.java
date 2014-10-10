@@ -15,6 +15,8 @@ public class ArcSocket extends Utility{
 		
 		//double shielding
 		//get a shield
+		// shield damaged module
+		// get a shield
 		
 		name[0]="Protect";
 		cost[0]=1;
