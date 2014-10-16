@@ -16,9 +16,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Main;
 import game.assets.Gallery;
 import game.card.CardGraphic;
+import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
+import game.module.junk.buff.BuffList;
 import game.module.utility.Utility;
 import game.screen.battle.Battle;
 import game.screen.battle.tutorial.Tutorial;
@@ -49,6 +51,7 @@ public class ModuleStats extends Mouser{
 
 	//Just for tutorial//
 	TextWisp nameWisp;
+	public BuffList buffList;
 
 	public ModuleStats(Component c) {
 		mousectivate(new BoxCollider(c.ship.player?0:Main.width-width, height*c.getIndex(), width, height));
@@ -84,7 +87,6 @@ public class ModuleStats extends Mouser{
 		if(!player) x=Main.width-x-uWidth;
 		position=new Pair(x,y);
 		mousectivate(new BoxCollider(position.x, position.y, uWidth, uHeight));
-		System.out.println("starting");
 		if(aUtil!=null)info=new ModuleInfo(aUtil);		
 	}
 
@@ -111,7 +113,6 @@ public class ModuleStats extends Mouser{
 
 
 		if(!Battle.isTutorial()){
-			System.out.println("refreshing info");
 			info.stopFading();
 			ModuleInfo.top=info;
 		}
@@ -157,6 +158,7 @@ public class ModuleStats extends Mouser{
 
 		if(Main.currentScreen instanceof Battle|| Main.currentScreen instanceof PreBattle){
 			if(info!=null)info.render(batch);
+			if(buffList!=null)buffList.render(batch);
 		}
 		
 		if(utilityStats){
@@ -174,7 +176,6 @@ public class ModuleStats extends Mouser{
 			}
 
 			if(Customise.getReplaceableType()==type){
-				System.out.println("highlighting");
 				batch.setColor(Reward.selectedColor);
 				Draw.drawScaled(batch, Gallery.baseUtilityStats.getOutline(), collider.position.x, collider.position.y,2,2);
 				batch.setColor(Colours.white);
@@ -255,6 +256,7 @@ public class ModuleStats extends Mouser{
 			p=Gallery.greenHP;
 			index=0;
 			boolean moused=false;
+			boolean absorb=false;
 			if(damage>i){
 				if(component.damage.get(i).moused)moused=true;
 				p=Gallery.redHP;
@@ -268,6 +270,10 @@ public class ModuleStats extends Mouser{
 				p=Gallery.orangeHP;
 				if(i>=damage+incoming+unshieldable-shields){
 					p=Gallery.blueHP;
+					ShieldPoint sp = component.shieldPoints.get(i-damage-component.getShieldableIncoming());
+					if(sp.firstAdded&&sp.card.getCode().contains(Special.Absorb)){
+						absorb=true;
+					}
 				}
 			}
 			if(component.thresholds[0]==i+1||component.thresholds[1]==i+1){
@@ -277,7 +283,7 @@ public class ModuleStats extends Mouser{
 				index=2;
 			}
 			Draw.draw(batch, p[twin>0?2+twin:index].get(),collider.position.x+hpLoc.x+hpGap.x*(slotLoc%row),collider.position.y+hpLoc.y+hpGap.y*(slotLoc/row));
-			if(moused){
+			if(moused||absorb){
 				Draw.draw(batch, Gallery.mousedHP.get(), collider.position.x+hpLoc.x+hpGap.x*(slotLoc%row),collider.position.y+hpLoc.y+hpGap.y*(slotLoc/row));
 			}
 

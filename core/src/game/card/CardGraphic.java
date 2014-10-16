@@ -8,6 +8,8 @@ import util.maths.BoxCollider;
 import util.maths.Pair;
 import util.update.Mouser;
 import util.update.Screen;
+import util.update.Timer;
+import util.update.Timer.Finisher;
 import util.update.Timer.Interp;
 
 import com.badlogic.gdx.graphics.Color;
@@ -21,8 +23,8 @@ import game.assets.Gallery;
 import game.assets.Sounds;
 import game.card.CardCode.Special;
 import game.module.Module.ModuleType;
-import game.module.junk.Buff;
-import game.module.junk.Buff.BuffType;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.Battle.State;
@@ -77,7 +79,8 @@ public class CardGraphic extends Mouser {
 	String botScrambledRules=randomString(70);
 	float scrambleTicks=0;
 	boolean scrambled;
-
+	private Timer hoverTimer= new Timer();
+	private Timer hoverFadeTimer= new Timer();
 	public static CardGraphic onTopGraphic;
 
 	//offcuts//
@@ -163,7 +166,7 @@ public class CardGraphic extends Mouser {
 		}
 
 		//Checking cooldown//
-		if (!card.selected && card.mod.getCurrentCooldown() > 0)c = Colours.faded;
+		if (!card.selected && card.mod.getBuffAmount(BuffType.Disabled) > 0)c = Colours.faded;
 
 		//Fade out the lower side if selected//
 		float lowerSideAlpha = card.selected?.3f:1;
@@ -204,7 +207,7 @@ public class CardGraphic extends Mouser {
 			//Coodlown symbols drawn faded if the card couldn't be clicked anyway//
 			if (wrongState)batch.setColor(Colours.withAlpha(c, 1f));	
 
-			int number = card.mod.getCurrentCooldown();
+			int number = card.mod.getBuffDuration(BuffType.Disabled);
 			Texture cd = Gallery.iconCooldown.get();
 
 			for (float i = 0; i < number; i++) {
@@ -215,8 +218,10 @@ public class CardGraphic extends Mouser {
 		}
 		Font.small.setColor(Colours.white);
 		batch.setColor(Colours.white);
-
-
+			
+		if (hoverFadeTimer.getFloat()!=0) {
+			HoverCard.render(batch, card, getBaseHeight(1-card.side), hoverFadeTimer.getFloat());
+		}
 	}
 
 	public float getBaseHeight(int part){
@@ -230,22 +235,18 @@ public class CardGraphic extends Mouser {
 		Color darkText = Colours.withAlpha(Colours.dark, c.a);
 		if(override) {
 			c=new Color(1,1,1,alpha);
-
 			lightText.a=alpha;
 			darkText.a=alpha;
 		}
 		batch.setColor(c);
 
 		//Card base//
-		
 		if(card.consumable) Draw.draw(batch, Gallery.cardBaseConsumable.get(), position.x, baseHeight);
 		else Draw.draw(batch, Gallery.cardBase.get(), position.x, baseHeight);
-
 
 		//Augment colouring//
 		if(!still&&card.isAugmented(part)){
 			float glowAlpha=(float)Math.sin(Main.ticks*5);
-
 			glowAlpha+=2.3f;
 			glowAlpha/=4;
 			Color prevCol=batch.getColor();
@@ -259,6 +260,7 @@ public class CardGraphic extends Mouser {
 			Draw.draw(batch, Gallery.cardOutline.get(), position.x, baseHeight);
 			batch.setColor(1,1,1,1);
 		}
+		
 		if(card.addToDeck){
 			batch.setColor(Colours.light);
 			Draw.draw(batch, Gallery.cardOutline.get(), position.x, baseHeight);
@@ -267,18 +269,7 @@ public class CardGraphic extends Mouser {
 
 		//Card image//
 		if (drawTopPic || part != card.side){
-
-			/*	System.out.println("printing");
-			System.out.println(card.mod.getClass());
-			System.out.println(card.getImage(0));
-			System.out.println(card.getImage(1));
-			System.out.println(card.side);
-			System.out.println(card.specialSide);
-			System.out.println(card.mod.getPic(1));
-			if(card.getImage(part)==null)return;*/
-
-			Draw.drawScaled(batch, card.getImage(part).get(), position.x + positionPic.x, baseHeight
-					+ positionPic.y, 2, 2);
+			Draw.drawScaled(batch, card.getImage(part).get(), position.x + positionPic.x, baseHeight+ positionPic.y, 2, 2);		
 		}
 
 		//Name//
@@ -297,18 +288,13 @@ public class CardGraphic extends Mouser {
 		if(card.wasScrambled&&card.mod.ship.player)rules="";
 		Font.small.drawWrapped(batch, rules, position.x + positionRules.x, baseHeight+ positionRules.y+2, 132, HAlignment.LEFT);
 
-
 		//Effect//
-
 		Pic[] effectPics=card.getShots(0)>0?Gallery.damageIcon:Gallery.shieldIcon;
 		int effect = card.getEffect(part);
 		if(card.wasScrambled)effect=0;
 
-
-
 		for (int i = 0; i < effect; i++) {
 			if (i == 0) {
-
 				Draw.draw(batch, effectPics[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
 				if(effect>7){
 					Draw.draw(batch, Gallery.fiveIcon[0].get(), position.x+ positionEffectStart.x, baseHeight+ positionEffectStart.y);
@@ -321,9 +307,7 @@ public class CardGraphic extends Mouser {
 
 				continue;
 			}
-
 			Draw.draw(batch, effectPics[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
-			//7-i spots remaining
 			if(effect>7){
 				Draw.draw(batch, Gallery.fiveIcon[1].get(), position.x + positionEffectMid.x+ effectGap * i - 1, baseHeight + positionEffectMid.y);
 				effect-=4;
@@ -332,9 +316,7 @@ public class CardGraphic extends Mouser {
 
 
 		// Weapon Junk//
-
 		int shots = card.getShots(part);
-		
 		int numSpecials= 0;
 		if(card.hasSpecial(Special.Targeted, part)) numSpecials++;
 		if(shots>1)numSpecials++;
@@ -384,34 +366,13 @@ public class CardGraphic extends Mouser {
 			}
 		}
 
-		//Cooldown// Remove from the game for now
-//		if(scrambled){
-//			if(!card.wasScrambled&&card.mod.ship.player){
-//				Draw.draw(batch, Gallery.iconJammed.get(),position.x+positionCooldown.x+positionArray[1][0].x-4,baseHeight+positionCooldown.y+positionArray[1][0].y-3);
-//			}
-//		}
-//		else{
-//			int cooldown = card.getCoodlown(part);
-//			if (cooldown < 3) {
-//				for (int i = 0; i < cooldown; i++) Draw.draw(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[cooldown][i].x, baseHeight+ positionCooldown.y + positionArray[cooldown][i].y);
-//			} 
-//			else {
-//				Font.small.setColor(darkText);
-//				Draw.draw(batch, Gallery.iconCooldown.get(), position.x + positionCooldown.x+ positionArray[5][0].x, baseHeight + positionCooldown.y+ positionArray[5][0].y);
-//				Font.drawFontCentered(batch, "" + cooldown, Font.small, position.x + positionCooldown.x + 12,baseHeight + positionCooldown.y + positionArray[5][0].y+ 7);
-//			}
-//		}
-
-
-
 		batch.setColor(Colours.white);
 		if(part==card.side&&moused&&Screen.isActiveType(Battle.class)){
 			Draw.draw(batch, Gallery.cardBase.getOutline(), position.x, baseHeight);
 		}
-
-
-
 	}
+	
+
 
 	//Setting up Energy icon positions//
 	public static void init() {
@@ -490,6 +451,13 @@ public class CardGraphic extends Mouser {
 
 	@Override
 	public void mouseDown() {
+		hoverTimer= new Timer(0,1,.7f, Interp.LINEAR);
+		hoverTimer.addFinisher(new Finisher() {
+			@Override
+			public void finish() {
+				hoverFadeTimer=new Timer(0,1,.5f,Interp.LINEAR);
+			}
+		});
 		if(Screen.isActiveType(Battle.class)){
 			if(!Battle.isTutorial())			card.mod.mouse();
 
@@ -506,23 +474,14 @@ public class CardGraphic extends Mouser {
 
 	@Override
 	public void mouseUp() {
-
+		hoverFadeTimer=new Timer(hoverFadeTimer.getFloat(),0, .35f, Interp.LINEAR);
+		hoverTimer.removeFinisher();
 		if(Screen.isActiveType(Battle.class)){
 			card.mod.unmouse();
 			onTopGraphic=null;
 			if(card.getShip()!=null)card.getShip().cardOrIconUnmoused();
 		}
 	}
-
-
-	/*public static void setAugmentOrTarget(CardGraphic augmenter){
-		resetOffCuts();
-		augmentPicker=augmenter;
-	}
-
-	public static void resetOffCuts(){
-		augmentPicker=null;
-	}*/
 
 	public static void renderOffCuts(SpriteBatch batch){
 		if(Battle.augmentSource!=null)Battle.augmentSource.getGraphic().render(batch);

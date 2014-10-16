@@ -4,6 +4,8 @@ import game.assets.Gallery;
 import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 import util.image.Pic;
 
 public class Swift extends Weapon{
@@ -22,9 +24,9 @@ public class Swift extends Weapon{
 		cost[1]=1;
 		effect[1]=0;
 		shots[1]=0;
-		rules[1]="Augment Swift card: "+calc(0)+" damage";
+		rules[1]="Augment Weapon: "+calc(0)+" damage";
 		code[1].add(Special.Augment);
-		code[1].add(Augment.AugmentThis);
+		code[1].add(Augment.AugmentWeapon);
 		code[1].add(Augment.AugmentDamage, calc(0));
 		code[1].add(AI.OtherCardsThisSystem,1);
 		code[1].setPriority(1);
@@ -48,16 +50,14 @@ public class Swift extends Weapon{
 		code[3].add(Special.BonusVsPristine, calc(0));
 		code[3].add(AI.PlayerPristineSystems,3);
 		
-		
-		name[4]="Rend";
-		cost[4]=5;
-		effect[4]=calc(1);
-		shots[4]=2;
-		rules[4]="Modules hit by this take +"+calc(0)+" damage from further shots this turn";
-		code[4].add(Special.MakeVulnerable,calc(0));
-		code[4].add(AI.SurplusEnergy,3);
-		code[4].setPriority(1);
-
+		name[4]="Disrupt";
+		cost[4]=2;
+		effect[4]=0;
+		shots[4]=0;
+		rules[4]="Drain target 1: +"+calc(1)+" damage taken from each shot";
+		code[4].add(Special.DrainTarget);
+		code[4].setBuff(new Buff(BuffType.TakesExtraDamage, false, calc(1), 1));
+		code[4].add(AI.Ignore);
 	}
 
 }

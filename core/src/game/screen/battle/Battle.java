@@ -102,7 +102,7 @@ public class Battle extends Screen{
 	@Override
 	public void init() {
 
-		
+	
 		player.getGraphic().activate();
 		enemy.getGraphic().activate();
 		me=this;
@@ -112,18 +112,22 @@ public class Battle extends Screen{
 		Star.init();
 		if(tutorial)initTutorial();		
 		//player.setArmour(new RegenArmour(0));
+		
 		player.startFight(true);
 		enemy.startFight(false);
+		
 		if(tutorial){
 			player.addEnergy(6, false);
 			enemy.addEnergy(2, false);
 		}
+		
 		for(Component c:player.components){
 			c.getStats().reset();
 		}
 		for(Component c:enemy.components){
 			c.getStats().reset();
 		}
+	
 	}
 
 	public static Ship getPlayer(){
@@ -167,8 +171,9 @@ public class Battle extends Screen{
 		victoryFadeInTimer=new Timer();
 		CardGraphic.onTopGraphic=null;
 		ModuleInfo.top=null;
-		player.clearUtilStats();
-		enemy.clearUtilStats();
+		player.resetGraphics();
+		enemy.resetGraphics();
+		
 	}
 
 	private void initTutorial() {
@@ -484,6 +489,7 @@ public class Battle extends Screen{
 	public void update(float delta) {
 
 
+
 		playerShakeIntensity*=Math.pow(shakeDrag, delta);
 		enemyShakeIntensity*=Math.pow(shakeDrag, delta);
 
@@ -565,6 +571,7 @@ public class Battle extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch) {
+	
 		batch.end();
 
 
@@ -636,20 +643,23 @@ public class Battle extends Screen{
 
 	@Override
 	public void postRender(SpriteBatch batch) {
-
+		
 		drawInterfaceOverlay(batch);
+		
 		for(CardIcon icon:CardIcon.icons){
 			icon.render(batch);
 		}
+	
 		for(Component c:player.components){
 			c.getStats().render(batch);
 		}
 		for(Component c:enemy.components){
 			c.getStats().render(batch);
 		}
+		
 		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
 		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
-
+	
 		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
 
 		for(Card c:player.hand){

@@ -1,38 +1,42 @@
 package game.card;
 
+import game.module.junk.buff.Buff;
+
 import java.util.ArrayList;
 
 public class CardCode {
 	public enum Special{
 		//General Specials//
-		DrawCard, IncreaseEffect, DiscardWhenPlayed, Augment, ReduceCost, GainEnergy, EnergyIfEmpty, MustBeMajorDamaged,
-		ModuleChooser, PermanentIncreaseEffect, EnergyIncome, SelfScramble, DiscardWhenChosen, BonusVsGenerator, BonusVsComputer,
-		GetCardFromChosenModule, DiscardOthers, ChooseWeapon, ChooseEnemyModule,  
-		ScrambleChosenModule, BonusEffectToShield,  StealEnergy,  DamageGenerator,
+		DrawCard, DiscardWhenPlayed, Augment, ReduceCost, GainEnergy, EnergyIfEmpty, MustBeMajorDamaged,
+		ModuleChooser, SelfScramble, DiscardWhenChosen, BonusVsGenerator, BonusVsComputer,
+		GetCardFromChosenModule, DiscardOthers, ChooseWeapon, ChooseEnemyModule, ScrambleChosenModule, BonusEffectToShield,  
+		StealEnergy,  DamageGenerator, BoostSelf, DrainSelf, DrainTarget,  BoostGenerator,
 		
 		//Tutorial junk//
 		BonusVsModule0, BonusVsModule1,
 
 		//Weapon Specials//
-		Targeted, Unshieldable, MakeVulnerable, BonusVsWeapon, BonusVsPristine, BonusVsMajorDamaged, BonusShots, BonusEffectPerOtherWeapon,
+		Targeted, Unshieldable, BonusVsWeapon, BonusVsPristine, BonusVsMajorDamaged, BonusShots, BonusEffectPerOtherWeapon,
 
 		//Shield Specials//
-		AddShieldPoints, ShieldAll, ShieldComputer, AbsorbDraw, ShieldOnlyDamaged, selfDamage, AbsorbEnergy, MustBeUndamaged,
+		AddShieldPoints, ShieldAll, ShieldComputer, AbsorbDraw, ShieldOnlyDamaged, selfDamage, Absorb, AbsorbEnergy, MustBeUndamaged,
 		ShieldWeapons, ShieldGenerator, ShieldChosenModule, ShieldShield, DestroyEnemyShield, ImmuneChosenModule, ResetCycle, 
-		BonusPerMajorDamage,
+		BonusPerMajorDamage, GetShieldCard, ShieldOnlyPristine, ReduceCostPerMajorDamage, ShieldAllDamaged,
 	};
 
 	public enum AI{
 		//General AI
 		Ignore, CheckOriginalFirst, LowEnergy, SurplusEnergy, OtherCardsThisSystem, LowChance, EvenChance, HighChance, ReduceCost, 
-		DamageSelf, OtherUntargeted, Singleton, DamagedModules, OverrideIfOtherSideIgnore, WeaponCards,
+		DamageSelf, OtherUntargeted, Singleton, DamagedModules, OverrideIfOtherSideIgnore, WeaponCards, MajorDamageTaken,
+		DamageGenerator, BeforeTurn,
 
 		//Weapon AI
 		PlayerPristineSystems, BetterAgainstSpecificSystem, MajorDamagedEnemySystems,
 
 		//Shield AI
 		RegularShield, OtherTargeted, IncomingComputer, IncomingOnMajorDamaged, IncomingAll, TotalIncoming, IncomingGenerator,
-		TotalIncomingThis, IncomingWeapons, ShieldAll, SingleModuleIncoming, 
+		TotalIncomingThis, IncomingWeapons, ShieldAll, SingleModuleIncoming, IncomingUndamaged, ModulesWithMajorDamageAndIncoming,
+
 	};
 
 	public enum Augment{
@@ -45,7 +49,6 @@ public class CardCode {
 	private ArrayList<CardSpecial> specials= new ArrayList<CardCode.CardSpecial>();
 	private ArrayList<AIclass> ais = new ArrayList<AIclass>();
 	private ArrayList<AugmentEffect> augs= new ArrayList<AugmentEffect>();
-
 
 	private class CardSpecial{
 		public Special special;
@@ -127,7 +130,7 @@ public class CardCode {
 		for(AIclass a:ais)result.add(a.ai,a.number);
 
 		for(AugmentEffect e:augs)result.add(e.aug,e.number);
-
+		result.containedBuff=containedBuff;
 		result.setPriority(getPriority());
 		return result;
 	}
@@ -149,6 +152,16 @@ public class CardCode {
 		ais.clear();
 		specials.clear();
 		augs.clear();
+	}
+	
+	private Buff containedBuff;
+	public void setBuff(Buff b){
+		containedBuff=b;
+	}
+	
+	public Buff getBuff(){
+		if(containedBuff==null)return null;
+		return containedBuff.copy();
 	}
 
 }

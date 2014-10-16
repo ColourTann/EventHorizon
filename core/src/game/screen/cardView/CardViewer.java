@@ -16,6 +16,11 @@ import game.module.component.shield.Deflector;
 import game.module.component.shield.Repeller;
 import game.module.component.shield.Repulsor;
 import game.module.component.weapon.Laser;
+import game.module.component.weapon.Pulse;
+import game.module.component.weapon.Ray;
+import game.module.component.weapon.Swift;
+import game.module.component.weapon.Tesla;
+import game.ship.mapThings.mapAbility.comAbility.PullBeam;
 
 public class CardViewer extends Screen{
 	public ArrayList<Module> modules = new ArrayList<Module>();
@@ -28,11 +33,15 @@ public class CardViewer extends Screen{
 	public void init(){
 		modules.clear();
 		
-		modules.add(new Laser(tier));
-		modules.add(new Repeller(tier));
-		modules.add(new Repulsor(tier));
-		modules.add(new Deflector(tier));
+//		modules.add(new Laser(tier));
+//		modules.add(new Repeller(tier));
+//		modules.add(new Repulsor(tier));
+//		modules.add(new Deflector(tier));
 		
+		modules.add(new Pulse(tier));
+		modules.add(new Ray(tier));
+		modules.add(new Swift(tier));
+		modules.add(new Tesla(tier));
 		
 		cards.clear();
 		for(Module m:modules){

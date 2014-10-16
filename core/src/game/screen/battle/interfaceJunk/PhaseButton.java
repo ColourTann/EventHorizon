@@ -36,7 +36,7 @@ public class PhaseButton extends Mouser{
 	private Pic after=Gallery.endTurnShield;
 	Timer t;
 	public PhaseButton(Collider col) {
-		System.out.println(Main.width/2-width/2+":"+416);
+		
 		mousectivate(new PolygonCollider(new Polygon(new float[]{
 				Main.width/2-width/2,416,
 				Main.width/2+width/2,416,

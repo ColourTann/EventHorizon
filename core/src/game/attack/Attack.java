@@ -12,9 +12,9 @@ import game.module.component.weapon.Pulse;
 import game.module.component.weapon.Ray;
 import game.module.component.weapon.Swift;
 import game.module.component.weapon.Tesla;
-import game.module.junk.Buff;
 import game.module.junk.DamagePoint;
-import game.module.junk.Buff.BuffType;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 
 public class Attack {
 	public AttackGraphic atkgrphc;
@@ -84,10 +84,6 @@ public class Attack {
 				target.addIncoming(new DamagePoint(card));
 			}
 			damage++;
-		}
-
-		if(code.contains(Special.MakeVulnerable)){
-			target.addBuff(new Buff(BuffType.TakesExtraDamage, 1, card, false));
 		}
 	}
 

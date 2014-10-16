@@ -3,10 +3,12 @@ package game.module.component.generator;
 import util.image.Pic;
 import game.card.CardCode.Special;
 import game.module.component.Component;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 
 public abstract class Generator extends Component{
 	public int energyIncome;
-	private int bonusIncome;
+	
 	public Generator(String modName,Pic p, int energyIncome, int[] thresholds){
 		super(-1, modName, p, 1, 2, thresholds);
 		this.energyIncome=energyIncome;
@@ -20,12 +22,13 @@ public abstract class Generator extends Component{
 		code[0].setPriority(2);
 	}
 	public int getIncome(){
-		return (int) (destroyed?Math.ceil(energyIncome/2f):energyIncome)+bonusIncome;
+		int result =(int) (destroyed?Math.ceil(energyIncome/2f):energyIncome);
+		for(Buff b:buffs){
+			if(b.type==BuffType.BonusIncome){
+				result += b.value;
+			}
+		}
+		return result;
 	}
-	public void addIncome(int amount){
-		bonusIncome+=amount;
-	}
-	public void resetIncome(){
-		bonusIncome=0;
-	}
+
 }

@@ -3,6 +3,8 @@ package game.module.component.weapon;
 import game.assets.Gallery;
 import game.card.CardCode.AI;
 import game.card.CardCode.Special;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 
 public class Ray extends Weapon{
 
@@ -18,33 +20,35 @@ public class Ray extends Weapon{
 		rules[0]="";
 		
 		name[1]="Frazzle";
-		cost[1]=3;
-		effect[1]=calc(1);
+		cost[1]=1;
+		effect[1]=calc(0);
 		shots[1]=1;
-		rules[1]="+"+calc(1)+" damage against weapons";
+		rules[1]="+"+calc(1)+" damage against undamaged modules";
 		code[1].add(Special.BonusVsWeapon, calc(1));
-		code[1].add(AI.BetterAgainstSpecificSystem);
+		code[1].add(AI.PlayerPristineSystems, 3);
 		
-		name[2]="Sunder";
-		cost[2]=1;
-		effect[2]=calc(0);
+		
+		name[2]="Current";
+		cost[2]=2;
+		effect[2]=calc(1);
 		shots[2]=1;
-		rules[2]="Modules hit by this take +"+calc(0)+" damage from further shots this turn";
-		code[2].add(Special.Targeted);
-		code[2].add(Special.MakeVulnerable,calc(0));
-		code[2].add(AI.OtherTargeted,2);
-		code[2].setPriority(1);
+		rules[2]="+ "+calc(1)+" damage against weapons";
+		code[2].add(Special.BonusVsWeapon, calc(1));
+		code[2].add(AI.BetterAgainstSpecificSystem);
 
 		name[3]="Initialise";
 		cost[3]=1;
 		effect[3]=0;
 		shots[3]=0;
-		rules[3]="-1 ray energy cost this turn";
-		code[3].add(Special.ReduceCost,1);
+		rules[3]="Self boost 1: -1 ray cost";
+		code[3].add(Special.BoostSelf);
+		code[3].setBuff(new Buff(BuffType.ReduceCost, true, 1, 1, null));
 		code[3].add(AI.OtherCardsThisSystem, 2);
 		code[3].add(AI.ReduceCost);
 		code[3].setPriority(2);
 
+	
+		
 		name[4]="Seek";
 		cost[4]=4;
 		effect[4]=calc(1,2);

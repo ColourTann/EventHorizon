@@ -37,6 +37,7 @@ public class Gallery {
 	
 	//CARD STUFF//
 	public static Pic cardBase=new Pic("Interface/cardbase");
+	public static Pic cardBaseHover=new Pic("Interface/cardbasetutorial");
 	public static Pic cardBaseConsumable=new Pic("Interface/cardbaseconsumable");
 	public static Pic cardOutline=new Pic("Interface/cardoutline");
 	public static Pic iconEnergy=new Pic("Icon/energy");
@@ -70,6 +71,8 @@ public class Gallery {
 	public static Pic[] repulsorCard= new Pic[5];
 	public static Pic repeller=new Pic("Module/Shield/Repeller/module", 3);
 	public static Pic[] repellerCard= new Pic[5];
+	public static Pic blocker = new Pic("Module/Shield/Blocker/module", 3);
+	public static Pic[] blockerCard= new Pic[5];
 		
 	//Computers//
 	public static Pic[] cardComputer= new Pic[4];
@@ -78,7 +81,6 @@ public class Gallery {
 	public static Pic[] cardGenerator= new Pic[4];
 	
 	//UTILITY//
-	
 	public static Pic[] arcSocket= new Pic[2];
 	public static Pic[] exploiter= new Pic[2];
 	public static Pic[] furnace= new Pic[2];
@@ -97,7 +99,6 @@ public class Gallery {
 	public static Pic voltaicCarapce =new Pic("Module/Utility/Armour/voltaiccarapace");
 	
 	//Consumables//
-	
 	public static Pic phase= new Pic("ConsumableCard/phase");
 	public static Pic flow= new Pic("ConsumableCard/flow");
 	public static Pic inverseSort= new Pic("ConsumableCard/inversesort");
@@ -112,7 +113,6 @@ public class Gallery {
 	public static Pic magnify= new Pic("ConsumableCard/magnify");
 	
 	//MOD STAT STUFF//
-	
 	public static Pic baseModuleStats= new Pic("Interface/statsbase");
 	public static Pic baseUtilityStats= new Pic("Interface/statsbaseutility");
 	public static Pic baseUtilityStatsOutline= new Pic("Interface/statsbaseutilityoutline");
@@ -178,6 +178,8 @@ public class Gallery {
 	public static Pic energyMeter= new Pic("Interface/energymeter");
 	public static Pic bonusPool= new Pic("Interface/bonuspool");
 	
+	public static Pic buffListTop= new Pic("Interface/bufflisttop");
+	public static Pic buffListMid= new Pic("Interface/bufflistmid");
 	
 	public static Pic difficultyMeter= new Pic("Interface/difficultymeter");
 	public static Pic difficultyDial= new Pic("Interface/difficultydial");
@@ -269,6 +271,7 @@ public class Gallery {
 			deflectorCard[i]=new Pic("Module/Shield/Deflector/card"+i);
 			repulsorCard[i]=new Pic("Module/Shield/Repulsor/card"+i);
 			repellerCard[i]=new Pic("Module/Shield/Repeller/card"+i);
+			blockerCard[i]= new Pic("Module/Shield/Blocker/card"+i);
 			
 			debris[0][i]=new Pic("Ship/Debris/s"+i);
 			debris[1][i]=new Pic("Ship/Debris/b"+i);

@@ -17,7 +17,7 @@ public class Colours {
 	
 	public static final Color[] baseReplacers =new Color[]{make(0,0,0), make(127,127,127), make(255,255,255)};
 	public static final Color[] greenHPCols =new Color[]{make(47,186,131), make(86,224,147), make(165,230,161)};
-	public static final Color[] blueHPCols =new Color[]{make(31,162,206), make(107,202,230), make(131,226,226)};
+	public static final Color[] blueHPCols =new Color[]{make(36,113,203), make(31,162,206), make(107,202,230)};
 	
 	public static final Color[] orangeHPCols =new Color[]{make(255,101,36), make(251,154,32), make(255,178,73)};
 	public static final Color[] greyHPCols =new Color[]{make(77,62,54), make(150,137,126), make(182,171,154)};

@@ -8,6 +8,8 @@ import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.SpecialComponent;
 import game.module.junk.ModuleInfo;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -94,11 +96,12 @@ public class ConsumableCard {
 		code[0].add(Special.StealEnergy, 2);
 
 		name[1]= "Ignite";
-		rules[1]="+1 energy income";
+		rules[1]="Boost generator 20: +1 income";
 		pic[1]= Gallery.ignite;
 		cost[1]=0;
 		effect[1]=0;
-		code[1].add(Special.EnergyIncome, 1);
+		code[1].add(Special.BoostGenerator);
+		code[1].setBuff(new Buff(BuffType.BonusIncome, true, 1, 20));
 
 		makeCard(tier, 1);
 
@@ -182,7 +185,7 @@ public class ConsumableCard {
 	}
 	private static void makeCard(int tier, int amount){
 		for(int i=0;i<amount;i++){
-			Card c = new Card(name, pic, cost, effect, new int[]{0,0}, shots, rules, code, type);
+			Card c = new Card(name, pic, cost, effect, shots, rules, code, type);
 			c.rocketSize=rocketSize;
 			c.mod=blankModule;
 			decks[tier].add(c);

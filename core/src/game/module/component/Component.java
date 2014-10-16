@@ -26,14 +26,15 @@ import game.card.CardCode.AI;
 import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.component.weapon.Weapon;
-import game.module.junk.Buff;
 import game.module.junk.DamagePoint;
 import game.module.junk.ModuleStats;
 import game.module.junk.ShieldPoint;
-import game.module.junk.Buff.BuffType;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 import game.module.utility.Utility;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.State;
+import game.ship.Ship;
 import game.ship.ShipGraphic;
 import game.ship.niche.Niche;
 
@@ -130,16 +131,34 @@ public abstract class Component extends Module{
 
 		if(left && Battle.getState()==State.ModuleChoose){
 			CardCode code=Battle.moduleChooser.getCode();
-			if(ship.player==code.contains(Special.ChooseEnemyModule)){
+			
+			// modulechooser is assumed to be player unless specified as ChooseEnemyModule //
+			if(code.contains(Special.ChooseEnemyModule)){
+				if(ship.player){
+					Sounds.error.overlay();
+					return;
+				}
+			}
+			else if (code.contains(Special.ModuleChooser)&&!ship.player){
 				Sounds.error.overlay();
 				return;
 			}
-
-
-			if(code.contains(Special.ChooseWeapon)&&type!=ModuleType.WEAPON){
-
+			
+			//Drain Target is assumed to be enemy//			
+			if(code.contains(Special.DrainTarget)&& ship.player){
+				System.out.println("baddrain");
+				Sounds.error.overlay();
 				return;
 			}
+			
+			//Boost target will be assumed to be player//
+			
+		
+			
+			if(code.contains(Special.ChooseWeapon)&&type!=ModuleType.WEAPON){
+				return;
+			}
+			
 			if(code.contains(Special.GetCardFromChosenModule)){
 				if(this==Battle.moduleChooser.mod){
 					Sounds.error.overlay();
@@ -152,6 +171,12 @@ public abstract class Component extends Module{
 
 			for(int i=0;i<Battle.moduleChooser.getEffect();i++)shield(new ShieldPoint(Battle.moduleChooser, i==0), false);
 
+			Buff buff=code.getBuff();
+			if(buff!=null){
+				buff.card=Battle.moduleChooser;
+				addBuff(buff);	
+			}
+			
 			Battle.moduleChooser.moduleChosen(this);
 			return;
 		}
@@ -308,6 +333,7 @@ public abstract class Component extends Module{
 		//#1Reason why not to shield//
 		System.out.println("shielding "+this);
 		if(s.card!=null&&s.card.getCode().contains(Special.ShieldOnlyDamaged))if(currentThreshold==0)return false;
+		if(s.card!=null&&s.card.getCode().contains(Special.ShieldOnlyPristine))if(getDamage()>0)return false;
 		shieldPoints.add(s);
 		if(overlapSound)Sounds.shieldUse.overlay();
 		else Sounds.shieldUse.play();
@@ -438,9 +464,19 @@ public abstract class Component extends Module{
 	public int getBuffAmount(BuffType check) {
 		int total=0;
 		for(Buff b:buffs){
-			if(check==b.type)total+=Math.max(b.number, 1);
+			if(check==b.type)total+=Math.max(b.value, 1);
 		}
 		return total;
+	}
+
+	public int getBuffDuration(BuffType type) {
+		int result=0;
+		for(Buff b:buffs){
+			if(b.type==type){
+				result+=b.duration;
+			}
+		}
+		return result;
 	}
 
 	public void removeSramble(){
@@ -454,7 +490,7 @@ public abstract class Component extends Module{
 
 	public void scramble(Card source){ //Source is usually null//
 		int preScramble=getBuffAmount(BuffType.Scrambled);
-		buffs.add(new Buff(BuffType.Scrambled, 1, source, true));
+		buffs.add(new Buff(BuffType.Scrambled,false, 1, -1));
 		ship.onScramble(this);
 		if(getBuffAmount(BuffType.Scrambled)>preScramble){
 			new TextWisp("Scrambled", Font.medium, getCenter().add(new Pair(ship.player?0:-500,-40)), WispType.Regular);
@@ -466,19 +502,7 @@ public abstract class Component extends Module{
 
 
 
-	public void addBuff(Buff b){
-		buffs.add(b);
-	}
 
-	public void removeBuffs(Card c){
-		for(int i=0;i<buffs.size();i++){
-			Buff b = buffs.get(i);
-			if(b.card==c){
-				buffs.remove(b);
-				i--;
-			}
-		}
-	}
 
 	public int getDamageUntilMajor(){
 
@@ -529,20 +553,23 @@ public abstract class Component extends Module{
 
 	public void endAdmin(){
 		targeteds=0;
-		currentCooldown=Math.max(0, currentCooldown-1);
 		immune=false;
 		for(int i=0;i<damageAtEnd;i++){
 			damage(new DamagePoint(null));
 		}
 		damageAtEnd=0;
 
-		//DOT stuff here//
+		//Buff stuff here//
 		for(int i=0;i<buffs.size();i++){
 			Buff b = buffs.get(i);
-			if(!b.permanent){
+			if(b.duration==-1) continue;
+
+			b.duration--;
+			if(b.duration==0){
 				buffs.remove(b);
 				i--;
 			}
+
 		}
 	}
 
@@ -615,6 +642,7 @@ public abstract class Component extends Module{
 		while(!onMajorDamage()){
 			damage.remove(0);
 		}
+
 	}
 
 	public boolean onMajorDamage(){
@@ -628,7 +656,89 @@ public abstract class Component extends Module{
 	public void finishBattle() {
 		buffs.clear();
 		currentThreshold=0;
-		currentCooldown=0;
 		destroyed=false;
 	}
+
+	public void addBuff(Buff buff) {
+		System.out.println("adding buff");
+		checkUnplaySpecials(buff);
+		buffs.add(buff);
+		if(buff.card==null)return;
+
+		//checking things to unplay now//
+
+	}
+
+	public void removeBuff(Card card){
+
+
+
+		Buff result=null;
+		for(Buff b:buffs){
+			if(b.card==card){
+				result=b;
+				break;
+			}
+		}
+		if(result!=null){
+			System.out.println("removing buff");
+			removeBuff(result);
+		}
+	}
+
+	public void removeBuff(Buff buff){
+		checkUnplaySpecials(buff);
+		buffs.remove(buff);
+	}
+
+	public void checkUnplaySpecials(Buff buff){
+		if(buff.card==null)return;
+		Module cardMod=buff.card.mod;
+
+		boolean unscramble=false;
+		boolean checkClass=false;
+
+		switch(buff.type){
+		case BonusEffeect:
+			checkClass=true;
+			break;
+		case BonusShot:
+			checkClass=true;
+			break;
+		case ReduceCost:
+			checkClass=true;
+			break;
+		case Scrambled:
+			unscramble=true;
+			break;
+		case TakesExtraDamage:
+			return;
+		default:
+			break;
+		}
+
+		Ship ship = buff.card.getShip();
+		Card baseCard = buff.card;
+
+		for(Card c:ship.hand){
+			if(!c.selected)continue; // unselected cards aren't affected //
+			if(c==baseCard)continue; // stop unplaying self //
+			if(unscramble){ // unplaying cards from descramble // 
+				if(c.mod==cardMod&&!c.wasScrambled){ 
+					c.deselect(false);
+				}				
+			}
+
+			if(checkClass){ // general case, class is due to multisystem effects //
+
+				if(c.getEffect()==0) continue; //usually don't have to unplay cards with no effect//
+
+				if(c.mod.getClass()==cardMod.getClass()){
+					c.deselect(false);
+				}
+
+			}
+		}	
+	}
+
 }

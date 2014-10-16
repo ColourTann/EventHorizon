@@ -214,7 +214,6 @@ public class Hex {
 		ArrayList<Hex> open=new ArrayList<Hex>();
 		ArrayList<Hex> closed=new ArrayList<Hex>();
 
-
 		idealDist=getDistance(target);
 		moves=0;
 		open.add(this);

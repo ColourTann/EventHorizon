@@ -112,7 +112,7 @@ public class Tutorial extends Updater{
 		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y, width/100f, height);
 		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, width/100f, -3);
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
-		Font.medium.drawWrapped(batch, str, x+offset, y+5, width-offset*2, HAlignment.CENTER);
+		Font.medium.drawWrapped(batch, str, x+offset, y+5, width-offset*2, HAlignment.LEFT);
 
 
 		if(special==1){

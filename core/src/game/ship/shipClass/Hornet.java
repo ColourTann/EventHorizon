@@ -9,6 +9,7 @@ import game.module.component.computer.Alpha;
 import game.module.component.computer.Gamma;
 import game.module.component.generator.Five;
 import game.module.component.generator.Four;
+import game.module.component.shield.Blocker;
 import game.module.component.shield.Deflector;
 import game.module.component.shield.Repulsor;
 import game.module.component.weapon.Ray;

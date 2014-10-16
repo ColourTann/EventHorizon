@@ -80,7 +80,7 @@ public class Customise extends Screen{
 		}
 		else Customise.ship=s;
 		Customise.ship.cleanupAfterFight();
-		Customise.ship.clearUtilStats();
+		Customise.ship.resetGraphics();
 	}
 
 
@@ -149,7 +149,7 @@ public class Customise extends Screen{
 
 		consumables=new ConsumableContainer();
 		
-		for(Component c:ship.components)c.getStats().mousectivate(null);
+		ship.resetGraphics();
 	}
 	
 	public static Ship makeEnemyShip() {
@@ -205,7 +205,7 @@ public class Customise extends Screen{
 		for(Component c:ship.components){
 			stats.add(c.getStats());
 		}
-		ship.clearUtilStats();
+		ship.resetGraphics();
 
 		retimeMeter(ship.getStats().energyUsage);
 

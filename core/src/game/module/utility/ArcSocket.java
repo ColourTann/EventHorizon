@@ -9,7 +9,7 @@ import game.module.component.Component;
 public class ArcSocket extends Utility{
 
 	public ArcSocket(int tier) {
-		super(tier, ModuleType.SHIELD, "Arc socket", "If you've taken 3+ major damage: -1 shield cost", Gallery.blaster, 1, 1);
+		super(tier, ModuleType.SHIELD, "Arc socket", "If you've taken 3+ major damage: -1 shield cost and +1 shield strength", Gallery.blaster, 1, 1);
 		
 		for(int i=0;i<2;i++) cardPic[i]= Gallery.arcSocket[i];
 		
@@ -20,19 +20,20 @@ public class ArcSocket extends Utility{
 		
 		name[0]="Protect";
 		cost[0]=1;
-		effect[0]=2;
-		rules[0]="+1 effect per major damage taken";
-		code[0].add(Special.BonusPerMajorDamage, calc(0));
+		effect[0]=5;
+		rules[0]="Shields only modules with major damage";
 		code[0].add(Special.AddShieldPoints);
+		code[0].add(Special.ShieldOnlyDamaged);
+		code[0].add(AI.IncomingOnMajorDamaged, 4);
 		code[0].add(AI.RegularShield);
 		
-		name[1]="Swell";
+
+		name[1]="Fetch";
 		cost[1]=0;
 		effect[1]=0;
-		rules[1]="+1 shield effect this turn";
-		code[1].add(Special.BonusEffectToShield, calc(0,1));
-		code[1].add(AI.Ignore);
-		
+		rules[1]="Get a shield card";
+		code[1].add(Special.GetShieldCard, 1);
+		code[1].add(Special.DiscardWhenPlayed);
 		
 	
 		cardType=ModuleType.SHIELD;

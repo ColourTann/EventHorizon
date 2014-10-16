@@ -14,12 +14,11 @@ import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
-import game.module.component.shield.Shield;
 import game.module.component.weapon.Weapon;
-import game.module.junk.Buff;
 import game.module.junk.DamagePoint;
 import game.module.junk.ShieldPoint;
-import game.module.junk.Buff.BuffType;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.Battle.State;
@@ -37,7 +36,6 @@ public class Card {
 	private int[] baseCost = new int[2];
 	private int[] baseEffect = new int[2];
 	private int bonusEffect=0;
-	private int[] baseCooldown = new int[2];
 	private String[] rules = new String[2];
 	private int[] shots = new int[2];
 
@@ -68,13 +66,12 @@ public class Card {
 		if(m instanceof Component)component=(Component) m;
 	}
 
-	public Card(String[] names, Pic[] cardpics, int[] baseCosts, int[] baseEffects, int[] baseCooldown, int[] shots, String[] rules, CardCode[] codes, ModuleType type){
+	public Card(String[] names, Pic[] cardpics, int[] baseCosts, int[] baseEffects, int[] shots, String[] rules, CardCode[] codes, ModuleType type){
 		//mod=s.getSpecialComponent();
 		this.name=names;
 		this.cardPic=cardpics;
 		this.baseCost=baseCosts;
 		this.baseEffect=baseEffects;
-		this.baseCooldown=baseCooldown;
 		this.rules=rules;
 		this.code=codes;
 		this.type=type;
@@ -95,7 +92,6 @@ public class Card {
 			cardPic[i]=mod.getPic(i*specialSide);
 			baseCost[i]=mod.getCost(i*specialSide);
 			baseEffect[i]=mod.getEffect(i*specialSide);
-			baseCooldown[i]=mod.getCooldown(i*specialSide);
 			rules[i]=mod.getRules(i*specialSide);
 			code[i]=mod.getCode(i*specialSide);
 			shots[i]=mod.getShots(i*specialSide);	
@@ -202,9 +198,9 @@ public class Card {
 			Sounds.error.overlay();
 			System.out.println("Not enough energy to play "+this); return;	//Not enough Energy//			
 		}	
-		if(mod.getCurrentCooldown()>0){
+		if(mod.getBuffAmount(BuffType.Disabled)>0){
 			Sounds.error.overlay();
-			System.out.println(this+" is cooling down"); return;			//Cooling down//
+			System.out.println(this+" is cooling down"); return;			//Disabled//
 		}
 
 		playerSelect();														//You did it!//
@@ -223,14 +219,13 @@ public class Card {
 
 		//Paying costs//
 		ship.addEnergy(-getCost(), false); 
-		mod.increaseCooldown(getCoolDown());
 
 		//Adding to list of ordered cards//
 		ship.playList.add(this);
 
 
 		if(ship.player){
-			if(code.contains(Special.ModuleChooser))moduleChoose();
+			if(code.contains(Special.ModuleChooser)||code.contains(Special.DrainTarget))moduleChoose();
 			if(code.contains(Special.Targeted)){
 				targetSelect();		
 				return;
@@ -238,13 +233,27 @@ public class Card {
 		}
 
 
+
+		//selfbuffstuff//
+		if(code.contains(Special.BoostSelf)||code.contains(Special.DrainSelf)){
+			System.out.println("attempting selfboost");
+			Buff b = code.getBuff();
+			b.card=this;
+			component.addBuff(b);
+		}
 		//General stuff//
-		if(code.contains(Special.IncreaseEffect))component.addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.IncreaseEffect), this, false));
-		if(code.contains(Special.BonusEffectToShield))getShip().getShield().addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.BonusEffectToShield), this, false));
-		if(code.contains(Special.PermanentIncreaseEffect)) component.addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.PermanentIncreaseEffect), this, true));
-		if(code.contains(Special.ReduceCost))component.addBuff(new Buff(BuffType.ReduceCost, code.getAmount(Special.ReduceCost), this, false));
-		if(code.contains(Special.BonusShots))component.addBuff(new Buff(BuffType.BonusShot, code.getAmount(Special.BonusShots), this, false));
-		ship.addIncome(code.getAmount(Special.EnergyIncome));
+		//		if(code.contains(Special.IncreaseEffect))component.addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.IncreaseEffect), this, false));
+		//		if(code.contains(Special.BonusEffectToShield))getShip().getShield().addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.BonusEffectToShield), this, false));
+		//		if(code.contains(Special.PermanentIncreaseEffect)) component.addBuff(new Buff(BuffType.BonusEffeect, code.getAmount(Special.PermanentIncreaseEffect), this, true));
+		//		if(code.contains(Special.ReduceCost))component.addBuff(new Buff(BuffType.ReduceCost, code.getAmount(Special.ReduceCost), this, false));
+		//		if(code.contains(Special.BonusShots))component.addBuff(new Buff(BuffType.BonusShot, code.getAmount(Special.BonusShots), this, false));
+
+
+
+
+		for(int i=0;i<code.getAmount(Special.GetShieldCard);i++)ship.drawCard(ship.getShield().getNextCard());
+
+
 
 		ship.drawCard(code.getAmount(Special.DrawCard));
 		ship.addEnergy(code.getAmount(Special.GainEnergy), false);
@@ -277,7 +286,15 @@ public class Card {
 		if(code.contains(Special.ShieldComputer))for(int i=0;i<getEffect();i++)getShip().getComputer().shield(new ShieldPoint(this,i==0),false);
 		if(code.contains(Special.ShieldGenerator))for(int i=0;i<getEffect();i++)getShip().getGenerator().shield(new ShieldPoint(this,i==0),false);
 		if(code.contains(Special.ShieldWeapons))for(Weapon w:ship.getWeapons())for(int i=0;i<getEffect();i++)w.shield(new ShieldPoint(this, i==0),false);
-
+		if(code.contains(Special.ShieldAllDamaged)){
+			for(Component c:ship.components){
+				if(c.currentThreshold>0){
+					for(int i=0;i<getEffect();i++){
+						c.shield(new ShieldPoint(this, i==0), false);
+					}
+				}
+			}
+		}
 
 
 
@@ -308,7 +325,6 @@ public class Card {
 		}
 		//Complicated bit about deselecting cards. First you have to deselect all cards that rely on this card. Currently only for reducecost//
 
-		checkUnplaySpecials();
 
 		/*if(code.contains(Special.ReduceCost)){
 			for(int i=0;i<ship.playList.size();i++){
@@ -453,14 +469,14 @@ public class Card {
 			c.scramble(this);
 		}
 		select();
-	
+
 		//if(!(mod.type==ModuleType.SHIELD&&getEffect()>0))Clip.cardSelect.play();
 
 	}
 
 
 
-	private void deselect(boolean playSound){
+	public void deselect(boolean playSound){
 		CardCode code=getCode();
 		Ship ship=getShip();
 
@@ -470,22 +486,21 @@ public class Card {
 			Sounds.error.overlay();
 			return;
 		}
-		
+
 		if(code.contains(Special.StealEnergy)&&effectItHad>ship.getEnergy()){
 			Sounds.error.overlay();
 			return;
 		}
-		
-		
+
+
 
 
 		//ok unplaying!
 		selected=false;
 
-		//Complicated bit about deselecting cards. First you have to deselect all cards that rely on this card. Currently only for reducecost//
-		Special unplaySpecial=null;
 
-		checkUnplaySpecials();
+
+
 		if(getCost()!=0){
 			for(Card c:ship.hand){
 				if(c.selected&&c.getCode().contains(Special.EnergyIfEmpty)){
@@ -498,9 +513,9 @@ public class Card {
 		//Resetting code stuff//
 
 
-		ship.addIncome(-code.getAmount(Special.EnergyIncome));
+
 		ship.addEnergy(-code.getAmount(Special.GainEnergy), false);
-		
+
 		if(code.contains(Special.StealEnergy)){
 			ship.getEnemy().addEnergy(effectItHad, false);	
 			getShip().addEnergy(-effectItHad, false);
@@ -511,9 +526,9 @@ public class Card {
 		if(type==ModuleType.SHIELD)ship.unShield(this);
 		if(component!=null){
 			component.removeIncoming(this);
-			component.removeBuffs(this);
+			component.removeBuff(this);
 		}
-		
+
 
 		//Uncharing weapons//
 		if(type==ModuleType.WEAPON){
@@ -524,7 +539,6 @@ public class Card {
 		}
 
 		//Getting resources back
-		mod.increaseCooldown(-getCoolDown());
 		ship.addEnergy(getCost(), false);
 
 		ship.playList.remove(this);
@@ -537,47 +551,12 @@ public class Card {
 		}
 		if(chosenModule!=null){
 			System.out.println("removing buffs");
-			chosenModule.removeBuffs(this);
+			chosenModule.removeBuff(this);
 		}
 
 		if(playSound)Sounds.cardDeselect.overlay();
 	}
 
-	public void checkUnplaySpecials(){
-		CardCode code=getCode();
-
-		Special unplaySpecial=null;
-		ModuleType overrideType=null;
-
-		if(code.contains(Special.ReduceCost))unplaySpecial=Special.ReduceCost;
-		if(code.contains(Special.IncreaseEffect))unplaySpecial=Special.IncreaseEffect;
-		if(code.contains(Special.BonusShots))unplaySpecial=Special.BonusShots;
-		if(code.contains(Special.BonusEffectToShield)){
-			unplaySpecial=Special.BonusEffectToShield;
-			overrideType=ModuleType.SHIELD;
-			getShip().getShield().removeBuffs(this);
-		}
-		if(unplaySpecial!=null){
-			for(int i=0;i<getShip().playList.size();i++){
-				Card c=getShip().playList.get(i); //c is the the other card in the hand//
-				CardCode checkCode=c.getCode(); //Checkcode is its code//
-				
-				if(c==this) continue;
-				
-				if(c.mod.getClass()==mod.getClass()||c.type==overrideType){
-					if(checkCode.contains(unplaySpecial))continue;
-					if(c.wasScrambled)continue;
-					if(c.getEffect()==0)continue;
-					c.deselect(false);
-					i--;
-				}
-				
-				
-			}
-		}
-
-
-	}
 
 	//General Play method//
 	public void play() {
@@ -615,6 +594,7 @@ public class Card {
 
 	//The Player plays when you end your turn//
 	public void playerPlay(){
+		if(played)return;
 		play();
 		fadeAndAddIcon();
 	}
@@ -685,7 +665,6 @@ public class Card {
 		getShip().updateCardPositions();
 		getGraphic().moveUp();
 		getGraphic().hideLower();
-
 	}
 
 	public void moduleChosen(Component component2) {
@@ -701,6 +680,8 @@ public class Card {
 			ship.updateCardPositions();
 			getGraphic().showLower();
 		}
+		
+		
 
 		Battle.setState(State.Nothing);
 
@@ -882,6 +863,9 @@ public class Card {
 
 		if(active){
 			effect+=getShip().getBonusCost(this, side, effect);
+			if(getCode(pick).contains(Special.ReduceCostPerMajorDamage)){
+				effect-=getShip().getMajorDamage();
+			}
 		}
 
 		return Math.max(0,effect);
@@ -896,18 +880,18 @@ public class Card {
 
 
 		if(active){
-			
+
 			effect+=mod.ship.getBonusEffect(this, pick, effect);
-			
+
 			for(Component c:mod.ship.components){
 				if(c.getClass()==mod.getClass())effect+=c.getBuffAmount(BuffType.BonusEffeect);	
 			}
 
-			
+
 			if(type==ModuleType.SHIELD&&mod!=getShip().getShield()){ //Special because shields are a single entity ish and should affect utility cards//
 				effect+=getShip().getShield().getBuffAmount(BuffType.BonusEffeect);
 			}
-			
+
 			if(code.contains(Special.BonusEffectPerOtherWeapon)){
 				for(Card c:getShip().hand){
 					if(c.type==ModuleType.WEAPON&&!c.wasScrambled&&c.selected&&c!=this){
@@ -919,16 +903,13 @@ public class Card {
 			for(int i=0;i<code.getAmount(Special.BonusPerMajorDamage);i++){
 				effect+=getShip().getMajorDamage();
 			}
-			
-			
+
+
 		}
 
 
 		return effect;
 	}
-
-	public int getCoolDown(){return getCoodlown(side);}
-	public int getCoodlown(int pick){return baseCooldown[pick];}
 
 	public String getRules(){return getRules(side);}
 	public String getRules(int pick){return rules[pick];}
@@ -939,14 +920,14 @@ public class Card {
 	public int getShots(){return getShots(side);}
 	public int getShots(int pick){
 		if(shots[pick]==0)return 0;
-		
+
 		int numShots = shots[pick]+bonusShots;
 
 
-		
+
 
 		if(active){
-			
+
 			numShots+=mod.ship.getBonusShots(this, pick, numShots);
 			for(Component c:mod.ship.components){
 				if(c.getClass()==mod.getClass())numShots+=c.getBuffAmount(BuffType.BonusShot);
@@ -992,8 +973,8 @@ public class Card {
 			no("Not enough energy");
 			return false;
 		}
-		if(mod.getCurrentCooldown()>0){
-			no("Cooling down");
+		if(mod.getBuffAmount(BuffType.Disabled)>0){
+			no("disabled");
 			return false;
 		}
 
@@ -1041,7 +1022,7 @@ public class Card {
 			case Ignore:
 				no(aiclass,"");
 				return false;
-				
+
 			case SurplusEnergy:
 				if(currentEnergy>=cost+aiclass.number){
 					ok(aiclass, "excess energy is "+(currentEnergy-cost));
@@ -1121,6 +1102,7 @@ public class Card {
 				}
 				ok(aiclass, "damage until: "+component.getDamageUntilMajor());
 				break;
+
 			case DamagedModules:
 				int damagedModules=0;
 				for(Component c:ship.getRandomisedModules()){
@@ -1135,11 +1117,41 @@ public class Card {
 				}
 
 				break;
+			case MajorDamageTaken:
+				if(ship.getMajorDamage()>=aiclass.number){
+					ok(aiclass, ship.getMajorDamage()+" damage taken");
+				}
+				else{
+					no(aiclass, ship.getMajorDamage()+" damage taken");
+					return false;
+				}
+				break;
+
+			case DamageGenerator:
+				if(ship.getGenerator().getDamageUntilMajor()>aiclass.number){
+					ok(aiclass, ship.getGenerator().getDamageUntilMajor()+ " until major gen dam");
+				}
+				else{
+					no(aiclass, ship.getGenerator().getDamageUntilMajor()+ " until major gen dam");
+					return false;
+				}
+				break;
+
+			case BeforeTurn:
+				if(ship.getCurrentTurn()<aiclass.number){
+					ok(aiclass, "on turn "+ship.getCurrentTurn());
+				}
+				else{
+					no(aiclass, "on turn "+ship.getCurrentTurn());
+					return false;
+				}
+
+				break;
 
 			case CheckOriginalFirst:
 				break;
-				
-			
+
+
 
 				/*
 				 * 
@@ -1270,6 +1282,22 @@ public class Card {
 				}
 				break;
 
+			case IncomingUndamaged:
+				int incomingUndamagedTotal=0;
+				for(Component c:ship.components){
+					if(c.getDamage()==0){
+						incomingUndamagedTotal+=c.getShieldableIncoming();
+					}
+				}
+				if(incomingUndamagedTotal>=aiclass.number){
+					ok(aiclass, "Incoming total: "+incomingUndamagedTotal);
+				}
+				else{
+					no(aiclass, "Incoming total: "+incomingUndamagedTotal);
+					return false;
+
+				}
+				break;
 
 			case IncomingComputer:
 				if(ship.getComputer().getShieldableIncoming()>=aiclass.number){
@@ -1295,6 +1323,23 @@ public class Card {
 					no(aiclass, "total shieldable: "+totalShieldable);
 					return false;
 				}
+				break;
+
+			case ModulesWithMajorDamageAndIncoming:
+				int numModules=0;
+				for(Component c:ship.getRandomisedModules()){
+					if(c.currentThreshold>0){
+						numModules++;
+					}
+				}
+				if(numModules>=aiclass.number){
+					ok(aiclass, "modules with major & incoming: "+numModules);
+				}
+				else{
+					no(aiclass, "modules with major & incoming: "+numModules);
+					return false;
+				}
+
 				break;
 
 			case IncomingAll:
@@ -1429,7 +1474,6 @@ public class Card {
 		if(getShip()==null)return false;
 		if(selected&&side!=checkSide)return false;
 		if(code[checkSide].contains(Special.ReduceCost))return false;
-		if(code[checkSide].contains(Special.IncreaseEffect))return false;
 		if(code[checkSide].contains(Special.BonusShots))return false;
 		if(bonusEffect>0&&getEffect(checkSide)>0)return true;
 		if(getShip().getBonusEffect(this, checkSide, baseEffect[checkSide])>0)return true;

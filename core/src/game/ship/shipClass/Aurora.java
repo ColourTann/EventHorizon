@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Polygon;
 import game.assets.Gallery;
 import game.module.component.computer.Alpha;
 import game.module.component.generator.Three;
+import game.module.component.shield.Blocker;
+import game.module.component.shield.Deflector;
 import game.module.component.shield.Repeller;
 import game.module.component.weapon.Laser;
 import game.module.component.weapon.Ray;

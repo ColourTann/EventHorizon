@@ -58,8 +58,8 @@ public class PreBattle extends Screen{
 
 	@Override
 	public void init() {
-		player.clearUtilStats();
-		enemy.clearUtilStats();
+	player.resetGraphics();
+	enemy.resetGraphics();
 		flashTimer=new Timer();
 		
 		me=this;
@@ -142,11 +142,7 @@ public class PreBattle extends Screen{
 			}
 		});
 		fightButton.font=Font.big;
-		for(Component c:player.components){
-			c.getStats().mousectivate(null);
-			c.getStats().alpha=0;
-			c.getStats().info.alpha=0;
-		}
+
 	}
 
 	private void resetJunk() {
@@ -154,10 +150,7 @@ public class PreBattle extends Screen{
 	}
 
 	private void deactivateJunk(){
-		for(Component c: enemy.components){
-			c.getStats().demousectivate();
-			c.getStats().deactivate();
-		}
+	enemy.resetGraphics();
 	}
 
 	public void shake(float amount){

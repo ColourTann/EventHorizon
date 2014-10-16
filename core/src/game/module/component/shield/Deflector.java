@@ -4,6 +4,8 @@ package game.module.component.shield;
 import game.assets.Gallery;
 import game.card.CardCode.AI;
 import game.card.CardCode.Special;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 
 public class Deflector extends Shield{
 	public Deflector(int tier){
@@ -21,8 +23,9 @@ public class Deflector extends Shield{
 		name[1]="Amplify";
 		cost[1]=1;
 		effect[1]=0;
-		rules[1]="+"+calc(0)+" shield to all shield cards this turn";
-		code[1].add(Special.IncreaseEffect, calc(0));
+		rules[1]="Self boost 1: +"+calc(0)+" strngth to all shield cards";
+		code[1].add(Special.BoostSelf);
+		code[1].setBuff(new Buff(BuffType.BonusEffeect, true, calc(0), 1));
 		code[1].add(AI.OtherCardsThisSystem,2);
 		code[1].add(AI.TotalIncoming,calc(0)*4);
 		code[1].setPriority(2);
@@ -40,13 +43,14 @@ public class Deflector extends Shield{
 		effect[3]=calc(0);
 		rules[3]="Shields computer.\nAbsorb: draw a card";
 		code[3].add(Special.ShieldComputer);
+		code[3].add(Special.Absorb);
 		code[3].add(Special.AbsorbDraw,1);
 		code[3].add(AI.IncomingComputer,1);
 		
 		name[4]="Flux Field";
 		cost[4]=1;
 		effect[4]=calc(2);
-		rules[4]="Shields only systems with major damage";
+		rules[4]="Shields only modules with major damage";
 		code[4].add(Special.AddShieldPoints);
 		code[4].add(Special.ShieldOnlyDamaged);
 		code[4].add(AI.IncomingOnMajorDamaged,calc(2));

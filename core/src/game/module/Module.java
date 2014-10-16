@@ -11,7 +11,8 @@ import game.card.CardCode;
 import game.module.Module.ModuleType;
 import game.module.component.SpecialComponent;
 import game.module.junk.ModuleInfo;
-import game.module.junk.Buff.BuffType;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 import game.ship.Ship;
 import game.ship.ShipGraphic;
 
@@ -37,7 +38,6 @@ public abstract class Module {
 	protected String[] name = new String[7];
 	protected Pic[] cardPic= new Pic[7];
 	protected int[] cost = new int[7];
-	protected int[] cooldown = new int[7];
 	protected int[] effect = new int[7];
 	protected int[] shots = new int[7];
 	protected String[] rules = new String[7];
@@ -45,7 +45,6 @@ public abstract class Module {
 	public int rocketSize=0;
 	protected ArrayList<Integer> cardOrder= new ArrayList<Integer>();
 	private ArrayList<Integer> nextCards= new ArrayList<Integer>();
-	protected int currentCooldown=0;
 	public int tier=-5;
 	public boolean destroyed;
 
@@ -129,9 +128,6 @@ public abstract class Module {
 	public int getCost(int i){
 		return cost[i];
 	}
-	public int getCooldown(int i){
-		return cooldown[i];
-	}
 	public int getEffect(int i){
 		return effect[i];
 	}
@@ -146,12 +142,6 @@ public abstract class Module {
 	public ModuleInfo getInfo(){
 		if(info==null)info=new ModuleInfo(this);
 		return info;
-	}
-	public int getCurrentCooldown() {
-		return currentCooldown;
-	}
-	public void increaseCooldown(int amount){
-		currentCooldown+=amount;
 	}
 
 
@@ -198,6 +188,11 @@ public abstract class Module {
 	public int getBuffAmount(BuffType check) {
 		return 0;
 	}
+	
+	public int getBuffDuration(BuffType type) {
+		return 0;
+	}
+	
 	public boolean isDead() {
 		return false;
 	}
@@ -219,6 +214,12 @@ public abstract class Module {
 	public boolean isScrambled(){
 		return getBuffAmount(BuffType.Scrambled)>0;
 	}
+
+	public void addBuff(Buff buff) {
+		
+	}
+
+	
 
 
 }

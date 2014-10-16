@@ -4,6 +4,8 @@ import game.assets.Gallery;
 import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 
 public class Laser extends Weapon{
 
@@ -30,14 +32,15 @@ public class Laser extends Weapon{
 		cost[2]=5;
 		effect[2]=calc(4);
 		shots[2]=1;
-		rules[2]="Scramble the module this hits";
+		rules[2]="";
+		code[2].add(Special.Targeted);
 		code[2].add(AI.SurplusEnergy,1);
 		
 		name[3]="Targeting Laser";
 		cost[3]=1;
 		effect[3]=0;
 		shots[3]=0;
-		rules[3]="Augment *any* weapon: +"+calc(0,1)+" damage, targeted";
+		rules[3]="Augment Weapon: +"+calc(0,1)+" damage, targeted";
 		code[3].add(Special.Augment);
 		code[3].add(Augment.AugmentWeapon);
 		code[3].add(Augment.AugmentDamage,calc(0,1));
@@ -45,14 +48,17 @@ public class Laser extends Weapon{
 		code[3].add(AI.OtherCardsThisSystem,1);
 		code[3].setPriority(1);
 		
+		// Choose instead //
+		//weaken//
+		//analyse?//
 		name[4]="Sunder";
-		cost[4]=2;
-		effect[4]=calc(1);
-		shots[4]=1;
-		rules[4]="Targeted module takes +"+calc(0)+" damage from further shots";
-		code[4].add(Special.Targeted);
-		code[4].add(Special.MakeVulnerable,calc(0));
-		code[4].add(AI.OtherTargeted,2);
+		cost[4]=4;
+		effect[4]=0;
+		shots[4]=0;
+		rules[4]="Targeted drain infinite: Takes +"+calc(0)+" damage from each shot";
+		code[4].add(Special.DrainTarget);
+		code[4].setBuff(new Buff(BuffType.TakesExtraDamage, false, calc(0), -1));
+		code[4].add(AI.BeforeTurn, 3);
 		code[4].setPriority(1);
 		
 		name[5]="Laser";

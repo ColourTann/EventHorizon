@@ -44,7 +44,7 @@ public class Pulse extends Weapon{
 		cost[4]=1;
 		effect[4]=0;
 		shots[4]=0;
-		rules[4]="+1 shot to all pulse attacks this turn";
+		rules[4]="Self boost 1: +1 shot to all pulse attacks";
 		code[4].add(Special.BonusShots,1);
 		code[4].add(AI.OtherCardsThisSystem,2);
 		code[4].setPriority(1);

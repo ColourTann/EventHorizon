@@ -23,6 +23,7 @@ public class Repeller extends Shield{
 		cost[1]=0;
 		effect[1]=calc(0);
 		rules[1]="Shields generator\nAbsorb: +1 energy";
+		code[1].add(Special.Absorb);
 		code[1].add(Special.AbsorbEnergy,1);
 		code[1].add(Special.ShieldGenerator);
 		code[1].add(AI.IncomingGenerator,1);
