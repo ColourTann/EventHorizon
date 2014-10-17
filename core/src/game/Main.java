@@ -99,7 +99,7 @@ public class Main extends ApplicationAdapter  {
 
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-		//select=new Menu();currentScreen=select;select.init();
+		select=new Menu();currentScreen=select;select.init();
 
 		//currentScreen=new PreBattle(new Hornet(true, 0), new Hornet(false, 0)); currentScreen.init();
 
@@ -107,20 +107,20 @@ public class Main extends ApplicationAdapter  {
 
 		//map=new Map();currentScreen=map;
 
-		currentScreen=new Test();currentScreen.init();
+		//currentScreen=new Test();currentScreen.init();
 
 
-		if(true){
-//			System.out.println("---------Aurora------------");
-//			System.out.println(new Aurora(true, 0).getStats());
-//			System.out.println("---------Nova------------");
-//			System.out.println(new Nova(true, 0).getStats());
-//			System.out.println("---------Hornet------------");
-//			System.out.println(new Hornet(true, 0).getStats());
-//			System.out.println("---------Comet------------");
-//			System.out.println(new Comet(true, 0).getStats());
-//			System.out.println("---------Eclipse------------");
-//			System.out.println(new Eclipse(true, 0).getStats());
+		if(false){
+			System.out.println("---------Aurora------------");
+			System.out.println(new Aurora(true, 0).getStats());
+			System.out.println("---------Nova------------");
+			System.out.println(new Nova(true, 0).getStats());
+			System.out.println("---------Hornet------------");
+			System.out.println(new Hornet(true, 0).getStats());
+			System.out.println("---------Comet------------");
+			System.out.println(new Comet(true, 0).getStats());
+			System.out.println("---------Eclipse------------");
+			System.out.println(new Eclipse(true, 0).getStats());
 		}
 
 	}	

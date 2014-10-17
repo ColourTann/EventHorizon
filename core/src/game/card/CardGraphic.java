@@ -34,7 +34,7 @@ import game.screen.preBattle.PreBattle;
 public class CardGraphic extends Mouser {
 	// POSITIONS//
 	public static float width = 140;
-	public static float height = 250;
+	public static float height = 249;
 	public static Pair enemyPlayStartPosition = new Pair(Main.width, 150);
 	public static Pair enemyPlayToPosition = new Pair(850, 150);
 	public static float maxSelectedHeight = -26;
@@ -337,14 +337,14 @@ public class CardGraphic extends Mouser {
 
 		if(scrambled){
 			if(!card.wasScrambled&&card.mod.ship.player){
-				Draw.draw(batch, Gallery.iconJammed.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
+				Draw.draw(batch, Gallery.iconScrambled.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
 			}
 		}
 
 
 		if(scrambled){
 			if(!card.wasScrambled&&card.mod.ship.player){
-				Draw.draw(batch, Gallery.iconJammed.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
+				Draw.draw(batch, Gallery.iconScrambled.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
 			}
 		}
 

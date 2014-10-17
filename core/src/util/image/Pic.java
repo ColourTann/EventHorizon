@@ -27,6 +27,7 @@ public class Pic {
 	private int scale=1;
 	private Pic basePic;
 	private Color[] replacers;
+	private HashMap<String, Pic> scaled= new HashMap<String, Pic>();
 	
 	public Pic(String path){
 		this.path=path+".png";
@@ -44,6 +45,17 @@ public class Pic {
 
 	public Pic(Texture t){
 		this.t=t;
+	}
+	
+	public Pic getScaled(int scale){
+		if(scale==1)return this;
+		Pic p= scaled.get(scale+":"+scale);
+		if (p==null){
+			p = new Pic(upscale(get(), scale));
+			scaled.put(scale+":"+scale, p);
+			return scaled.get(scale+":"+scale);
+		}
+		return p;
 	}
 	
 	public Texture get(){
@@ -287,6 +299,8 @@ public class Pic {
 			t.dispose();
 		}
 	}
+
+
 	
 	
 

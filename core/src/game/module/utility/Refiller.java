@@ -1,22 +1,26 @@
-package game.module.utility.armour;
+package game.module.utility;
 
 import game.assets.Gallery;
 import game.card.Card;
+import game.module.Module.ModuleType;
+import game.module.component.Component;
+import util.image.Pic;
 
-public class Plating extends Armour{
+public class Refiller extends Utility{
 
-	public Plating(int tier) {
-		super(1+tier*.5,tier, "Plating", "basic armour", Gallery.basicArmour, 0, 0);
+	public Refiller(int tier) {
+		super(tier, ModuleType.WEAPON, "Refiller", "+1 z if you end your turn with 0 z and >1 card", Gallery.blaster, 1, 1);
+		
+		//discard a card, gain energy equal to half its cost rounded down//
+		
 	}
 
 	@Override
 	public void startBattleEffect() {
-
 	}
 
 	@Override
 	public void beginTurnEffect() {
-
 	}
 
 	@Override
@@ -25,10 +29,6 @@ public class Plating extends Armour{
 
 	@Override
 	public void playCardEffect(Card c) {
-	}
-
-	@Override
-	public void afterBattle() {
 	}
 
 	@Override
@@ -52,7 +52,11 @@ public class Plating extends Armour{
 	}
 
 	@Override
-	public void onTakeMajorDamage() {
+	public void afterBattle() {
+	}
+
+	@Override
+	public void onScramble(Component c) {
 	}
 
 }

@@ -27,13 +27,13 @@ public class Test extends Screen{
 
 	@Override
 	public void init() {
-		tw=new TextWriter(Font.small);
+		tw=new TextWriter(Font.small, "1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h 1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h");
+		//tw=new TextWriter(Font.big, "bello hi hi hi ho billo he bollo ballo");
 		tw.setWrapWidth(600);
 		tw.replace("hi", Gallery.iconEnergy.get());
 		tw.replace("ho", Gallery.iconCooldown.get());
 		tw.replace("he", Gallery.greyHP[2].get());
 		tw.addObstacleTopLeft(120, 80);
-		//ParticleSystem.systems.add(new SwiftSystem());
 
 	}
 	@Override
@@ -56,7 +56,7 @@ public class Test extends Screen{
 		Draw.drawScaled(batch, Gallery.whiteSquare.get(), 200, 200, tw.getWrapWidth(), tw.getHeight());
 		batch.setColor(1,1,1,1);
 		Font.medium.setColor(1,1,1,1);
-		tw.drawText(batch, "1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h 1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h", 200, 200);
+		tw.drawText(batch, 200, 200);
 		ParticleSystem.renderAll(batch);
 
 	}

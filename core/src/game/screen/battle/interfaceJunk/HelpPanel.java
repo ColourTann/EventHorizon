@@ -3,7 +3,9 @@ package game.screen.battle.interfaceJunk;
 
 import util.Colours;
 import util.Draw;
+import util.maths.Pair;
 import util.update.Timer.Interp;
+import util.TextWriter.Alignment;
 import util.assets.Font;
 import util.update.Mouser;
 
@@ -12,16 +14,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.TextBox;
 
-public class HelpPanel extends Mouser{
+public class HelpPanel extends TextBox{
 	String text;
 	int y=415;
 	int x=Main.width/2;
 	public HelpPanel(String s, boolean high) {
 		text=s;
 		fadeIn(.5f, Interp.SQUARE);
-		if(high)y=150;
-		else y=252;
+		if(high)y=170;
+		else y=272;
+		position=new Pair(x,y);
+		align=Alignment.Center;
 	}
 	
 	public HelpPanel(String s, int x, int y) {
@@ -29,29 +34,17 @@ public class HelpPanel extends Mouser{
 		this.x=x;
 		fadeIn(.5f, Interp.SQUARE);
 		this.y=y;
-	}
-
-	@Override
-	public void mouseDown() {
-	}
-
-	@Override
-	public void mouseUp() {
-	}
-
-	@Override
-	public void mouseClicked(boolean left) {
+		position=new Pair(x,y);
+		align=Alignment.Center;
 	}
 
 	public void render(SpriteBatch batch) {
 		batch.setColor(1,1,1,alpha);
-		int width=(int) Font.medium.getBounds(text).width+10;
-		Draw.drawScaled(batch, Gallery.helpPanelMid.get(), x-width/2, y, width, 1);
-		Draw.draw(batch, Gallery.helpPanelEdge.get(), x-width/2-Gallery.helpPanelEdge.getWidth(), y);
-		Draw.drawRotatedScaledFlipped(batch, Gallery.helpPanelEdge.get(), x+width/2, y, 1,1,0, true, false);
+		int width=(int) Font.medium.getBounds(text).width+16;
+		renderBox(batch, width, 35);
 	
-		Font.medium.setColor(Colours.withAlpha(Colours.dark,alpha));
-		Font.medium.draw(batch, text, x-Font.medium.getBounds(text).width/2, y+13);
+		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
+		Font.medium.draw(batch, text, x-Font.medium.getBounds(text).width/2, y-Font.medium.getWrappedBounds(" ", 50).height/2f);
 		batch.setColor(1,1,1,1);
 	}
 	

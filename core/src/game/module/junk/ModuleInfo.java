@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.TextBox;
 import game.card.Card;
 import game.card.CardGraphic;
 import game.module.Module;
@@ -26,8 +27,9 @@ import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
 import game.screen.customise.Customise;
 
-public class ModuleInfo extends Mouser{
+public class ModuleInfo extends TextBox{
 	//279373
+	float cardOffset=4;
 	float width;
 	float height=CardGraphic.height*2-1;
 	public Module mod;
@@ -45,13 +47,16 @@ public class ModuleInfo extends Mouser{
 		if(mod.getPic(1)==null){
 			width=CardGraphic.width-1;
 		}
+		width+=9;
+		height+=17;
 		if(mod.ship==null)return;
 		setPosition(new Pair(mod.ship.player?130+width/2:Main.width-130-width/2, 0));
 	}
 	
 	public ModuleInfo(Card[] cards){
 		this.consumableCards=cards;
-		width=CardGraphic.width*3-3;
+		width=CardGraphic.width*3-3+11;
+		height+=18;
 	}
 
 	public void setPosition(Pair pos){
@@ -63,7 +68,7 @@ public class ModuleInfo extends Mouser{
 			for (int i=0;i<consumableCards.length;i++){
 				
 				CardGraphic cg=consumableCards[i].getGraphic();
-				cg.setPosition(new Pair(position.x+i*Gallery.cardBase.getWidth(), position.y));
+				cg.setPosition(new Pair(position.x+i*Gallery.cardBase.getWidth()+cardOffset, position.y+cardOffset));
 				cg.override=true;
 				graphics.add(cg);
 				cg.demousectivate();
@@ -78,11 +83,11 @@ public class ModuleInfo extends Mouser{
 
 			for(int i=0;i<=3;i++){
 				CardGraphic cg=mod.getCard(i+1).getHalfGraphic(true);
-				cg.setPosition(new Pair(position.x+(i%2)*139+139, position.y+((i/2))*124));
+				cg.setPosition(new Pair(position.x+(i%2)*139+139+cardOffset, position.y+((i/2))*124+cardOffset));
 				graphics.add(cg);
 			}
 			CardGraphic cg=mod.getCard(0).getHalfGraphic(false);
-			cg.setPosition(new Pair(position.x,position.y+124));
+			cg.setPosition(new Pair(position.x+cardOffset,position.y+124+cardOffset));
 			graphics.add(cg);
 		}
 		else if(mod.numCards==0){
@@ -92,11 +97,11 @@ public class ModuleInfo extends Mouser{
 			//height-=124;
 
 			CardGraphic cg=mod.getCard(0).getHalfGraphic(true);
-			cg.setPosition(new Pair(position.x+139, position.y));
+			cg.setPosition(new Pair(position.x+139+cardOffset, position.y+cardOffset));
 			graphics.add(cg);
 
 			CardGraphic cg1=mod.getCard(1).getHalfGraphic(true);
-			cg1.setPosition(new Pair(position.x+139,position.y+CardGraphic.height/2));
+			cg1.setPosition(new Pair(position.x+139+cardOffset,position.y+124+cardOffset));
 			graphics.add(cg1);
 		}
 
@@ -104,24 +109,10 @@ public class ModuleInfo extends Mouser{
 	}
 
 	@Override
-	public void mouseDown() {
-	
-	}
-
-	@Override
-	public void mouseUp() {
-	}
-
-	@Override
-	public void mouseClicked(boolean left) {
-	}
-
-	@Override
 	public void update(float delta) {
 	}
 
 	public void fadeAll(){
-
 		for(CardGraphic cg: graphics){
 			cg.fadeOut(CardGraphic.fadeSpeed/1.5f, CardGraphic.fadeType);
 		}
@@ -134,7 +125,8 @@ public class ModuleInfo extends Mouser{
 		if (alpha<=0)return;
 		Font.small.setColor(Colours.withAlpha(Colours.light,alpha));
 		batch.setColor(1,1,1,alpha);
-		Draw.drawScaled(batch, Gallery.cardBase.getMask(Colours.withAlpha(Colours.backgrounds1[0], alpha)), position.x, position.y, width/CardGraphic.width, height/CardGraphic.height);
+		renderBox(batch, width, height/2f);
+		//Draw.drawScaled(batch, Gallery.cardBase.getMask(Colours.withAlpha(Colours.backgrounds1[0], alpha)), position.x, position.y, width/CardGraphic.width, height/CardGraphic.height);
 
 		if(consumableCards!=null&&alpha>0){
 			if(noDrawCards)return;
@@ -150,7 +142,7 @@ public class ModuleInfo extends Mouser{
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		String s=mod.moduleName;
 		float nameHeight=Font.medium.getWrappedBounds(s, CardGraphic.width).height;
-		Font.medium.drawWrapped(batch, s, position.x, position.y+25-nameHeight/2, CardGraphic.width, HAlignment.CENTER);
+		Font.medium.drawWrapped(batch, s, position.x+cardOffset, position.y+25-nameHeight/2, CardGraphic.width, HAlignment.CENTER);
 		//Font.drawFontCentered(batch, s, Font.medium, position.x+CardGraphic.width/2, position.y+25);
 		//Font.small.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+17);
 		s="Cards:";
@@ -159,28 +151,28 @@ public class ModuleInfo extends Mouser{
 		if(mod.ship!=null&&mod.numCards>0){
 			s+="/"+mod.ship.getTotalDeckSize();
 		}
-		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+100);
+		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2+cardOffset, position.y+100);
 
 		if(mod instanceof Armour){
 	
 			
 			s="HP multiplier "+((Armour)mod).multiplier;
-			Font.small.drawWrapped(batch, s, position.x, position.y+50+nameHeight/2, CardGraphic.width, HAlignment.CENTER);
+			Font.small.drawWrapped(batch, s, position.x, position.y+50+nameHeight/2+cardOffset, CardGraphic.width, HAlignment.CENTER);
 		}
 
 		if(mod.type==ModuleType.GENERATOR){
 			s="Energy";
-			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+155);
+			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2+cardOffset, position.y+155);
 			s="Income:";
-			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+180);
+			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2+cardOffset, position.y+180);
 			s=""+mod.ship.getIncome();
-			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+205);
+			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2+cardOffset, position.y+205);
 		}
 		if(mod.type==ModuleType.COMPUTER){
 			s="Hand";
-			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+155);
+			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2+cardOffset, position.y+155);
 			s="Size:";
-			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+180);
+			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2+cardOffset, position.y+180);
 			s=""+((Computer)mod).maxCards;
 			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+205);
 		}
@@ -189,11 +181,11 @@ public class ModuleInfo extends Mouser{
 			
 			Font.medium.setColor(Colours.withAlpha(Colours.player2[0],alpha));
 			float fHeight=Font.medium.getWrappedBounds(passive, CardGraphic.width-offset*2).height;
-			Font.medium.drawWrapped(batch, passive, position.x+offset, position.y+CardGraphic.height*3/4-fHeight/2-7, CardGraphic.width-offset*2, HAlignment.CENTER);
+			Font.medium.drawWrapped(batch, passive, position.x+offset+cardOffset, position.y+CardGraphic.height*3/4-fHeight/2-7, CardGraphic.width-offset*2, HAlignment.CENTER);
 		}
 	
 		String words=mod.type+(mod.tier==-1?"":" Tier "+mod.tier);
-		Font.drawFontCentered(batch, words, Font.small, position.x+CardGraphic.width/2, position.y+42+nameHeight/2);
+		Font.drawFontCentered(batch, words, Font.small, position.x+CardGraphic.width/2+cardOffset, position.y+42+nameHeight/2);
 		//Font.medium.drawWrapped(batch, s, width/4, 20, 500, HAlignment.CENTER);
 		if(alpha>0){
 			for(CardGraphic cg:graphics){

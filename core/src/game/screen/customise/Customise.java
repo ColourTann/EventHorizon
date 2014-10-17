@@ -58,6 +58,7 @@ public class Customise extends Screen{
 	private static Customise me;
 	HelpPanel panel;
 	HelpPanel oldPanel;
+	static int panelY=560;
 	static float energyX=1050; 
 	static float centerEnergy=.8f;
 	static float downMultiplier=500f;
@@ -176,16 +177,16 @@ public class Customise extends Screen{
 		if(oldPanel!=null)oldPanel.fadeOut(.3f, Interp.LINEAR);
 		switch(pt){
 		case PickShip:
-			panel=new HelpPanel("Pick your ship", (int) shipX, 540);
+			panel=new HelpPanel("Pick your ship", (int) shipX, panelY);
 			break;
 		case Choose:
-			panel=new HelpPanel("Choose a salvaged reward!", (int) shipX, 540);
+			panel=new HelpPanel("Choose a salvaged reward!", (int) shipX, panelY);
 			break;
 		case Install:
-			panel=new HelpPanel("Install the module on your ship", (int) shipX, 540);
+			panel=new HelpPanel("Install the module on your ship", (int) shipX, panelY);
 			break;
 		case Add:
-			panel=new HelpPanel("Add the cards to your pool", (int) shipX, 540);
+			panel=new HelpPanel("Add the cards to your pool", (int) shipX, panelY);
 			break;
 		case None:
 			break;
@@ -321,17 +322,20 @@ public class Customise extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch) {
+		
 		for(ModuleStats ms:stats) ms.render(batch);
 
 		for(Reward r:rewards) r.render(batch);
 		for(ModuleStats ms:ship.getUtilityStats())ms.render(batch);
 		Draw.drawCentered(batch, ship.getGraphic().composite.get(), shipX, 140);
-
+		
 		if(infoBox!=null)infoBox.render(batch);
 		if(oldInfoBox!=null)oldInfoBox.render(batch);
-		if(panel!=null)panel.render(batch);
-		if(oldPanel!=null)oldPanel.render(batch);
 
+		if(panel!=null)panel.render(batch);
+		
+		if(oldPanel!=null)oldPanel.render(batch);
+		
 		Font.big.setColor(Colours.light);
 		Font.drawFontCentered(batch, "Energy Usage", Font.big, energyX, 50);
 		Font.medium.setColor(Colours.light);

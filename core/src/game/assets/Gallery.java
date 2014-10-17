@@ -44,11 +44,22 @@ public class Gallery {
 	public static Pic iconCooldown=new Pic("Icon/cooldown");
 	public static Pic iconShots=new Pic("Icon/multipleshot");
 	public static Pic iconTargeted=new Pic("Icon/targeted");
-	public static Pic iconJammed=new Pic("Icon/jammed");
+	public static Pic iconScrambled=new Pic("Icon/jammed");
+	
 	public static Pic iconIncreasedEffect=new Pic("Icon/increasedeffect");
+	public static Pic iconReducedCost=new Pic("Icon/reducedcost");
+	public static Pic iconTakesExtraDamage=new Pic("Icon/takesextradamage");
+	public static Pic iconBonusIncome=new Pic("Icon/extraincome");
+	public static Pic iconDisabled=new Pic("Icon/disabled");
+	public static Pic iconMultiShot=new Pic("Icon/multishot");
+	
 	public static Pic damageIcon[] = new Pic[3];
 	public static Pic shieldIcon[] = new Pic[3];
 	public static Pic fiveIcon[]= new Pic[2];
+	
+	public static Pic textBoxTop= new Pic("Interface/textboxtop");
+	public static Pic textBoxTopLeftCorner= new Pic("Interface/textboxtopleftcorner");
+	public static Pic textBoxMid= new Pic("Interface/textboxmid");
 	
 	//WEAPONS//
 	public static Pic blaster=new Pic("Module/Weapon/Blaster/module", 3);

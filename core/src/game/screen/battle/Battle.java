@@ -650,17 +650,12 @@ public class Battle extends Screen{
 			icon.render(batch);
 		}
 	
-		for(Component c:player.components){
-			c.getStats().render(batch);
-		}
-		for(Component c:enemy.components){
-			c.getStats().render(batch);
-		}
+		
 		
 		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
 		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
 	
-		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
+	//	if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
 
 		for(Card c:player.hand){
 			if(c.getGraphic()!=CardGraphic.onTopGraphic)c.getGraphic().render(batch);
@@ -682,6 +677,13 @@ public class Battle extends Screen{
 		}
 		for(ModuleStats ums:enemy.getUtilityStats()){
 			ums.render(batch);
+		}
+		
+		for(Component c:player.components){
+			c.getStats().render(batch);
+		}
+		for(Component c:enemy.components){
+			c.getStats().render(batch);
 		}
 
 	}

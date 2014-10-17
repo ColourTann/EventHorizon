@@ -26,7 +26,6 @@ public class Draw {
 		batch.draw(t, x, y, 0, 0, t.getWidth(), t.getHeight(), scaleX, scaleY, rad2deg(radianRotation),0,0,t.getWidth(),t.getHeight(),xFlip,!yFlip);
 	}
 	
-	
 	//Centered stuff//
 	
 	public static void drawCentered(SpriteBatch batch, Texture t, float x, float y){

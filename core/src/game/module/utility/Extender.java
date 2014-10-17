@@ -1,22 +1,24 @@
-package game.module.utility.armour;
+package game.module.utility;
 
 import game.assets.Gallery;
 import game.card.Card;
+import game.module.Module.ModuleType;
+import game.module.component.Component;
+import util.image.Pic;
 
-public class Plating extends Armour{
+public class Extender extends Utility{
 
-	public Plating(int tier) {
-		super(1+tier*.5,tier, "Plating", "basic armour", Gallery.basicArmour, 0, 0);
+	public Extender(int tier) {
+		super(tier, ModuleType.UTILITY, "Extender", "Boosts and drains from your cards last 1 extra turn", Gallery.blaster, 1, 1);
+		
 	}
 
 	@Override
 	public void startBattleEffect() {
-
 	}
 
 	@Override
 	public void beginTurnEffect() {
-
 	}
 
 	@Override
@@ -25,10 +27,6 @@ public class Plating extends Armour{
 
 	@Override
 	public void playCardEffect(Card c) {
-	}
-
-	@Override
-	public void afterBattle() {
 	}
 
 	@Override
@@ -52,7 +50,11 @@ public class Plating extends Armour{
 	}
 
 	@Override
-	public void onTakeMajorDamage() {
+	public void afterBattle() {
+	}
+
+	@Override
+	public void onScramble(Component c) {
 	}
 
 }

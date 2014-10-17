@@ -38,6 +38,7 @@ import game.module.component.shield.Shield;
 import game.module.component.weapon.Weapon;
 import game.module.junk.ModuleStats;
 import game.module.junk.ShieldPoint;
+import game.module.junk.buff.Buff;
 import game.module.junk.buff.Buff.BuffType;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
@@ -206,7 +207,6 @@ public abstract class Ship {
 		addEnergy(getIncome(), true);
 		resetMaximumHandSize();
 		for(Utility u:utilities) if(u!=null) u.beginTurnEffect();
-
 	}
 
 	private void resetMaximumHandSize() {

@@ -1,5 +1,6 @@
 package game.module.junk.buff;
 
+import util.TextWriter;
 import util.image.Pic;
 import game.assets.Gallery;
 import game.card.Card;
@@ -11,7 +12,7 @@ public class Buff {
 	public int duration;
 	public int value;
 	boolean positive;
-	
+	public TextWriter tw;
 	public Buff(BuffType type, boolean positive, int value, int duration){
 		this.type=type;
 		this.positive=positive;
@@ -32,17 +33,17 @@ public class Buff {
 		case BonusEffeect:
 			return Gallery.iconIncreasedEffect;
 		case BonusShot:
-			break;
+			return Gallery.iconMultiShot;
 		case Scrambled:
-			return Gallery.iconJammed;
+			return Gallery.iconScrambled;
 		case ReduceCost:
-			return Gallery.iconIncreasedEffect;
+			return Gallery.iconReducedCost;
 		case TakesExtraDamage:
-			return Gallery.iconIncreasedEffect;
+			return Gallery.iconTakesExtraDamage;
 		case BonusIncome:
-			return Gallery.iconIncreasedEffect;
+			return Gallery.iconBonusIncome;
 		case Disabled:
-			return Gallery.iconIncreasedEffect;
+			return Gallery.iconDisabled;
 		default:
 			break;
 		}
@@ -52,23 +53,27 @@ public class Buff {
 	public String getWords(){
 		switch(type){
 		case BonusEffeect:
-			return "+"+value+" strength for "+duration+" turns";
+			return "+"+value+" strength"+dur();
 		case BonusIncome:
-			return "+"+value+" income for "+duration+" turns";
+			return "+"+value+" energy income"+dur();
 		case BonusShot:
-			return "+"+value+" shots for "+duration+" turns";
+			return "+"+value+" shots"+dur();
 		case Disabled:
-			return "Disabled for "+duration+" turns";
+			return "Disabled"+dur();
 		case ReduceCost:
-			return "-"+value+" cost for "+duration+" turns";
+			return "-"+value+" energy"+dur();
 		case Scrambled:
-			return "Scrambled, play any scrambeld card to unscramble";
+			return "Scrambled, play any scrambled card to remove";
 		case TakesExtraDamage:
-			return "Takes +"+value+" extra damage from all shots for "+duration+" turns";
+			return "Takes +"+value+" extra damage from all shots"+dur();
 		default:
 			break;
 		}
 		return "Remind Tann to put something here";
+	}
+	
+	private String dur(){
+		return " for "+duration +" turn"+(duration>1?"s":"");
 	}
 	
 	public Buff copy() {

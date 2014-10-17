@@ -10,6 +10,7 @@ import util.update.Mouser;
 import util.update.Screen;
 import util.update.TextWisp;
 import util.update.TextWisp.WispType;
+import util.update.Timer.Interp;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -115,6 +116,7 @@ public class ModuleStats extends Mouser{
 		if(!Battle.isTutorial()){
 			info.stopFading();
 			ModuleInfo.top=info;
+			if(buffList!=null)buffList.stopFading();
 		}
 
 		if(Screen.isActiveType(Customise.class)){
@@ -140,6 +142,7 @@ public class ModuleStats extends Mouser{
 		}
 		if(component!=null)component.unmoused();
 		if(info!=null)info.fadeAll();
+		if(buffList!=null)buffList.fadeOut(CardGraphic.fadeSpeed/1.5f, Interp.LINEAR);
 
 	}
 	@Override
@@ -155,12 +158,18 @@ public class ModuleStats extends Mouser{
 	}
 
 	public void render(SpriteBatch batch) {
-
+		
 		if(Main.currentScreen instanceof Battle|| Main.currentScreen instanceof PreBattle){
 			if(info!=null)info.render(batch);
-			if(buffList!=null)buffList.render(batch);
+			if(component!=null){
+				if(buffList==null){
+					buffList=new BuffList(component);
+				}
+				buffList.render(batch);
+			}
+
 		}
-		
+
 		if(utilityStats){
 			Draw.drawScaled(batch, Gallery.baseUtilityStats.get(), position.x, position.y, 2, 2);
 
@@ -320,13 +329,7 @@ public class ModuleStats extends Mouser{
 			Draw.draw(batch, component.buffs.get(i).getPic().get(), collider.position.x+8+pos*gap, collider.position.y+70);
 			pos++;
 		}
-
-	
-
-
 	}
-
-
 
 	public void reset() {
 		activate();
@@ -338,12 +341,11 @@ public class ModuleStats extends Mouser{
 		demousectivate();
 		if(info!=null){
 			info.deactivate();
-			info.demousectivate();
 			for(CardGraphic cg:info.graphics){
 				cg.demousectivate();
 				cg.deactivate();
 			}
 		}
-		
+
 	}
 }
