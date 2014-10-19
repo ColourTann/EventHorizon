@@ -50,7 +50,8 @@ public class Hornet extends Ship{
 
 		setWeapon(new Swift(0), 0);
 		setWeapon(new Ray(0), 1);
-		setShield(new Repulsor(0));
+		//setShield(new Repulsor(0));
+		setShield(new Blocker(0));
 		setGenerator(new Five());
 		setComputer(new Alpha());
 	}

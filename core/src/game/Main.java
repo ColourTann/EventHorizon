@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import game.assets.Gallery;
 import game.assets.Sounds;
 import game.card.CardGraphic;
+import game.card.CardHover;
 import game.screen.battle.Battle;
 import game.screen.cardView.CardViewer;
 import game.screen.escape.EscapeMenu;
@@ -47,6 +48,8 @@ public class Main extends ApplicationAdapter  {
 	public static int height=700;
 	public static int width=1280;
 
+	public static SpriteBatch bufferBatch;
+	
 	public static SpriteBatch batch;
 	public static ShapeRenderer shape;
 
@@ -75,15 +78,17 @@ public class Main extends ApplicationAdapter  {
 		init();
 	}
 	public void init(){
-
 		Gdx.input.setInputProcessor(new InputHandler());
 
 		CardGraphic.init();
 		Gallery.init();
 		Sounds.init();
 		Font.init();
+		CardHover.init();
 		Ship.init();
+		
 		batch = new SpriteBatch();
+		
 		shape=new ShapeRenderer();
 		Color c=Colours.dark;
 		Gdx.gl.glClearColor(c.r,c.g,c.b,1);
@@ -93,13 +98,17 @@ public class Main extends ApplicationAdapter  {
 
 		mainCam=new OrthographicCamera(Main.width, Main.height);
 		mainCam.setToOrtho(true);
-
+		bufferBatch = new SpriteBatch();
+		OrthographicCamera cam = new OrthographicCamera(Main.width, Main.height);
+		
+		
+		//bufferBatch.setProjectionMatrix(Main.mainCam.combined);
 
 		//currentScreen=new Test();currentScreen.init();
 
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-		select=new Menu();currentScreen=select;select.init();
+//		select=new Menu();currentScreen=select;select.init();
 
 		//currentScreen=new PreBattle(new Hornet(true, 0), new Hornet(false, 0)); currentScreen.init();
 
@@ -107,7 +116,7 @@ public class Main extends ApplicationAdapter  {
 
 		//map=new Map();currentScreen=map;
 
-		//currentScreen=new Test();currentScreen.init();
+		currentScreen=new Test();currentScreen.init();
 
 
 		if(false){
@@ -169,9 +178,6 @@ public class Main extends ApplicationAdapter  {
 
 
 		batch.end();
-
-
-
 
 	}
 

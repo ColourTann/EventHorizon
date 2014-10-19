@@ -17,7 +17,7 @@ public abstract class Generator extends Component{
 		name[0]="Recharge";
 		cost[0]=0;
 		effect[0]=0;
-		rules[0]="+1 energy";
+		rules[0]="+1 iconenergy";
 		code[0].add(Special.GainEnergy,1);
 		code[0].setPriority(2);
 	}

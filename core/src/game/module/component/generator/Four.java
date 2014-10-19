@@ -14,7 +14,7 @@ public class Four extends Generator{
 		name[1]="Stoke";
 		cost[1]=0;
 		effect[1]=0;
-		rules[1]="+2 energy, 2 damage to this system";
+		rules[1]="+2 iconenergy \n 2 damage to this system";
 		code[1].add(Special.GainEnergy, 2);
 		code[1].add(Special.selfDamage, 2);
 		code[1].add(AI.DamageSelf, 2);

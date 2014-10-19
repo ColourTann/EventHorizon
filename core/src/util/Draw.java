@@ -1,5 +1,7 @@
 package util;
 
+import game.Main;
+
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
@@ -9,6 +11,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Draw {
 	//Non-centered stuff//
+	
+	public static void shittyBufferDraw(SpriteBatch batch, Texture t, float x, float y){
+		shittyBufferDraw(batch, t, x, y, 1, 1, 0);
+	}
+	public static void shittyBufferDraw(SpriteBatch batch, Texture t, float x, float y, float scaleX, float scaleY, float rotation){
+		drawRotatedScaledFlipped(batch, t, x, Main.height-y-t.getHeight()*scaleY, scaleX,scaleY,rotation,false,true);
+	}
 	
 	public static void draw(SpriteBatch batch, Texture t, float x, float y){
 		drawRotatedScaled(batch, t, x, y, 1, 1, 0);

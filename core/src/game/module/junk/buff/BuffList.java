@@ -1,12 +1,10 @@
 package game.module.junk.buff;
 
-import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
-import game.assets.Gallery;
 import game.assets.TextBox;
 import game.module.component.Component;
 import util.Colours;
@@ -14,19 +12,17 @@ import util.Draw;
 import util.TextWriter;
 import util.assets.Font;
 import util.maths.Pair;
-import util.update.Updater;
 
 public class BuffList extends TextBox{
 	Component component;
-	static int yLocation=249;
-	static int width= 280;
+	static int yLocation=256;
+	static int width= 287;
 	static int xOffset=8;
 	static int yGap=7;
 	static int yWiggle=20;
 	static int buffPicWidth=20;
 	static int buffPicHeight=10;
 	static BitmapFont font = Font.medium;
-	//static TextWriter textWriter= new TextWriter(font);
 	public BuffList(Component comp){
 		component=comp;
 		resetJunk();
@@ -64,10 +60,6 @@ public class BuffList extends TextBox{
 		}
 		height-=yGap;
 		height+=yWiggle;
-		renderBox(batch, width, height);
-//		Draw.draw(batch, Gallery.buffListTop.get(), position.x, position.y-Gallery.buffListTop.getHeight());
-//		Draw.drawScaled(batch, Gallery.buffListMid.get(), position.x, position.y, 1, height);
-//		Draw.drawRotatedScaledFlipped(batch, Gallery.buffListTop.get(), position.x, position.y+height, 1, 1, 0, false, true);
 		
 		int y=0;
 		for(Buff b:component.buffs){

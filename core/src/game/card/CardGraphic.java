@@ -2,6 +2,7 @@ package game.card;
 
 import util.Colours;
 import util.Draw;
+import util.TextWriter;
 import util.assets.Font;
 import util.image.Pic;
 import util.maths.BoxCollider;
@@ -50,12 +51,7 @@ public class CardGraphic extends Mouser {
 	
 	private static Pair bonusesCenter = new Pair(124,45);
 	private static int bonusGap= 20;
-	
-//	private static Pair positionShots = new Pair(12, 21);
-//	private static Pair positionTargeted = new Pair(115, 49);
-	
-	
-	
+
 	private static Pair positionEffectStart = new Pair(5, 64);
 	private static Pair positionEffectMid = new Pair(9, 66);
 	private static Pair positionEffectEnd = new Pair(110, 64);
@@ -66,6 +62,7 @@ public class CardGraphic extends Mouser {
 	private static float gap = 7;
 	private static float selectSpeed=7;
 	private static float flipSpeed=7;
+	private TextWriter[] textWriters = new TextWriter[2];
 	//Graphic stuff//
 	private float selectedHeight = 0;
 	private boolean drawTopPic = true;
@@ -102,7 +99,15 @@ public class CardGraphic extends Mouser {
 		deactivate();
 	}
 
-
+	public void setupTextWriters(){
+		for(int i=0;i<2;i++){
+			TextWriter tw= new TextWriter(Font.small, card.getRules(i));
+			tw.setCardGraphicReplacements();
+			tw.setWrapWidth(132);
+			textWriters[i]=tw;
+			
+		}
+	}
 
 	public void setPosition(Pair s) {
 
@@ -220,7 +225,7 @@ public class CardGraphic extends Mouser {
 		batch.setColor(Colours.white);
 			
 		if (hoverFadeTimer.getFloat()!=0) {
-			HoverCard.render(batch, card, getBaseHeight(1-card.side), hoverFadeTimer.getFloat());
+			CardHover.render(batch, card, getBaseHeight(1-card.side), hoverFadeTimer.getFloat());
 		}
 	}
 
@@ -283,10 +288,15 @@ public class CardGraphic extends Mouser {
 
 		//Rules//
 		Font.small.setColor(lightText);
-		String rules = card.getRules(part);
-		if(scrambled)rules=part==0?topScrambledRules:botScrambledRules;
-		if(card.wasScrambled&&card.mod.ship.player)rules="";
-		Font.small.drawWrapped(batch, rules, position.x + positionRules.x, baseHeight+ positionRules.y+2, 132, HAlignment.LEFT);
+		if(scrambled){
+			String rules=part==0?topScrambledRules:botScrambledRules;
+			Font.small.drawWrapped(batch, rules, position.x + positionRules.x, baseHeight+ positionRules.y+3, 132, HAlignment.LEFT);
+		}
+		else{
+			if(textWriters[part]==null)setupTextWriters();
+			textWriters[part].drawText(batch, position.x + positionRules.x, baseHeight+ positionRules.y+3);
+		}
+		
 
 		//Effect//
 		Pic[] effectPics=card.getShots(0)>0?Gallery.damageIcon:Gallery.shieldIcon;

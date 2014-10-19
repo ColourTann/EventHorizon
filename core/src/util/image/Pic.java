@@ -288,6 +288,7 @@ public class Pic {
 	}
 	
 	public static Pixmap getPixMap(Texture t){
+		
 		if(!t.getTextureData().isPrepared()){
 			t.getTextureData().prepare();
 		}

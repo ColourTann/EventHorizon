@@ -35,5 +35,6 @@ public class Sounds {
 	
 	public static void init(){
 		for(int i=0;i<1000;i++) array[i]=new MusicClip("Sound/Music/sp.mp3");
+		
 	}
 }

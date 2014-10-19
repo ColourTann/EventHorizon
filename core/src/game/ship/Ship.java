@@ -23,7 +23,7 @@ import game.attack.Attack;
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardGraphic;
-import game.card.HoverCard;
+import game.card.CardHover;
 import game.card.CardCode.AI;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
@@ -418,7 +418,7 @@ public abstract class Ship {
 			i++;
 		}
 		
-		HoverCard.enemyHoverPosition = new Pair(
+		CardHover.enemyHoverPosition = new Pair(
 					975-(i/2)*(gap+CardGraphic.width),
 					80+(i%2)*(CardGraphic.height/2+gap));
 	

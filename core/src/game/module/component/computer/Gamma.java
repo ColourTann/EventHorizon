@@ -16,7 +16,7 @@ public class Gamma extends Computer{
 		name[1]="Focus";
 		cost[1]=0;
 		effect[1]=0;
-		rules[1]="Augment all cards in hand: targeted";
+		rules[1]="Augment all cards in hand: icontargeted";
 		code[1].add(Special.DiscardWhenPlayed);
 		code[1].add(Augment.AugmentAll);
 		code[1].add(Augment.AugmentWeapon);
@@ -24,7 +24,6 @@ public class Gamma extends Computer{
 		code[1].add(AI.OtherUntargeted, 3);
 		code[1].add(AI.Singleton);
 		code[1].setPriority(2);
-		
 		
 	}
 }

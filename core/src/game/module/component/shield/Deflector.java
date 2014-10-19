@@ -41,7 +41,7 @@ public class Deflector extends Shield{
 		name[3]="Energise";
 		cost[3]=0;
 		effect[3]=calc(0);
-		rules[3]="Shields computer.\nAbsorb: draw a card";
+		rules[3]="Shields computer. \n Absorb: draw a card";
 		code[3].add(Special.ShieldComputer);
 		code[3].add(Special.Absorb);
 		code[3].add(Special.AbsorbDraw,1);

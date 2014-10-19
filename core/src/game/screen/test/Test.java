@@ -27,9 +27,9 @@ public class Test extends Screen{
 
 	@Override
 	public void init() {
-		tw=new TextWriter(Font.small, "1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h 1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h");
+		tw=new TextWriter(Font.small, "1111 222 3333  |hi| 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h 1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h |hi|");
 		//tw=new TextWriter(Font.big, "bello hi hi hi ho billo he bollo ballo");
-		tw.setWrapWidth(600);
+		tw.setWrapWidth(250);
 		tw.replace("hi", Gallery.iconEnergy.get());
 		tw.replace("ho", Gallery.iconCooldown.get());
 		tw.replace("he", Gallery.greyHP[2].get());
@@ -56,7 +56,9 @@ public class Test extends Screen{
 		Draw.drawScaled(batch, Gallery.whiteSquare.get(), 200, 200, tw.getWrapWidth(), tw.getHeight());
 		batch.setColor(1,1,1,1);
 		Font.medium.setColor(1,1,1,1);
-		tw.drawText(batch, 200, 200);
+		//for(int i=0;i<2000;i++)Font.small.drawWrapped(batch, "1111 222 3333 |hi| 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h 1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h", 50, 50, 50);
+		//for(int i=0;i<1000;i++)Draw.draw(batch, Gallery.shipAurora.get(), 50, 50);
+		for(int i=0;i<2000;i++)tw.drawText(batch, 200, 200);
 		ParticleSystem.renderAll(batch);
 
 	}
@@ -74,7 +76,13 @@ public class Test extends Screen{
 			ParticleSystem.debugDontUse.add(new Lightning(new Pair(10,10), new Pair(700,400), 3, 1));
 			ParticleSystem.debugDontUse.add(new Lightning(new Pair(700,400), new Pair(Main.width-10,Main.height-10), 3, 1));
 			break;
-
+		case Input.Keys.UP:
+			for(int i=0;i<1000;i++){
+				tw.setWrapWidth(tw.getWrapWidth()-20);
+				tw.setWrapWidth(tw.getWrapWidth()+20);
+				tw.setupTexture();
+			}
+			break;
 		case Input.Keys.LEFT:
 			tw.setWrapWidth(tw.getWrapWidth()-20);
 			break;
