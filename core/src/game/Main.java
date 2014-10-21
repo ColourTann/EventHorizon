@@ -10,6 +10,7 @@ import util.update.InputHandler;
 import util.update.Screen;
 import util.update.TextWisp;
 import util.update.Timer;
+import util.update.Timer.Finisher;
 import util.update.Timer.Interp;
 import util.update.Updater;
 
@@ -131,6 +132,7 @@ public class Main extends ApplicationAdapter  {
 			System.out.println("---------Eclipse------------");
 			System.out.println(new Eclipse(true, 0).getStats());
 		}
+	
 
 	}	
 

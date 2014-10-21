@@ -43,6 +43,12 @@ public class Timer extends Updater{
 		toFloat=1;
 		ratio=0;
 	}
+	
+	public static Timer event(float seconds, Finisher finisher){
+		Timer t= new Timer(0,1,seconds, Interp.LINEAR);
+		t.addFinisher(finisher);
+		return t;
+	}
 
 	public void addFinisher(Finisher f){
 		this.f=f;
