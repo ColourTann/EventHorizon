@@ -24,7 +24,7 @@ public class Swift extends Weapon{
 		cost[1]=1;
 		effect[1]=0;
 		shots[1]=0;
-		rules[1]="Augment Weapon: "+calc(0)+" damage";
+		rules[1]="Augment Weapon: +"+calc(0)+" |icondamage|";
 		code[1].add(Special.Augment);
 		code[1].add(Augment.AugmentWeapon);
 		code[1].add(Augment.AugmentDamage, calc(0));
@@ -35,7 +35,7 @@ public class Swift extends Weapon{
 		cost[2]=2;
 		effect[2]=0;
 		shots[2]=0;
-		rules[2]="Augment swift card: +1 shot";
+		rules[2]="Augment swift card: +1 |iconshot|";
 		code[2].add(Special.Augment);
 		code[2].add(Augment.AugmentThis);
 		code[2].add(Augment.AugmentAddShot, 1);
@@ -54,7 +54,7 @@ public class Swift extends Weapon{
 		cost[4]=2;
 		effect[4]=0;
 		shots[4]=0;
-		rules[4]="Drain target 1: +"+calc(1)+" damage taken from each shot";
+		rules[4]="Drain target 1: +"+calc(1)+" |icondamage| taken from each shot";
 		code[4].add(Special.DrainTarget);
 		code[4].setBuff(new Buff(BuffType.TakesExtraDamage, false, calc(1), 1));
 		code[4].add(AI.Ignore);

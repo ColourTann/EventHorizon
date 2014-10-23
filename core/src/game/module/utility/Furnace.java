@@ -12,14 +12,14 @@ import util.image.Pic;
 public class Furnace extends Utility{
 
 	public Furnace(int tier) {
-		super(tier, ModuleType.UTILITY,"Fusion Furnace", "+1 energy if you end your turn with 7+ energy", Gallery.blaster, 1, 1);
+		super(tier, ModuleType.UTILITY,"Fusion Furnace", "+1| ||energy| if you end your turn with >6| ||energy|", Gallery.blaster, 1, 1);
 		
 		for(int i=0;i<2;i++) cardPic[i]= Gallery.furnace[i];
 		
 		name[0]="Divert";
 		cost[0]=0;
 		effect[0]=0;
-		rules[0]="+1 energy";
+		rules[0]="+1| ||iconenergy|";
 		code[0].add(Special.GainEnergy,1);
 		code[0].setPriority(2);
 		
@@ -27,7 +27,7 @@ public class Furnace extends Utility{
 		name[1]="Burn";
 		cost[1]=0;
 		effect[1]=0;
-		rules[1]="Discard a card, +2 energy";
+		rules[1]="Discard a card,|n|+2| ||iconenergy|";
 		code[1].add(Special.DiscardOthers,1);
 		code[1].add(Augment.AugmentAny);
 		code[1].add(Augment.AugmentDiscard);

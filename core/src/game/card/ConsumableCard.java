@@ -89,14 +89,14 @@ public class ConsumableCard {
 		type=ModuleType.UTILITY;
 
 		name[0]= "Consume";
-		rules[0]="Steal 2 energy";
+		rules[0]="Steal 2| ||iconenergy|";
 		pic[0]= Gallery.consume;
 		cost[0]=0;
 		effect[0]=0;
 		code[0].add(Special.StealEnergy, 2);
 
 		name[1]= "Ignite";
-		rules[1]="Boost generator 20: +1 income";
+		rules[1]="Boost generator 20: +1| ||iconenergy| income";
 		pic[1]= Gallery.ignite;
 		cost[1]=0;
 		effect[1]=0;
@@ -110,7 +110,7 @@ public class ConsumableCard {
 		type=ModuleType.UTILITY;
 
 		name[0]= "Refresh";
-		rules[0]="+3 energy, reset cycle cost";
+		rules[0]="+3| ||iconenergy|, reset cycle cost";
 		pic[0]= Gallery.refresh;
 		cost[0]=0;
 		effect[0]=0;
@@ -118,7 +118,7 @@ public class ConsumableCard {
 		code[0].add(Special.ResetCycle);
 
 		name[1]= "Kindle";
-		rules[1]="+4 energy";
+		rules[1]="+4| ||iconenergy|";
 		pic[1]= Gallery.kindle;
 		cost[1]=0;
 		effect[1]=0;
@@ -138,7 +138,7 @@ public class ConsumableCard {
 		shots[0]=6;
 
 		name[1]= "Replicate";
-		rules[1]="Augment weapon card: +2 shots";
+		rules[1]="Augment weapon card: +2| ||iconshot|";
 		pic[1]= Gallery.replicate;
 		cost[1]=2;
 		effect[1]=0;
@@ -163,7 +163,7 @@ public class ConsumableCard {
 		shots[0]=1;
 
 		name[1]= "Magnify";
-		rules[1]="Augment weapon card: +"+calc(2)+" damage";
+		rules[1]="Augment weapon card: +"+calc(2)+" |icondamage|";
 		pic[1]= Gallery.magnify;
 		cost[1]=1;
 		effect[1]=0;

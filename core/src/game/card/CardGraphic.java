@@ -294,7 +294,7 @@ public class CardGraphic extends Mouser {
 		}
 		else{
 			if(textWriters[part]==null)setupTextWriters();
-			textWriters[part].drawText(batch, position.x + positionRules.x, baseHeight+ positionRules.y+3);
+			textWriters[part].drawText(batch, (int)position.x + (int)positionRules.x, (int)baseHeight+ (int)positionRules.y+3);
 		}
 		
 

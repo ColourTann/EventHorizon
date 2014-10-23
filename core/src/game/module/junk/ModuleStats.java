@@ -115,8 +115,12 @@ public class ModuleStats extends Mouser{
 
 		if(!Battle.isTutorial()){
 			info.stopFading();
+			info.alpha=1;
 			ModuleInfo.top=info;
-			if(buffList!=null)buffList.stopFading();
+			if(buffList!=null){
+				buffList.stopFading();
+				buffList.alpha=1;
+			}
 		}
 
 		if(Screen.isActiveType(Customise.class)){
@@ -160,7 +164,7 @@ public class ModuleStats extends Mouser{
 	public void render(SpriteBatch batch) {
 		
 		if(Main.currentScreen instanceof Battle|| Main.currentScreen instanceof PreBattle){
-			if(info!=null)info.render(batch);
+			if(info!=null&&info!=ModuleInfo.top)info.render(batch);
 			if(component!=null){
 				if(buffList==null){
 					buffList=new BuffList(component);

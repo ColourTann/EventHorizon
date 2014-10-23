@@ -11,7 +11,7 @@ import game.module.component.Component;
 public class Repeater extends Utility{
 
 	public Repeater(int tier) {
-		super(tier, ModuleType.UTILITY, "Repeater", "Weapons cards with 3+ shots get 1 bonus shot", Gallery.blaster, 1, 1);
+		super(tier, ModuleType.UTILITY, "Repeater", "Weapons cards with >2| ||shot| get +1| ||shot|", Gallery.blaster, 1, 1);
 		
 		rocketSize=2;
 		
@@ -20,7 +20,7 @@ public class Repeater extends Utility{
 		name[0]="Duplicate";
 		cost[0]=2;
 		effect[0]=0;
-		rules[0]="Augment weapon card: +1 shot";
+		rules[0]="Augment weapon card: +1 |iconshot|";
 		code[0].add(Special.Augment);
 		code[0].add(Augment.AugmentWeapon);
 		code[0].add(Augment.AugmentAddShot, 1);

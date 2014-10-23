@@ -13,6 +13,7 @@ import util.image.Pic;
 import util.maths.Pair;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -26,6 +27,8 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
 
 public class TextWriter {
+	public final static int yOffset=2;
+	public static ArrayList<TextWriter> staticList= new ArrayList<TextWriter>();
 	public enum Alignment{Left, Center}
 	String text;
 	int baseWrapWidth=9999;
@@ -39,17 +42,17 @@ public class TextWriter {
 	HashMap<String, Texture> replacers = new HashMap<String, Texture>();
 	public Alignment align= Alignment.Left; 
 	FrameBuffer buffer;
-	
+	Color col;
 	ArrayList<PairPic> pairPics= new ArrayList<PairPic>();
 
-	Texture testTexture;
+	Texture texture;
 
 	public TextWriter(BitmapFont font, String text){
 
 		//basic stuff for EH//
 		int scale=1;
 		if(font==Font.medium)scale=1;
-
+		col=font.getColor();
 
 		this.font=font;
 		spaceWidth=font.getBounds(" ").width;
@@ -57,14 +60,14 @@ public class TextWriter {
 		bonusHeight=height/7f*2;
 		height+=bonusHeight;
 		this.text=text;
-
+		staticList.add(this);
 
 
 	}
 
 	public void setupTexture(){
-		if(testTexture!=null)smallDispose();
-		
+		if(texture!=null)smallDispose();
+		font.setColor(col);
 		buffer = new FrameBuffer(Format.RGBA8888, baseWrapWidth,300, false);
 		SpriteBatch tempBatch = new SpriteBatch();
 		buffer.begin();
@@ -92,12 +95,18 @@ public class TextWriter {
 					prevIndex=currentIndex;
 					continue;
 				}
+				if(specialString.equals(" ")){
+					x+=spaceWidth/2f;
+					specialMode=false;
+					prevIndex=currentIndex;
+					continue;
+				}
 				Texture t= replacers.get(specialString);
 				if(x+t.getWidth()>baseWrapWidth){
 					x=0;
 					y+=height;
 				}
-				Draw.draw(tempBatch, t, +x, +y+(int)((height-t.getHeight())/2f));
+				Draw.draw(tempBatch, t, x, y+(int)((height-t.getHeight()-1)/2f)+yOffset);
 				x+=t.getWidth();
 				specialMode=false;
 				prevIndex=currentIndex;
@@ -105,45 +114,52 @@ public class TextWriter {
 			}
 			else{
 				if(c==' '){
-					String word = text.substring(prevIndex, currentIndex);
+					String word = text.substring(prevIndex, currentIndex-1);
 					float wordWidth=font.getBounds(word).width;
 					if(x+wordWidth>baseWrapWidth){
 						x=0;
 						y+=height;
 					}
-					font.draw(tempBatch, word, x, y);
+					font.draw(tempBatch, word, x, y+yOffset);
 					x+=wordWidth;
 					x+=spaceWidth;
 					prevIndex=currentIndex;
 				}
 				if(c=='|'){
-					String word = text.substring(prevIndex, currentIndex);
+					String word = text.substring(prevIndex, currentIndex-1);
 					float wordWidth=font.getBounds(word).width;
 					if(x+wordWidth>baseWrapWidth){
 						x=0;
 						y+=height;
 					}
-					font.draw(tempBatch, word, x, y);
+					font.draw(tempBatch, word, x, y+yOffset);
 					x+=wordWidth;
 					specialMode=true;
 					prevIndex=currentIndex;
 				}
 			}
 		}
+		String word = text.substring(prevIndex, currentIndex);
+		float wordWidth=font.getBounds(word).width;
+		if(x+wordWidth>baseWrapWidth){
+			x=0;
+			y+=height;
+		}
+		font.draw(tempBatch, word, x, y+yOffset);
 		maxHeight=y+height;
 		tempBatch.end();
 		buffer.end();
-		testTexture=buffer.getColorBufferTexture();
+		texture=buffer.getColorBufferTexture();
 		
 		tempBatch.dispose();
 		
 	}
 	
 	private void smallDispose() {
-		if(testTexture!=null){
-		testTexture.dispose();
+		if(texture!=null){
+		texture.dispose();
 		buffer.dispose();
-		testTexture=null;
+		texture=null;
 		}
 	}
 
@@ -173,125 +189,13 @@ public class TextWriter {
 	}
 
 	public void drawText(SpriteBatch batch, float startX, float startY){
-		if(testTexture==null){
+		if(texture==null){
 			batch.end();
 			setupTexture();
 			batch.begin();
 		}
-		Draw.drawRotatedScaledFlipped(batch, testTexture, startX, startY, 1, 1, 0, false, false);
-		
-		
-
+		Draw.drawRotatedScaledFlipped(batch, texture, startX, startY-yOffset, 1, 1, 0, false, false);
 	}
-
-	
-
-	//	public int n(int index){
-	//		int finalIndex=index;
-	//		String s=text.substring(index);
-	//		for(char c:s.toCharArray()){
-	//			finalIndex++;
-	//			if(c==' '){
-	//
-	//			}
-	//		}
-	//	}
-
-	//	public void setupLines(){
-	//		String[] words = text.split(" ");
-	//		//precheck line width//
-	//		int lineWidth=0;
-	//		int bonusY=0;
-	//
-	//		int wrapWidth=0;
-	//		ArrayList<String> stringLine=new ArrayList<String>();
-	//		float xOffset=0;
-	//		for(String word:words){
-	//
-	//			wrapWidth=baseWrapWidth;
-	//			if(bonusY<obstacle.y){
-	//				wrapWidth-=obstacle.x;
-	//				xOffset=obstacle.x;
-	//			}
-	//			float wordWidth=0;
-	//			Texture t= replacers.get(word);
-	//			if(t!=null){
-	//				wordWidth=t.getWidth();
-	//			}
-	//			else{
-	//				wordWidth=font.getBounds(word).width;
-	//			}
-	//			if(lineWidth+wordWidth>wrapWidth&&lineWidth>0){
-	//				addLine(xOffset, bonusY, lineWidth, wrapWidth, stringLine);
-	//				bonusY+=height+bonusHeight;
-	//				lineWidth=0;
-	//				stringLine.clear();
-	//				xOffset=0;
-	//				if(bonusY<obstacle.y){
-	//					wrapWidth-=obstacle.x;
-	//					xOffset=obstacle.x;
-	//				}
-	//			}
-	//
-	//
-	//			if(word.equals("\n")){
-	//				if(lineWidth==0)continue;
-	//				else{
-	//					addLine(xOffset, bonusY, lineWidth, wrapWidth, stringLine);
-	//					bonusY+=height+bonusHeight;
-	//					lineWidth=0;
-	//					stringLine.clear();
-	//					xOffset=0;
-	//					continue;
-	//				}
-	//			}
-	//
-	//			lineWidth+= wordWidth;
-	//			stringLine.add(word);
-	//
-	//
-	//			if(lineWidth+spaceWidth>wrapWidth){
-	//				addLine(xOffset, bonusY, lineWidth, wrapWidth, stringLine);
-	//				stringLine.clear();
-	//				bonusY+=height+bonusHeight;
-	//				lineWidth=0;
-	//				xOffset=0;
-	//				if(bonusY<obstacle.y){
-	//					wrapWidth-=obstacle.x;
-	//					xOffset=obstacle.x;
-	//				}
-	//				continue;
-	//			}
-	//			else{
-	//				lineWidth+=spaceWidth;
-	//			}
-	//		}
-	//		addLine(xOffset, bonusY, lineWidth, wrapWidth, stringLine);
-	//		maxHeight=bonusY+height;	
-	//
-	//	}
-
-	//	private void addLine(float startX, float startY, float lineWidth, float wrapWidth, ArrayList<String> words) {
-	//		if(lineWidth>maxWidth)maxWidth=lineWidth;
-	//		float actualSpaceWidth=0;
-	//		float xFlib=0;
-	//
-	//		switch(align){
-	//		case Center:
-	//			xFlib=(wrapWidth-lineWidth)/2f;
-	//			actualSpaceWidth=spaceWidth;
-	//			break;
-	//		case Left:
-	//			xFlib=0;
-	//			actualSpaceWidth=spaceWidth;
-	//			break;
-	//
-	//		default:
-	//			break;
-	//		}
-	//
-	//		lines.add(new Line(startX+xFlib, startY, actualSpaceWidth, (ArrayList<String>) words.clone()));
-	//	}
 
 	public int getWrapWidth() {
 		return baseWrapWidth;
@@ -336,12 +240,28 @@ public class TextWriter {
 	public void setCardGraphicReplacements() {
 		replace("icontarget", Gallery.iconTargetedMini.get());
 		replace("iconenergy", Gallery.iconEnergyMini.get());
-		replace("icondamage", Gallery.iconDamage.get());
+		replace("icondamage", Gallery.damageIcon[1].get());
 		replace("iconshield", Gallery.shieldIcon[1].get());
 		replace("iconinfinity", Gallery.iconInfinity.get());
-		replace("iconmajordamage", Gallery.iconMajorDamage.get());
+		replace("iconshot", Gallery.iconShots.get());
 		bonusHeight+=2;
 		smallDispose();
 	}
+
+	public void setPassiveReplacements() {
+		replace("energy", Gallery.iconEnergy.get());
+		replace("majordamage", Gallery.redHP[1].get());
+		replace("shield", Gallery.shieldIcon[1].getScaled(2).get());
+		replace("shot", Gallery.iconShots.getScaled(2).get());
+	}
+	
+	public static void disposeAll() {
+		for(TextWriter tw:staticList){
+			tw.smallDispose();
+		}
+		staticList.clear();
+	}
+
+	
 }
 

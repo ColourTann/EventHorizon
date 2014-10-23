@@ -10,7 +10,7 @@ import game.module.component.Component;
 public class PhaseArray extends Utility{
 
 	public PhaseArray(int tier) {
-		super(tier, ModuleType.WEAPON, "Phase Array", "If you play 3+ cards from one weapon: +1 energy", Gallery.blaster, 1, 1);
+		super(tier, ModuleType.WEAPON, "Phase Array", "If you play >2 cards from one weapon: +1| ||energy|", Gallery.blaster, 1, 1);
 		
 		for(int i=0;i<2;i++) cardPic[i]= Gallery.phaseArray[i];
 		
@@ -18,7 +18,7 @@ public class PhaseArray extends Utility{
 		cost[0]=1;
 		effect[0]=1;
 		shots[0]=1;
-		rules[0]="+1 damage for each other weapon card played this turn";
+		rules[0]="+1 |icondamage| for each other weapon card played this turn";
 		code[0].add(Special.BonusEffectPerOtherWeapon, 1);
 		
 		name[1]="Fetch";

@@ -21,7 +21,7 @@ public class Tesla extends Weapon{
 		cost[1]=2;
 		effect[1]=0;
 		shots[1]=0;
-		rules[1]="Augment tesla card: +"+calc(1)+" damage";
+		rules[1]="Augment tesla card: +"+calc(1)+" |icondamage|";
 		code[1].add(Special.Augment);
 		code[1].add(Augment.AugmentThis);
 		code[1].add(Augment.AugmentDamage,calc(1));
@@ -41,7 +41,7 @@ public class Tesla extends Weapon{
 		cost[3]=2;
 		effect[3]=calc(4);
 		shots[3]=1;
-		rules[3]="Play only if this module has taken major damage";
+		rules[3]="Play only if this module has take major damage";
 		code[3].add(Special.MustBeMajorDamaged);
 		
 		name[4]="Fork";

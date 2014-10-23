@@ -35,7 +35,7 @@ public class Pulse extends Weapon{
 		cost[3]=1;
 		effect[3]=calc(0);
 		shots[3]=1;
-		rules[3]="+"+calc(0,2)+" damage if target has taken at least one major damage";
+		rules[3]="+"+calc(0,2)+" |icondamage| if target has taken at least one major damage";
 		code[3].add(Special.BonusVsMajorDamaged,calc(0,2));
 		code[3].add(AI.MajorDamagedEnemySystems,3);
 		code[3].setPriority(-1);
@@ -44,7 +44,7 @@ public class Pulse extends Weapon{
 		cost[4]=1;
 		effect[4]=0;
 		shots[4]=0;
-		rules[4]="Self boost 1: +1 shot to all pulse attacks";
+		rules[4]="Self boost 1: +1 |iconshot| to all pulse attacks";
 		code[4].add(Special.BonusShots,1);
 		code[4].add(AI.OtherCardsThisSystem,2);
 		code[4].setPriority(1);

@@ -36,7 +36,7 @@ public class Blocker extends Shield{
 		name[2]="Block";
 		cost[2]=5;
 		effect[2]=calc(4);
-		rules[2]="-1 cost per iconmajordamage taken";
+		rules[2]="-1 cost per major damage taken";
 		code[2].add(Special.AddShieldPoints);
 		code[2].add(Special.ReduceCostPerMajorDamage);
 		code[2].add(AI.RegularShield);
@@ -57,7 +57,7 @@ public class Blocker extends Shield{
 		name[4]="Block";
 		cost[4]=1;
 		effect[4]=calc(1);
-		rules[4]="Shields all modules with iconmajordamage";
+		rules[4]="Shields all modules with major damage";
 		code[4].add(Special.ShieldAllDamaged);
 		code[4].add(AI.ModulesWithMajorDamageAndIncoming, 2);
 	}

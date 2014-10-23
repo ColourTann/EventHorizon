@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import util.Colours;
 import util.Draw;
+import util.TextWriter;
 import util.assets.Font;
 import util.maths.Pair;
 import util.update.Mouser;
@@ -38,19 +39,27 @@ public class ModuleInfo extends TextBox{
 	public boolean noDrawCards;
 	public static ModuleInfo top;
 	float offset=3;
+	TextWriter statsWriter;
 	public ModuleInfo(Module m) {
 		if(m==null)return;
 		mod=m;
 		width=CardGraphic.width*2-2;
-	
 		if(mod instanceof Shield||mod instanceof Weapon)width=CardGraphic.width*3-3;
 		if(mod.getPic(1)==null){
 			width=CardGraphic.width-1;
 		}
 		width+=9;
 		height+=17;
+		if(m instanceof Utility){
+			Font.medium.setColor(Colours.player2[0]);
+			statsWriter=new TextWriter(Font.medium, ((Utility)m).passive);
+			statsWriter.setWrapWidth((int) (CardGraphic.width-offset*2));
+			statsWriter.setPassiveReplacements();
+		}
 		if(mod.ship==null)return;
 		setPosition(new Pair(mod.ship.player?130+width/2:Main.width-130-width/2, 0));
+		
+		
 	}
 	
 	public ModuleInfo(Card[] cards){
@@ -114,9 +123,9 @@ public class ModuleInfo extends TextBox{
 
 	public void fadeAll(){
 		for(CardGraphic cg: graphics){
-			cg.fadeOut(CardGraphic.fadeSpeed/1.5f, CardGraphic.fadeType);
+			cg.fadeOut(CardGraphic.fadeSpeed/1.2f, CardGraphic.fadeType);
 		}
-		fadeOut(CardGraphic.fadeSpeed/1.5f, Interp.LINEAR);
+		fadeOut(CardGraphic.fadeSpeed/1.2f, Interp.LINEAR);
 	}
 
 
@@ -126,7 +135,6 @@ public class ModuleInfo extends TextBox{
 		Font.small.setColor(Colours.withAlpha(Colours.light,alpha));
 		batch.setColor(1,1,1,alpha);
 		renderBox(batch, width, height/2f);
-		//Draw.drawScaled(batch, Gallery.cardBase.getMask(Colours.withAlpha(Colours.backgrounds1[0], alpha)), position.x, position.y, width/CardGraphic.width, height/CardGraphic.height);
 
 		if(consumableCards!=null&&alpha>0){
 			if(noDrawCards)return;
@@ -177,11 +185,8 @@ public class ModuleInfo extends TextBox{
 			Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+205);
 		}
 		if(mod instanceof Utility){
-			String passive=((Utility)mod).passive;
-			
-			Font.medium.setColor(Colours.withAlpha(Colours.player2[0],alpha));
-			float fHeight=Font.medium.getWrappedBounds(passive, CardGraphic.width-offset*2).height;
-			Font.medium.drawWrapped(batch, passive, position.x+offset+cardOffset, position.y+CardGraphic.height*3/4-fHeight/2-7, CardGraphic.width-offset*2, HAlignment.CENTER);
+			float fHeight=statsWriter.maxHeight;
+			statsWriter.drawText(batch, (int)(position.x+offset+cardOffset), (int)(position.y+CardGraphic.height*3/4-fHeight/2));
 		}
 	
 		String words=mod.type+(mod.tier==-1?"":" Tier "+mod.tier);

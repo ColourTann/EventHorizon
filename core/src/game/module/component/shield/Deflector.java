@@ -23,7 +23,7 @@ public class Deflector extends Shield{
 		name[1]="Amplify";
 		cost[1]=1;
 		effect[1]=0;
-		rules[1]="Self boost 1: +"+calc(0)+" strngth to all shield cards";
+		rules[1]="Self boost 1: +"+calc(0)+" |iconshield| to all shield cards";
 		code[1].add(Special.BoostSelf);
 		code[1].setBuff(new Buff(BuffType.BonusEffeect, true, calc(0), 1));
 		code[1].add(AI.OtherCardsThisSystem,2);
@@ -41,7 +41,7 @@ public class Deflector extends Shield{
 		name[3]="Energise";
 		cost[3]=0;
 		effect[3]=calc(0);
-		rules[3]="Shields computer. \n Absorb: draw a card";
+		rules[3]="Shields computer|n|Absorb: draw a card";
 		code[3].add(Special.ShieldComputer);
 		code[3].add(Special.Absorb);
 		code[3].add(Special.AbsorbDraw,1);

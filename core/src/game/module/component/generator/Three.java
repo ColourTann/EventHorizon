@@ -14,7 +14,7 @@ public class Three extends Generator{
 		name[1]="Refill";
 		cost[1]=0;
 		effect[1]=0;
-		rules[1]="+2 iconenergy at end of phase if you use all energy";
+		rules[1]="+2 |iconenergy| at end of phase if you use up all energy";
 		code[1].add(Special.EnergyIfEmpty,2);
 		code[1].add(AI.Ignore);
 	}

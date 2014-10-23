@@ -671,7 +671,8 @@ public class Battle extends Screen{
 		for(Animation a:animations){
 			a.render(batch);
 		}
-		
+		ArrayList<ModuleStats> stats= new ArrayList<ModuleStats>();
+		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
 		for(ModuleStats ums:player.getUtilityStats()){
 			ums.render(batch);
 		}
@@ -685,7 +686,7 @@ public class Battle extends Screen{
 		for(Component c:enemy.components){
 			c.getStats().render(batch);
 		}
-
+		
 	}
 
 	@Override

@@ -304,10 +304,10 @@ public class Customise extends Screen{
 	}
 
 	public static void unMouse(Module module){
+		//me.oldInfoBox=me.infoBox;
 		if(me.infoBox==null)return;
 		if(me.infoBox.mod==module||module==null){
-			me.oldInfoBox=me.infoBox;
-			me.oldInfoBox.fadeOut(fadeOutSpeed, Interp.LINEAR);
+			me.infoBox.fadeOut(fadeOutSpeed, Interp.LINEAR);
 			retimeMeter(ship.getStats().energyUsage);
 		}
 	}

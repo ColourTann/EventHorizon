@@ -33,7 +33,7 @@ public class Repulsor extends Shield{
 		name[2]="Charge";
 		cost[2]=4;
 		effect[2]=0;
-		rules[2]="Self boost infinite: +"+calc(0)+" strength";
+		rules[2]="Self boost infinite: +"+calc(0)+" |iconshield|";
 		code[2].add(AI.BeforeTurn, 3);
 		code[2].add(AI.LowChance);
 		code[2].setPriority(1);		

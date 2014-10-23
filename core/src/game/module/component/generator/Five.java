@@ -16,7 +16,7 @@ public class Five extends Generator{
 		name[1]="Power up";
 		cost[1]=4;
 		effect[1]=0;
-		rules[1]="Self boost 10: +1 iconenergy income";
+		rules[1]="Self boost 10: +1 |iconenergy| income";
 		code[1].add(Special.BoostSelf);
 		code[1].setBuff(new Buff(BuffType.BonusIncome, true, 1, 10));
 		code[1].add(AI.BeforeTurn, 3);

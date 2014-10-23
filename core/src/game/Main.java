@@ -109,7 +109,7 @@ public class Main extends ApplicationAdapter  {
 
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-//		select=new Menu();currentScreen=select;select.init();
+		select=new Menu();currentScreen=select;select.init();
 
 		//currentScreen=new PreBattle(new Hornet(true, 0), new Hornet(false, 0)); currentScreen.init();
 
@@ -117,7 +117,7 @@ public class Main extends ApplicationAdapter  {
 
 		//map=new Map();currentScreen=map;
 
-		currentScreen=new Test();currentScreen.init();
+//		currentScreen=new Test();currentScreen.init();
 
 
 		if(false){
@@ -197,7 +197,7 @@ public class Main extends ApplicationAdapter  {
 				fadeTimer=new Timer(1, 0, fadeSpeed, Interp.LINEAR);
 				nextScreen.init();
 				currentScreen.dispose();
-
+				TextWriter.disposeAll();
 				currentScreen=nextScreen;
 				nextScreen=null;
 			}

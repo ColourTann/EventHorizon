@@ -53,7 +53,7 @@ public abstract class Updater {
 
 	public void stopFading(){
 		fader=null;
-		alpha=1;
+		//alpha=1;
 	}
 
 	public void slide(Pair target, float seconds, Interp type){

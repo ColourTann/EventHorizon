@@ -46,7 +46,8 @@ public class Gallery {
 	public static Pic iconTargeted=new Pic("Icon/targeted");
 	public static Pic iconScrambled=new Pic("Icon/jammed");
 	
-	public static Pic iconMajorDamage=new Pic("Icon/twmajordamageicon");
+	public static Pic iconTextDamage=new Pic("Icon/textdamageicon");
+	public static Pic iconMajorDamage=new Pic("Icon/iconmajordamagemini");
 	public static Pic iconDamage=new Pic("Icon/twdamageicon");
 	public static Pic iconInfinity=new Pic("Icon/infinity");
 	public static Pic iconTargetedMini=new Pic("Icon/targetedmini");
