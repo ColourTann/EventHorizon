@@ -30,7 +30,7 @@ import game.screen.customise.Reward;
 import game.screen.preBattle.PreBattle;
 
 public class ModuleStats extends Mouser{
-	static int height=Main.height/5-17;
+	public static int height=Main.height/5-17;
 	public static int width=128;
 	public Component component;
 	public ModuleInfo info;
@@ -142,7 +142,8 @@ public class ModuleStats extends Mouser{
 	public void mouseUp() {
 		if(component==null&&fUtil==null)return;
 		if(Main.currentScreen instanceof Customise){
-			Customise.unMouse(component);
+			if(component!=null)Customise.unMouse(component);
+			Customise.unMouse(fUtil);
 		}
 		if(component!=null)component.unmoused();
 		if(info!=null)info.fadeAll();

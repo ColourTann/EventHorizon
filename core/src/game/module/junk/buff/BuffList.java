@@ -48,12 +48,11 @@ public class BuffList extends TextBox{
 		
 		
 		float height=0;
-		
 		for(Buff b:component.buffs){
 			if(b.tw==null){
 				
 				b.tw= new TextWriter(font, ": "+b.getWords());
-				b.tw.addObstacleTopLeft(buffPicWidth, buffPicHeight);
+				b.tw.addObstacleTopLeft(buffPicWidth, buffPicHeight-5);
 				b.tw.setWrapWidth(width-xOffset*2);
 			}
 			height+=b.tw.maxHeight+yGap;
@@ -61,10 +60,12 @@ public class BuffList extends TextBox{
 		height-=yGap;
 		height+=yWiggle;
 		
+		renderBox(batch, width, height);
+		
 		int y=0;
 		for(Buff b:component.buffs){
 			Draw.draw(batch, b.getPic().get(), position.x+xOffset, position.y+y+yWiggle/2-1);
-			b.tw.drawText(batch, position.x+xOffset, position.y+y+yWiggle/2);
+			b.tw.render(batch, position.x+xOffset, position.y+y+yWiggle/2);
 			y+=b.tw.maxHeight+yGap;
 		}
 	}

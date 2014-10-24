@@ -50,7 +50,7 @@ public class CardHover {
 
 
 	public static void render(SpriteBatch batch, Card c, float baseY, float alpha) {
-		int bonusY=yOffset+125;
+		int bonusY=0;
 		card=c;
 		if(CardHover.getReminderTypes(card).size()==0){
 			return;
@@ -65,11 +65,11 @@ public class CardHover {
 		}
 
 		batch.setColor(1,1,1,alpha);
-		Draw.draw(batch, Gallery.cardBaseHover.get(), position.x, baseY);
+		Draw.draw(batch, Gallery.cardBaseHover.get(), (int)position.x, (int)baseY);
 		Font.small.setColor(Colours.withAlpha(Colours.dark, alpha));
 		for(ReminderType t:getReminderTypes(card)){
 			TextWriter tw=buffWriters.get(t);
-			tw.drawText(batch, position.x+xOffset, position.y+bonusY);
+			tw.render(batch, (int)position.x+xOffset, (int)(baseY+yOffset+bonusY));//position.y+bonusY);
 			bonusY+=tw.maxHeight;
 			bonusY+=yGap;
 		}
@@ -79,6 +79,7 @@ public class CardHover {
 	public static void init() {
 		for(ReminderType type: ReminderType.values()){
 			TextWriter tw=null;
+			Font.small.setColor(Colours.dark);
 			switch(type){
 			case Absorb:
 				tw=new TextWriter(Font.small, "Absorb Effect - Gain the effect if all shield points are used to block damage");
@@ -89,7 +90,7 @@ public class CardHover {
 				buffWriters.put(type, tw);
 				break;
 			case Multishot:
-				tw=new TextWriter(Font.small, "x shot - Fires x times");
+				tw=new TextWriter(Font.small, "X|iconshot|| |- Fires X times");
 				tw.replace("shot", Gallery.iconShots.get());
 				buffWriters.put(type, tw);
 				break;

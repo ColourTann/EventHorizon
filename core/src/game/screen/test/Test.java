@@ -27,13 +27,11 @@ public class Test extends Screen{
 
 	@Override
 	public void init() {
-		tw=new TextWriter(Font.small, "1111 222 3333  |hi| 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h 1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h |hi|");
+		tw=new TextWriter(Font.big, "1111 222 3333 444444 555 66666666 hi 777777 |energy| 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h 1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h ");
 		//tw=new TextWriter(Font.big, "bello hi hi hi ho billo he bollo ballo");
 		tw.setWrapWidth(250);
-		tw.replace("hi", Gallery.iconEnergy.get());
-		tw.replace("ho", Gallery.iconCooldown.get());
-		tw.replace("he", Gallery.greyHP[2].get());
-		tw.addObstacleTopLeft(120, 80);
+		tw.setPassiveReplacements();
+		tw.addObstacleTopLeft(150, 30);
 
 	}
 	@Override
@@ -58,7 +56,7 @@ public class Test extends Screen{
 		Font.medium.setColor(1,1,1,1);
 		//for(int i=0;i<2000;i++)Font.small.drawWrapped(batch, "1111 222 3333 |hi| 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h 1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h", 50, 50, 50);
 		//for(int i=0;i<1000;i++)Draw.draw(batch, Gallery.shipAurora.get(), 50, 50);
-		for(int i=0;i<2000;i++)tw.drawText(batch, 200, 200);
+		for(int i=0;i<1;i++)tw.render(batch, 200, 200);
 		ParticleSystem.renderAll(batch);
 
 	}

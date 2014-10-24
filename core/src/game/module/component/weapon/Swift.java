@@ -24,7 +24,7 @@ public class Swift extends Weapon{
 		cost[1]=1;
 		effect[1]=0;
 		shots[1]=0;
-		rules[1]="Augment Weapon: +"+calc(0)+" |icondamage|";
+		rules[1]="Augment weapon card: +"+calc(0)+"| ||icondamage|";
 		code[1].add(Special.Augment);
 		code[1].add(Augment.AugmentWeapon);
 		code[1].add(Augment.AugmentDamage, calc(0));
@@ -46,7 +46,7 @@ public class Swift extends Weapon{
 		cost[3]=4;
 		effect[3]=calc(1);
 		shots[3]=2;
-		rules[3]="+"+calc(0)+" damage against undamaged modules";
+		rules[3]="+"+calc(0)+" |icondamage| against undamaged modules";
 		code[3].add(Special.BonusVsPristine, calc(0));
 		code[3].add(AI.PlayerPristineSystems,3);
 		
@@ -54,7 +54,7 @@ public class Swift extends Weapon{
 		cost[4]=2;
 		effect[4]=0;
 		shots[4]=0;
-		rules[4]="Drain target 1: +"+calc(1)+" |icondamage| taken from each shot";
+		rules[4]="Drain target 1:|n|+"+calc(1)+" |icondamage| taken from each shot";
 		code[4].add(Special.DrainTarget);
 		code[4].setBuff(new Buff(BuffType.TakesExtraDamage, false, calc(1), 1));
 		code[4].add(AI.Ignore);

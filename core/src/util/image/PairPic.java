@@ -4,9 +4,9 @@ import util.maths.Pair;
 
 public class PairPic {
 	public Pic pic;
-	public Pair location;
-	public PairPic(Pic pic, Pair location){
+	public Pair position;
+	public PairPic(Pic pic, Pair position){
 		this.pic=pic;
-		this.location=location;
+		this.position=position;
 	}
 }

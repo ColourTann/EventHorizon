@@ -55,6 +55,7 @@ public class Timer extends Updater{
 	}
 
 	public void update(float delta){
+		if(seconds==-1)return;
 		ratio+=delta/seconds;
 		ratio=Math.min(1, ratio);
 		if(ratio>=1){
@@ -97,5 +98,9 @@ public class Timer extends Updater{
 
 	public void removeFinisher() {
 		this.f=null;
+	}
+
+	public void stop() {
+		seconds=-1;
 	}
 }

@@ -7,6 +7,8 @@ import game.screen.battle.tutorial.PicLoc;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.sound.sampled.LineListener;
+
 import util.assets.Font;
 import util.image.PairPic;
 import util.image.Pic;
@@ -37,6 +39,7 @@ public class TextWriter {
 	float bonusHeight=3;
 	public float maxHeight;
 	public float maxWidth;
+	float wigglyTextureHeight;
 	BitmapFont font;
 	Pair obstacle= new Pair();
 	HashMap<String, Texture> replacers = new HashMap<String, Texture>();
@@ -52,47 +55,67 @@ public class TextWriter {
 		//basic stuff for EH//
 		int scale=1;
 		if(font==Font.medium)scale=1;
-		col=font.getColor();
+		col=font.getColor().cpy();
 
 		this.font=font;
 		spaceWidth=font.getBounds(" ").width;
-		height=font.getBounds("").height;
-		bonusHeight=height/7f*2;
+		height=font.getBounds("l").height;
+		bonusHeight=height/7f*4;
 		height+=bonusHeight;
 		this.text=text;
 		staticList.add(this);
-
+		wigglyTextureHeight=height*.5f;
+		setCardGraphicReplacements();
 
 	}
 
 	public void setupTexture(){
 		if(texture!=null)smallDispose();
 		font.setColor(col);
-		buffer = new FrameBuffer(Format.RGBA8888, baseWrapWidth,300, false);
+		buffer = new FrameBuffer(Format.RGBA8888, baseWrapWidth ,300, false);
 		SpriteBatch tempBatch = new SpriteBatch();
 		buffer.begin();
 		OrthographicCamera tempCam = new OrthographicCamera(baseWrapWidth, 300);
-		
+
 		tempCam.translate(baseWrapWidth/2, 300/2);
 		tempCam.update();
 		tempBatch.setProjectionMatrix(tempCam.combined);
 		tempBatch.begin();
-		
+
 		boolean specialMode=false;
 		int prevIndex=0;
 		int currentIndex=0;
-		int x=0;
-		int y=0;
+		float x=0;
+		float y=0;
+		int lineStart=0;
+		float wrapWidth;
+		float xOffset;
+		
+		xOffset=0;
+		wrapWidth=baseWrapWidth;
+		if(y<obstacle.y){
+			wrapWidth-=obstacle.x;
+			xOffset=obstacle.x;
+		}
+		
 		for(char c:text.toCharArray()){
 			currentIndex++;
 			if(specialMode){
 				if(c!='|')continue;
 				String specialString=text.substring(prevIndex, currentIndex-1);	
 				if(specialString.equals("n")){
+					drawLine(tempBatch, text.substring(lineStart, prevIndex-1), y, x, xOffset);
+					xOffset=0;
+					wrapWidth=baseWrapWidth;
+					lineStart=currentIndex;
 					x=0;
 					y+=height;
 					specialMode=false;
 					prevIndex=currentIndex;
+					if(y<obstacle.y){
+						wrapWidth-=obstacle.x;
+						xOffset=obstacle.x;
+					}
 					continue;
 				}
 				if(specialString.equals(" ")){
@@ -102,11 +125,19 @@ public class TextWriter {
 					continue;
 				}
 				Texture t= replacers.get(specialString);
-				if(x+t.getWidth()>baseWrapWidth){
+				if(x+t.getWidth()>wrapWidth){
+					drawLine(tempBatch, text.substring(lineStart, prevIndex-1), y, x, xOffset);
+					xOffset=0;
+					wrapWidth=baseWrapWidth;
+					lineStart=prevIndex-1;
 					x=0;
 					y+=height;
+					if(y<obstacle.y){
+						wrapWidth-=obstacle.x;
+						xOffset=obstacle.x;
+					}
 				}
-				Draw.draw(tempBatch, t, x, y+(int)((height-t.getHeight()-1)/2f)+yOffset);
+
 				x+=t.getWidth();
 				specialMode=false;
 				prevIndex=currentIndex;
@@ -114,25 +145,43 @@ public class TextWriter {
 			}
 			else{
 				if(c==' '){
+
 					String word = text.substring(prevIndex, currentIndex-1);
+
 					float wordWidth=font.getBounds(word).width;
-					if(x+wordWidth>baseWrapWidth){
+					//System.out.println("WORD IS: "+word+" END OF WORD "+":"+x+":"+wordWidth+"vs"+wrapWidth);
+					if(x+wordWidth>wrapWidth){
+						drawLine(tempBatch, text.substring(lineStart, prevIndex-1), y, x-spaceWidth, xOffset);
+						xOffset=0;
+						wrapWidth=baseWrapWidth;
+						lineStart=prevIndex;
 						x=0;
 						y+=height;
+						if(y<obstacle.y){
+							wrapWidth-=obstacle.x;
+							xOffset=obstacle.x;
+						}
 					}
-					font.draw(tempBatch, word, x, y+yOffset);
-					x+=wordWidth;
-					x+=spaceWidth;
+						x+=wordWidth;
+						x+=spaceWidth;
 					prevIndex=currentIndex;
 				}
 				if(c=='|'){
 					String word = text.substring(prevIndex, currentIndex-1);
 					float wordWidth=font.getBounds(word).width;
-					if(x+wordWidth>baseWrapWidth){
+					if(x+wordWidth>wrapWidth){
+						drawLine(tempBatch, text.substring(lineStart, prevIndex-1), y, x, xOffset);
+						xOffset=0;
+						wrapWidth=baseWrapWidth;
+						lineStart=prevIndex;
 						x=0;
 						y+=height;
+						if(y<obstacle.y){
+							wrapWidth-=obstacle.x;
+							xOffset=obstacle.x;
+						}
 					}
-					font.draw(tempBatch, word, x, y+yOffset);
+
 					x+=wordWidth;
 					specialMode=true;
 					prevIndex=currentIndex;
@@ -141,25 +190,99 @@ public class TextWriter {
 		}
 		String word = text.substring(prevIndex, currentIndex);
 		float wordWidth=font.getBounds(word).width;
-		if(x+wordWidth>baseWrapWidth){
-			x=0;
+		if(x+wordWidth>wrapWidth){
+			drawLine(tempBatch, text.substring(lineStart, prevIndex), y, x, xOffset);
+			xOffset=0;
+			wrapWidth=baseWrapWidth;
+			lineStart=prevIndex;
+			x=wordWidth;
 			y+=height;
+			if(y<obstacle.y){
+				wrapWidth-=obstacle.x;
+				xOffset=obstacle.x;
+			}
 		}
-		font.draw(tempBatch, word, x, y+yOffset);
-		maxHeight=y+height;
+		
+		drawLine(tempBatch, text.substring(lineStart, currentIndex), y, x, xOffset);
+		maxHeight=y+height-bonusHeight/2;
+		tempBatch.setColor(1,1,1,1);
+		
+		for(PairPic pp:pairPics){
+			Draw.draw(tempBatch, pp.pic.get(), pp.position.x, pp.position.y+yOffset);
+		}
+		//tempBatch.setColor(1,1,1,.8f);	Draw.drawScaled(tempBatch, Gallery.whiteSquare.get(), 0, yOffset, baseWrapWidth, maxHeight);
 		tempBatch.end();
 		buffer.end();
 		texture=buffer.getColorBufferTexture();
-		
+
 		tempBatch.dispose();
 		
+
 	}
-	
+
+	private void drawLine(SpriteBatch batch, String s, float y, float lineLength, float xOffset){
+		
+		
+		System.out.println(maxWidth);
+		int prevIndex=0;
+		int currentIndex=0;
+		float x=0;
+		if(align==Alignment.Center){
+			x=(baseWrapWidth/2f-lineLength/2f);
+		}
+		boolean specialMode=false;
+		for(char c:s.toCharArray()){
+			currentIndex++;
+			if(specialMode){
+
+				if(c!='|')continue;
+				String specialString=s.substring(prevIndex, currentIndex-1);	
+				if(specialString.equals(" ")){
+					x+=spaceWidth/2f;
+					prevIndex=currentIndex;
+					specialMode=false;
+					continue;
+				}
+				Texture t= replacers.get(specialString);
+				Draw.draw(batch, t, (int)x+xOffset, (int)(y+((float)height-(wigglyTextureHeight/2f))/2f-t.getHeight()/2f+yOffset));
+				x+=t.getWidth();
+				prevIndex=currentIndex;
+				specialMode=false;
+
+			}
+			else{
+
+
+				if(c=='|'){
+					String word=s.substring(prevIndex, currentIndex-1);
+					font.draw(batch, word, (int)x+xOffset, y+yOffset);
+					x+=font.getBounds(word).width;
+					specialMode=true;
+					prevIndex=currentIndex;
+				}
+				if(c==' '){
+					String word=s.substring(prevIndex, currentIndex-1);
+					font.draw(batch, word, (int)x+xOffset, y+yOffset);
+
+					x+=font.getBounds(word).width;
+					x+=spaceWidth;
+					prevIndex=currentIndex;
+				}
+			}
+
+		}
+		font.draw(batch, s.substring(prevIndex, currentIndex), (int)x+xOffset, y+yOffset);
+		x+=font.getBounds(s.substring(prevIndex, currentIndex)).width;
+		if(x>maxWidth){
+			maxWidth=x;
+		}
+	}
+
 	private void smallDispose() {
 		if(texture!=null){
-		texture.dispose();
-		buffer.dispose();
-		texture=null;
+			texture.dispose();
+			buffer.dispose();
+			texture=null;
 		}
 	}
 
@@ -188,7 +311,7 @@ public class TextWriter {
 		smallDispose();
 	}
 
-	public void drawText(SpriteBatch batch, float startX, float startY){
+	public void render(SpriteBatch batch, float startX, float startY){
 		if(texture==null){
 			batch.end();
 			setupTexture();
@@ -205,32 +328,7 @@ public class TextWriter {
 		return maxHeight;
 	}
 
-	public class Line{
-		float x, y, spaceWidth;
-		ArrayList<String> words;
-		Line(float x, float y, float spaceWidth, ArrayList<String> words){
-			this.x=x;
-			this.y=y;
-			this.spaceWidth=spaceWidth;
-			this.words=words;
-		}
-		public void render(SpriteBatch batch, float xDraw, float yDraw){
-			float currentX=x;
-			for(String s:words){
-				Texture t= replacers.get(s);
-				if(t!=null){
-					Draw.draw(batch, t, (currentX+xDraw), (y+yDraw+(int)((height)/2f-((t.getHeight())/2f))));
-					currentX+=t.getWidth();
-				}
-				else {
-					font.draw(batch, s, (currentX+xDraw), (y+yDraw));
-					currentX+=font.getBounds(s).width;
-				}
-				currentX+= spaceWidth;
 
-			}
-		}
-	}
 
 	public void addPairPic(PairPic pairPic) {
 		pairPics.add(pairPic);
@@ -254,7 +352,7 @@ public class TextWriter {
 		replace("shield", Gallery.shieldIcon[1].getScaled(2).get());
 		replace("shot", Gallery.iconShots.getScaled(2).get());
 	}
-	
+
 	public static void disposeAll() {
 		for(TextWriter tw:staticList){
 			tw.smallDispose();
@@ -262,6 +360,6 @@ public class TextWriter {
 		staticList.clear();
 	}
 
-	
+
 }
 

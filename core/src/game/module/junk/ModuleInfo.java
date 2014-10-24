@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import util.Colours;
 import util.Draw;
 import util.TextWriter;
+import util.TextWriter.Alignment;
 import util.assets.Font;
 import util.maths.Pair;
 import util.update.Mouser;
@@ -55,6 +56,7 @@ public class ModuleInfo extends TextBox{
 			statsWriter=new TextWriter(Font.medium, ((Utility)m).passive);
 			statsWriter.setWrapWidth((int) (CardGraphic.width-offset*2));
 			statsWriter.setPassiveReplacements();
+			statsWriter.setAlignment(Alignment.Center);
 		}
 		if(mod.ship==null)return;
 		setPosition(new Pair(mod.ship.player?130+width/2:Main.width-130-width/2, 0));
@@ -186,7 +188,7 @@ public class ModuleInfo extends TextBox{
 		}
 		if(mod instanceof Utility){
 			float fHeight=statsWriter.maxHeight;
-			statsWriter.drawText(batch, (int)(position.x+offset+cardOffset), (int)(position.y+CardGraphic.height*3/4-fHeight/2));
+			statsWriter.render(batch, (int)(position.x+offset+cardOffset), (int)(position.y+CardGraphic.height*3/4-fHeight/2));
 		}
 	
 		String words=mod.type+(mod.tier==-1?"":" Tier "+mod.tier);

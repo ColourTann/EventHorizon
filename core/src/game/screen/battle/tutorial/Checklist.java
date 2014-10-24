@@ -4,6 +4,7 @@ package game.screen.battle.tutorial;
 import util.Colours;
 import util.Draw;
 import util.assets.Font;
+import util.maths.Pair;
 import util.update.Mouser;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,8 +12,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.TextBox;
 
-public class Checklist extends Mouser{
+public class Checklist extends TextBox{
 	Task[] tasks;
 	float height;
 	static float width=350;
@@ -32,20 +34,7 @@ public class Checklist extends Mouser{
 		height-=fontHeight;
 		height+=5;
 		y-=height/2;
-	}
-
-
-
-	@Override
-	public void mouseDown() {
-	}
-
-	@Override
-	public void mouseUp() {
-	}
-
-	@Override
-	public void mouseClicked(boolean left) {
+		position=new Pair(x,y);
 	}
 
 	@Override
@@ -84,19 +73,24 @@ public class Checklist extends Mouser{
 	public void render(SpriteBatch batch) {
 		if(!isCurrent())return;
 		batch.setColor(Colours.withAlpha(Colours.white,alpha));
-		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, width/100f, 3);
-		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y, width/100f, height);
-		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, width/100f, -3);
+		renderBox(batch, width, height+offset*2);
+//		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, width/100f, 3);
+//		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y, width/100f, height);
+//		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, width/100f, -3);
 		float heightAdd=0;
 		for(Task t:tasks){
-			if(t.isDone())Font.medium.setColor(Colours.withAlpha(Colours.player2[1],alpha));
-			else Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
-			Font.medium.drawWrapped(batch, t.s, x+offset, y+heightAdd+4, width-offset*2, HAlignment.LEFT);
-			heightAdd+=Font.medium.getWrappedBounds(t.s+"\n\n", width-offset*2).height;
+			if(t.s.equals(""))continue;
+			if(t.isDone())batch.setColor(Colours.withAlpha(Colours.player2[1],alpha));
+			else batch.setColor(Colours.withAlpha(Colours.light,alpha));
+			t.writer.render(batch, (int)(x+offset), (int)(y+heightAdd+4+offset/2));			
+			heightAdd+=t.writer.maxHeight;
+			heightAdd+=offset*2;
 		}
-		if(drawDam){
-			Draw.draw(batch, Gallery.orangeHP[1].get(), 591,148);
-		}
+		height=heightAdd-offset*2;
+		
+//		if(drawDam){
+//			Draw.draw(batch, Gallery.orangeHP[1].get(), 591,148);
+//		}
 		//599 560
 
 	}

@@ -9,7 +9,7 @@ import game.module.component.Component;
 public class ArcSocket extends Utility{
 
 	public ArcSocket(int tier) {
-		super(tier, ModuleType.SHIELD, "Arc socket", "If you're on >2 major damage:|n|-1 shield cost and +1 |shield|", Gallery.blaster, 1, 1);
+		super(tier, ModuleType.SHIELD, "Arc socket", "If on >2 major damage:|n|-1 shield cost and +1 |shield|", Gallery.blaster, 1, 1);
 		
 		for(int i=0;i<2;i++) cardPic[i]= Gallery.arcSocket[i];
 		

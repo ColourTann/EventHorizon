@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import util.Colours;
 import util.Draw;
+import util.TextWriter;
 import util.update.Timer.Interp;
 import util.assets.Font;
 import util.image.Pic;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.TextBox;
 import game.card.Card;
 import game.card.CardCode.AI;
 import game.card.CardCode.Special;
@@ -26,7 +28,7 @@ import game.screen.battle.Battle.Phase;
 import game.screen.battle.tutorial.Task.TaskType;
 import game.ship.Ship;
 
-public class Tutorial extends Updater{
+public class Tutorial extends TextBox{
 	public static Checklist currentList;
 	public static boolean overrideStopFlip=false;
 	public static boolean overrideStopEnd=false;
@@ -40,11 +42,15 @@ public class Tutorial extends Updater{
 	public static Card firstWeaponCard;
 	public static Card targetedWeaponCard;
 
-	static float width=350;
+	TextWriter writer;
+	
+	static float baseWidth=350;
 	static float offset=8;
-	float x=Main.width/2-width/2;
+	static float yOffset=10;
+	float x=Main.width/2-baseWidth/2;
 	float y=173;
 	float height;
+	float width;
 	String str;
 	Pair target;
 	Pair origin;
@@ -62,66 +68,89 @@ public class Tutorial extends Updater{
 	public static ArrayList<PicLoc> glows= new ArrayList<PicLoc>();
 
 	public Tutorial(String message, Trigger t, Effect e) {
-		this.str=message;
-		height=Font.medium.getWrappedBounds(str, width-offset*2).height+14;
+		Font.medium.setColor(Colours.light);
+		this.str=message;	
 		trig=t;
 		eff=e;
 		y-=height/2;
+		setupTextWriter();
 	}
+
+	
 
 	public Tutorial(String message, float x){
 		this.str=message;
-		height=Font.medium.getWrappedBounds(str, width-offset*2).height+14;
+
 		y-=height/2;
-		this.x=x-width/2;
+		this.x=x-baseWidth/2;
+		setupTextWriter();
 	}
 
 	public Tutorial(String message, Pair point) {
 		this.str=message;
-		height=Font.medium.getWrappedBounds(str, width-offset*2).height+14;
+
+	
+		
 		this.target=point;
 		if(point.x<x){
 			origin=new Pair(x+10,y+height/2+5);
 		}
-		else if(point.x>x+width){
-			origin=new Pair(x+width,y+height/2);
+		else if(point.x>x+baseWidth){
+			origin=new Pair(x+baseWidth,y+height/2);
 		}
 		else if(point.y<y){
-			origin=new Pair(x+width/2,y);
+			origin=new Pair(x+baseWidth/2,y);
 		}
 		else{
-			origin=new Pair(x+width/2,y+height/2);
+			origin=new Pair(x+baseWidth/2,y+height/2);
 		}
 		vector=Pair.getVector(this.origin, target);
 		rotation=(float) Math.atan2(vector.y, vector.x);
 		distance=vector.getDistance();
 		vector=vector.normalise();
 		y-=height/2;
+		setupTextWriter();
 	}
-
+	private void setupTextWriter() {
+		Font.medium.setColor(Colours.light);
+		writer=new TextWriter(Font.medium, str);
+		writer.replace("greenhp1", Gallery.greenHP[1].get());
+		writer.replace("greenhp2", Gallery.greenHP[2].get());
+		writer.replace("targ", Gallery.iconTargeted.get());
+		writer.replace("incoming", Gallery.orangeHP[0].get());
+		writer.replace("shield", Gallery.shieldIcon[1].getScaled(2).get());
+		writer.setWrapWidth((int)baseWidth);
+		writer.setupTexture();
+		height=writer.maxHeight+yOffset*2;
+		width=writer.maxWidth+offset*2;
+		position=new Pair(Main.width/2-width/2, y-height/2);
+	}
 
 	public void render(SpriteBatch batch) {
 
 		if(str.equals(""))return;
 
 		batch.setColor(1,1,1,alpha);
+		
 		if(target!=null){
 			Draw.drawRotatedScaled(batch, Gallery.tutPoint.get(), origin.x, origin.y, distance, 1, rotation);
 		}
-		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, width/100f, 3);
-		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y, width/100f, height);
-		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, width/100f, -3);
-		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
-		Font.medium.drawWrapped(batch, str, x+offset, y+5, width-offset*2, HAlignment.LEFT);
+		renderBox(batch, width, height);
+//		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, width/100f, 3);
+//		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y, width/100f, height);
+//		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, width/100f, -3);
+		writer.render(batch,  (int)(position.x+offset), (int)(position.y+yOffset));
+//		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
+//		Font.medium.drawWrapped(batch, str, x+offset, y+5, baseWidth-offset*2, HAlignment.LEFT);
 
 
-		if(special==1){
-			Draw.draw(batch, Gallery.greenHP[1].get(), 491, 161);
-			Draw.draw(batch, Gallery.greenHP[2].get(), 603, 161);
-		}
-		if(special==2){
-			Draw.draw(batch, Gallery.iconTargeted.get(), 591,154);
-		}
+//		if(special==1){
+//			Draw.draw(batch, Gallery.greenHP[1].get(), 491, 161);
+//			Draw.draw(batch, Gallery.greenHP[2].get(), 603, 161);
+//		}
+//		if(special==2){
+//			Draw.draw(batch, Gallery.iconTargeted.get(), 591,154);
+//		}
 		batch.setColor(1,1,1,1);
 	}
 
@@ -140,29 +169,28 @@ public class Tutorial extends Updater{
 
 		enemy=Battle.getEnemy();
 		player=Battle.getPlayer();
-		add("This is your ship.\n(click to continue)");
+		add("This is your ship.|n|(click to continue)");
 		add("It has five modules.", Effect.ShowPlayerNames);
 		add("They make up a deck of cards that you use to fight!");
 		add("The enemy ship is playing a weapon card to attack you!", Trigger.PlayerShieldPhase, Effect.EnemyPlayCards);
-		add("These orange blips show that you have incoming damage on your generator.", new Pair(43,440));
-		add("Shield cards give you shield points to spend when you play them.", Effect.DrawFirstHand);
+		add("Each |incoming| shows that you are about to take damage on that module.", new Pair(43,390));
+		add("Shield cards give you shield points to spend equal to their| ||shield| when you play them.", Effect.DrawFirstHand);
 		add("This card gives two shield points.", new Pair(Main.width/2, 451));
 		add("", Trigger.CheckList, Effect.ShieldGenList);
 		add("", Trigger.PlayerWeaponPhase);
 		add("Now it's your turn to fight back.", Effect.hideNameWisps);
 		add("Cards have an energy cost.", new Pair(475,484));
-		add("And some cards have a cooldown, which means you must wait before playing another card from that module.",new Pair(579,484));
 		add("Weapon and shield cards have bars which show how much damage or shielding they provide.", new Pair(528,521));
 		add("", Trigger.CheckList, Effect.PlayWeaponList);
 		add("", Trigger.PlayerShieldPhase);
-		add("If you take enough damage to cover a \n[   ] or a [   ], you take a major damage and something bad happens!", 1);
+		add("If you take enough damage to cover a |greenhp1| or a |greenhp2|, you take a major damage and something bad happens!", 1);
 		add("If a ship takes 5 total major damage, it is defeated.");
 		add("You are about to take major damage, shield it all.");
 		add("", Trigger.CheckList, Effect.ShieldMajorList);
 		add("", Trigger.PlayerWeaponPhase);
 		add("All cards have a special alternate side.", Effect.DrawTargeted);
 		add("You can choose which side to play by right-clicking the card.");
-		add("The special side of this weapon has the target symbol [  ], which means you can pick a target rather than it hitting a random enemy module.", Effect.HighlightTargetedPulse, 2);
+		add("The special side of this weapon has the target symbol (|targ|), which means you can pick a target rather than it hitting a random enemy module.", Effect.HighlightTargetedPulse, 2);
 		add("", Trigger.CheckList, Effect.TargetGeneratorList);
 		add("", Trigger.PlayerShieldPhase);
 		add("You're about to take three major damage!", Effect.drawTwoShields);
@@ -175,7 +203,7 @@ public class Tutorial extends Updater{
 		add("A turn is made up of a shield phase followed by a weapon phase.");
 		add("At the beginning of each turn, you draw to your maximum hand size.");
 		add("And gain your income in energy",new Pair(320,404));
-		add("You're good to go! If there's anything else you don't understand, press tab.");
+		add("You're good to go!");
 		add("", Effect.End);
 		for(Tutorial p:tutorials){
 			p.deactivate();
@@ -230,7 +258,7 @@ public class Tutorial extends Updater{
 
 		System.out.println("next");
 		Tutorial t= tutorials.get(index);
-
+		
 
 		if(!t.triggered&&t.trig!=null){
 			switch(t.trig){
@@ -262,7 +290,7 @@ public class Tutorial extends Updater{
 		//t.fadeOut(3, Interp.LINEAR);
 		index++;
 		t=tutorials.get(index);
-
+		
 		//t.alpha=1;
 		if(t.str.length()>2)t.activate();
 
@@ -339,8 +367,8 @@ public class Tutorial extends Updater{
 				break;
 			case ShieldGenList:
 				currentList=new Checklist(t, new Task[]{
-						new Task("Play the shield card\n(click to play)",TaskType.PlayShield, firstShieldCard, 0), 
-						new Task("Use both shield points to protect your generator by clicking on it twice \n(on the left)",TaskType.ShieldGen, Gallery.statsGenerator, new Pair(0,420)),
+						new Task("Play the shield card|n|(click to play)",TaskType.PlayShield, firstShieldCard, 0), 
+						new Task("Click twice on your generator (on the left) to prevent the incoming damage (|incoming|) with your shield points",TaskType.ShieldGen, Gallery.baseModuleStats, new Pair(0,ModuleStats.height*3)),
 						new Task("Click the central blue shield button to confirm", TaskType.EndShieldPhase, true)
 				});
 				break;
@@ -366,7 +394,7 @@ public class Tutorial extends Updater{
 				break;
 			case ShieldMajorList:
 				currentList=new Checklist(t, new Task[]{
-						new Task("Prevent all major damage [   ]",TaskType.PreventAllMajor), 
+						new Task("Prevent all incoming major damage (|pic|)",TaskType.PreventAllMajor), 
 						new Task("Click the blue shield to confirm",TaskType.EndShieldPhase, true)
 				});
 				currentList.drawDam=true;
@@ -391,7 +419,7 @@ public class Tutorial extends Updater{
 				currentList=new Checklist(t, new Task[]{
 						new Task("Right-click to flip the pulse card",TaskType.FlipCard, targetedWeaponCard, 1),
 						new Task("Play the alternate side of the pulse card",TaskType.PlayerAlternateSide, targetedWeaponCard, 1), 
-						new Task("Target the enemy Generator",TaskType.TargetGenerator, Gallery.statsGenerator, new Pair(Main.width-ModuleStats.width, Main.height/5*3)),
+						new Task("Target the enemy Generator",TaskType.TargetGenerator, Gallery.baseModuleStats, new Pair(Main.width-ModuleStats.width, ModuleStats.height*3)),
 						new Task(TaskType.EndWeaponPhase)
 				});
 				break;
@@ -405,7 +433,7 @@ public class Tutorial extends Updater{
 
 			case LotsShieldList:
 				currentList=new Checklist(t, new Task[]{
-						new Task("Prevent two major damage",TaskType.WeirdPrevent), 
+						new Task("Prevent two major damage (|pic|)",TaskType.WeirdPrevent), 
 						new Task(TaskType.EndShieldPhase)
 				});
 				break;
@@ -427,7 +455,7 @@ public class Tutorial extends Updater{
 				glows.clear();
 				
 				for(int i=0;i<5;i++){
-					t.myGlows.add(new PicLoc(Gallery.statsComputer, new Pair(0,Main.height/5*i), null));
+					t.myGlows.add(new PicLoc(Gallery.baseModuleStats, new Pair(0,ModuleStats.height*i), null));
 				}
 				break;
 
@@ -435,6 +463,10 @@ public class Tutorial extends Updater{
 			}
 		}
 		t.activated=true;
+		if(currentList!=null&&currentList.isCurrent()){
+			UndoButton.setPosition(new Pair(Main.width/2-currentList.width/2f-30,175));
+		}
+		else UndoButton.setPosition(new Pair(Main.width/2-t.width/2f-30,175));
 	}
 
 	public static boolean stopFlip(){
@@ -517,6 +549,7 @@ public class Tutorial extends Updater{
 	
 	@SuppressWarnings("incomplete-switch")
 	public static void goBack() {
+		
 		System.out.println("going back");
 		if(index==0)return;
 		Tutorial t=tutorials.get(index-1);
@@ -545,6 +578,9 @@ public class Tutorial extends Updater{
 		index--;
 		getCurrentTutorial();
 		glows.addAll(Tutorial.glows);
+		
+		//if(currentList!=null) UndoButton.setPosition(new Pair(Main.width/2-currentList.width/2f-30,200));
+		UndoButton.setPosition(new Pair(Main.width/2-t.width/2f-30,175));
 	}
 
 	public static Tutorial getCurrentTutorial() {

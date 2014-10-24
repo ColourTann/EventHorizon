@@ -829,7 +829,10 @@ public class Card {
 		return cg;
 	}
 
-	public void flip(){side=1-side;}
+	public void flip(){
+		side=1-side;
+		
+	}
 	public Ship getShip(){
 		return mod.ship;
 	}

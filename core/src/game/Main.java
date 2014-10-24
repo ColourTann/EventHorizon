@@ -101,7 +101,7 @@ public class Main extends ApplicationAdapter  {
 		mainCam.setToOrtho(true);
 		bufferBatch = new SpriteBatch();
 		OrthographicCamera cam = new OrthographicCamera(Main.width, Main.height);
-		
+		//map=new Map();currentScreen=map;
 		
 		//bufferBatch.setProjectionMatrix(Main.mainCam.combined);
 
@@ -115,7 +115,7 @@ public class Main extends ApplicationAdapter  {
 
 		//viewer=new CardViewer();currentScreen=viewer;
 
-		//map=new Map();currentScreen=map;
+
 
 //		currentScreen=new Test();currentScreen.init();
 

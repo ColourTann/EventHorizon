@@ -60,7 +60,7 @@ public class TextBox extends Updater{
 			x-=width/2f;
 			y-=height/2f;
 		}
-		tw.drawText(batch, position.x, position.y);
+		tw.render(batch, position.x, position.y);
 	}
 	
 	

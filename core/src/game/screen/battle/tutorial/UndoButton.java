@@ -1,6 +1,7 @@
 package game.screen.battle.tutorial;
 
 import game.assets.Gallery;
+import game.screen.battle.Battle;
 import util.Draw;
 import util.maths.CircleCollider;
 import util.maths.Pair;
@@ -15,6 +16,10 @@ public class UndoButton extends Mouser{
 		position=new Pair(435,172);
 		mousectivate(new CircleCollider(position.x, position.y, 24));
 	}
+	public static void setPosition(Pair position){
+		get().position=position;
+		me.collider.position=position;
+	}
 	@Override
 	public void mouseDown() {
 		glow=true;
@@ -27,13 +32,16 @@ public class UndoButton extends Mouser{
 
 	@Override
 	public void mouseClicked(boolean left) {
-		Tutorial.goBack();
+		if(Tutorial.undoVisible()){
+			Tutorial.goBack();
+		}
 	}
 
 	@Override
 	public void update(float delta) {
 	}
 	public void render(SpriteBatch batch){
+		batch.setColor(1,1,1,1);
 		Draw.drawCenteredScaled(batch, Gallery.tutUndo.get(), position.x, position.y, 3, 3);
 		if(glow)Draw.drawCenteredScaled(batch, Gallery.tutUndo.getOutline(), position.x, position.y, 3, 3);
 	}

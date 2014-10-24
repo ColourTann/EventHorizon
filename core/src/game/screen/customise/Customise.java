@@ -305,8 +305,11 @@ public class Customise extends Screen{
 
 	public static void unMouse(Module module){
 		//me.oldInfoBox=me.infoBox;
+		System.out.println(module);
+		System.out.println(me.infoBox.mod);
 		if(me.infoBox==null)return;
-		if(me.infoBox.mod==module||module==null){
+		if(me.infoBox.mod==module){
+			System.out.println("2"+module);
 			me.infoBox.fadeOut(fadeOutSpeed, Interp.LINEAR);
 			retimeMeter(ship.getStats().energyUsage);
 		}

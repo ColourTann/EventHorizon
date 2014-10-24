@@ -2,8 +2,12 @@ package game.screen.battle.tutorial;
 
 
 
+import util.Colours;
+import util.TextWriter;
+import util.assets.Font;
 import util.image.Pic;
 import util.maths.Pair;
+import game.assets.Gallery;
 import game.card.Card;
 import game.card.CardCode.Special;
 import game.module.Module;
@@ -17,6 +21,7 @@ import game.ship.Ship;
 
 public class Task {
 	String s;
+	TextWriter writer;
 	TaskType t;
 	Ship player = Battle.getPlayer();
 	public Pic pic;
@@ -28,12 +33,14 @@ public class Task {
 	public Task(String s, TaskType t){
 		this.s="- "+s;
 		this.t=t;
+		setupWriter();
 	}
 	public Task(String s, TaskType t, Pic pic, Pair location){
 		this.s="- "+s;
 		this.t=t;
 		this.pic=pic;
 		this.location=location;
+		setupWriter();
 	}
 
 	public Task(String s, TaskType t, Card card, int side){
@@ -41,18 +48,31 @@ public class Task {
 		this.t=t;
 		this.card=card;
 		this.side=side;
+		setupWriter();
 	}
 
 	public Task(String s, TaskType t, boolean phaseButton){
 		this.s="- "+s;
 		this.t=t;
 		this.phaseButton=true;
+		setupWriter();
 	}
 	public Task(TaskType phaseTrigger) {
 		s="";
 		t=phaseTrigger;
 		this.phaseButton=true;
+		setupWriter();
 	}
+	
+	public void setupWriter(){
+		Font.medium.setColor(1,1,1,1);
+		writer=new TextWriter(Font.medium, s);
+		writer.replace("pic", Gallery.orangeHP[1].get());
+		writer.replace("incoming", Gallery.orangeHP[0].get());
+		writer.setWrapWidth((int)(Checklist.width-Checklist.offset*2));
+		writer.setupTexture();
+	}
+	
 	public boolean isDone(){
 		switch(t){
 		case PlayShield:
