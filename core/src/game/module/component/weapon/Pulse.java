@@ -3,6 +3,8 @@ package game.module.component.weapon;
 import game.assets.Gallery;
 import game.card.CardCode.AI;
 import game.card.CardCode.Special;
+import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 
 public class Pulse extends Weapon{
 
@@ -45,7 +47,8 @@ public class Pulse extends Weapon{
 		effect[4]=0;
 		shots[4]=0;
 		rules[4]="Self boost 1: +1 |iconshot| to all pulse attacks";
-		code[4].add(Special.BonusShots,1);
+		code[4].add(Special.BuffSelf);
+		code[4].setBuff(new Buff(BuffType.BonusShot, true, 1, 1));
 		code[4].add(AI.OtherCardsThisSystem,2);
 		code[4].setPriority(1);
 		

@@ -111,7 +111,7 @@ public class ModuleStats extends Mouser{
 		if(component==null&&fUtil==null)return;
 		if(component!=null)component.moused();
 
-
+		ModuleInfo.top=info;
 
 		if(!Battle.isTutorial()){
 			info.stopFading();
@@ -297,7 +297,7 @@ public class ModuleStats extends Mouser{
 				index=2;
 			}
 			Draw.draw(batch, p[twin>0?2+twin:index].get(),collider.position.x+hpLoc.x+hpGap.x*(slotLoc%row),collider.position.y+hpLoc.y+hpGap.y*(slotLoc/row));
-			if(moused||absorb){
+			if(moused){
 				Draw.draw(batch, Gallery.mousedHP.get(), collider.position.x+hpLoc.x+hpGap.x*(slotLoc%row),collider.position.y+hpLoc.y+hpGap.y*(slotLoc/row));
 			}
 

@@ -25,13 +25,13 @@ public class CardIcon extends Mouser{
 	public CardGraphic mousedGraphic;
 
 	public CardIcon(Card c) {
-	
+
 		this.cg=c.getGraphic();
-		
+
 		position=new Pair(cg.position.x+CardGraphic.positionPic.x,
 				cg.position.y+CardGraphic.positionPic.y+CardGraphic.maxSelectedHeight+CardGraphic.height/2);
 		border=c.getShip().player?Gallery.cardIconPlayer:Gallery.cardIconEnemy;
-		
+
 		mousedGraphic=new CardGraphic(cg.card, position.x+width/2-CardGraphic.width/2,position.y-270);
 		mousedGraphic.alpha=0;
 		mousectivate(new BoxCollider(5, 5,	width,height));
@@ -58,7 +58,7 @@ public class CardIcon extends Mouser{
 		if(position.y!=22)return;
 		overrideAlpha=true;
 		mousedGraphic.setPosition(position.add(width/2-CardGraphic.width/2,start.y+16));
-		
+
 		mousedGraphic.stopFading();
 		mousedGraphic.alpha=1;
 		cg.card.getShip().cardOrIconMoused(cg.card);
@@ -84,7 +84,7 @@ public class CardIcon extends Mouser{
 	public void render(SpriteBatch batch) {
 		if(!overrideAlpha)batch.setColor(1,1,1,.2f+.8f*(icons.indexOf(this)+14-icons.size())/14); 	//This alpha thing took me 20 minutes...//
 		Draw.drawScaled(batch,cg.card.getImage().get(), position.x, position.y, 2, 2);
-	
+
 		Draw.draw(batch, border.get(),position.x,position.y);
 		batch.setColor(1,1,1,1);
 	}

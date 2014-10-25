@@ -15,7 +15,7 @@ public abstract class Updater {
 	
 
 	public Layer layer=Layer.Default;
-	Timer fader;
+	public Timer fader;
 	public float alpha=1;
 	Timer slider;
 	public Pair position=new Pair(0,0);
@@ -52,7 +52,9 @@ public abstract class Updater {
 	}
 
 	public void stopFading(){
+		if(fader!=null)fader.stop();
 		fader=null;
+		
 		//alpha=1;
 	}
 

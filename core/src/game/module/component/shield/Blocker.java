@@ -47,7 +47,7 @@ public class Blocker extends Shield{
 		effect[3]=calc(7);
 		rules[3]="Self Drain 4: disables system";
 		code[3].add(Special.AddShieldPoints);
-		code[3].add(Special.DrainSelf);
+		code[3].add(Special.DebuffSelf);
 		code[3].setBuff(new Buff(BuffType.Disabled, false, 1, 4));
 		code[3].add(AI.RegularShield);
 		code[3].add(AI.MajorDamageTaken, 2);

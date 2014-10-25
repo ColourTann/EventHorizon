@@ -19,7 +19,7 @@ public class Buff {
 		this.value=value;
 		this.duration=duration;
 	}
-	
+
 	public Buff(BuffType type, boolean positive, int value, int duration, Card card){
 		this.type=type;
 		this.positive=positive;
@@ -27,7 +27,7 @@ public class Buff {
 		this.duration=duration;
 		this.card=card;
 	}
-	
+
 	public Pic getPic(){
 		switch(type){
 		case BonusEffeect:
@@ -49,7 +49,7 @@ public class Buff {
 		}
 		return null;
 	}
-	
+
 	public String getWords(){
 		switch(type){
 		case BonusEffeect:
@@ -71,11 +71,12 @@ public class Buff {
 		}
 		return "Remind Tann to put something here";
 	}
-	
+
 	private String dur(){
+		if(duration==-1)return " permanently";
 		return " for "+duration +" turn"+(duration>1?"s":"");
 	}
-	
+
 	public Buff copy() {
 		return new Buff(type, positive, value, duration);
 	}

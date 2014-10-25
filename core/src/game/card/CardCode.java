@@ -1,22 +1,23 @@
 package game.card;
 
 import game.module.junk.buff.Buff;
+import game.module.junk.buff.Buff.BuffType;
 
 import java.util.ArrayList;
 
 public class CardCode {
 	public enum Special{
 		//General Specials//
-		DrawCard, DiscardWhenPlayed, Augment, ReduceCost, GainEnergy, EnergyIfEmpty, MustBeMajorDamaged,
+		DrawCard, DiscardWhenPlayed, Augment, GainEnergy, EnergyIfEmpty, MustBeMajorDamaged,
 		ModuleChooser, SelfScramble, DiscardWhenChosen, BonusVsGenerator, BonusVsComputer,
 		GetCardFromChosenModule, DiscardOthers, ChooseWeapon, ChooseEnemyModule, ScrambleChosenModule, BonusEffectToShield,  
-		StealEnergy,  DamageGenerator, BoostSelf, DrainSelf, DrainTarget,  BoostGenerator,
+		StealEnergy,  DamageGenerator, BuffSelf, DebuffSelf, DebuffTarget,  BoostGenerator,
 		
 		//Tutorial junk//
 		BonusVsModule0, BonusVsModule1,
 
 		//Weapon Specials//
-		Targeted, Unshieldable, BonusVsWeapon, BonusVsPristine, BonusVsMajorDamaged, BonusShots, BonusEffectPerOtherWeapon,
+		Targeted, Unshieldable, BonusVsWeapon, BonusVsPristine, BonusVsMajorDamaged, BonusEffectPerOtherWeapon,
 
 		//Shield Specials//
 		AddShieldPoints, ShieldAll, ShieldComputer, AbsorbDraw, ShieldOnlyDamaged, selfDamage, Absorb, AbsorbEnergy, MustBeUndamaged,
@@ -162,6 +163,11 @@ public class CardCode {
 	public Buff getBuff(){
 		if(containedBuff==null)return null;
 		return containedBuff.copy();
+	}
+	
+	public boolean containsBuffType(BuffType type){
+		if(containedBuff==null)return false;
+		return containedBuff.type==type;
 	}
 
 }

@@ -93,7 +93,7 @@ public abstract class Ship {
 	private Component specialComponent; //this is a bit shit...//
 
 	//Enemy ai stuff//
-	public Component focusTarget;
+//	public Component focusTarget;
 	public Timer turnTimer = new Timer();
 
 	//Map stuff//
@@ -227,7 +227,6 @@ public abstract class Ship {
 	}
 
 	private void endTurn(){
-		focusTarget=null;
 		for(Component c:components)c.endAdmin();
 		shieldPoints.clear();
 		for(Utility u:utilities){
@@ -275,7 +274,7 @@ public abstract class Ship {
 	private void addAttack(Attack a){
 
 		a.atkgrphc.order=attacks.size();
-		System.out.println(attacks.size());
+		
 
 		attacks.add(a);
 		ParticleSystem.systems.add(a.atkgrphc);
@@ -467,7 +466,7 @@ public abstract class Ship {
 		Card c;
 		for(int pri=2;pri>=-1;pri--){
 
-			c=decideBest(pri, weapon, shield, false);
+			c=decideBest(pri, weapon, shield);
 			if(c!=null){
 				return c;
 			}
@@ -477,15 +476,9 @@ public abstract class Ship {
 		return null;
 	}
 
-	private Card decideBest(int priority, boolean weapon, boolean shield, boolean targetedOnly){
+	private Card decideBest(int priority, boolean weapon, boolean shield){
 
-		//if priority == 0, check targeted then normal//
-		if(priority==0&&targetedOnly==false){
-
-			Card c=decideBest(0, weapon, shield, true);
-			if(c!=null)return c;
-
-		}
+		
 
 		for(Card c:hand){
 			if(c.selected)continue; //Probably just for debugging//
@@ -496,21 +489,13 @@ public abstract class Ship {
 			for(int side=1;side>=0;side--){
 				CardCode code= c.getCode(side);
 
-				//cancelling due to targeted//
-				if(targetedOnly&&!code.contains(Special.Targeted))break;
-
-
 				if(code.getPriority()==priority){
-					if(c.enemyDecide(side)) return c;
+					if(c.enemyDecide(side)){
+						System.out.println("playing "+c);
+						return c;
+					}
 
 				}
-
-				if(focusTarget!=null&&code.contains(Special.Targeted)){
-
-					if(c.enemyDecide(side)) return c;
-
-				}
-
 
 
 			}
@@ -856,7 +841,10 @@ public abstract class Ship {
 	}
 
 	public void setUtility(Utility u, int position){
-		if(u instanceof Armour) System.out.println("Watch out, setting armour as utility wuhohh!");
+		if(u instanceof Armour){
+			setArmour((Armour) u);
+			return;
+		}
 		utilities[position]=u;
 		u.ship=this;
 	}
@@ -1173,6 +1161,14 @@ public abstract class Ship {
 			c.getStats().buffList=null;
 			
 		}
+	}
+
+
+	public boolean hasVulnerability() {
+		for(Component c:components){
+			if(c.getBuffAmount(BuffType.TakesExtraDamage)>0)return true;
+		}
+		return false;
 	}
 
 	

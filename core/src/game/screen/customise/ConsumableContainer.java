@@ -17,6 +17,7 @@ import util.assets.Font;
 import util.maths.BoxCollider;
 import util.maths.Pair;
 import util.update.Mouser;
+import util.update.Timer;
 import util.update.Timer.Interp;
 
 public class ConsumableContainer extends Mouser{
@@ -47,18 +48,31 @@ public class ConsumableContainer extends Mouser{
 		if(Customise.consumableSelected()){
 			for(int i=0;i<Customise.selectedReward.cards.length;i++){
 				Card c=Customise.selectedReward.cards[i];
+				
 				Customise.ship.addConsumableCard(c);
 				cards.add(c);
 				CardGraphic cg=c.getGraphic();
 				//cg.override=true;
-				cg.alpha=0;
-				cg.fadeIn(1, Interp.LINEAR);
+				cg.stopFading();
+				cg.alpha=1;
+				cg.fader=new Timer(1,1,1,Interp.LINEAR);
+
+				
 				cg.setPosition(position.copy());
-				updateCardPositions();
-				Sounds.shieldUse.play();
+		
 			}
-			
+			updateCardPositions();
+			Sounds.shieldUse.play();
 			Customise.rewardChosen();
+			
+			for(Card c:cards){
+				CardGraphic cg=c.getGraphic();
+				cg.stopFading();
+				cg.alpha=1;
+				cg.fader=new Timer(1,1,1,Interp.LINEAR);
+				
+			}
+			System.out.println(cards.size());
 			
 		}
 	}
@@ -75,6 +89,7 @@ public class ConsumableContainer extends Mouser{
 				c.activate();
 				c.slide(new Pair(start+gap*(i+1)+i*CardGraphic.width, position.y), .5f, Interp.SQUARE);
 				c.finishFlipping();
+				
 			}
 		}
 		else{
@@ -82,6 +97,7 @@ public class ConsumableContainer extends Mouser{
 			gap=funnyWidth/(cards.size()-1);
 			for(int i=0;i<cards.size();i++){
 				CardGraphic c=cards.get(i).getGraphic();
+				c.activate();
 				c.slide(new Pair(start+gap*i, position.y), .5f, Interp.SQUARE);
 				c.finishFlipping();
 			}
@@ -105,9 +121,6 @@ public class ConsumableContainer extends Mouser{
 		for(Card c:cards){
 			c.getGraphic().render(batch);
 		}
-		
-		
-		
 	}
 
 }

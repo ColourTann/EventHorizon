@@ -24,9 +24,8 @@ public class Ray extends Weapon{
 		effect[1]=calc(0);
 		shots[1]=1;
 		rules[1]="+"+calc(1)+" |icondamage| against undamaged modules";
-		code[1].add(Special.BonusVsWeapon, calc(1));
+		code[1].add(Special.BonusVsPristine, calc(1));
 		code[1].add(AI.PlayerPristineSystems, 3);
-		
 		
 		name[2]="Current";
 		cost[2]=2;
@@ -41,14 +40,12 @@ public class Ray extends Weapon{
 		effect[3]=0;
 		shots[3]=0;
 		rules[3]="Self boost 1:|n|-1 cost";
-		code[3].add(Special.BoostSelf);
+		code[3].add(Special.BuffSelf);
 		code[3].setBuff(new Buff(BuffType.ReduceCost, true, 1, 1, null));
 		code[3].add(AI.OtherCardsThisSystem, 2);
 		code[3].add(AI.ReduceCost);
 		code[3].setPriority(2);
 
-	
-		
 		name[4]="Seek";
 		cost[4]=4;
 		effect[4]=calc(1,2);

@@ -198,6 +198,8 @@ public class PreBattle extends Screen{
 							dialTimer.getFloat()*Gallery.difficultyDial.getWidth()*3) ,
 							difficultyStart.y, 3, 3);
 
+			
+			if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
 			for(Component  c:player.components){
 				c.getStats().render(batch);
 			}

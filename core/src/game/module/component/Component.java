@@ -145,7 +145,7 @@ public abstract class Component extends Module{
 			}
 			
 			//Drain Target is assumed to be enemy//			
-			if(code.contains(Special.DrainTarget)&& ship.player){
+			if(code.contains(Special.DebuffTarget)&& ship.player){
 				System.out.println("baddrain");
 				Sounds.error.overlay();
 				return;
@@ -563,8 +563,8 @@ public abstract class Component extends Module{
 		for(int i=0;i<buffs.size();i++){
 			Buff b = buffs.get(i);
 			if(b.duration==-1) continue;
-
 			b.duration--;
+			b.tw=null;
 			if(b.duration==0){
 				buffs.remove(b);
 				i--;

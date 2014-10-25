@@ -59,6 +59,13 @@ public class Card {
 
 	public float rocketSize; //only used for consumable or utility attacks//
 	private boolean played;
+	
+	//locked stuff//
+	boolean locked;
+	int[] lockedCost;
+	int[] lockedEffect;
+	int[] lockedShots;
+	boolean[] lockedAugmented;
 
 	//Setting up card//
 	public Card(Module m){
@@ -100,6 +107,14 @@ public class Card {
 		type=mod.cardType;
 	}
 
+	public void lockEffects(){
+		lockedCost=new int[]{getCost(0), getCost(1)};
+		lockedEffect=new int[]{getEffect(0), getEffect(1)};
+		lockedShots=new int[]{getShots(0), getShots(1)};
+		lockedAugmented=new boolean[]{isAugmented(0), isAugmented(1)};
+		locked=true;
+	}
+	
 	//Checking whose card clicked on//
 	public void click(){
 		if(getShip().player){
@@ -225,7 +240,7 @@ public class Card {
 
 
 		if(ship.player){
-			if(code.contains(Special.ModuleChooser)||code.contains(Special.DrainTarget))moduleChoose();
+			if(code.contains(Special.ModuleChooser)||code.contains(Special.DebuffTarget))moduleChoose();
 			if(code.contains(Special.Targeted)){
 				targetSelect();		
 				return;
@@ -235,7 +250,7 @@ public class Card {
 
 
 		//selfbuffstuff//
-		if(code.contains(Special.BoostSelf)||code.contains(Special.DrainSelf)){
+		if(code.contains(Special.BuffSelf)||code.contains(Special.DebuffSelf)){
 			System.out.println("attempting selfboost");
 			Buff b = code.getBuff();
 			b.card=this;
@@ -387,12 +402,15 @@ public class Card {
 					target=c;
 					required=thisReq;
 				}
+				System.out.println(c+":"+c.getBuffAmount(BuffType.TakesExtraDamage));
+				if(c.getBuffAmount(BuffType.TakesExtraDamage)>0){
+					System.out.println("found a good target");
+					target=c;
+					break;
+				}
 			}
 
-			//Override due to focus target//
-			if(ship.focusTarget!=null){
-				target=ship.focusTarget; 
-			}
+		
 
 			//Override target due to bonus damage vs specific things//
 			for(Component c:enemy.getRandomisedModules()){
@@ -429,9 +447,7 @@ public class Card {
 				}
 			}
 
-			if(code.contains(AI.OtherTargeted)){
-				ship.focusTarget=target;	
-			}
+	
 
 
 			for(int i=0;i<getShots();i++){
@@ -444,7 +460,7 @@ public class Card {
 			//First get the whole list of available targets//
 			ArrayList<Card> possible=new ArrayList<Card>();
 			for(Card c:ship.hand){
-				if(c.validAugmentTarget(this))possible.add(c);
+				if(c.validAugmentTarget(this)&&!c.selected)possible.add(c);
 			}
 			System.out.println(possible);
 			if(possible.size()>0){
@@ -467,6 +483,11 @@ public class Card {
 		Component c=ship.getEnemy().getRandomUndestroyedComponent();
 		for(int i=0;i<code.getAmount(Special.ScrambleChosenModule);i++){
 			c.scramble(this);
+		}
+		
+		if(code.contains(Special.DebuffTarget)){
+			Component drainTarget=ship.getEnemy().getRandomUndestroyedComponent();
+			drainTarget.addBuff(code.getBuff());
 		}
 		select();
 
@@ -583,6 +604,7 @@ public class Card {
 		}
 
 		if(code.contains(Special.ResetCycle)) CycleButton.resetCost();
+		lockEffects();
 
 	}
 
@@ -850,8 +872,12 @@ public class Card {
 
 	public int getCost(){return getCost(side);}
 	public int getCost(int pick){
+		
+		if(locked){
+			return lockedCost[pick];
+		}
 		int effect=0;
-		if(getCode(pick).contains(Special.ReduceCost)){
+		if(getCode(pick).containsBuffType(BuffType.ReduceCost)){
 			effect= baseCost[pick];
 		}
 		else {
@@ -876,6 +902,7 @@ public class Card {
 
 	public int getEffect(){return getEffect(side);}
 	public int getEffect(int pick){
+		if(locked)return lockedEffect[pick];
 		CardCode code= getCode();
 		if(baseEffect[pick]==0)return 0;
 
@@ -922,25 +949,17 @@ public class Card {
 
 	public int getShots(){return getShots(side);}
 	public int getShots(int pick){
+		if(locked)return lockedShots[pick];
 		if(shots[pick]==0)return 0;
-
 		int numShots = shots[pick]+bonusShots;
-
-
-
-
 		if(active){
-
 			numShots+=mod.ship.getBonusShots(this, pick, numShots);
 			for(Component c:mod.ship.components){
 				if(c.getClass()==mod.getClass())numShots+=c.getBuffAmount(BuffType.BonusShot);
 			}
-
 		}
 		return numShots;
 	}
-
-
 
 	public boolean hasSpecial(Special test){return code[side].contains(test);}
 	public boolean hasSpecial(Special test, int pick){return code[pick].contains(test);}
@@ -957,6 +976,11 @@ public class Card {
 		int currentEnergy=ship.getEnergy();
 		int cost=getCost();
 
+		
+		if(isAugmented(side)&&getEffect()==0){
+			System.out.println("not playing, augmented");
+		}
+		
 		if(code.contains(AI.CheckOriginalFirst)){
 			if(enemyDecide(0))return true;
 			this.side=side;
@@ -1001,7 +1025,8 @@ public class Card {
 
 		//Special stuff for targeted cards//
 		if(code.contains(Special.Targeted)){
-			if(ship.focusTarget!=null){
+			//check for vulns//
+			if(ship.getEnemy().hasVulnerability()){
 				if(!getCode(1-side).contains(Special.Targeted)){
 					ok("Focusing and other side not target so overriding");
 					return true;
@@ -1451,19 +1476,19 @@ public class Card {
 
 	public void ok(AIclass aiclass, String addition){
 
-		System.out.println("ok "+aiclass.ai+" "+addition+(aiclass.number==-1?"":(" ("+aiclass.number+")")));
+		System.out.println(this+": ok "+aiclass.ai+" "+addition+(aiclass.number==-1?"":(" ("+aiclass.number+")")));
 	}
 	public void ok(String addition){
 
-		System.out.println("ok "+addition);
+		System.out.println(this+": ok "+addition);
 	}
 	public void no(AIclass aiclass, String addition){
 
-		System.out.println("NO!! "+aiclass.ai+" "+addition+(aiclass.number==-1?"":(" ("+aiclass.number+")")));
+		System.out.println(this+": NO!! "+aiclass.ai+" "+addition+(aiclass.number==-1?"":(" ("+aiclass.number+")")));
 	}
 	public void no(String addition){
 
-		System.out.println("NO!! "+" "+addition);
+		System.out.println(this+": NO!! "+" "+addition);
 	}
 	public boolean sameAs(Card c){
 		return c.getName(1).equals(getName(1));
@@ -1474,10 +1499,10 @@ public class Card {
 	}
 
 	public boolean isAugmented(int checkSide) {
+		if(locked)return lockedAugmented[checkSide];
 		if(getShip()==null)return false;
 		if(selected&&side!=checkSide)return false;
-		if(code[checkSide].contains(Special.ReduceCost))return false;
-		if(code[checkSide].contains(Special.BonusShots))return false;
+		if(code[checkSide].containsBuffType(BuffType.ReduceCost))return false;
 		if(bonusEffect>0&&getEffect(checkSide)>0)return true;
 		if(getShip().getBonusEffect(this, checkSide, baseEffect[checkSide])>0)return true;
 		if(getShip().getBonusShots(this, checkSide, shots[checkSide])>0)return true;

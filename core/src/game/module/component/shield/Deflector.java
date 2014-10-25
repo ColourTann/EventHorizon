@@ -24,7 +24,7 @@ public class Deflector extends Shield{
 		cost[1]=1;
 		effect[1]=0;
 		rules[1]="Self boost 1: +"+calc(0)+" |iconshield| to all shield cards";
-		code[1].add(Special.BoostSelf);
+		code[1].add(Special.BuffSelf);
 		code[1].setBuff(new Buff(BuffType.BonusEffeect, true, calc(0), 1));
 		code[1].add(AI.OtherCardsThisSystem,2);
 		code[1].add(AI.TotalIncoming,calc(0)*4);

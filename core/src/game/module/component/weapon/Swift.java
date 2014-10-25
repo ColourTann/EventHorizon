@@ -54,8 +54,8 @@ public class Swift extends Weapon{
 		cost[4]=2;
 		effect[4]=0;
 		shots[4]=0;
-		rules[4]="Drain target 1:|n|+"+calc(1)+" |icondamage| taken from each shot";
-		code[4].add(Special.DrainTarget);
+		rules[4]="Targeted Glitch 1:|n|+"+calc(1)+" |icondamage| taken from each shot";
+		code[4].add(Special.DebuffTarget);
 		code[4].setBuff(new Buff(BuffType.TakesExtraDamage, false, calc(1), 1));
 		code[4].add(AI.Ignore);
 	}

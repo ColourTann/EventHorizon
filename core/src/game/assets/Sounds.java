@@ -27,14 +27,11 @@ public class Sounds {
 	public static SoundClip preBattleImpact= new SoundClip("Sound/prebattleimpact.ogg");
 	public static SoundClip bigAccept= new SoundClip("Sound/bigaccept.ogg");
 	
-	public static MusicClip one = new MusicClip("Sound/Music/1.ogg");
-	public static MusicClip two = new MusicClip("Sound/Music/2.ogg");
-	public static MusicClip three = new MusicClip("Sound/Music/3.ogg");
-	public static MusicClip[] array = new MusicClip[1000];
+	
 	
 	
 	public static void init(){
-		for(int i=0;i<1000;i++) array[i]=new MusicClip("Sound/Music/sp.mp3");
+	
 		
 	}
 }

@@ -43,8 +43,8 @@ import game.ship.shipClass.Nova;
 
 public class Main extends ApplicationAdapter  {
 
-	public static float version=0.41f;
-	public static boolean debug=true;
+	public static float version=0.45f;
+	public static boolean debug=false;
 	public static float ticks;
 	public static int height=700;
 	public static int width=1280;
@@ -113,14 +113,14 @@ public class Main extends ApplicationAdapter  {
 
 		//currentScreen=new PreBattle(new Hornet(true, 0), new Hornet(false, 0)); currentScreen.init();
 
-		//viewer=new CardViewer();currentScreen=viewer;
+//		viewer=new CardViewer();currentScreen=viewer;
 
 
 
 //		currentScreen=new Test();currentScreen.init();
 
 
-		if(false){
+		if(true){
 			System.out.println("---------Aurora------------");
 			System.out.println(new Aurora(true, 0).getStats());
 			System.out.println("---------Nova------------");

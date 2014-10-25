@@ -151,6 +151,7 @@ public class CardGraphic extends Mouser {
 	}
 
 	public void render(SpriteBatch batch) {
+		
 		if(alpha==0)return;
 		//batch.end();debugRender();batch.begin();
 
@@ -203,7 +204,7 @@ public class CardGraphic extends Mouser {
 
 		//Draw.draw(batch, Gallery.cardOutline.get(), position.x, getBaseHeight(1));
 		//Draw.draw(batch, Gallery.cardOutline.get(), position.x, getBaseHeight(0));
-
+		
 
 		if (showLower)renderHalf(1 - card.side, batch,Colours.withAlpha(c, lowerSideAlpha * alpha));
 		renderHalf(card.side, batch, Colours.withAlpha(c, alpha));
@@ -224,7 +225,7 @@ public class CardGraphic extends Mouser {
 		}
 		Font.small.setColor(Colours.white);
 		batch.setColor(Colours.white);
-			
+		
 		if (hoverFadeTimer.getFloat()!=0) {
 			CardHover.render(batch, card, getBaseHeight(1-card.side), hoverFadeTimer.getFloat());
 		}
@@ -245,7 +246,7 @@ public class CardGraphic extends Mouser {
 			darkText.a=alpha;
 		}
 		batch.setColor(c);
-
+		
 		//Card base//
 		if(card.consumable) Draw.draw(batch, Gallery.cardBaseConsumable.get(), (int)position.x, (int)baseHeight);
 		else Draw.draw(batch, Gallery.cardBase.get(), (int)position.x, (int)baseHeight);
@@ -277,7 +278,7 @@ public class CardGraphic extends Mouser {
 		if (drawTopPic || part != card.side){
 			Draw.drawScaled(batch, card.getImage(part).get(), (int)(position.x + positionPic.x), (int)(baseHeight+ positionPic.y), 2, 2);		
 		}
-
+		
 		//Name//
 		Font.small.setColor(darkText);
 		String name = card.getName(part);
@@ -298,7 +299,7 @@ public class CardGraphic extends Mouser {
 			textWriters[part].render(batch, (int)position.x + (int)positionRules.x, (int)baseHeight+ (int)positionRules.y+3);
 		}
 		
-
+		
 		//Effect//
 		Pic[] effectPics=card.getShots(0)>0?Gallery.damageIcon:Gallery.shieldIcon;
 		int effect = card.getEffect(part);
@@ -324,7 +325,7 @@ public class CardGraphic extends Mouser {
 				effect-=4;
 			}
 		}
-
+		
 
 		// Weapon Junk//
 		int shots = card.getShots(part);
@@ -344,14 +345,7 @@ public class CardGraphic extends Mouser {
 			Draw.drawCentered(batch, Gallery.iconTargeted.get(), (int)(position.x + bonusesCenter.x),  (int)(baseHeight + bonusesCenter.y-(numSpecials==1?0:bonusGap/5)));
 		}
 
-
-
-		if(scrambled){
-			if(!card.wasScrambled&&card.mod.ship.player){
-				Draw.draw(batch, Gallery.iconScrambled.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
-			}
-		}
-
+		
 
 		if(scrambled){
 			if(!card.wasScrambled&&card.mod.ship.player){
@@ -359,6 +353,13 @@ public class CardGraphic extends Mouser {
 			}
 		}
 
+
+		if(scrambled){
+			if(!card.wasScrambled&&card.mod.ship.player){
+				Draw.draw(batch, Gallery.iconScrambled.get(),position.x+positionEnergy.x+positionArray[1][0].x-4,baseHeight+positionEnergy.y+positionArray[1][0].y-3);
+			}
+		}
+		
 		//Cost//
 		else{
 			int cost = card.getCost(part);
@@ -376,7 +377,7 @@ public class CardGraphic extends Mouser {
 				//	font.draw(batch, "" + cost, position.x + positionEnergy.x + 6,baseHeight + positionEnergy.y + positionArray[5][0].y);
 			}
 		}
-
+		
 		batch.setColor(Colours.white);
 		if(part==card.side&&moused&&Screen.isActiveType(Battle.class)){
 			Draw.draw(batch, Gallery.cardBase.getOutline(), (int)position.x, (int)baseHeight);

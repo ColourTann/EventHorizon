@@ -38,7 +38,7 @@ public class Repulsor extends Shield{
 		code[2].add(AI.LowChance);
 		code[2].setPriority(1);		
 		
-		code[2].add(Special.BoostSelf);
+		code[2].add(Special.BuffSelf);
 		code[2].setBuff(new Buff(BuffType.BonusEffeect, true, 1, -1));
 		
 		// gotta replace ooh shield an undamaged  module! cheaper costs 1

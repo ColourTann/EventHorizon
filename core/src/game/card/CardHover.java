@@ -28,7 +28,7 @@ public class CardHover {
 	public static Pair enemyHoverPosition = new Pair();
 	TextWriter tw;
 	public static HashMap<ReminderType, TextWriter> buffWriters = new HashMap<CardHover.ReminderType, TextWriter>();
-	public enum ReminderType{Targeted, Multishot, Augment, Absorb, Boost, Drain}
+	public enum ReminderType{Targeted, Multishot, Augment, Absorb, SelfBuff, SelfDebuff, TargetedDebuff}
 
 	public static ArrayList<ReminderType> getReminderTypes(Card c){
 		ArrayList<ReminderType> result = new ArrayList<CardHover.ReminderType>();
@@ -36,12 +36,12 @@ public class CardHover {
 		if(code.contains(Special.Augment)) result.add(ReminderType.Augment);
 		if(code.contains(Special.Targeted)) result.add(ReminderType.Targeted);
 		if(code.contains(Augment.AugmentTargeted)) result.add(ReminderType.Targeted);
+		if(code.contains(Augment.AugmentAddShot)) result.add(ReminderType.Multishot);
 		if(c.getShots()>1) result.add(ReminderType.Multishot);
 		if(code.contains(Special.Absorb)) result.add(ReminderType.Absorb);
-		if(code.contains(Special.BoostSelf)) result.add(ReminderType.Boost);
-		if(code.contains(Special.DrainSelf)) result.add(ReminderType.Drain);
-		if(code.contains(Special.DrainTarget)) result.add(ReminderType.Drain);
-
+		if(code.contains(Special.BuffSelf)) result.add(ReminderType.SelfBuff);
+		if(code.contains(Special.DebuffSelf)) result.add(ReminderType.SelfDebuff);
+		if(code.contains(Special.DebuffTarget)) result.add(ReminderType.TargetedDebuff);
 		return result;
 	}
 
@@ -100,14 +100,17 @@ public class CardHover {
 				tw.addObstacleTopLeft(20, 12);
 				buffWriters.put(type, tw);
 				break;
-			case Boost:
-				tw=new TextWriter(Font.small, "Boost X Effect - Affected module gains the beneficial effect for X turns");
+			case SelfBuff:
+				tw=new TextWriter(Font.small, "Self Boost X: Effect - This card's module gains the beneficial effect for X turns");
 				buffWriters.put(type, tw);
 				break;
-			case Drain:
-				tw=new TextWriter(Font.small, "Drain X Effect - Affected module gains the negative effect for X turns");
+			case SelfDebuff:
+				tw=new TextWriter(Font.small, "Self Glitch X: Effect - This card's module gains the negative effect for X turns");
 				buffWriters.put(type, tw);
 				break;
+			case TargetedDebuff:
+				tw=new TextWriter(Font.small, "Targeted Glitch X: Effect - Chosen enemy module gains the negative effect for X turns");
+				buffWriters.put(type, tw);
 			}
 			tw.setWrapWidth(wrapWidth);
 		}

@@ -149,7 +149,6 @@ public class TextWriter {
 					String word = text.substring(prevIndex, currentIndex-1);
 
 					float wordWidth=font.getBounds(word).width;
-					//System.out.println("WORD IS: "+word+" END OF WORD "+":"+x+":"+wordWidth+"vs"+wrapWidth);
 					if(x+wordWidth>wrapWidth){
 						drawLine(tempBatch, text.substring(lineStart, prevIndex-1), y, x-spaceWidth, xOffset);
 						xOffset=0;
@@ -221,9 +220,6 @@ public class TextWriter {
 	}
 
 	private void drawLine(SpriteBatch batch, String s, float y, float lineLength, float xOffset){
-		
-		
-		System.out.println(maxWidth);
 		int prevIndex=0;
 		int currentIndex=0;
 		float x=0;

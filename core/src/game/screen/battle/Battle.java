@@ -37,6 +37,7 @@ import game.screen.battle.interfaceJunk.CycleButton;
 import game.screen.battle.interfaceJunk.HelpPanel;
 import game.screen.battle.interfaceJunk.PhaseButton;
 import game.screen.battle.interfaceJunk.Star;
+import game.screen.battle.tutorial.CycleTeacher;
 import game.screen.battle.tutorial.Tutorial;
 import game.screen.battle.tutorial.UndoButton;
 import game.screen.battle.tutorial.Tutorial.Trigger;
@@ -91,18 +92,22 @@ public class Battle extends Screen{
 	public static boolean arena;
 	private static Timer endTimer=new Timer();
 	static Timer victoryFadeInTimer=new Timer();
-
+	
+	public boolean clicked=false;
+	 
+	
 	public Battle(Ship player, Ship enemy, boolean tutorial, boolean arena){
 		this.player=player;
 		this.enemy=enemy;
 		this.tutorial=tutorial;
 		Battle.arena=arena;
+		CycleTeacher.get();
 	}
 
 	@Override
 	public void init() {
 
-	
+
 		player.getGraphic().activate();
 		enemy.getGraphic().activate();
 		me=this;
@@ -112,22 +117,22 @@ public class Battle extends Screen{
 		Star.init();
 		if(tutorial)initTutorial();		
 		//player.setArmour(new RegenArmour(0));
-		
+
 		player.startFight(true);
 		enemy.startFight(false);
-		
+
 		if(tutorial){
 			player.addEnergy(6, false);
 			enemy.addEnergy(2, false);
 		}
-		
+
 		for(Component c:player.components){
 			c.getStats().reset();
 		}
 		for(Component c:enemy.components){
 			c.getStats().reset();
 		}
-	
+
 	}
 
 	public static Ship getPlayer(){
@@ -173,7 +178,7 @@ public class Battle extends Screen{
 		ModuleInfo.top=null;
 		player.resetGraphics();
 		enemy.resetGraphics();
-		
+
 	}
 
 	private void initTutorial() {
@@ -251,7 +256,7 @@ public class Battle extends Screen{
 		if(getState()!=State.Nothing)return;
 		if(getPlayer().hasSpendableShields())return;
 
-		
+
 
 		if(getPhase()==Phase.ShieldPhase){
 			getPlayer().endPhase();
@@ -279,6 +284,7 @@ public class Battle extends Screen{
 		}
 		if(getPlayer().dead)victor=getEnemy();
 		if(!arena){
+			
 			Timer t=new Timer(0,1,5,Interp.LINEAR);
 
 			t.addFinisher(new Finisher() {
@@ -360,6 +366,7 @@ public class Battle extends Screen{
 			break;
 		case Input.Keys.A:
 			if(Main.debug){
+				battleWon(player);
 				getEnemy().getGenerator().destroyed=true;
 				getEnemy().getComputer().destroyed=true;
 				getEnemy().getGraphic().drawMap(true);
@@ -372,12 +379,6 @@ public class Battle extends Screen{
 
 			if(tutorial){
 				Tutorial.next();
-			}
-			if(!tutorial){
-				if (Tutorial.three.size()>0){
-					Tutorial.next();
-				}
-				else Tutorial.makeThree();
 			}
 
 			break;
@@ -468,7 +469,7 @@ public class Battle extends Screen{
 
 	@Override
 	public void mousePressed(Pair location, boolean left) {
-
+		clicked=true;
 		if(tutorial)Tutorial.next();
 		else{
 			advance();	
@@ -554,11 +555,6 @@ public class Battle extends Screen{
 			break;
 		}
 
-
-
-
-
-
 		//tutorishit//
 		if(!isTutorial())return;
 		Tutorial t= Tutorial.tutorials.get(Tutorial.index);
@@ -571,7 +567,7 @@ public class Battle extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch) {
-	
+
 		batch.end();
 
 
@@ -626,51 +622,33 @@ public class Battle extends Screen{
 			String s=victor.player?"You win!":"You lose";
 			Font.big.setColor(Colours.withAlpha(Colours.light,victoryFadeInTimer.getFloat()));
 			Font.drawFontCentered(batch, s, Font.big, Main.width/2, 205);
-
-
-
 			if(!victor.player){
 				if(arena){ Font.drawFontCentered(batch, "You defeated "+Customise.totalShipsDefeated+" ship"+(Customise.totalShipsDefeated==1?"":"s"), Font.big, Main.width/2, 100);
 				Font.drawFontCentered(batch, "esc to return", Font.big, Main.width/2, 130);
 				}
 			}
 		}
-		//	debugRender(batch);
-
-
-		//Draw.drawScaledCentered(batch, Gallery.whiteSquare.get(), Mouser.getMousePosition().x, Mouser.getMousePosition().y, 200, 200);
+		
+		
 	}
 
 	@Override
 	public void postRender(SpriteBatch batch) {
 		
 		drawInterfaceOverlay(batch);
-		
 		for(CardIcon icon:CardIcon.icons){
 			icon.render(batch);
 		}
-	
-		
-		
-		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
-		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
-	
-	//	if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
-
 		for(Card c:player.hand){
 			if(c.getGraphic()!=CardGraphic.onTopGraphic)c.getGraphic().render(batch);
 		}
-		CardGraphic.renderOffCuts(batch);
+	
 		CycleButton.get().render(batch);
-
 		if(help!=null)help.render(batch);
-
-
-
-		
 		for(Animation a:animations){
 			a.render(batch);
 		}
+		
 		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
 		for(ModuleStats ums:player.getUtilityStats()){
 			ums.render(batch);
@@ -678,15 +656,25 @@ public class Battle extends Screen{
 		for(ModuleStats ums:enemy.getUtilityStats()){
 			ums.render(batch);
 		}
-		
 		for(Component c:player.components){
 			c.getStats().render(batch);
 		}
 		for(Component c:enemy.components){
 			c.getStats().render(batch);
 		}
+		
+		CardGraphic.renderOffCuts(batch);
+	
+		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
+		
+		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
+		
 		if(isTutorial()){
-		Tutorial.renderAll(batch);
+			Tutorial.renderAll(batch);
+		}
+		
+		if(arena&&Customise.totalShipsDefeated==0&&!clicked){
+			CycleTeacher.get().render(batch);
 		}
 	}
 
@@ -700,8 +688,6 @@ public class Battle extends Screen{
 
 	@Override
 	public void dispose() {
-		//Updater.clearAll();
-		//player.getGraphic().dispose();
 		enemy.dispose();
 	}
 

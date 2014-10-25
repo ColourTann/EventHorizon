@@ -139,8 +139,9 @@ public class ModuleInfo extends TextBox{
 		renderBox(batch, width, height/2f);
 
 		if(consumableCards!=null&&alpha>0){
-			if(noDrawCards)return;
+		
 			for(Card c:consumableCards){
+				if(noDrawCards)break;;
 				CardGraphic cg=c.getGraphic();
 				cg.finishFlipping();
 				cg.alpha=alpha;

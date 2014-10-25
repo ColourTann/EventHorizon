@@ -127,30 +127,13 @@ public class Tutorial extends TextBox{
 	}
 
 	public void render(SpriteBatch batch) {
-
 		if(str.equals(""))return;
-
 		batch.setColor(1,1,1,alpha);
-		
 		if(target!=null){
 			Draw.drawRotatedScaled(batch, Gallery.tutPoint.get(), origin.x, origin.y, distance, 1, rotation);
 		}
 		renderBox(batch, width, height);
-//		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y-6, width/100f, 3);
-//		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y, width/100f, height);
-//		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y+height+6, width/100f, -3);
-		writer.render(batch,  (int)(position.x+offset), (int)(position.y+yOffset));
-//		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
-//		Font.medium.drawWrapped(batch, str, x+offset, y+5, baseWidth-offset*2, HAlignment.LEFT);
-
-
-//		if(special==1){
-//			Draw.draw(batch, Gallery.greenHP[1].get(), 491, 161);
-//			Draw.draw(batch, Gallery.greenHP[2].get(), 603, 161);
-//		}
-//		if(special==2){
-//			Draw.draw(batch, Gallery.iconTargeted.get(), 591,154);
-//		}
+		writer.render(batch, (int)(position.x+offset), (int)(position.y+offset+2));
 		batch.setColor(1,1,1,1);
 	}
 
@@ -197,7 +180,7 @@ public class Tutorial extends TextBox{
 		add("", Trigger.CheckList, Effect.LotsShieldList);
 		add("", Trigger.PlayerWeaponPhase, Effect.DrawMoreTeslas);
 		add("Your tesla module has been scrambled because it took major damage.");
-		add("Click on a scrambled card to repair it, that card will be free but will not fire.");
+		add("Click on a scrambled card to repair it (this will cost you no energy but use up the card)");
 		add("", Trigger.CheckList, Effect.UnscrambleList);
 		add("", Trigger.PlayerShieldPhase);
 		add("A turn is made up of a shield phase followed by a weapon phase.");
@@ -394,7 +377,7 @@ public class Tutorial extends TextBox{
 				break;
 			case ShieldMajorList:
 				currentList=new Checklist(t, new Task[]{
-						new Task("Prevent all incoming major damage (|pic|)",TaskType.PreventAllMajor), 
+						new Task("Prevent all incoming major damage (|pic|) using your shield cards",TaskType.PreventAllMajor), 
 						new Task("Click the blue shield to confirm",TaskType.EndShieldPhase, true)
 				});
 				currentList.drawDam=true;

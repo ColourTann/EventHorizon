@@ -166,7 +166,7 @@ public class Customise extends Screen{
 			return makeEnemyShip();
 		}
 		
-		power+=.55f;
+		power+=.7f;
 		return result;
 		
 	}
@@ -229,6 +229,7 @@ public class Customise extends Screen{
 			if(start&&i==0)type=RewardType.Utility;
 			if(start&&i==1)type=RewardType.Booster;
 			if(start&&i==2)type=RewardType.Utility;
+			type=RewardType.Booster;
 			switch(type){
 			case Armour:
 				reward=new Reward(Armour.getRandomArmour(tier), i);
@@ -304,12 +305,8 @@ public class Customise extends Screen{
 	}
 
 	public static void unMouse(Module module){
-		//me.oldInfoBox=me.infoBox;
-		System.out.println(module);
-		System.out.println(me.infoBox.mod);
 		if(me.infoBox==null)return;
 		if(me.infoBox.mod==module){
-			System.out.println("2"+module);
 			me.infoBox.fadeOut(fadeOutSpeed, Interp.LINEAR);
 			retimeMeter(ship.getStats().energyUsage);
 		}
@@ -350,7 +347,7 @@ public class Customise extends Screen{
 		Draw.drawCenteredScaled(batch, Gallery.energyMeter.get(), 
 				energyX+meterPosition.getFloat(), 
 				170, 4, 4);
-		consumables.render(batch);
+		
 
 		if(first){
 			Font.drawFontCentered(batch, ship.shipName, Font.big, shipX, Main.height-80);
@@ -369,6 +366,7 @@ public class Customise extends Screen{
 		
 		
 		Font.drawFontCentered(batch, "Ships defeated: "+totalShipsDefeated, Font.big, ConsumableContainer.position.x+ConsumableContainer.width/2, 280);
+		consumables.render(batch);
 	}
 
 	public static void select(Reward reward) {
@@ -416,7 +414,8 @@ public class Customise extends Screen{
 	}
 
 	public static void rewardChosen(){
-		if(consumableSelected())me.infoBox.noDrawCards=true;
+		me.infoBox.noDrawCards=true;
+		if(me.oldInfoBox!=null)me.oldInfoBox.noDrawCards=true;
 		unMouse(null);
 		ship.recalculateStats();
 		retimeMeter(ship.getStats().energyUsage);

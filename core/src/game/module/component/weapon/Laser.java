@@ -52,9 +52,9 @@ public class Laser extends Weapon{
 		cost[4]=4;
 		effect[4]=0;
 		shots[4]=0;
-		rules[4]="Targeted drain |iconinfinity|: Takes +"+calc(0)+" |icondamage| from each shot";
-		code[4].add(Special.DrainTarget);
-		code[4].setBuff(new Buff(BuffType.TakesExtraDamage, false, calc(0), -1));
+		rules[4]="Targeted glitch 15: Takes +"+calc(0)+" |icondamage| from each shot";
+		code[4].add(Special.DebuffTarget);
+		code[4].setBuff(new Buff(BuffType.TakesExtraDamage, false, calc(0), 15));
 		code[4].add(AI.BeforeTurn, 3);
 		code[4].setPriority(1);
 		
