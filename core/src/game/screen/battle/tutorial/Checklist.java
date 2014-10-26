@@ -19,7 +19,7 @@ public class Checklist extends TextBox{
 	float height;
 	static float width=350;
 	static float x=Main.width/2-width/2;
-	float y=173;
+	float y=156;
 	static float fontHeight=Font.medium.getBounds("a").height;
 	static float offset=8;
 	boolean drawDam;

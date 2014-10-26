@@ -284,10 +284,7 @@ public class ModuleStats extends Mouser{
 				p=Gallery.orangeHP;
 				if(i>=damage+incoming+unshieldable-shields){
 					p=Gallery.blueHP;
-					ShieldPoint sp = component.shieldPoints.get(i-damage-component.getShieldableIncoming());
-					if(sp.firstAdded&&sp.card.getCode().contains(Special.Absorb)){
-						absorb=true;
-					}
+				
 				}
 			}
 			if(component.thresholds[0]==i+1||component.thresholds[1]==i+1){

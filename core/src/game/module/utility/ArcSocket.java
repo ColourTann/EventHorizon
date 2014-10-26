@@ -57,9 +57,9 @@ public class ArcSocket extends Utility{
 
 	@Override
 	public int getBonusEffect(Card c, int baseEffect) {
-//		if(ship.getMajorDamage()>=3 && c.type==ModuleType.SHIELD){
-//			return calc(0);
-//		}
+		if(ship.getMajorDamage()>=3 && c.type==ModuleType.SHIELD){
+			return 1;
+		}
 		return 0;
 	}
 

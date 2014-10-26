@@ -334,6 +334,15 @@ public class Battle extends Screen{
 
 
 			break;
+		case Input.Keys.M:
+			for(Component c:player.components){
+				System.out.println(c+":"+c.getShieldsRequiredToAvoidMajor());
+			}
+			for(Component c:enemy.components){
+				System.out.println(c+":"+c.getShieldsRequiredToAvoidMajor());
+			}
+			
+			break;
 		case Input.Keys.Q:
 
 			//show enemy cards//
@@ -653,6 +662,13 @@ public class Battle extends Screen{
 		for(ModuleStats ums:player.getUtilityStats()){
 			ums.render(batch);
 		}
+		
+		
+		
+		
+		if(isTutorial()){
+			Tutorial.renderAll(batch);
+		}
 		for(ModuleStats ums:enemy.getUtilityStats()){
 			ums.render(batch);
 		}
@@ -662,20 +678,15 @@ public class Battle extends Screen{
 		for(Component c:enemy.components){
 			c.getStats().render(batch);
 		}
-		
-		CardGraphic.renderOffCuts(batch);
-	
-		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
-		
-		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
-		
-		if(isTutorial()){
-			Tutorial.renderAll(batch);
-		}
-		
 		if(arena&&Customise.totalShipsDefeated==0&&!clicked){
 			CycleTeacher.get().render(batch);
 		}
+CardGraphic.renderOffCuts(batch);
+	
+		
+		
+		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
+		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
 	}
 
 	@Override

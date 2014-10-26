@@ -4,11 +4,6 @@ import game.card.Card;
 import game.module.Module;
 import game.module.component.Component;
 import game.module.component.shield.Deflector;
-import game.module.component.shield.Shield;
-import game.module.utility.armour.Plating;
-import game.module.utility.armour.OrganicShell;
-import game.module.utility.armour.GalvanicSkin;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
@@ -23,6 +18,7 @@ public abstract class Utility extends Module{
 		this.passive=passive;
 		type=ModuleType.UTILITY;
 		this.cardType=cardType;
+	
 	}
 
 	ArrayList<Card> card=new ArrayList<Card>();

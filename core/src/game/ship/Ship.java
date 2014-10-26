@@ -133,7 +133,7 @@ public abstract class Ship {
 	private void setupTiers() {
 
 		int baseTier=(int) (tier/3);
-
+		
 
 		int shieldTier=baseTier;
 		int[] weaponTier = new int[]{baseTier,baseTier};
@@ -150,24 +150,13 @@ public abstract class Ship {
 		if(bigRemainder>=2){
 			shieldTier++;
 		}
-		if(smallRemainder>.3){
+		if(smallRemainder>.5){
 			utilityTier[0]=baseTier+1;
 		}
-		if(smallRemainder>.6){
+		if(smallRemainder>.8){
 			utilityTier[1]=baseTier+1;
 		}
-		/*System.out.println("setting up tiers "+tier);
-		System.out.println("basetier: "+baseTier );
-		System.out.println("shiledtier " +shieldTier);
-		System.out.println("weapontiers");
-		for(int i:weaponTier)System.out.println(i);
-		System.out.println("utility tiers");
-		for(int i:utilityTier)System.out.println(i);
-
-		System.out.println("-------------------");*/
-
-
-
+	
 
 		try {
 
@@ -180,7 +169,7 @@ public abstract class Ship {
 				}
 			}
 			if(baseTier>0){
-				setArmour(Armour.getRandomArmour(baseTier));
+				setArmour(Armour.getRandomArmour(Math.min(2, baseTier)));
 			}
 
 		} catch (InstantiationException e) {
@@ -212,7 +201,11 @@ public abstract class Ship {
 	private void resetMaximumHandSize() {
 	}
 
-	public void enemyStartTurn(){	
+	public void enemyStartTurn(){
+		System.out.println();
+		System.out.println();
+		System.out.println("---------start of turn----------");
+		System.out.println();
 		startTurn();
 	}
 
@@ -491,7 +484,7 @@ public abstract class Ship {
 
 				if(code.getPriority()==priority){
 					if(c.enemyDecide(side)){
-						System.out.println("playing "+c);
+						System.out.println("playing "+c+":"+c.hashCode());
 						return c;
 					}
 
@@ -509,10 +502,16 @@ public abstract class Ship {
 
 
 		for(Component c:getRandomisedModules()){
+			
 			if(shieldPoints.size()==0)return;
+			
+			CardCode shieldCode=shieldPoints.get(0).card.getCode();
 			//Need to put in reasons not to shield//
-			if(shieldPoints.get(0).card.getCode().contains(Special.ShieldOnlyDamaged)){
+			if(shieldCode.contains(Special.ShieldOnlyDamaged)){
 				if(c.currentThreshold==0)continue;
+			}
+			if(shieldCode.contains(Special.ShieldOnlyPristine)){
+				if(c.damage.size()>0)continue;
 			}
 
 			//Priority checking//
@@ -590,6 +589,8 @@ public abstract class Ship {
 		card.addToDeck=false;
 		card.getGraphic().activate();
 		card.getGraphic().override=false;
+		card.getGraphic().stopFading();
+		card.getGraphic().alpha=1;
 		if(card.specialSide==-1)card.finaliseSide(); //for rigged draws//
 
 		hand.add(card);

@@ -17,7 +17,7 @@ import game.module.component.weapon.Tesla;
 import game.module.utility.Utility;
 
 public abstract class Armour extends Utility{
-	static Class[] classes = new Class[]{ChargedHull.class, CrystalLattice.class, GalvanicSkin.class, Plating.class, VoltaicCarapace.class}; //DISABLED ORGAINING SHELL FOR NOW//
+	static Class[] classes = new Class[]{ChargedHull.class, CrystalLattice.class, GalvanicSkin.class, Plating.class}; //DISABLED ORGAINIC SHELL FOR NOW// (and voltaic)
 	public double multiplier;
 	public Armour(double multiplier, int tier, String modName, String passive, Pic modulePic, int variants, int numCards){
 		super(tier, ModuleType.UTILITY, modName, passive, modulePic, variants, numCards);

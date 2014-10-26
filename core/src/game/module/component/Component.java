@@ -331,9 +331,10 @@ public abstract class Component extends Module{
 
 	public boolean shield(ShieldPoint s, boolean overlapSound){
 		//#1Reason why not to shield//
-		System.out.println("shielding "+this);
+		System.out.println("shielding "+this+" from "+s.card);
 		if(s.card!=null&&s.card.getCode().contains(Special.ShieldOnlyDamaged))if(currentThreshold==0)return false;
 		if(s.card!=null&&s.card.getCode().contains(Special.ShieldOnlyPristine))if(getDamage()>0)return false;
+		System.out.println("ok");
 		shieldPoints.add(s);
 		if(overlapSound)Sounds.shieldUse.overlay();
 		else Sounds.shieldUse.play();
@@ -696,17 +697,17 @@ public abstract class Component extends Module{
 		Module cardMod=buff.card.mod;
 
 		boolean unscramble=false;
-		boolean checkClass=false;
+		boolean checkThisModule=false;
 
 		switch(buff.type){
 		case BonusEffeect:
-			checkClass=true;
+			checkThisModule=true;
 			break;
 		case BonusShot:
-			checkClass=true;
+			checkThisModule=true;
 			break;
 		case ReduceCost:
-			checkClass=true;
+			checkThisModule=true;
 			break;
 		case Scrambled:
 			unscramble=true;
@@ -723,17 +724,18 @@ public abstract class Component extends Module{
 		for(Card c:ship.hand){
 			if(!c.selected)continue; // unselected cards aren't affected //
 			if(c==baseCard)continue; // stop unplaying self //
+			if(c.wasScrambled)continue;
 			if(unscramble){ // unplaying cards from descramble // 
 				if(c.mod==cardMod&&!c.wasScrambled){ 
 					c.deselect(false);
 				}				
 			}
 
-			if(checkClass){ // general case, class is due to multisystem effects //
+			if(checkThisModule){ // general case, class is due to multisystem effects //
 
 				if(c.getEffect()==0) continue; //usually don't have to unplay cards with no effect//
 
-				if(c.mod.getClass()==cardMod.getClass()){
+				if(c.mod==this){
 					c.deselect(false);
 				}
 

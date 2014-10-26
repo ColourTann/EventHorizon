@@ -10,7 +10,7 @@ import game.module.component.Component;
 public class ParticleCore extends Utility{
 
 	public ParticleCore(int tier) {
-		super(tier, ModuleType.UTILITY,"Particle Core", "-1 hand size, +2 cards next turn if you use all cards", Gallery.blaster, 1, 1);
+		super(tier, ModuleType.UTILITY,"Particle Core", "-1 hand size, +2 next turn if you use all cards", Gallery.blaster, 1, 1);
 		
 		for(int i=0;i<2;i++) cardPic[i]= Gallery.particleCore[i];
 		

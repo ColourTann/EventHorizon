@@ -41,7 +41,7 @@ public class Tesla extends Weapon{
 		cost[3]=2;
 		effect[3]=calc(4);
 		shots[3]=1;
-		rules[3]="Play only if this module has take major damage";
+		rules[3]="Play only if this module has taken major damage";
 		code[3].add(Special.MustBeMajorDamaged);
 		
 		name[4]="Fork";

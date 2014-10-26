@@ -67,7 +67,7 @@ public class Repeater extends Utility{
 
 	@Override
 	public int getBonusShots(Card c, int baseShots) {
-		if(baseShots>=4&&c.type==ModuleType.WEAPON){
+		if(baseShots>=3&&c.type==ModuleType.WEAPON){
 			return 1;
 		}
 		return 0;

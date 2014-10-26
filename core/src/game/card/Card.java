@@ -59,7 +59,7 @@ public class Card {
 
 	public float rocketSize; //only used for consumable or utility attacks//
 	private boolean played;
-	
+
 	//locked stuff//
 	boolean locked;
 	int[] lockedCost;
@@ -114,7 +114,7 @@ public class Card {
 		lockedAugmented=new boolean[]{isAugmented(0), isAugmented(1)};
 		locked=true;
 	}
-	
+
 	//Checking whose card clicked on//
 	public void click(){
 		if(getShip().player){
@@ -410,7 +410,7 @@ public class Card {
 				}
 			}
 
-		
+
 
 			//Override target due to bonus damage vs specific things//
 			for(Component c:enemy.getRandomisedModules()){
@@ -447,7 +447,7 @@ public class Card {
 				}
 			}
 
-	
+
 
 
 			for(int i=0;i<getShots();i++){
@@ -475,8 +475,11 @@ public class Card {
 
 		if(code.contains(Special.ShieldChosenModule)){
 			for(Component c:ship.getRandomisedModules()){
+				System.out.println("checking "+c);
 				if(c.getShieldableIncoming()>=getEffect()-1){
+
 					for(int i=0;i<getEffect();i++)c.shield(new ShieldPoint(this, i==0), false);
+					break;
 				}
 			}
 		}
@@ -484,7 +487,7 @@ public class Card {
 		for(int i=0;i<code.getAmount(Special.ScrambleChosenModule);i++){
 			c.scramble(this);
 		}
-		
+
 		if(code.contains(Special.DebuffTarget)){
 			Component drainTarget=ship.getEnemy().getRandomUndestroyedComponent();
 			drainTarget.addBuff(code.getBuff());
@@ -702,8 +705,8 @@ public class Card {
 			ship.updateCardPositions();
 			getGraphic().showLower();
 		}
-		
-		
+
+
 
 		Battle.setState(State.Nothing);
 
@@ -853,7 +856,7 @@ public class Card {
 
 	public void flip(){
 		side=1-side;
-		
+
 	}
 	public Ship getShip(){
 		return mod.ship;
@@ -872,23 +875,25 @@ public class Card {
 
 	public int getCost(){return getCost(side);}
 	public int getCost(int pick){
-		
+
 		if(locked){
 			return lockedCost[pick];
 		}
 		int effect=0;
-		if(getCode(pick).containsBuffType(BuffType.ReduceCost)){
-			effect= baseCost[pick];
-		}
-		else {
-			effect=Math.max(0, baseCost[pick]);
-			if(active){
-				for(Component c:mod.ship.components){
-					if(c.getClass()==mod.getClass())effect-=c.getBuffAmount(BuffType.ReduceCost);
-				}
-			}
+		//		if(getCode(pick).containsBuffType(BuffType.ReduceCost)){
+		//			effect= baseCost[pick];
+		//		}
+		//		else {
+		effect=Math.max(0, baseCost[pick]);
+		if(active){
+			if(component!=null)effect-=component.getBuffAmount(BuffType.ReduceCost);
 
+			//			for(Component c:mod.ship.components){
+			//				if(c.getClass()==mod.getClass())effect-=c.getBuffAmount(BuffType.ReduceCost);
+			//			}
 		}
+
+		//		}
 
 		if(active){
 			effect+=getShip().getBonusCost(this, side, effect);
@@ -912,10 +917,10 @@ public class Card {
 		if(active){
 
 			effect+=mod.ship.getBonusEffect(this, pick, effect);
-
-			for(Component c:mod.ship.components){
-				if(c.getClass()==mod.getClass())effect+=c.getBuffAmount(BuffType.BonusEffeect);	
-			}
+			if(component!=null)effect+=component.getBuffAmount(BuffType.BonusEffeect);	
+			//			for(Component c:mod.ship.components){
+			//				if(c.getClass()==mod.getClass())effect+=c.getBuffAmount(BuffType.BonusEffeect);	
+			//			}
 
 
 			if(type==ModuleType.SHIELD&&mod!=getShip().getShield()){ //Special because shields are a single entity ish and should affect utility cards//
@@ -954,9 +959,10 @@ public class Card {
 		int numShots = shots[pick]+bonusShots;
 		if(active){
 			numShots+=mod.ship.getBonusShots(this, pick, numShots);
-			for(Component c:mod.ship.components){
-				if(c.getClass()==mod.getClass())numShots+=c.getBuffAmount(BuffType.BonusShot);
-			}
+			if(component!=null)numShots+=component.getBuffAmount(BuffType.BonusShot);
+			//			for(Component c:mod.ship.components){
+			//				if(c.getClass()==mod.getClass())numShots+=c.getBuffAmount(BuffType.BonusShot);
+			//			}
 		}
 		return numShots;
 	}
@@ -976,11 +982,11 @@ public class Card {
 		int currentEnergy=ship.getEnergy();
 		int cost=getCost();
 
-		
+
 		if(isAugmented(side)&&getEffect()==0){
 			System.out.println("not playing, augmented");
 		}
-		
+
 		if(code.contains(AI.CheckOriginalFirst)){
 			if(enemyDecide(0))return true;
 			this.side=side;
@@ -1447,17 +1453,22 @@ public class Card {
 				break;
 
 			case SingleModuleIncoming:
+				boolean okFound=false;
 				for(Component c:ship.getRandomisedModules()){
+					System.out.println(c+":"+c.getShieldableIncoming());
+					System.out.println(aiclass.number);
 					if(c.getShieldableIncoming()>=aiclass.number){
+						okFound=true;
 						ok(aiclass, c+"");
 						break;
 					}
-					else{
-						no(aiclass, "not found");
-						return false;
-					}
+				}
+				if(!okFound){
+					no(aiclass, "not found");
+					return false;
 				}
 				break;
+
 
 			case Singleton:
 				for(Card c:ship.hand){
@@ -1506,9 +1517,9 @@ public class Card {
 		if(bonusEffect>0&&getEffect(checkSide)>0)return true;
 		if(getShip().getBonusEffect(this, checkSide, baseEffect[checkSide])>0)return true;
 		if(getShip().getBonusShots(this, checkSide, shots[checkSide])>0)return true;
-		for(Component c:getShip().components){
-			if(c.getClass()==mod.getClass()&&c.isAugmented())return true;
-		}
+		if(component!=null&&component.isAugmented())return true;
+
+
 		return augmented[checkSide];
 	}
 

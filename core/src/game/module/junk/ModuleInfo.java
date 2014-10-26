@@ -52,7 +52,7 @@ public class ModuleInfo extends TextBox{
 		width+=9;
 		height+=17;
 		if(m instanceof Utility){
-			Font.medium.setColor(Colours.player2[0]);
+			Font.medium.setColor(Colours.player2[1]);
 			statsWriter=new TextWriter(Font.medium, ((Utility)m).passive);
 			statsWriter.setWrapWidth((int) (CardGraphic.width-offset*2));
 			statsWriter.setPassiveReplacements();
@@ -157,6 +157,8 @@ public class ModuleInfo extends TextBox{
 		//Font.drawFontCentered(batch, s, Font.medium, position.x+CardGraphic.width/2, position.y+25);
 		//Font.small.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+17);
 		s="Cards:";
+		
+		
 		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+80);
 		s=""+mod.numCards;
 		if(mod.ship!=null&&mod.numCards>0){
@@ -192,8 +194,12 @@ public class ModuleInfo extends TextBox{
 			statsWriter.render(batch, (int)(position.x+offset+cardOffset), (int)(position.y+CardGraphic.height*3/4-fHeight/2));
 		}
 	
-		String words=mod.type+(mod.tier==-1?"":" Tier "+mod.tier);
+		String words=mod.type+"";
+		if(!(mod instanceof Utility)||mod instanceof Armour){
+		words+=(mod.tier==-1?"":" Tier "+mod.tier);
+		}
 		Font.drawFontCentered(batch, words, Font.small, position.x+CardGraphic.width/2+cardOffset, position.y+42+nameHeight/2);
+		
 		//Font.medium.drawWrapped(batch, s, width/4, 20, 500, HAlignment.CENTER);
 		if(alpha>0){
 			for(CardGraphic cg:graphics){

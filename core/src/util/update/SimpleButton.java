@@ -56,8 +56,11 @@ public class SimpleButton extends Mouser{
 	}
 
 	public void render(SpriteBatch batch){
-		Color base=batch.getColor();
+		Color base=batch.getColor().cpy();
 		batch.setColor(1,1,1,batch.getColor().a*alpha);
+		
+	
+		
 		Draw.drawScaled(batch, pic.get(), position.x, position.y, scale, scale);
 		if(moused)Draw.drawScaled(batch, pic.getOutline(), position.x, position.y, scale, scale);
 		font.setColor(batch.getColor());

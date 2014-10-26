@@ -10,6 +10,7 @@ import game.module.component.generator.Three;
 import game.module.component.shield.Blocker;
 import game.module.component.shield.Deflector;
 import game.module.component.shield.Repeller;
+import game.module.component.shield.Repulsor;
 import game.module.component.weapon.Laser;
 import game.module.component.weapon.Ray;
 import game.ship.Ship;

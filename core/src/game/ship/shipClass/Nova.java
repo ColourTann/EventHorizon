@@ -8,6 +8,7 @@ import game.assets.Gallery;
 import game.module.component.computer.Beta;
 import game.module.component.generator.Three;
 import game.module.component.shield.Repeller;
+import game.module.component.shield.Repulsor;
 import game.module.component.weapon.Pulse;
 import game.module.component.weapon.Tesla;
 import game.ship.Ship;

@@ -275,6 +275,7 @@ public class CardGraphic extends Mouser {
 		}
 
 		//Card image//
+
 		if (drawTopPic || part != card.side){
 			Draw.drawScaled(batch, card.getImage(part).get(), (int)(position.x + positionPic.x), (int)(baseHeight+ positionPic.y), 2, 2);		
 		}

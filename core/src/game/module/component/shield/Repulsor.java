@@ -27,17 +27,16 @@ public class Repulsor extends Shield{
 		rules[1]="Shields single system";
 		code[1].add(Special.ModuleChooser);
 		code[1].add(Special.ShieldChosenModule);
-		code[1].add(AI.SingleModuleIncoming,calc(3));
+		code[1].add(AI.SingleModuleIncoming,calc(4)-1);
 		code[1].setPriority(1);
 		
 		name[2]="Charge";
 		cost[2]=4;
 		effect[2]=0;
-		rules[2]="Self boost infinite: +"+calc(0)+" |iconshield|";
+		rules[2]="Self boost infinite: +"+calc(0)+" |iconshield| to all repulsor cards";
 		code[2].add(AI.BeforeTurn, 3);
 		code[2].add(AI.LowChance);
 		code[2].setPriority(1);		
-		
 		code[2].add(Special.BuffSelf);
 		code[2].setBuff(new Buff(BuffType.BonusEffeect, true, 1, -1));
 		
@@ -50,6 +49,7 @@ public class Repulsor extends Shield{
 		code[3].add(AI.RegularShield);
 		code[3].add(Special.ShieldOnlyPristine);
 		code[3].add(AI.IncomingUndamaged, calc(2));
+		code[3].setPriority(2);
 		
 		name[4]="Encase";
 		cost[4]=5;

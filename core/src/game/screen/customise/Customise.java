@@ -6,6 +6,7 @@ import game.Main;
 import game.assets.Gallery;
 import game.assets.Sounds;
 import game.card.Card;
+import game.card.CardCode;
 import game.card.ConsumableCard;
 import game.module.Module;
 import game.module.Module.ModuleType;
@@ -93,7 +94,6 @@ public class Customise extends Screen{
 			totalShipsDefeated++;
 			addRewards((int)(power/3)+1,false);
 		}
-		
 		if(first){
 			totalShipsDefeated=0;
 			setPanel(PanelType.PickShip);
@@ -132,11 +132,12 @@ public class Customise extends Screen{
 					Sounds.shieldUse.overlay();
 					first=false;
 					setPanel(PanelType.Choose);
-					addRewards(0, true);
+					
 					for(SimpleButton butt:buttons){
 						butt.demousectivate();
 						butt.fadeOut(.2f, Interp.LINEAR);
 					}
+					addRewards(0, true);
 				}
 
 				
@@ -212,12 +213,22 @@ public class Customise extends Screen{
 
 	}
 
-
+	public void addDeclineButton(){
+		final SimpleButton b = new SimpleButton(new Pair(250,Main.height-Reward.height-8), "", Gallery.crossButton, new Code() {
+			@Override
+			public void onPress() {
+				rewardChosen();
+				Sounds.cardDeselect.play();
+			}
+		});
+		b.setScale(4);
+		buttons.add(b);
+	}
 
 	public void addRewards(int tier, boolean start){
 
 		rewards.clear();
-		tier=Math.min(4, tier);
+		tier=Math.min(2, tier);
 		Draw.shuffle(Reward.typeList);
 		int bonus=0;
 		for(int i=0;i<3;i++){
@@ -229,7 +240,6 @@ public class Customise extends Screen{
 			if(start&&i==0)type=RewardType.Utility;
 			if(start&&i==1)type=RewardType.Booster;
 			if(start&&i==2)type=RewardType.Utility;
-			type=RewardType.Booster;
 			switch(type){
 			case Armour:
 				reward=new Reward(Armour.getRandomArmour(tier), i);
@@ -272,6 +282,7 @@ public class Customise extends Screen{
 			bonus=0;
 			setPanel(PanelType.Choose);
 		}
+		addDeclineButton();
 	}
 
 	public static void changeStats(ModuleInfo info){
@@ -361,8 +372,9 @@ public class Customise extends Screen{
 		}
 
 		batch.setColor(1,1,1,1);
-
-		for(SimpleButton butt:buttons) butt.render(batch);
+		for(SimpleButton butt:buttons){
+			butt.render(batch);
+		}
 		
 		
 		Font.drawFontCentered(batch, "Ships defeated: "+totalShipsDefeated, Font.big, ConsumableContainer.position.x+ConsumableContainer.width/2, 280);
@@ -414,7 +426,7 @@ public class Customise extends Screen{
 	}
 
 	public static void rewardChosen(){
-		me.infoBox.noDrawCards=true;
+		if(me.infoBox!=null)me.infoBox.noDrawCards=true;
 		if(me.oldInfoBox!=null)me.oldInfoBox.noDrawCards=true;
 		unMouse(null);
 		ship.recalculateStats();
@@ -431,13 +443,15 @@ public class Customise extends Screen{
 				Main.changeScreen(new PreBattle(ship, makeEnemyShip()),.5f);
 			}
 		});
-		
 	}
 
 	public void chosen(){
 		for(Reward rw:rewards){
 			rw.fadeOut(.3f, Interp.LINEAR);
 			rw.demousectivate();
+		}
+		for(SimpleButton butt:buttons){
+			butt.fadeOut(.3f, Interp.LINEAR);
 		}
 		selectedReward=null;
 		setPanel(PanelType.None);

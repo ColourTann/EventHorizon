@@ -39,7 +39,7 @@ public class Ray extends Weapon{
 		cost[3]=1;
 		effect[3]=0;
 		shots[3]=0;
-		rules[3]="Self boost 1:|n|-1 cost";
+		rules[3]="Self boost 1:|n|-1 |iconenergy| cost";
 		code[3].add(Special.BuffSelf);
 		code[3].setBuff(new Buff(BuffType.ReduceCost, true, 1, 1, null));
 		code[3].add(AI.OtherCardsThisSystem, 2);
