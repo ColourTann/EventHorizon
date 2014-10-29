@@ -43,7 +43,7 @@ import game.ship.shipClass.Nova;
 
 public class Main extends ApplicationAdapter  {
 
-	public static float version=0.494f;
+	public static float version=0.511f;
 	public static boolean debug=false;
 	public static float ticks;
 	public static int height=700;
@@ -80,7 +80,7 @@ public class Main extends ApplicationAdapter  {
 	}
 	public void init(){
 		Gdx.input.setInputProcessor(new InputHandler());
-
+		Sounds.battleMusic.get();
 		CardGraphic.init();
 		Gallery.init();
 		Sounds.init();

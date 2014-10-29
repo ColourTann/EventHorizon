@@ -27,7 +27,7 @@ public class Sounds {
 	public static SoundClip preBattleImpact= new SoundClip("Sound/prebattleimpact.ogg");
 	public static SoundClip bigAccept= new SoundClip("Sound/bigaccept.ogg");
 	
-	
+	public static MusicClip battleMusic = new MusicClip("Sound/Music/battle.mp3");
 	
 	
 	public static void init(){

@@ -31,7 +31,7 @@ public class Repeller extends Shield{
 		name[2]="Kinetic Field";
 		cost[2]=1;
 		effect[2]=calc(4);
-		rules[2]="Shields your shield system";
+		rules[2]="Shields your shield module";
 		code[2].add(Special.ShieldShield);
 		code[2].add(AI.TotalIncomingThis,calc(2));
 		code[2].setPriority(1);
@@ -39,7 +39,7 @@ public class Repeller extends Shield{
 		name[3]="Precision";
 		cost[3]=1;
 		effect[3]=calc(2);
-		rules[3]="Play only if your shield is undamaged";
+		rules[3]="Play only if your shield module is undamaged";
 		code[3].add(Special.AddShieldPoints);
 		code[3].add(AI.RegularShield);
 		code[3].add(Special.MustBeUndamaged);
@@ -47,7 +47,7 @@ public class Repeller extends Shield{
 		name[4]="Prioritise";
 		cost[4]=2;
 		effect[4]=calc(1);
-		rules[4]="Shields both your weapons";
+		rules[4]="Shields both your weapon modules";
 		code[4].add(Special.ShieldWeapons);
 		code[4].add(AI.IncomingWeapons,calc(2));
 		code[4].setPriority(1);

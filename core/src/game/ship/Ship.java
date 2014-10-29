@@ -1147,9 +1147,22 @@ public abstract class Ship {
 			}
 		}
 		return utilityStats;
-		
-			
-			
+	}
+	
+	public boolean containsModule(Module mod, boolean ignoreTier){
+		for(Component c:components){
+			if(mod.getClass()==c.getClass()){
+				if(!ignoreTier&&mod.tier==c.tier)continue;
+				return true;
+			}
+		}
+		for(Utility u:utilities){
+			if(u!=null&&mod.getClass()==u.getClass()){
+				if(!ignoreTier&&mod.tier==u.tier)continue;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void resetGraphics(){

@@ -3,6 +3,7 @@ package game.assets;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 import util.Draw;
 import util.TextWriter;
@@ -11,7 +12,8 @@ import util.maths.Pair;
 import util.update.Updater;
 
 public class TextBox extends Updater{
-
+	static int cornerSize=Gallery.textBoxTopLeftCorner.getHeight();
+	static int sideSize=Gallery.textBoxTop.getHeight();
 	
 	protected Alignment align=Alignment.Left;
 	TextWriter tw;
@@ -30,9 +32,10 @@ public class TextBox extends Updater{
 	}
 	
 	protected void renderBox(SpriteBatch batch, float width, float height){
-		int cornerSize=Gallery.textBoxTopLeftCorner.getHeight();
-		int sideSize=Gallery.textBoxTop.getHeight();
-		
+		renderBox(batch, position, width, height, align);
+	}
+	
+	public static void renderBox(SpriteBatch batch, Pair position, float width, float height, Alignment align){
 		int x=(int) position.x;
 		int y=(int) position.y;
 		if(align==Alignment.Center){

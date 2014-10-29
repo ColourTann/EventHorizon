@@ -39,7 +39,7 @@ public class Menu extends Screen{
 		choices.add(new GameChoice(Main.width/2, 305, "easy", 
 				new Battle(new Hornet(true, 0), new Aurora(false, 0), false, false)));
 		choices.add(new GameChoice(Main.width/2, 405, "medium", 	
-				new Battle(new Comet(true, 0), new Nova(false, 0), false, false)));
+				new Battle(new Comet(true, 0), new Eclipse(false, 0), false, false)));
 		choices.add(new GameChoice(Main.width/2, 505, "arena", 	
 				new Customise(new Aurora(true, 0), true)));
 

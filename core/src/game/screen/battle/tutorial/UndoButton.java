@@ -13,7 +13,7 @@ public class UndoButton extends Mouser{
 	private static UndoButton me;
 	boolean glow;
 	public UndoButton(){
-		position=new Pair(435,172);
+		position=new Pair(420,172);
 		mousectivate(new CircleCollider(position.x, position.y, 24));
 	}
 	public static void setPosition(Pair position){
@@ -32,9 +32,9 @@ public class UndoButton extends Mouser{
 
 	@Override
 	public void mouseClicked(boolean left) {
-		if(Tutorial.undoVisible()){
+	//	if(Tutorial.undoVisible()){
 			Tutorial.goBack();
-		}
+		//}
 	}
 
 	@Override

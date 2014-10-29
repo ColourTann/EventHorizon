@@ -35,7 +35,7 @@ public class TextWriter {
 	String text;
 	int baseWrapWidth=9999;
 	float spaceWidth;
-	float height;
+	public float height;
 	float bonusHeight=3;
 	public float maxHeight;
 	public float maxWidth;
@@ -201,7 +201,7 @@ public class TextWriter {
 				xOffset=obstacle.x;
 			}
 		}
-		
+		else x+=wordWidth;
 		drawLine(tempBatch, text.substring(lineStart, currentIndex), y, x, xOffset);
 		maxHeight=y+height-bonusHeight/2;
 		tempBatch.setColor(1,1,1,1);
@@ -240,7 +240,7 @@ public class TextWriter {
 					continue;
 				}
 				Texture t= replacers.get(specialString);
-				Draw.draw(batch, t, (int)x+xOffset, (int)(y+((float)height-(wigglyTextureHeight/2f))/2f-t.getHeight()/2f+yOffset));
+				Draw.draw(batch, t, (int)(x+xOffset), (int)(y+((float)height-(wigglyTextureHeight/2f))/2f-t.getHeight()/2f+yOffset));
 				x+=t.getWidth();
 				prevIndex=currentIndex;
 				specialMode=false;
@@ -251,14 +251,14 @@ public class TextWriter {
 
 				if(c=='|'){
 					String word=s.substring(prevIndex, currentIndex-1);
-					font.draw(batch, word, (int)x+xOffset, y+yOffset);
+					font.draw(batch, word, (int)(x+xOffset), (int)(y+yOffset));
 					x+=font.getBounds(word).width;
 					specialMode=true;
 					prevIndex=currentIndex;
 				}
 				if(c==' '){
 					String word=s.substring(prevIndex, currentIndex-1);
-					font.draw(batch, word, (int)x+xOffset, y+yOffset);
+					font.draw(batch, word, (int)(x+xOffset), (int)(y+yOffset));
 
 					x+=font.getBounds(word).width;
 					x+=spaceWidth;
@@ -267,7 +267,7 @@ public class TextWriter {
 			}
 
 		}
-		font.draw(batch, s.substring(prevIndex, currentIndex), (int)x+xOffset, y+yOffset);
+		font.draw(batch, s.substring(prevIndex, currentIndex), (int)(x+xOffset), (int)(y+yOffset));
 		x+=font.getBounds(s.substring(prevIndex, currentIndex)).width;
 		if(x>maxWidth){
 			maxWidth=x;

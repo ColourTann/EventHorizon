@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import game.Main;
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardGraphic;
@@ -92,10 +93,10 @@ public class Battle extends Screen{
 	public static boolean arena;
 	private static Timer endTimer=new Timer();
 	static Timer victoryFadeInTimer=new Timer();
-	
+
 	public boolean clicked=false;
-	 
-	
+
+
 	public Battle(Ship player, Ship enemy, boolean tutorial, boolean arena){
 		this.player=player;
 		this.enemy=enemy;
@@ -106,7 +107,8 @@ public class Battle extends Screen{
 
 	@Override
 	public void init() {
-
+		Sounds.battleMusic.get().stop();
+		Sounds.battleMusic.fadeIn(1);
 
 		player.getGraphic().activate();
 		enemy.getGraphic().activate();
@@ -116,8 +118,6 @@ public class Battle extends Screen{
 		resetStatics();
 		Star.init();
 		if(tutorial)initTutorial();		
-		//player.setArmour(new RegenArmour(0));
-
 		player.startFight(true);
 		enemy.startFight(false);
 
@@ -284,7 +284,7 @@ public class Battle extends Screen{
 		}
 		if(getPlayer().dead)victor=getEnemy();
 		if(!arena){
-			
+
 			Timer t=new Timer(0,1,5,Interp.LINEAR);
 
 			t.addFinisher(new Finisher() {
@@ -292,6 +292,7 @@ public class Battle extends Screen{
 				@Override
 				public void finish() {
 					Main.changeScreen(new Menu());
+					Sounds.battleMusic.fadeOut(.3f);
 				}
 			});
 		}
@@ -304,6 +305,7 @@ public class Battle extends Screen{
 					@Override
 					public void finish() {
 						Main.changeScreen(new Customise(victor, false),1);
+						Sounds.battleMusic.fadeOut(.3f);
 					}
 				});
 			}
@@ -341,7 +343,7 @@ public class Battle extends Screen{
 			for(Component c:enemy.components){
 				System.out.println(c+":"+c.getShieldsRequiredToAvoidMajor());
 			}
-			
+
 			break;
 		case Input.Keys.Q:
 
@@ -637,13 +639,13 @@ public class Battle extends Screen{
 				}
 			}
 		}
-		
-		
+
+
 	}
 
 	@Override
 	public void postRender(SpriteBatch batch) {
-		
+
 		drawInterfaceOverlay(batch);
 		for(CardIcon icon:CardIcon.icons){
 			icon.render(batch);
@@ -651,24 +653,22 @@ public class Battle extends Screen{
 		for(Card c:player.hand){
 			if(c.getGraphic()!=CardGraphic.onTopGraphic)c.getGraphic().render(batch);
 		}
-	
+
 		CycleButton.get().render(batch);
 		if(help!=null)help.render(batch);
 		for(Animation a:animations){
 			a.render(batch);
 		}
-		
+
 		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
 		for(ModuleStats ums:player.getUtilityStats()){
 			ums.render(batch);
 		}
-		
-		
-		
-		
-		if(isTutorial()){
-			Tutorial.renderAll(batch);
-		}
+
+
+
+
+
 		for(ModuleStats ums:enemy.getUtilityStats()){
 			ums.render(batch);
 		}
@@ -681,12 +681,12 @@ public class Battle extends Screen{
 		if(arena&&Customise.totalShipsDefeated==0&&!clicked){
 			CycleTeacher.get().render(batch);
 		}
-CardGraphic.renderOffCuts(batch);
-	
-		
-		
+		CardGraphic.renderOffCuts(batch);
 		for(CardGraphic cg:Card.extraCardsToRender)cg.render(batch);
 		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
+		if(isTutorial()){
+			Tutorial.renderAll(batch);
+		}
 	}
 
 	@Override

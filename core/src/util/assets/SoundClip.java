@@ -7,13 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 public class SoundClip{
-	
-	//general
-	
-	
-	
-
-	
 	public static Option soundLevel=new Option(1);
 	
 	private Sound sound;

@@ -24,7 +24,7 @@ public class Repulsor extends Shield{
 		name[1]="Reinforce";
 		cost[1]=3;
 		effect[1]=calc(4);
-		rules[1]="Shields single system";
+		rules[1]="Shields a single chosen module";
 		code[1].add(Special.ModuleChooser);
 		code[1].add(Special.ShieldChosenModule);
 		code[1].add(AI.SingleModuleIncoming,calc(4)-1);

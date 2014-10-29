@@ -49,7 +49,7 @@ public class Laser extends Weapon{
 		code[3].setPriority(1);
 
 		name[4]="Weaken";
-		cost[4]=3;
+		cost[4]=2;
 		effect[4]=0;
 		shots[4]=0;
 		rules[4]="Targeted glitch 15: Takes +"+calc(0)+" |icondamage| from each shot";

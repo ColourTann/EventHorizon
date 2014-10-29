@@ -158,7 +158,7 @@ public class Tutorial extends TextBox{
 		add("The enemy ship is playing a weapon card to attack you!", Trigger.PlayerShieldPhase, Effect.EnemyPlayCards);
 		add("Each |incoming| shows that you are about to take damage on that module.", new Pair(43,390));
 		add("Shield cards give you shield points to spend equal to their| ||shield| when you play them.", Effect.DrawFirstHand);
-		add("This card gives two shield points.", new Pair(Main.width/2, 451));
+		add("The deflect card gives 2 shield points.");
 		add("", Trigger.CheckList, Effect.ShieldGenList);
 		add("", Trigger.PlayerWeaponPhase);
 		add("Now it's your turn to fight back.", Effect.hideNameWisps);
@@ -168,7 +168,7 @@ public class Tutorial extends TextBox{
 		add("", Trigger.PlayerShieldPhase);
 		add("If you take enough damage to cover a |greenhp1| or a |greenhp2|, you take a major damage and something bad happens!", 1);
 		add("If a ship takes 5 total major damage, it is defeated.");
-		add("You are about to take major damage, shield it all.");
+		add("You are about to take two major damage, shield it all.");
 		add("", Trigger.CheckList, Effect.ShieldMajorList);
 		add("", Trigger.PlayerWeaponPhase);
 		add("All cards have a special alternate side.", Effect.DrawTargeted);
@@ -313,6 +313,7 @@ public class Tutorial extends TextBox{
 				for(Card c:player.hand){
 					if(c.getName(1).equals("")){
 						c.remakeCard(3);
+						c.getGraphic().setupTextWriters();
 					}
 				}
 
@@ -447,9 +448,9 @@ public class Tutorial extends TextBox{
 		}
 		t.activated=true;
 		if(currentList!=null&&currentList.isCurrent()){
-			UndoButton.setPosition(new Pair(Main.width/2-currentList.width/2f-30,175));
+			//UndoButton.setPosition(new Pair(Main.width/2-currentList.width/2f-30,175));
 		}
-		else UndoButton.setPosition(new Pair(Main.width/2-t.width/2f-30,175));
+		//else UndoButton.setPosition(new Pair(Main.width/2-t.width/2f-30,175));
 	}
 
 	public static boolean stopFlip(){
@@ -563,7 +564,7 @@ public class Tutorial extends TextBox{
 		glows.addAll(Tutorial.glows);
 		
 		//if(currentList!=null) UndoButton.setPosition(new Pair(Main.width/2-currentList.width/2f-30,200));
-		UndoButton.setPosition(new Pair(Main.width/2-t.width/2f-30,175));
+		//UndoButton.setPosition(new Pair(Main.width/2-t.width/2f-30,175));
 	}
 
 	public static Tutorial getCurrentTutorial() {

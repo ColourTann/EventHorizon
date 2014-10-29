@@ -280,7 +280,7 @@ public abstract class Component extends Module{
 
 	private void destroy(){
 		destroyed=true;
-		new TextWisp("Destroyed", Font.medium, getCenter().add(new Pair(0,-40)), WispType.Regular);
+		//new TextWisp("Destroyed", Font.medium, getCenter().add(new Pair(0,-40)), WispType.Regular);
 		for(int i=0;i<ship.hand.size();i++){
 			Card c=ship.hand.get(i);
 			if(c.mod==this){

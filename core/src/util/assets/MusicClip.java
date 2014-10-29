@@ -9,11 +9,11 @@ import util.Option;
 import util.update.Mouser;
 
 public class MusicClip extends Mouser{
-	public static Option musicLevel=new Option(.7f);
+	public static Option musicLevel=new Option(.5f);
 	
 
 	float fadeSpeed=0;
-	float volumeMultiplier=1;
+	float volumeMultiplier=.5f;
 	String path;
 	Music music;
 	public static MusicClip currentMusic;
@@ -29,6 +29,7 @@ public class MusicClip extends Mouser{
 		return music;
 	}
 	public void play(){
+		
 		currentMusic=this;
 		get().setVolume(getVolume());
 		music.setLooping(true);

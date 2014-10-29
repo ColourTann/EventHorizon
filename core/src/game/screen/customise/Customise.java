@@ -232,8 +232,8 @@ public class Customise extends Screen{
 		Draw.shuffle(Reward.typeList);
 		int bonus=0;
 		for(int i=0;i<3;i++){
-			if(i+bonus>=5)bonus=0;
-			RewardType type= Reward.typeList[i+bonus];
+			
+			RewardType type= Reward.typeList[(i+bonus)%6];
 
 			Reward reward = null;
 			boolean cancel=false;
@@ -253,12 +253,21 @@ public class Customise extends Screen{
 				break;
 			case Utility:
 				reward=new Reward(Utility.getRandomUtility(tier), i);
+				while(ship.containsModule(reward.module, true)){
+					reward=new Reward(Utility.getRandomUtility(tier), i);
+				}
 				break;
 			case Shield:
 				reward=new Reward(Shield.getRandomShield(tier), i);
+				while(ship.containsModule(reward.module, false)){
+					reward=new Reward(Shield.getRandomShield(tier), i);
+				}
 				break;
 			case Weapon:
 				reward=new Reward(Weapon.getRandomWeapon(tier), i);
+				while(ship.containsModule(reward.module, false)){
+					reward=new Reward(Weapon.getRandomWeapon(tier), i);
+				}
 				break;
 			default:
 				break;

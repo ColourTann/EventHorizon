@@ -3,6 +3,7 @@ package game.card;
 import game.assets.Gallery;
 import game.card.CardCode.Augment;
 import game.card.CardCode.Special;
+import game.module.junk.buff.Buff.BuffType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,17 +28,20 @@ public class CardHover {
 	static Card card;
 	public static Pair enemyHoverPosition = new Pair();
 	TextWriter tw;
+	static TextWriter scrambledWriter;
 	public static HashMap<ReminderType, TextWriter> buffWriters = new HashMap<CardHover.ReminderType, TextWriter>();
 	public enum ReminderType{Targeted, Multishot, Augment, Absorb, SelfBuff, SelfDebuff, TargetedDebuff}
 
 	public static ArrayList<ReminderType> getReminderTypes(Card c){
 		ArrayList<ReminderType> result = new ArrayList<CardHover.ReminderType>();
-		CardCode code = c.getCode();
+		CardCode code = c.getCode(c.getGraphic().mousedSide==c.side?0:1);
+		
 		if(code.contains(Special.Augment)) result.add(ReminderType.Augment);
+		if(code.contains(Augment.AugmentAll)) result.add(ReminderType.Augment);
 		if(code.contains(Special.Targeted)) result.add(ReminderType.Targeted);
 		if(code.contains(Augment.AugmentTargeted)) result.add(ReminderType.Targeted);
 		if(code.contains(Augment.AugmentAddShot)) result.add(ReminderType.Multishot);
-		if(c.getShots()>1) result.add(ReminderType.Multishot);
+		if(c.getShots(c.getGraphic().mousedSide==c.side?0:1)>1) result.add(ReminderType.Multishot);
 		if(code.contains(Special.Absorb)) result.add(ReminderType.Absorb);
 		if(code.contains(Special.BuffSelf)) result.add(ReminderType.SelfBuff);
 		if(code.contains(Special.DebuffSelf)) result.add(ReminderType.SelfDebuff);
@@ -50,9 +54,11 @@ public class CardHover {
 
 
 	public static void render(SpriteBatch batch, Card c, float baseY, float alpha) {
+		System.out.println(c.getGraphic().mousedSide);
 		int bonusY=0;
 		card=c;
-		if(CardHover.getReminderTypes(card).size()==0){
+		System.out.println(baseY+yOffset+bonusY);
+		if(c.mod.getBuffAmount(BuffType.Scrambled)==0&&CardHover.getReminderTypes(card).size()==0){
 			return;
 		}
 
@@ -67,6 +73,11 @@ public class CardHover {
 		batch.setColor(1,1,1,alpha);
 		Draw.draw(batch, Gallery.cardBaseHover.get(), (int)position.x, (int)baseY);
 		Font.small.setColor(Colours.withAlpha(Colours.dark, alpha));
+		if(c.mod.getBuffAmount(BuffType.Scrambled)>0){
+			TextWriter tw=scrambledWriter;
+			tw.render(batch, (int)position.x+xOffset, (int)(baseY+yOffset+bonusY));//position.y+bonusY);
+			return;
+		}
 		for(ReminderType t:getReminderTypes(card)){
 			TextWriter tw=buffWriters.get(t);
 			tw.render(batch, (int)position.x+xOffset, (int)(baseY+yOffset+bonusY));//position.y+bonusY);
@@ -77,9 +88,12 @@ public class CardHover {
 	}
 
 	public static void init() {
+		Font.small.setColor(Colours.dark);
+		scrambledWriter=new TextWriter(Font.small, "This card's module has been scrambled. Click this card to unscramble it|n|(no |iconenergy| cost)");
+		scrambledWriter.setWrapWidth(wrapWidth);
 		for(ReminderType type: ReminderType.values()){
 			TextWriter tw=null;
-			Font.small.setColor(Colours.dark);
+			
 			switch(type){
 			case Absorb:
 				tw=new TextWriter(Font.small, "Absorb Effect - Gain the effect if all shield points are used to block damage");
