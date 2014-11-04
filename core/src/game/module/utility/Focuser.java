@@ -10,6 +10,7 @@ public class Focuser extends Utility{
 
 	public Focuser(int tier) {
 		super(tier, ModuleType.UTILITY, "Focuser", "Targeted single-shot attacks cost 1 less", Gallery.blaster, 1, 1);
+		//Cards are: targeted glitch 3: takes extra damage and... another augment targeted + draw?
 	}
 
 	@Override

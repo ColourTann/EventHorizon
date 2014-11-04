@@ -69,15 +69,24 @@ public class TextWriter {
 
 	}
 
+	public static int getClosestPower(int i){
+		if(true)return 1024;
+		int result=1;
+		while(result<i)result<<=1;
+		return result;
+	}
+	
 	public void setupTexture(){
 		if(texture!=null)smallDispose();
 		font.setColor(col);
-		buffer = new FrameBuffer(Format.RGBA8888, baseWrapWidth ,300, false);
+		int buffWidth=getClosestPower(baseWrapWidth);
+		int buffHeight=getClosestPower(300);
+		buffer = new FrameBuffer(Format.RGBA4444, buffWidth, buffHeight ,false);
 		SpriteBatch tempBatch = new SpriteBatch();
 		buffer.begin();
-		OrthographicCamera tempCam = new OrthographicCamera(baseWrapWidth, 300);
+		OrthographicCamera tempCam = new OrthographicCamera(buffWidth, buffHeight);
 
-		tempCam.translate(baseWrapWidth/2, 300/2);
+		tempCam.translate(buffWidth/2, buffHeight/2);
 		tempCam.update();
 		tempBatch.setProjectionMatrix(tempCam.combined);
 		tempBatch.begin();
@@ -213,7 +222,10 @@ public class TextWriter {
 		tempBatch.end();
 		buffer.end();
 		texture=buffer.getColorBufferTexture();
-
+//		Pixmap map = new Pixmap(baseWrapWidth, (int) maxHeight, Format.RGBA8888);
+//		Pixmap old = Pic.getPixMap(texture);
+//		map.drawPixmap(old, 0, 0);
+//		texture=new Texture(map);
 		tempBatch.dispose();
 		
 

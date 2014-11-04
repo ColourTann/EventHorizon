@@ -43,7 +43,7 @@ import game.ship.shipClass.Nova;
 
 public class Main extends ApplicationAdapter  {
 
-	public static float version=0.511f;
+	public static float version=0.534f;
 	public static boolean debug=false;
 	public static float ticks;
 	public static int height=700;
@@ -79,6 +79,7 @@ public class Main extends ApplicationAdapter  {
 		init();
 	}
 	public void init(){
+		System.out.println(TextWriter.getClosestPower(300));
 		Gdx.input.setInputProcessor(new InputHandler());
 		Sounds.battleMusic.get();
 		CardGraphic.init();
@@ -101,7 +102,7 @@ public class Main extends ApplicationAdapter  {
 		mainCam.setToOrtho(true);
 		bufferBatch = new SpriteBatch();
 		OrthographicCamera cam = new OrthographicCamera(Main.width, Main.height);
-		//map=new Map();currentScreen=map;
+		map=new Map();currentScreen=map;currentScreen.init();
 		
 		//bufferBatch.setProjectionMatrix(Main.mainCam.combined);
 
@@ -109,7 +110,7 @@ public class Main extends ApplicationAdapter  {
 
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-		select=new Menu();currentScreen=select;select.init();
+//		select=new Menu();currentScreen=select;select.init();
 
 		//currentScreen=new PreBattle(new Hornet(true, 0), new Hornet(false, 0)); currentScreen.init();
 
@@ -211,6 +212,7 @@ public class Main extends ApplicationAdapter  {
 
 	public enum ScreenType{EasyFight, MediumFight, HardFight, TutorialFight, Menu}
 	public static void changeScreen(Screen newScreen){
+		Gdx.input.setCursorImage(null,0,0);
 		fadeSpeed=.5f;
 		//if(type==ScreenType.Menu&&currentScreen==select)return;
 		TextWisp.wisps.clear();

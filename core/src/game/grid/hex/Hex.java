@@ -23,10 +23,10 @@ import game.ship.mapThings.MapShip;
 
 public class Hex {
 	//Defining geometry and stuff//
-	public static float sqr3=(float) Math.sqrt(3);
+	public static double sqr3=Math.sqrt(3);
 	private static Polygon p;
 	private static float[] points = new float[12];
-	public static float size=30;
+	public static float size=30f;
 	static float width; static float height;
 	public static float xGap;
 	public static float yGap;
@@ -84,7 +84,9 @@ public class Hex {
 	}
 
 	public Pair getPixel(){
-		return new Pair((float) (x*xGap+y*yGap/sqr3),y*yGap);
+		
+		//return new Pair((float) Math.round((x*xGap+y*yGap/sqr3)),(float)Math.round(y*yGap));
+		return new Pair((float) (x*xGap+y*yGap/sqr3),(y*yGap));
 	}
 	public ArrayList<Hex> getHexesWithin(int dist, boolean includeSelf){
 		ArrayList<Hex> result= new ArrayList<Hex>();
@@ -382,8 +384,12 @@ public class Hex {
 
 	public void renderBorder(ShapeRenderer shape) {
 		Pair s=getPixel();
-		p.setPosition(s.x, s.y);
-		shape.polygon(p.getTransformedVertices());
+		p.setPosition((float)Math.round(s.x), (float)Math.round(s.y));
+		float[] vertices=p.getTransformedVertices();
+		shape.line(vertices[0], vertices[1], vertices[2], vertices[3]);
+		shape.line(vertices[4], vertices[5], vertices[2], vertices[3]);
+		shape.line(vertices[4], vertices[5], vertices[6], vertices[7]);
+//		shape.polygon(p.getTransformedVertices());
 
 	}
 

@@ -444,6 +444,7 @@ public class Battle extends Screen{
 	public static Phase getPhase(){return currentPhase;}
 
 	public static void setState(State s){
+		Gdx.input.setCursorImage(null,0,0);
 		currentState=s;
 		switch(currentState){
 		case Augmenting:
@@ -463,6 +464,7 @@ public class Battle extends Screen{
 			augmentSource=null;
 			break;
 		case Targeting:
+			Gdx.input.setCursorImage(Gallery.cursorTargeted.getPixMap(), Gallery.cursorTargeted.getWidth()/2, Gallery.cursorTargeted.getHeight()/2);
 			help=new HelpPanel("Pick a target module",false);
 			break;
 		case ModuleChoose:

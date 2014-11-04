@@ -67,6 +67,8 @@ public class Gallery {
 	public static Pic textBoxTopLeftCorner= new Pic("Interface/textboxtopleftcorner");
 	public static Pic textBoxMid= new Pic("Interface/textboxmid");
 	
+	public static Pic cursorTargeted= new Pic("Icon/cursoricontargeted");
+	
 	//WEAPONS//
 	public static Pic blaster=new Pic("Module/Weapon/Blaster/module", 3);
 	public static Pic[] blasterCard= new Pic[5];

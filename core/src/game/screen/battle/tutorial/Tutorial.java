@@ -11,6 +11,7 @@ import util.image.Pic;
 import util.maths.Pair;
 import util.update.Updater;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -63,6 +64,7 @@ public class Tutorial extends TextBox{
 	ArrayList<PicLoc> myGlows= new ArrayList<PicLoc>();
 	boolean activated;
 	private boolean triggered;
+
 	
 	//Highlight stuff//
 	public static ArrayList<PicLoc> glows= new ArrayList<PicLoc>();
@@ -87,10 +89,7 @@ public class Tutorial extends TextBox{
 	}
 
 	public Tutorial(String message, Pair point) {
-		this.str=message;
-
-	
-		
+		this.str=message;		
 		this.target=point;
 		if(point.x<x){
 			origin=new Pair(x+10,y+height/2+5);
@@ -128,6 +127,7 @@ public class Tutorial extends TextBox{
 
 	public void render(SpriteBatch batch) {
 		if(str.equals(""))return;
+	
 		batch.setColor(1,1,1,alpha);
 		if(target!=null){
 			Draw.drawRotatedScaled(batch, Gallery.tutPoint.get(), origin.x, origin.y, distance, 1, rotation);
@@ -149,10 +149,10 @@ public class Tutorial extends TextBox{
 	public enum Effect{EnemyPlayCards, ShieldGenList, DrawFirstHand, PlayWeaponList, ShieldMajorList, hideNameWisps, TargetGeneratorList, DrawTargeted, drawTwoShields, LotsShieldList, End, UnscrambleList, DrawMoreTeslas, ShowPlayerNames, HighlightTargetedPulse}
 	public static ArrayList<Tutorial> tutorials=new ArrayList<Tutorial>();
 	public static void init(){
-
+		
 		enemy=Battle.getEnemy();
 		player=Battle.getPlayer();
-		add("This is your ship.|n|(click to continue)");
+		add("This is your ship.|n|(click to continue)", 250, 30);
 		add("It has five modules.", Effect.ShowPlayerNames);
 		add("They make up a deck of cards that you use to fight!");
 		add("The enemy ship is playing a weapon card to attack you!", Trigger.PlayerShieldPhase, Effect.EnemyPlayCards);
@@ -161,7 +161,11 @@ public class Tutorial extends TextBox{
 		add("The deflect card gives 2 shield points.");
 		add("", Trigger.CheckList, Effect.ShieldGenList);
 		add("", Trigger.PlayerWeaponPhase);
-		add("Now it's your turn to fight back.", Effect.hideNameWisps);
+		add("A turn is made up of a shield phase followed by a weapon phase.");
+		add("At the beginning of each turn, you draw to your maximum hand size.");
+		add("And gain your income in energy",new Pair(320,404));
+		add("You just has a shield phase, where you defend yourself from enemy attacks.");
+		add("Now it's your weapon phase, time to fight back!", Effect.hideNameWisps);
 		add("Cards have an energy cost.", new Pair(475,484));
 		add("Weapon and shield cards have bars which show how much damage or shielding they provide.", new Pair(528,521));
 		add("", Trigger.CheckList, Effect.PlayWeaponList);
@@ -183,10 +187,7 @@ public class Tutorial extends TextBox{
 		add("Click on a scrambled card to repair it (this will cost you no energy but use up the card)");
 		add("", Trigger.CheckList, Effect.UnscrambleList);
 		add("", Trigger.PlayerShieldPhase);
-		add("A turn is made up of a shield phase followed by a weapon phase.");
-		add("At the beginning of each turn, you draw to your maximum hand size.");
-		add("And gain your income in energy",new Pair(320,404));
-		add("You're good to go!");
+		add("You're good to go, try to win the battle!");
 		add("", Effect.End);
 		for(Tutorial p:tutorials){
 			p.deactivate();
@@ -225,7 +226,11 @@ public class Tutorial extends TextBox{
 		tutorials.add(t);
 	}
 
-
+	public static void add(String s, int x, int y){
+		Tutorial t= new Tutorial(s,null,null);
+		t.position=new Pair(x,y);
+		tutorials.add(t);
+	}
 
 
 	public static void next(){
@@ -239,7 +244,6 @@ public class Tutorial extends TextBox{
 		}
 		glows.clear();
 
-		System.out.println("next");
 		Tutorial t= tutorials.get(index);
 		
 
@@ -351,7 +355,7 @@ public class Tutorial extends TextBox{
 				break;
 			case ShieldGenList:
 				currentList=new Checklist(t, new Task[]{
-						new Task("Play the shield card|n|(click to play)",TaskType.PlayShield, firstShieldCard, 0), 
+						new Task("Play deflect|n|(click to play)",TaskType.PlayShield, firstShieldCard, 0), 
 						new Task("Click twice on your generator (on the left) to prevent the incoming damage (|incoming|) with your shield points",TaskType.ShieldGen, Gallery.baseModuleStats, new Pair(0,ModuleStats.height*3)),
 						new Task("Click the central blue shield button to confirm", TaskType.EndShieldPhase, true)
 				});
@@ -534,7 +538,6 @@ public class Tutorial extends TextBox{
 	@SuppressWarnings("incomplete-switch")
 	public static void goBack() {
 		
-		System.out.println("going back");
 		if(index==0)return;
 		Tutorial t=tutorials.get(index-1);
 		if(t==null)return;

@@ -10,6 +10,7 @@ public class Extender extends Utility{
 
 	public Extender(int tier) {
 		super(tier, ModuleType.UTILITY, "Extender", "Boosts and drains from your cards last 1 extra turn", Gallery.blaster, 1, 1);
+		//boosts and drains last one additional turn//
 		
 	}
 

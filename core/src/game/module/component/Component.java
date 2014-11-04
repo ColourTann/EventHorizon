@@ -156,6 +156,7 @@ public abstract class Component extends Module{
 		
 			
 			if(code.contains(Special.ChooseWeapon)&&type!=ModuleType.WEAPON){
+				Sounds.error.overlay();
 				return;
 			}
 			
@@ -176,7 +177,7 @@ public abstract class Component extends Module{
 				buff.card=Battle.moduleChooser;
 				addBuff(buff);	
 			}
-			
+			Sounds.targetSelect.play();
 			Battle.moduleChooser.moduleChosen(this);
 			return;
 		}
@@ -229,6 +230,7 @@ public abstract class Component extends Module{
 				for(int i=0;i<targeter.getShots();i++){
 					ship.getEnemy().addAttack(targeter, this);
 				}
+				Sounds.targetSelect.play();
 			}
 		}
 	}

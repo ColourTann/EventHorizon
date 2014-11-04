@@ -161,6 +161,7 @@ public class Map extends Screen{
 
 	@Override
 	public void update(float delta) {
+
 		updateState(delta);		
 		grid.update(delta);		
 		updateCamPosition();
@@ -222,6 +223,7 @@ public class Map extends Screen{
 
 	@Override
 	public void scroll(int amount) {
+		zoom(amount);
 	}
 
 	@Override

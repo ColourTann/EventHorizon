@@ -81,7 +81,7 @@ public class CardGraphic extends Mouser {
 	private Timer hoverFadeTimer= new Timer();
 	public static CardGraphic onTopGraphic;
 	public int mousedSide=0;
-	
+	boolean wrongState = false;
 	//offcuts//
 	//public static CardGraphic augmentPicker;
 
@@ -133,9 +133,9 @@ public class CardGraphic extends Mouser {
 			int newMousedSide=0;
 			if(Mouser.getMousePosition().y>position.y+selectedHeight+height/2f)newMousedSide=1;
 			if(mousedSide!=newMousedSide){
-//				if(hoverFadeTimer.getFloat()!=0){
-//					hoverFadeTimer=new Timer(0,1,.5f, Interp.LINEAR);
-//				}
+				//				if(hoverFadeTimer.getFloat()!=0){
+				//					hoverFadeTimer=new Timer(0,1,.5f, Interp.LINEAR);
+				//				}
 			}
 			mousedSide=newMousedSide;
 		}
@@ -173,8 +173,8 @@ public class CardGraphic extends Mouser {
 
 		Color c = Colours.white;
 		//Faded is used for cards from the wrong phase, cards cooling down and cards that can't be augmented//
-		boolean wrongState = false;
-
+		
+		wrongState=false;
 
 
 		//Checking state//
@@ -268,7 +268,7 @@ public class CardGraphic extends Mouser {
 		else Draw.draw(batch, Gallery.cardBase.get(), (int)position.x, (int)baseHeight);
 
 		//Augment colouring//
-		if(!still&&card.isAugmented(part)){
+		if(!still&&card.isAugmented(part)&&!wrongState){
 			float glowAlpha=(float)Math.sin(Main.ticks*5);
 			glowAlpha+=2.3f;
 			glowAlpha/=4;
@@ -397,7 +397,9 @@ public class CardGraphic extends Mouser {
 
 		batch.setColor(Colours.white);
 		if((card.side==0)==(mousedSide==part)&&moused&&Screen.isActiveType(Battle.class)){
-			Draw.draw(batch, Gallery.cardBase.getOutline(), (int)position.x, (int)baseHeight);
+			if(card.mod.ship.player){
+				Draw.draw(batch, Gallery.cardBase.getOutline(), (int)position.x, (int)baseHeight);
+			}
 		}
 	}
 

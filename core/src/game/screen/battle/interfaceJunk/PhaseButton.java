@@ -125,7 +125,7 @@ public class PhaseButton extends Mouser{
 		Draw.draw(batch, after.get(),t.getPair().x,t.getPair().y);
 		batch.setColor(1, 1, 1, 1);
 		
-		for(PicLoc pl:Tutorial.glows)pl.renderFuckingPhaseButtonStupidTutorial(batch);
+		if(Battle.isTutorial())for(PicLoc pl:Tutorial.glows)pl.renderFuckingPhaseButtonStupidTutorial(batch);
 	}
 	
 

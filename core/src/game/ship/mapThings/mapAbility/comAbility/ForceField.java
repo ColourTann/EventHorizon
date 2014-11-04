@@ -16,7 +16,7 @@ public class ForceField extends MapAbility{
 	ArrayList<Hex> forceFields = new ArrayList<Hex>();
 	
 	public ForceField() {
-		super(Gallery.mapAbilityForceField, 5, 1);
+		super(Gallery.mapAbilityForceField,4, 5, 1);
 	}
 
 	@Override

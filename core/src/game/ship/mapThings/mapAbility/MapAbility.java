@@ -19,7 +19,7 @@ import game.ship.mapThings.MapShip;
 
 public abstract class MapAbility extends Mouser{
 	
-	public int cooldown;
+	public int baseCooldown, cooldown;
 	Pair location;
 	public MapShip mapShip;
 	public int range;
@@ -31,11 +31,11 @@ public abstract class MapAbility extends Mouser{
 		//Computer Abilities
 		Cloak, Beam, Forcefield
 	}
-	public MapAbility(Pic p, int range, float effort) {
+	public MapAbility(Pic p, int cooldown, int range, float effort) {
 		abilityPic=p;
 		this.range=range;
 		this.effort=effort;
-		deactivate();
+		this.baseCooldown=cooldown;
 	}
 
 	@Override

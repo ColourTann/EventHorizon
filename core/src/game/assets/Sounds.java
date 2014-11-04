@@ -11,6 +11,7 @@ public class Sounds {
 	public static SoundClip cardFlip= new SoundClip("Sound/flip.ogg");
 	public static SoundClip cardDeselect= new SoundClip("Sound/deselectcard.ogg");
 	public static SoundClip cardSelect= new SoundClip("Sound/selectcard.ogg");
+	public static SoundClip targetSelect= new SoundClip("Sound/targetselect.ogg");
 	
 	public static SoundClip damageMinor=new SoundClip("Sound/minordamage.ogg");
 	public static SoundClip damageMajor=new SoundClip("Sound/majordamage.ogg");
@@ -24,10 +25,12 @@ public class Sounds {
 	public static SoundClip swift= new SoundClip("Sound/swift.ogg");
 	public static SoundClip rocket= new SoundClip("Sound/rocket.ogg");
 	
+	
+	
 	public static SoundClip preBattleImpact= new SoundClip("Sound/prebattleimpact.ogg");
 	public static SoundClip bigAccept= new SoundClip("Sound/bigaccept.ogg");
 	
-	public static MusicClip battleMusic = new MusicClip("Sound/Music/battle.mp3");
+	public static MusicClip battleMusic = new MusicClip("Sound/Music/battle.ogg");
 	
 	
 	public static void init(){

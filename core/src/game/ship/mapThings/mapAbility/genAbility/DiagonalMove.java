@@ -8,7 +8,7 @@ import game.ship.mapThings.mapAbility.MapAbility;
 public class DiagonalMove extends MapAbility{
 
 	public DiagonalMove() {
-		super(Gallery.mapAbilityDiagonalMove,2,1);
+		super(Gallery.mapAbilityDiagonalMove,5,2,1);
 	}
 
 	@Override

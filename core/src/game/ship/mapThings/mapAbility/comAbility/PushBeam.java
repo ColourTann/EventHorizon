@@ -10,7 +10,7 @@ import game.ship.mapThings.mapAbility.MapAbility;
 public class PushBeam extends MapAbility{
 
 	public PushBeam() {
-		super(Gallery.mapAbilityPush,6,1);
+		super(Gallery.mapAbilityPush,4,6,1);
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import game.ship.mapThings.mapAbility.MapAbility;
 public class DoubleMove extends MapAbility{
 
 	public DoubleMove() {
-		super(Gallery.mapAbilityDoubleMove,2,1);
+		super(Gallery.mapAbilityDoubleMove,6,2,1);
 	}
 
 

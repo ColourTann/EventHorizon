@@ -53,7 +53,7 @@ import game.assets.TextBox;
 import game.screen.menu.Menu;
 
 public class EscapeMenu extends Screen{
-	static final float width=370, height=300;
+	static final float width=380, height=300;
 	static final int buttonWidth=130, buttonY=448;
 	static final int buttonSeparation=70;
 	

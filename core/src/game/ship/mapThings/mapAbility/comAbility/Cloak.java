@@ -9,7 +9,7 @@ public class Cloak extends MapAbility{
 	int duration=5;
 	int durationLeft;
 	public Cloak() {
-		super(Gallery.mapAbilityCloak, 0, 1);
+		super(Gallery.mapAbilityCloak,4, 0, 1);
 	}
 
 	@Override

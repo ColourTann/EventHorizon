@@ -33,12 +33,12 @@ public class Repulsor extends Shield{
 		name[2]="Charge";
 		cost[2]=4;
 		effect[2]=0;
-		rules[2]="Self boost infinite: +"+calc(0)+" |iconshield| to all repulsor cards";
+		rules[2]="Self boost 20:|n|+"+calc(0)+" |iconshield| to all repulsor cards";
 		code[2].add(AI.BeforeTurn, 3);
 		code[2].add(AI.LowChance);
 		code[2].setPriority(1);		
 		code[2].add(Special.BuffSelf);
-		code[2].setBuff(new Buff(BuffType.BonusEffeect, true, 1, -1));
+		code[2].setBuff(new Buff(BuffType.BonusEffeect, true, 1, 20));
 		
 		// gotta replace ooh shield an undamaged  module! cheaper costs 1
 		name[3]="Shimmer";
