@@ -136,6 +136,7 @@ public class Hex {
 				}
 			}
 		}
+		Map.mouseOverHex(this);
 
 	}
 

@@ -10,4 +10,5 @@ public abstract class HexContent {
 		this.hex=hex;
 	}
 	public abstract void render(SpriteBatch batch);
+	public abstract String toString();
 }

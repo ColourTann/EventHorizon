@@ -17,6 +17,7 @@ import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
 import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Eclipse;
+import game.ship.shipClass.Scout;
 
 public class MapShip {
 
@@ -45,7 +46,7 @@ public class MapShip {
 
 	public void init() {
 		Ship s=null;
-		if(Math.random()>.5)s=new Aurora(false, 0);
+		if(Math.random()>.5)s=new Scout(false, 0);
 		else s=new Eclipse(false, 0);
 		init(s);
 	}
@@ -69,25 +70,41 @@ public class MapShip {
 			moveTo(path.remove(path.size()-1));
 		}
 		else path=null;
+		
+	}
+	
+	public void playerAfterMove(){
+		tickMapAbilities();
 	}
 
-	public void takeTurn() {
+	public void tickMapAbilities(){
+		for(MapAbility ma:mapAbilities)ma.turn();
+	}
+	
+	public void takeAITurn() {
+		
 		if(ship==null)init();
 		
 		HexChoice best=getBestRegular();
 		
 		for(MapAbility ma:mapAbilities){
+			if(!ma.isUsable())continue;
 			HexChoice abilChoice=ma.getBestTarget();
 			if(abilChoice.isBetterThan(best))	best=abilChoice;
 		}
 		
+		boolean moved=false;
+		
 		if(best.source==null){
 			moveTo(best.hex);
-			return;
+			moved=true;
+		}
+		if(!moved){
+		best.source.use();
+		best.source.pickHex(best.hex);
 		}
 		
-		best.source.pickHex(best.hex);		
-				
+		tickMapAbilities();
 	}
 
 	public HexChoice getBestRegular(){

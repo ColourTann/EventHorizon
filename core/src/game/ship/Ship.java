@@ -1041,7 +1041,7 @@ public abstract class Ship {
 
 		float refinedRatio=ratio;
 
-		if(refinedRatio>1)refinedRatio-=(refinedRatio-1)/2f;
+		if(refinedRatio>1)refinedRatio-=(refinedRatio-1)*.8f;
 
 		float attackPower=totalHandAttack*refinedRatio;
 		float defPower=totalHandDefence*refinedRatio;

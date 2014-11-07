@@ -162,9 +162,9 @@ public class Tutorial extends TextBox{
 		add("", Trigger.CheckList, Effect.ShieldGenList);
 		add("", Trigger.PlayerWeaponPhase);
 		add("A turn is made up of a shield phase followed by a weapon phase.");
-		add("At the beginning of each turn, you draw to your maximum hand size.");
+		add("At the beginning of each turn, you draw up to your maximum hand size.");
 		add("And gain your income in energy",new Pair(320,404));
-		add("You just has a shield phase, where you defend yourself from enemy attacks.");
+		add("You just had a shield phase, where you defend yourself from enemy attacks.");
 		add("Now it's your weapon phase, time to fight back!", Effect.hideNameWisps);
 		add("Cards have an energy cost.", new Pair(475,484));
 		add("Weapon and shield cards have bars which show how much damage or shielding they provide.", new Pair(528,521));

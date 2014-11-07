@@ -28,6 +28,7 @@ public class Teleport extends MapAbility{
 	@Override
 	public void pickHex(Hex hex) {
 		if(!isValidChoice(hex))return;
+		use();
 		if(mapShip.ship.player) afterPlayerUse();
 		mapShip.stretch=new Timer(0,1, 1/Map.phaseSpeed, Interp.SIN);
 		mapShip.moveTo(hex);

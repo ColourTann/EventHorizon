@@ -40,11 +40,12 @@ import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
 import game.ship.shipClass.Hornet;
 import game.ship.shipClass.Nova;
+import game.ship.shipClass.Scout;
 
 public class Main extends ApplicationAdapter  {
 
 	public static float version=0.534f;
-	public static boolean debug=false;
+	public static boolean debug=true;
 	public static float ticks;
 	public static int height=700;
 	public static int width=1280;
@@ -52,6 +53,7 @@ public class Main extends ApplicationAdapter  {
 	public static SpriteBatch bufferBatch;
 	
 	public static SpriteBatch batch;
+	public static SpriteBatch uiBatch;
 	public static ShapeRenderer shape;
 
 	//SCREENS//
@@ -90,14 +92,14 @@ public class Main extends ApplicationAdapter  {
 		Ship.init();
 		
 		batch = new SpriteBatch();
-		
+		uiBatch=new SpriteBatch();
 		shape=new ShapeRenderer();
 		Color c=Colours.dark;
 		Gdx.gl.glClearColor(c.r,c.g,c.b,1);
 		uiCam=new OrthographicCamera(Main.width, Main.height);
 		uiCam.setToOrtho(true);
 		uiCam.translate(-Main.width, -Main.height/2);
-
+		uiBatch.setProjectionMatrix(uiCam.combined);
 		mainCam=new OrthographicCamera(Main.width, Main.height);
 		mainCam.setToOrtho(true);
 		bufferBatch = new SpriteBatch();
@@ -122,6 +124,8 @@ public class Main extends ApplicationAdapter  {
 
 
 		if(true){
+			System.out.println("---------Scout------------");
+			System.out.println(new Scout(true, 0).getStats());
 			System.out.println("---------Aurora------------");
 			System.out.println(new Aurora(true, 0).getStats());
 			System.out.println("---------Nova------------");
@@ -163,10 +167,9 @@ public class Main extends ApplicationAdapter  {
 		currentScreen.postRender(batch);
 
 		for(TextWisp t:TextWisp.wisps)t.render(batch);
-
+		
 		//fading bit//
-		batch.setColor(Colours.withAlpha(Colours.dark, fadeTimer.getFloat()));
-		Draw.drawScaled(batch, Gallery.whiteSquare.get(), 0, 0, width, height);
+		
 
 		if(debug){
 			batch.end();
@@ -176,11 +179,24 @@ public class Main extends ApplicationAdapter  {
 			Font.small.draw(batch, "FPS: "+(int)(1/delta), 0, 0);
 		}
 
-		EscapeMenu.get().render(batch);
-		EscapeMenu.get().postRender(batch);
-
+		
 
 		batch.end();
+		
+		uiBatch.begin();
+		
+		
+		uiBatch.setColor(Colours.withAlpha(Colours.dark, fadeTimer.getFloat()));
+		Draw.drawScaled(uiBatch, Gallery.whiteSquare.get(), 0, 0, width, height);
+		uiBatch.setColor(1,1,1,1);
+		EscapeMenu.get().render(uiBatch);
+		EscapeMenu.get().postRender(uiBatch);
+		uiBatch.end();
+//		batch.begin();
+//		//batch.setProjectionMatrix(uiCam.combined);
+//		uiCam.update();
+//		
+//		batch.end();
 
 	}
 
@@ -201,6 +217,7 @@ public class Main extends ApplicationAdapter  {
 				TextWriter.disposeAll();
 				currentScreen=nextScreen;
 				nextScreen=null;
+				resetMainCam();
 			}
 			return;
 		}
@@ -208,6 +225,11 @@ public class Main extends ApplicationAdapter  {
 		mainCam.update();
 
 
+	}
+
+	private void resetMainCam() {
+		setCam(new Pair(Main.width/2,Main.height/2));
+		
 	}
 
 	public enum ScreenType{EasyFight, MediumFight, HardFight, TutorialFight, Menu}

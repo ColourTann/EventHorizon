@@ -117,6 +117,7 @@ public class EscapeMenu extends Screen{
 	public void render(SpriteBatch batch) {
 		
 		batch.setColor(1, 1, 1, alphaTimer.getFloat());
+		
 		TextBox.renderBox(batch, position, width, height, Alignment.Left);
 		//Draw.drawCenteredScaled(batch, Gallery.pauseBase.get(), Main.width/2, Main.height/2, 1, 1);
 		for(AdvancedButton ab:buttons){
@@ -149,7 +150,6 @@ public class EscapeMenu extends Screen{
 	}
 		
 	public void cycle() {
-		System.out.println("cycling");
 		if(active)deactivate();
 		else activate();
 	}

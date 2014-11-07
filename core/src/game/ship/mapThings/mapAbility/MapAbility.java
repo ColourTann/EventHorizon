@@ -1,7 +1,9 @@
 package game.ship.mapThings.mapAbility;
 
 
+import util.Colours;
 import util.Draw;
+import util.assets.Font;
 import util.image.Pic;
 import util.maths.Pair;
 import util.maths.PolygonCollider;
@@ -10,6 +12,8 @@ import util.update.Mouser;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
 
+import game.assets.Gallery;
+import game.assets.Sounds;
 import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
 import game.screen.map.Map;
@@ -24,13 +28,7 @@ public abstract class MapAbility extends Mouser{
 	public MapShip mapShip;
 	public int range;
 	public float effort;
-	public enum MapAbilityType{
-		//Generator abilities
-		Teleport, Move, Diagonal,
-
-		//Computer Abilities
-		Cloak, Beam, Forcefield
-	}
+	
 	public MapAbility(Pic p, int cooldown, int range, float effort) {
 		abilityPic=p;
 		this.range=range;
@@ -40,6 +38,10 @@ public abstract class MapAbility extends Mouser{
 
 	@Override
 	public void mouseClicked(boolean left) {
+		if(!isUsable()){
+			Sounds.error.play();
+			return;
+		}
 		if(Map.using==this){
 			fadeHexesOut();
 			deselect(); 
@@ -120,9 +122,31 @@ public abstract class MapAbility extends Mouser{
 	}
 	
 	public void render(SpriteBatch batch) {
+		
 		Draw.drawCenteredScaled(batch, abilityPic.get(), location.x, location.y, 1, 1);
+		Draw.drawScaled(batch, Gallery.mapAbilityCooldown.get(), (int)location.x+50, (int)location.y-36, 2, 2);
+		Font.medium.setColor(Colours.genCols5[3]);
+		Font.drawFontCentered(batch, ""+baseCooldown, Font.medium, (int)location.x+64,  (int)location.y+8);
+		
+		if(cooldown==0){
+			Font.medium.setColor(Colours.player2[1]);
+		}
+		else Font.medium.setColor(Colours.genCols5[2]);
+			Font.drawFontCentered(batch, ""+cooldown, Font.medium,(int)location.x+64,  (int)location.y-24);
 	}
 
+	public void use() {
+		cooldown=baseCooldown+1;
+	}
+	
+	public boolean isUsable(){
+		return cooldown<=0;
+	}
+
+	public void turn(){
+		cooldown--;
+		if(cooldown<0)cooldown=0;
+	}
 
 
 }

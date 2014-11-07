@@ -21,8 +21,11 @@ public class Star extends HexContent{
 		Pair loc=hex.getPixel();
 		Texture t=Gallery.star.get();
 		Draw.drawCenteredScaled(batch, t, loc.x, loc.y, Hex.size/30f, Hex.size/30f);
-		
-		
+	}
+
+	@Override
+	public String toString() {
+		return "star";
 	}
 
 }

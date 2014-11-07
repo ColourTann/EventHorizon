@@ -14,11 +14,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.sun.media.jfxmedia.events.PlayerEvent;
 
 import game.Main;
 import game.assets.Gallery;
 import game.grid.Grid;
 import game.grid.hex.Hex;
+import game.screen.map.panels.HexInfoPanel;
+import game.screen.map.panels.SidePanel;
 import game.ship.mapThings.MapShip;
 import game.ship.mapThings.mapAbility.MapAbility;
 import game.ship.shipClass.Nova;
@@ -28,7 +31,7 @@ public class Map extends Screen{
 	public static Grid grid;
 
 	public static MapShip player;
-	SpriteBatch batch2=new SpriteBatch();
+	SpriteBatch uiBatch=new SpriteBatch();
 	public enum MapState{PlayerTurn,PlayerMoving,EnemyMoving,PickHex}
 	private static MapState state=MapState.PlayerTurn;
 	public static Hex explosion;
@@ -37,8 +40,9 @@ public class Map extends Screen{
 	public static float progress=0;
 	public static float phaseSpeed=3;
 	public static MapAbility using;
-
 	public static ArrayList<Hex> path= new ArrayList<Hex>();
+	static HexInfoPanel hexPanel;
+	ArrayList<SidePanel> panels = new ArrayList<SidePanel>();
 
 	public Map(){
 	
@@ -56,6 +60,8 @@ public class Map extends Screen{
 			MapAbility a=player.mapAbilities.get(i);
 			a.showAt(new Pair(5+MapAbility.width/2, 5+MapAbility.height/2+i*MapAbility.gap));
 		}
+		hexPanel=new HexInfoPanel();
+		panels.add(hexPanel);
 	}
 
 
@@ -82,6 +88,7 @@ public class Map extends Screen{
 			player.playerStartTurn();
 			break;
 		case PlayerMoving:
+			player.playerAfterMove();
 			break;
 		case PickHex:
 			break;
@@ -104,6 +111,7 @@ public class Map extends Screen{
 			progress+=delta*phaseSpeed;
 			if(progress>1){
 				progress=0;
+				
 				setState(MapState.EnemyMoving);
 			}
 			break;
@@ -113,7 +121,7 @@ public class Map extends Screen{
 	}
 
 	public static void enemyTurn(){
-		for(MapShip enemy:grid.getActiveEnemies())enemy.takeTurn();
+		for(MapShip enemy:grid.getActiveEnemies())enemy.takeAITurn();
 	}
 
 	
@@ -201,20 +209,24 @@ public class Map extends Screen{
 		
 		
 		//batch2 is for interface stuff//
-		batch2.setProjectionMatrix(Main.uiCam.combined);
-		batch2.begin();
-		batch2.draw(Gallery.mapslice.get(), 0, 0);
+		uiBatch.setProjectionMatrix(Main.uiCam.combined);
+		uiBatch.begin();
+		uiBatch.draw(Gallery.mapslice.get(), 0, 0);
 		
-		Draw.drawScaled(batch2, Gallery.mapsliceRight.get(), Main.width, Main.height	, -1, -1);
-		batch2.setColor(Colours.light);
-		Font.medium.draw(batch2, ""+getState(), 300, 0);
-		for(MapAbility a:player.mapAbilities)a.render(batch2);
-		batch2.end();
+		Draw.drawScaled(uiBatch, Gallery.mapsliceRight.get(), Main.width, Main.height	, -1, -1);
+		uiBatch.setColor(Colours.light);
+		Font.medium.draw(uiBatch, ""+getState(), 300, 0);
+		for(MapAbility a:player.mapAbilities)a.render(uiBatch);
+		batch.setColor(1,1,1,1);
+		for(SidePanel p:panels)p.render(uiBatch);
+		
+		uiBatch.end();
 
 
 
 		batch.begin();
 
+		
 	}
 
 	@Override
@@ -230,7 +242,9 @@ public class Map extends Screen{
 	public void dispose() {
 	}
 
-
+	public static void mouseOverHex(Hex h){
+		hexPanel.hexMouse(h);
+	}
 
 
 

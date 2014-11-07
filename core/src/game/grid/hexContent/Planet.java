@@ -24,5 +24,9 @@ public class Planet extends HexContent{
 		Pair loc=hex.getPixel();
 		Draw.drawCenteredScaled(batch, Gallery.circle32.get(), loc.x+offset.x, loc.y+offset.y, scale*Hex.size/30f, scale*Hex.size/30f);
 	}
+	@Override
+	public String toString() {
+		return "planet";
+	}
 
 }

@@ -14,6 +14,10 @@ import com.badlogic.gdx.graphics.Texture;
 public class Gallery {
 	
 	//Ships//
+	public static Pic shipScout=new Pic("Ship/Scout/ship", 3);
+	public static Pic scoutGenerator= new Pic("Ship/Scout/generator", 3);
+	public static Pic scoutComputer= new Pic("Ship/Scout/computer", 3);
+
 	
 	public static Pic shipAurora=new Pic("Ship/Aurora/ship", 3);
 	public static Pic auroraGenerator= new Pic("Ship/Aurora/generator", 3);
@@ -179,8 +183,7 @@ public class Gallery {
 	public static Pic helpPanelMid = new Pic("Interface/helppanelmid");
 	public static Pic helpPanelEdge = new Pic("Interface/helppaneledge");
 	
-	public static Pic tutPanelBorder= new Pic("Interface/tutpanelborder");
-	public static Pic tutPanelMain= new Pic("Interface/tutpanelmain");
+
 	public static Pic tutPoint= new Pic("Interface/tutpoint");
 	public static Pic tutUndo= new Pic("Interface/undo");
 	
@@ -220,6 +223,8 @@ public class Gallery {
 	public static Pic mapAbilityPull=new Pic("Map/Abilities/pull");
 	public static Pic mapAbilityPush=new Pic("Map/Abilities/push");
 	public static Pic mapAbilityCloak=new Pic("Map/Abilities/cloak");
+	
+	public static Pic mapAbilityCooldown=new Pic("Map/Abilities/cooldown");
 	
 	//PARTICLE STUFF//
 	public static Pic circle32=new Pic("Particle/circle32");
