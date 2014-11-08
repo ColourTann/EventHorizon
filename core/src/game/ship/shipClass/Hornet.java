@@ -17,6 +17,10 @@ import game.module.component.weapon.Swift;
 import game.module.component.weapon.Tesla;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
+import game.ship.mapThings.mapAbility.comAbility.EMP;
+import game.ship.mapThings.mapAbility.comAbility.PullBeam;
+import game.ship.mapThings.mapAbility.genAbility.DiagonalMove;
+import game.ship.mapThings.mapAbility.genAbility.DoubleMove;
 
 public class Hornet extends Ship{
 
@@ -57,7 +61,12 @@ public class Hornet extends Ship{
 
 	@Override
 	public ArrayList<MapAbility> getMapAbilities() {
-		return null;
+		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
+		result.add(new DoubleMove(7,1,.02f));
+		if(player){
+			result.add(new EMP(4,4,.01f));
+		}
+		return result;
 	}
 
 }

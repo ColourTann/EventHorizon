@@ -29,7 +29,7 @@ public abstract class MapAbility extends Mouser{
 	public int range;
 	public float effort;
 	
-	public MapAbility(Pic p, int cooldown, int range, float effort) {
+	public MapAbility(Pic p, int cooldown, int fuelCost, int range, float effort) {
 		abilityPic=p;
 		this.range=range;
 		this.effort=effort;
@@ -122,6 +122,10 @@ public abstract class MapAbility extends Mouser{
 	}
 	
 	public void render(SpriteBatch batch) {
+		if(location==null){
+			System.out.println("null location");
+			return;
+		}
 		
 		Draw.drawCenteredScaled(batch, abilityPic.get(), location.x, location.y, 1, 1);
 		Draw.drawScaled(batch, Gallery.mapAbilityCooldown.get(), (int)location.x+50, (int)location.y-36, 2, 2);

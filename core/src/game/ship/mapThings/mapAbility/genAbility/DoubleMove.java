@@ -3,12 +3,13 @@ package game.ship.mapThings.mapAbility.genAbility;
 import game.assets.Gallery;
 import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
+import game.module.utility.Furnace;
 import game.ship.mapThings.mapAbility.MapAbility;
 
 public class DoubleMove extends MapAbility{
 
-	public DoubleMove() {
-		super(Gallery.mapAbilityDoubleMove,6,2,1);
+	public DoubleMove(int cooldown, int fuelCost, float effort) {
+		super(Gallery.mapAbilityDoubleMove ,cooldown, fuelCost, 2, effort);
 	}
 
 
@@ -24,8 +25,10 @@ public class DoubleMove extends MapAbility{
 	@Override
 	public void pickHex(Hex hex) {
 		if(!isValidChoice(hex))return;
-		afterPlayerUse();
+		use();
+		if(mapShip.ship.player) afterPlayerUse();
 		mapShip.moveTo(hex);
+	
 	}
 
 
@@ -38,6 +41,7 @@ public class DoubleMove extends MapAbility{
 			HexChoice current=new HexChoice(h, h.howGood(mapShip));
 			if(current.isBetterThan(result))result=current;
 		}
+		result.source=this;
 		return result;
 	}
 

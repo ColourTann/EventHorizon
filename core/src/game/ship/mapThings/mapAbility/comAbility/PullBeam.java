@@ -10,7 +10,7 @@ import game.ship.mapThings.mapAbility.MapAbility;
 public class PullBeam extends MapAbility{
 
 	public PullBeam() {
-		super(Gallery.mapAbilityPull,4,6,1);
+		super(Gallery.mapAbilityPull,4,1,6,1);
 	}
 
 	@Override

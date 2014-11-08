@@ -21,7 +21,7 @@ public class Grid {
 	private Hex[][] hexes;
 	public ArrayList<Hex> drawableHexes;
 	public static int viewDist;
-	public static int activeDist=10;
+	public static int activeDist=80;
 	
 	public static Grid MakeGrid(){
 		Grid g= new Grid();
@@ -110,7 +110,7 @@ public class Grid {
 		start=Map.player.hex;
 		if(start!=null)drawableHexes=start.getHexesWithin(viewDist+2, true);
 		if(drawableHexes==null)return;
-		for(Hex h:drawableHexes){
+		for(Hex h:start.getHexesWithin(viewDist+2, true)){
 			h.update(delta);
 		}
 	}

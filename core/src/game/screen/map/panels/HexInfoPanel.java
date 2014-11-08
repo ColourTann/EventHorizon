@@ -49,6 +49,9 @@ public class HexInfoPanel extends SidePanel{
 		if(mapShip!=null&&mapShip!=Map.player){
 			
 			Ship ship = mapShip.ship;
+			if(ship==null){
+				System.out.println("a null ship whuhoh");
+			}
 			Font.drawFontCentered(batch, ship.shipName, Font.medium, Main.width-width/2, gap);
 			Draw.drawCenteredScaled(batch, ship.getPic().get(), Main.width-width/2, 100, .33f, .33f);
 			

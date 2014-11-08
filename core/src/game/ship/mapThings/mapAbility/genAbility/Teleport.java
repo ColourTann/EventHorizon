@@ -14,8 +14,8 @@ import game.ship.mapThings.mapAbility.MapAbility;
 
 public class Teleport extends MapAbility{
 
-	public Teleport() {
-		super(Gallery.mapAbilityTeleport,6,4,.02f);
+	public Teleport(int fuel, int cooldown, float effort) {
+		super(Gallery.mapAbilityTeleport, cooldown, fuel, 4, effort);
 	}
 
 	@Override

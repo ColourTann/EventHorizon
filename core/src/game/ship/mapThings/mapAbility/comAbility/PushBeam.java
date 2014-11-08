@@ -10,7 +10,7 @@ import game.ship.mapThings.mapAbility.MapAbility;
 public class PushBeam extends MapAbility{
 
 	public PushBeam() {
-		super(Gallery.mapAbilityPush,4,6,1);
+		super(Gallery.mapAbilityPush,4,1,6,1);
 	}
 
 	@Override
@@ -43,6 +43,7 @@ public class PushBeam extends MapAbility{
 		target.moveTo(best);
 		}
 
+	//Use to destroy, limited looting!//
 	@Override
 	public HexChoice getBestTarget() {
 		return null;

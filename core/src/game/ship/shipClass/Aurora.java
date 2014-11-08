@@ -15,6 +15,8 @@ import game.module.component.weapon.Laser;
 import game.module.component.weapon.Ray;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
+import game.ship.mapThings.mapAbility.comAbility.Cloak;
+import game.ship.mapThings.mapAbility.genAbility.DiagonalMove;
 import game.ship.mapThings.mapAbility.genAbility.Teleport;
 
 public class Aurora extends Ship{
@@ -59,7 +61,11 @@ public class Aurora extends Ship{
 	@Override
 	public ArrayList<MapAbility> getMapAbilities() {
 		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
-		result.add(new Teleport());
+		result.add(new Teleport(5,5,.02f));
+		result.add(new DiagonalMove(3, 2, .01f));
+		if(player){
+			result.add(new Cloak());
+		}
 		return result;
 	}
 }

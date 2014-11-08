@@ -216,6 +216,7 @@ public class Gallery {
 	//Map Abilities//
 	//Gen//
 	public static Pic mapAbilityTeleport=new Pic("Map/Abilities/teleport");
+	public static Pic mapAbilityEmergencyTeleport= new Pic("Map/Abilities/teleport");
 	public static Pic mapAbilityDoubleMove=new Pic("Map/Abilities/doublemove");
 	public static Pic mapAbilityDiagonalMove=new Pic("Map/Abilities/diagonalmove");
 	//Com//
@@ -249,6 +250,7 @@ public class Gallery {
 	
 	//Runtime stuff//
 	public static Pic whiteSquare;
+
 	
 	
 	

@@ -13,6 +13,9 @@ import game.module.component.weapon.Pulse;
 import game.module.component.weapon.Tesla;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
+import game.ship.mapThings.mapAbility.genAbility.DiagonalMove;
+import game.ship.mapThings.mapAbility.genAbility.DoubleMove;
+import game.ship.mapThings.mapAbility.genAbility.EmergencyTeleport;
 import game.ship.mapThings.mapAbility.genAbility.Teleport;
 
 public class Nova extends Ship{
@@ -59,7 +62,9 @@ public class Nova extends Ship{
 	@Override
 	public ArrayList<MapAbility> getMapAbilities() {
 		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
-		result.add(new Teleport());
+		result.add(new EmergencyTeleport(15, 15, .03f));
+		result.add(new DoubleMove(5,4,.1f));
+		result.add(new DiagonalMove(5,1,.1f));
 		return result;
 	}
 }

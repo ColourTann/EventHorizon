@@ -13,6 +13,8 @@ import game.module.component.weapon.Swift;
 import game.module.component.weapon.Tesla;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
+import game.ship.mapThings.mapAbility.comAbility.ForceField;
+import game.ship.mapThings.mapAbility.genAbility.DoubleMove;
 import game.ship.mapThings.mapAbility.genAbility.Teleport;
 
 public class Comet extends Ship{
@@ -55,7 +57,10 @@ public class Comet extends Ship{
 	@Override
 	public ArrayList<MapAbility> getMapAbilities() {
 		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
-		result.add(new Teleport());
+		result.add(new DoubleMove(5,3,.02f));
+		if(player){
+			result.add(new ForceField());
+		}
 		return result;
 	}
 }

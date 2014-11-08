@@ -12,6 +12,8 @@ import game.module.component.weapon.Laser;
 import game.module.component.weapon.Tesla;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
+import game.ship.mapThings.mapAbility.comAbility.PullBeam;
+import game.ship.mapThings.mapAbility.genAbility.DiagonalMove;
 import game.ship.mapThings.mapAbility.genAbility.Teleport;
 
 public class Eclipse extends Ship{
@@ -52,7 +54,10 @@ public class Eclipse extends Ship{
 	@Override
 	public ArrayList<MapAbility> getMapAbilities() {
 		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
-		result.add(new Teleport());
+		result.add(new DiagonalMove(4,1,.01f));
+		if(player){
+			result.add(new PullBeam());
+		}
 		return result;
 	}
 }

@@ -12,6 +12,7 @@ import game.module.component.weapon.Ray;
 import game.module.component.weapon.Tesla;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
+import game.ship.mapThings.mapAbility.genAbility.DoubleMove;
 import game.ship.mapThings.mapAbility.genAbility.Teleport;
 
 import java.util.ArrayList;
@@ -58,7 +59,9 @@ public class Scout extends Ship{
 	@Override
 	public ArrayList<MapAbility> getMapAbilities() {
 		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
-		result.add(new Teleport());
+		result.add(new Teleport(5,5,.02f));
+		result.add(new DoubleMove(3,1,.1f));
+		
 		return result;
 	}
 }

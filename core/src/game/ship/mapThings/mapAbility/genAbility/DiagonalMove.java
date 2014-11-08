@@ -7,8 +7,8 @@ import game.ship.mapThings.mapAbility.MapAbility;
 
 public class DiagonalMove extends MapAbility{
 
-	public DiagonalMove() {
-		super(Gallery.mapAbilityDiagonalMove,5,2,1);
+	public DiagonalMove(int cooldown, int fuelCost, float effort) {
+		super(Gallery.mapAbilityDiagonalMove, cooldown, fuelCost, 2, effort);
 	}
 
 	@Override
@@ -25,7 +25,8 @@ public class DiagonalMove extends MapAbility{
 	@Override
 	public void pickHex(Hex hex) {
 		if(!isValidChoice(hex))return;
-		afterPlayerUse();
+		use();
+		if(mapShip.ship.player) afterPlayerUse();
 		mapShip.moveTo(hex);
 	}
 
@@ -37,6 +38,7 @@ public class DiagonalMove extends MapAbility{
 			HexChoice current=new HexChoice(h, h.howGood(mapShip));
 			if(current.isBetterThan(result))result=current;
 		}
+		result.source=this;
 		return result;
 	}
 
