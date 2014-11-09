@@ -224,7 +224,7 @@ public class Gallery {
 	public static Pic mapAbilityPull=new Pic("Map/Abilities/pull");
 	public static Pic mapAbilityPush=new Pic("Map/Abilities/push");
 	public static Pic mapAbilityCloak=new Pic("Map/Abilities/cloak");
-	
+	public static Pic mapAbilityEMP=new Pic("Map/Abilities/emp");
 	public static Pic mapAbilityCooldown=new Pic("Map/Abilities/cooldown");
 	
 	//PARTICLE STUFF//

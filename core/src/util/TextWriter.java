@@ -70,7 +70,7 @@ public class TextWriter {
 	}
 
 	public static int getClosestPower(int i){
-		if(true)return 1024;
+		//if(true)return 1024; mac stuff ughhhh
 		int result=1;
 		while(result<i)result<<=1;
 		return result;
@@ -134,7 +134,7 @@ public class TextWriter {
 					continue;
 				}
 				Texture t= replacers.get(specialString);
-				if(x+t.getWidth()>wrapWidth){
+				if(x+t.getWidth()>wrapWidth&&lineStart!=prevIndex){
 					drawLine(tempBatch, text.substring(lineStart, prevIndex-1), y, x, xOffset);
 					xOffset=0;
 					wrapWidth=baseWrapWidth;
@@ -154,11 +154,12 @@ public class TextWriter {
 			}
 			else{
 				if(c==' '){
-
+					
 					String word = text.substring(prevIndex, currentIndex-1);
-
+				
 					float wordWidth=font.getBounds(word).width;
-					if(x+wordWidth>wrapWidth){
+					if(x+wordWidth>wrapWidth&&lineStart!=prevIndex){
+						
 						drawLine(tempBatch, text.substring(lineStart, prevIndex-1), y, x-spaceWidth, xOffset);
 						xOffset=0;
 						wrapWidth=baseWrapWidth;
@@ -177,7 +178,7 @@ public class TextWriter {
 				if(c=='|'){
 					String word = text.substring(prevIndex, currentIndex-1);
 					float wordWidth=font.getBounds(word).width;
-					if(x+wordWidth>wrapWidth){
+					if(x+wordWidth>wrapWidth&&lineStart!=prevIndex){
 						drawLine(tempBatch, text.substring(lineStart, prevIndex-1), y, x, xOffset);
 						xOffset=0;
 						wrapWidth=baseWrapWidth;

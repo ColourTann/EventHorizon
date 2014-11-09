@@ -109,7 +109,7 @@ public class Hex {
 	}
 
 	public float getDistanceFromExplosion() {
-		return(getLineDistance(Map.explosion)-(Map.explosionSize+.5f));
+		return(getLineDistance(Map.explosion)-(Map.getExplosionSize()+.5f));
 	}
 
 	public float getLineDistance(Hex h){
@@ -158,6 +158,7 @@ public class Hex {
 			Map.using.pickHex(this);
 			return;
 		}
+		
 		if(Map.getState()!=MapState.PlayerTurn){
 			Map.player.resetPath();
 			return;
@@ -297,7 +298,7 @@ public class Hex {
 	}
 
 	private boolean isSwallowed() {
-		return(getLineDistance(Map.explosion)<Map.explosionSize+.5f);
+		return(getLineDistance(Map.explosion)<Map.getExplosionSize()+.5f);
 	}
 
 

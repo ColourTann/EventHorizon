@@ -304,7 +304,7 @@ public class Battle extends Screen{
 
 					@Override
 					public void finish() {
-						Main.changeScreen(new Customise(victor, false),1);
+						Main.changeScreen(new Customise(victor, false, false),1);
 						Sounds.battleMusic.fadeOut(.3f);
 					}
 				});

@@ -4,6 +4,8 @@ import util.image.Pic;
 import game.assets.Gallery;
 import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
+import game.screen.map.Map;
+import game.screen.map.Map.MapState;
 import game.ship.mapThings.mapAbility.MapAbility;
 
 public class EmergencyTeleport extends MapAbility{
@@ -12,13 +14,18 @@ public class EmergencyTeleport extends MapAbility{
 		super(Gallery.mapAbilityEmergencyTeleport, cooldown, fuelCost, 7, effort);
 	}
 
+
+	@Override
+	public void doStuff() {
+		System.out.println("need to code this bit");
+	}
 	@Override
 	public HexChoice getBestTarget() {
 		int total=0;
 		int hexes=0;
 		for(Hex h: mapShip.hex.getHexesWithin(range, false)){
 			hexes++;
-			
+
 		}
 		return new HexChoice();
 	}
@@ -30,6 +37,12 @@ public class EmergencyTeleport extends MapAbility{
 
 	@Override
 	public void pickHex(Hex hex) {
+	}
+
+
+	@Override
+	public String getText() {
+		return "blah blah need to code";
 	}
 
 }

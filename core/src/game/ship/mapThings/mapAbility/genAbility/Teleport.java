@@ -10,6 +10,7 @@ import game.assets.Gallery;
 import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
 import game.screen.map.Map;
+import game.screen.map.Map.MapState;
 import game.ship.mapThings.mapAbility.MapAbility;
 
 public class Teleport extends MapAbility{
@@ -18,6 +19,13 @@ public class Teleport extends MapAbility{
 		super(Gallery.mapAbilityTeleport, cooldown, fuel, 4, effort);
 	}
 
+	
+
+	@Override
+	public void doStuff() {
+		fadeHexesIn();
+		Map.setState(MapState.PickHex);
+	}
 	@Override
 	public boolean isValidChoice(Hex target) {
 		Hex origin=mapShip.hex;
@@ -45,6 +53,13 @@ public class Teleport extends MapAbility{
 		result.value-=effort;
 		result.source=this;
 		return result;
+	}
+
+
+
+	@Override
+	public String getText() {
+		return "Teleport to an unblocked hex";
 	}
 	
 }

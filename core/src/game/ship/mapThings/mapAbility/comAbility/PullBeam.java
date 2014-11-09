@@ -4,6 +4,7 @@ import game.assets.Gallery;
 import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
 import game.screen.map.Map;
+import game.screen.map.Map.MapState;
 import game.ship.mapThings.MapShip;
 import game.ship.mapThings.mapAbility.MapAbility;
 
@@ -23,6 +24,13 @@ public class PullBeam extends MapAbility{
 
 	}
 
+	@Override
+	public void doStuff() {
+		fadeHexesIn();
+		Map.using=this;
+		Map.setState(MapState.PickHex);
+	}
+	
 	public void deselect() {
 		Map.returnToPlayerTurn();
 		Map.using=null;
@@ -50,5 +58,10 @@ public class PullBeam extends MapAbility{
 	@Override
 	public HexChoice getBestTarget() {
 		return null;
+	}
+
+	@Override
+	public String getText() {
+		return "Drag an enemy ship 2 spaces towards you";
 	}
 }

@@ -104,7 +104,7 @@ public class Main extends ApplicationAdapter  {
 		mainCam.setToOrtho(true);
 		bufferBatch = new SpriteBatch();
 		OrthographicCamera cam = new OrthographicCamera(Main.width, Main.height);
-		map=new Map();currentScreen=map;currentScreen.init();
+		//map=new Map();currentScreen=map;currentScreen.init();
 		
 		//bufferBatch.setProjectionMatrix(Main.mainCam.combined);
 
@@ -112,7 +112,7 @@ public class Main extends ApplicationAdapter  {
 
 		//battle=new Battle(ScreenType.MediumFight);currentScreen=battle;
 
-//		select=new Menu();currentScreen=select;select.init();
+		select=new Menu();currentScreen=select;select.init();
 
 		//currentScreen=new PreBattle(new Hornet(true, 0), new Hornet(false, 0)); currentScreen.init();
 

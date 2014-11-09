@@ -11,6 +11,10 @@ public class Cloak extends MapAbility{
 	public Cloak() {
 		super(Gallery.mapAbilityCloak,4, 1, 0, 1);
 	}
+	@Override
+	public void doStuff() {
+		
+	}
 
 	@Override
 	public boolean isValidChoice(Hex target) {
@@ -25,5 +29,11 @@ public class Cloak extends MapAbility{
 	public HexChoice getBestTarget() {
 		return null;
 	}
+	@Override
+	public String getText() {
+		return "cloak need to code";
+	}
+
+	
 
 }

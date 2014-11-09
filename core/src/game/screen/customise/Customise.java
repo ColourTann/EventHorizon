@@ -19,6 +19,7 @@ import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
 import game.screen.battle.interfaceJunk.HelpPanel;
 import game.screen.customise.Reward.RewardType;
+import game.screen.map.Map;
 import game.screen.preBattle.PreBattle;
 import game.ship.Ship;
 import game.ship.shipClass.Aurora;
@@ -72,8 +73,9 @@ public class Customise extends Screen{
 	public static float power=0;
 	public static int totalShipsDefeated=0;
 	public static boolean repairing=false;
-	public Customise(Ship s, boolean first){
-		
+	public boolean map;
+	public Customise(Ship s, boolean first, boolean map){
+		this.map=map;
 		me=this;
 		this.first=first;
 
@@ -129,6 +131,11 @@ public class Customise extends Screen{
 
 				@Override
 				public void onPress() {
+					if(map){
+						System.out.println(ship);
+						Main.changeScreen(new Map(ship));
+						return;
+					}
 					Sounds.shieldUse.overlay();
 					first=false;
 					setPanel(PanelType.Choose);

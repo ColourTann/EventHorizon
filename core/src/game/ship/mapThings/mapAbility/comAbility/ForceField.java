@@ -26,6 +26,13 @@ public class ForceField extends MapAbility{
 		if(distance<=range)return false;
 		return !target.isBlocked(true);
 	}
+	
+	@Override
+	public void doStuff() {
+		fadeHexesIn();
+		Map.using=this;
+		Map.setState(MapState.PickHex);
+	}
 
 	public void deselect() {
 		Map.returnToPlayerTurn();
@@ -53,5 +60,12 @@ public class ForceField extends MapAbility{
 	public HexChoice getBestTarget() {
 		return null;
 	}
+
+	@Override
+	public String getText() {
+		return "Block 3 hexes for 4 turns";
+	}
+
+	
 
 }

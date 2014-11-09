@@ -4,6 +4,8 @@ import game.assets.Gallery;
 import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
 import game.module.utility.Furnace;
+import game.screen.map.Map;
+import game.screen.map.Map.MapState;
 import game.ship.mapThings.mapAbility.MapAbility;
 
 public class DoubleMove extends MapAbility{
@@ -13,6 +15,11 @@ public class DoubleMove extends MapAbility{
 	}
 
 
+	@Override
+	public void doStuff() {
+		fadeHexesIn();
+		Map.setState(MapState.PickHex);
+	}
 
 	@Override
 	public boolean isValidChoice(Hex target) {
@@ -28,7 +35,7 @@ public class DoubleMove extends MapAbility{
 		use();
 		if(mapShip.ship.player) afterPlayerUse();
 		mapShip.moveTo(hex);
-	
+
 	}
 
 
@@ -44,5 +51,14 @@ public class DoubleMove extends MapAbility{
 		result.source=this;
 		return result;
 	}
+
+
+	@Override
+	public String getText() {
+		return "Move two spaces";
+	}
+
+
+
 
 }

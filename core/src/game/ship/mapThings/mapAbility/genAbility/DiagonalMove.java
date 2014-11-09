@@ -3,6 +3,8 @@ package game.ship.mapThings.mapAbility.genAbility;
 import game.assets.Gallery;
 import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
+import game.screen.map.Map;
+import game.screen.map.Map.MapState;
 import game.ship.mapThings.mapAbility.MapAbility;
 
 public class DiagonalMove extends MapAbility{
@@ -19,9 +21,14 @@ public class DiagonalMove extends MapAbility{
 		int yDiff=Math.abs(origin.y-target.y);
 		if(target.isBlocked(false))return false;
 		return distance==2&&!(xDiff%2==0&&yDiff%2==0);
-
 	}
 
+	@Override
+	public void doStuff() {
+		fadeHexesIn();
+		Map.setState(MapState.PickHex);
+	}
+	
 	@Override
 	public void pickHex(Hex hex) {
 		if(!isValidChoice(hex))return;
@@ -41,5 +48,12 @@ public class DiagonalMove extends MapAbility{
 		result.source=this;
 		return result;
 	}
+
+	@Override
+	public String getText() {
+		return "Move like a knight!";
+	}
+
+	
 
 }

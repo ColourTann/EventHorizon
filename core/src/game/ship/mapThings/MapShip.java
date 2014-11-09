@@ -32,6 +32,7 @@ public class MapShip {
 	public ArrayList<Hex> path= new ArrayList<Hex>();
 	public float rotation = 0;
 	public ArrayList<MapAbility> mapAbilities = new ArrayList<MapAbility>();
+	int stunTime=0;
 	public Timer stretch=new Timer();
 	
 
@@ -64,7 +65,7 @@ public class MapShip {
 	}
 	
 	public void playerStartTurn() {
-		Map.explosionSize+=Map.growthRate/2;
+		Map.incrementExplosionSize();
 		if (path != null && path.size() > 0) {
 			Map.setState(MapState.PlayerMoving);
 			moveTo(path.remove(path.size()-1));
@@ -82,7 +83,10 @@ public class MapShip {
 	}
 	
 	public void takeAITurn() {
-		
+		if(stunTime>0){
+			stunTime--;
+			return;
+		}
 		if(ship==null)init();
 		
 		HexChoice best=getBestRegular();
@@ -184,5 +188,9 @@ public class MapShip {
 
 	public float getPowerLevel() {
 		return ship.getStats().power;
+	}
+
+	public void stun(int i) {
+		stunTime+=i;
 	}
 }
