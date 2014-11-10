@@ -59,8 +59,8 @@ public abstract class MapAbility extends Mouser{
 		}
 		
 		if(Map.using==this){
-			fadeOutHighlights();
 			deselect(); 
+			fadeOutHighlights();
 			return;
 		}
 		if(Map.using!=null){

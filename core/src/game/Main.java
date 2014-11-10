@@ -45,7 +45,7 @@ import game.ship.shipClass.Scout;
 public class Main extends ApplicationAdapter  {
 
 	public static float version=0.534f;
-	public static boolean debug=true;
+	public static boolean debug=!true;
 	public static float ticks;
 	public static int height=700;
 	public static int width=1280;
@@ -72,7 +72,7 @@ public class Main extends ApplicationAdapter  {
 	public static Timer fadeTimer=new Timer();
 
 	static float fadeSpeed=.5f;
-
+	
 
 	//Escape menu//
 
@@ -222,7 +222,7 @@ public class Main extends ApplicationAdapter  {
 		}
 
 		mainCam.update();
-
+	
 
 	}
 

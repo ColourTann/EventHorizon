@@ -17,6 +17,16 @@ public class Pair {
 		this.y=(float) y;
 		pairsMade++;
 	}
+	public Pair(float x, double y){
+		this.x=(float) x;
+		this.y=(float) y;
+		pairsMade++;
+	}
+	public Pair(double x, float y){
+		this.x=(float) x;
+		this.y=(float) y;
+		pairsMade++;
+	}
 	public Pair(){
 		pairsMade++;
 	}

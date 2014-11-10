@@ -54,7 +54,7 @@ public class Hex {
 	float moves=-1;
 	Timer mapAbilityFadeTimer;
 	private Timer empTimer;
-
+	private Timer ForceFieldTimer;
 
 	public static void init(){
 		for(int i=0;i<12;i+=2){
@@ -188,7 +188,7 @@ public class Hex {
 		}
 		ArrayList<Hex> possibles=getHexesWithin(6, false);
 		Draw.shuffle(possibles);
-		int planets=(int) (3+Math.random()*4);
+		int planets=(int) (7+Math.random()*4);
 		for(int i=0;i<planets;i++){
 			Hex h=possibles.remove(0);
 			if(h.getDistance(this)<3)continue;
@@ -205,6 +205,9 @@ public class Hex {
 
 	public void hexTurn(){
 		forceField--;
+		if(forceField>=0){
+			ForceFieldTimer=new Timer(ForceFieldTimer.getFloat(), forceField/3f, .3f, Interp.LINEAR);
+		}
 	}
 
 	public void makeMapShip(){
@@ -375,7 +378,7 @@ public class Hex {
 
 		if(highlight)shape.setColor(Colours.blueWeaponCols4[2]);
 		if(moused)shape.setColor(Colours.light);	
-		if(forceField>0)shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[0], forceField/3f));
+		if(ForceFieldTimer!=null)shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.blueWeaponCols4[1], ForceFieldTimer.getFloat()));
 		
 		if(isSwallowed())shape.setColor(Colours.redWeaponCols4[0]);
 
@@ -383,9 +386,9 @@ public class Hex {
 			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
 		}
 		
-		if(mapShip!=null&&mapShip.isStunned()){
-			shape.setColor(Colours.genCols5[3]);
-		}
+//		if(mapShip!=null&&mapShip.isStunned()){
+//			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
+//		}
 		
 		Pair s=getPixel();
 		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[2], s.y+points[3], s.x+points[4], s.y+points[5]);
@@ -441,13 +444,17 @@ public class Hex {
 		empTimer=new Timer(1,0,1/Map.phaseSpeed,Interp.LINEAR);
 		if(mapShip!=null){
 			mapShip.stun(2);
+			empTimer=new Timer(1,1,0,Interp.LINEAR);
 		}
 	}
 
-
+	public void clearEMP(){
+		empTimer=new Timer(1,0,.3f,Interp.LINEAR);
+	}
 
 	public void forceField(int turns) {
 		forceField=turns;
+		ForceFieldTimer=new Timer(1,1,0,Interp.LINEAR);
 		mapAbilityChoiceFadeout();
 	}
 	

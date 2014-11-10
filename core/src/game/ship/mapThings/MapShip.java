@@ -96,6 +96,7 @@ public class MapShip {
 	public void takeAITurn() {
 		if(stunTime>0){
 			stunTime--;
+			if(stunTime==0)hex.clearEMP();
 			return;
 		}
 		if(ship==null)init();
