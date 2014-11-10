@@ -20,13 +20,11 @@ public class EMP extends MapAbility{
 	public void doStuff() {
 		
 		for(Hex h:getValidHexes()){
-			h.mapShip.stun(2);
+			h.Emp();
 		}
-		
 		use();
-		
-		endPlayerTurn();
-		
+		mapShip.tickMapAbilities();
+		endPlayerTurn();		
 	}
 	
 	@Override
@@ -36,7 +34,8 @@ public class EMP extends MapAbility{
 
 	@Override
 	public boolean isValidChoice(Hex target) {
-		return target.mapShip!=null&&target.mapShip!=mapShip;
+		//return target.mapShip!=null&&target.mapShip!=mapShip;
+		return true;
 	}
 
 	@Override
@@ -46,6 +45,16 @@ public class EMP extends MapAbility{
 	@Override
 	public String getText() {
 		return "Disables all enemies for 2 turns";
+	}
+
+	@Override
+	public void mouseDownEffect() {
+		regularMouseDown();
+	}
+
+	@Override
+	public void mouseUpEffect() {
+		regularMouseUp();
 	}
 
 }

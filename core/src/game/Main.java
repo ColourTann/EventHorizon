@@ -81,7 +81,6 @@ public class Main extends ApplicationAdapter  {
 		init();
 	}
 	public void init(){
-		System.out.println(TextWriter.getClosestPower(300));
 		Gdx.input.setInputProcessor(new InputHandler());
 		Sounds.battleMusic.get();
 		CardGraphic.init();

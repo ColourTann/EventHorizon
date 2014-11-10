@@ -3,6 +3,7 @@ package game.ship.mapThings.mapAbility.comAbility;
 import java.util.ArrayList;
 
 import game.assets.Gallery;
+import game.assets.Sounds;
 import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
 import game.screen.map.Map;
@@ -23,12 +24,13 @@ public class ForceField extends MapAbility{
 	public boolean isValidChoice(Hex target) {
 		Hex origin= mapShip.hex;
 		int distance=origin.getDistance(target);
-		if(distance<=range)return false;
+		if(distance>range)return false;
 		return !target.isBlocked(true);
 	}
 	
 	@Override
 	public void doStuff() {
+		forceFields.clear();
 		fadeHexesIn();
 		Map.using=this;
 		Map.setState(MapState.PickHex);
@@ -36,23 +38,31 @@ public class ForceField extends MapAbility{
 
 	public void deselect() {
 		Map.returnToPlayerTurn();
-		Map.using=null;
-		for(Hex h:forceFields)h.forceField=0;
+		for(Hex h:forceFields)h.unForceField();
 		forceFields.clear();
 	}
 
 	@Override
 	public void pickHex(Hex hex) {
-		if(!isValidChoice(hex)||forceFields.contains(hex))return;
 		
-		hex.forceField=3;
-		//hex.highlight=false;
+		if(forceFields.contains(hex)){
+			forceFields.remove(hex);
+			hex.unForceField();
+			Sounds.cardDeselect.play();
+			return;
+		}
+		
+		if(!isValidChoice(hex))return;
+		
+		hex.forceField(3);
 		forceFields.add(hex);
+		Sounds.cardSelect.play();
 		if(forceFields.size()==3){
 			for(Hex h:Map.grid.drawableHexes)if(isValidChoice(h))h.mapAbilityChoiceFadeout();
 			Map.using=null;
-			Map.setState(MapState.EnemyMoving);
-			forceFields.clear();
+			use();
+			endPlayerTurn();
+			mapShip.tickMapAbilities();
 		}
 	}
 
@@ -66,6 +76,14 @@ public class ForceField extends MapAbility{
 		return "Block 3 hexes for 4 turns";
 	}
 
-	
+	@Override
+	public void mouseDownEffect() {
+		regularMouseDown();
+	}
+
+	@Override
+	public void mouseUpEffect() {
+		regularMouseUp();
+	}
 
 }

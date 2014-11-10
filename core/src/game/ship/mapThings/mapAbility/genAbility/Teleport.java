@@ -38,8 +38,9 @@ public class Teleport extends MapAbility{
 		if(!isValidChoice(hex))return;
 		use();
 		if(mapShip.ship.player) afterPlayerUse();
-		mapShip.stretch=new Timer(0,1, 1/Map.phaseSpeed, Interp.SIN);
+		
 		mapShip.moveTo(hex);
+		mapShip.teleport();
 	}
 
 	@Override
@@ -61,5 +62,15 @@ public class Teleport extends MapAbility{
 	public String getText() {
 		return "Teleport to an unblocked hex";
 	}
+
 	
+	@Override
+	public void mouseDownEffect() {
+		regularMouseDown();
+	}
+
+	@Override
+	public void mouseUpEffect() {
+		regularMouseUp();
+	}
 }

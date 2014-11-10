@@ -14,6 +14,7 @@ import game.module.component.weapon.Tesla;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
 import game.ship.mapThings.mapAbility.comAbility.ForceField;
+import game.ship.mapThings.mapAbility.genAbility.DiagonalMove;
 import game.ship.mapThings.mapAbility.genAbility.DoubleMove;
 import game.ship.mapThings.mapAbility.genAbility.Teleport;
 

@@ -9,11 +9,14 @@ public class Cloak extends MapAbility{
 	int duration=5;
 	int durationLeft;
 	public Cloak() {
-		super(Gallery.mapAbilityCloak,4, 1, 0, 1);
+		super(Gallery.mapAbilityCloak,12, 1, 0, 1);
 	}
 	@Override
 	public void doStuff() {
-		
+		mapShip.cloak(6);
+		use();
+		mapShip.tickMapAbilities();
+		endPlayerTurn();	
 	}
 
 	@Override
@@ -31,7 +34,13 @@ public class Cloak extends MapAbility{
 	}
 	@Override
 	public String getText() {
-		return "cloak need to code";
+		return "Conceals you completely for 6 turns";
+	}
+	@Override
+	public void mouseDownEffect() {
+	}
+	@Override
+	public void mouseUpEffect() {
 	}
 
 	

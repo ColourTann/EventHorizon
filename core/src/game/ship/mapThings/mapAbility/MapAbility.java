@@ -57,12 +57,17 @@ public abstract class MapAbility extends Mouser{
 			Sounds.error.play();
 			return;
 		}
+		
 		if(Map.using==this){
 			fadeOutHighlights();
 			deselect(); 
 			return;
 		}
-		else if(Map.getState()==MapState.PlayerTurn){
+		if(Map.using!=null){
+			 Map.using.fadeOutHighlights();
+			Map.using.deselect();
+		}
+		if(Map.getState()==MapState.PlayerTurn){
 			Map.using=this;
 			doStuff(); 
 			return;
@@ -73,7 +78,6 @@ public abstract class MapAbility extends Mouser{
 
 	public void deselect() {
 		Map.returnToPlayerTurn();
-		Map.using=null;
 	}
 
 	public abstract HexChoice getBestTarget();
@@ -89,8 +93,7 @@ public abstract class MapAbility extends Mouser{
 	}
 
 	public void endPlayerTurn(){
-		Timer.event(.2f, new Finisher() {
-
+		Timer.event(1/Map.phaseSpeed, new Finisher() {
 			@Override
 			public void finish() {
 				Map.setState(MapState.EnemyMoving);
@@ -99,11 +102,27 @@ public abstract class MapAbility extends Mouser{
 	}
 
 	@Override
-	public void mouseDown() {
+	public void mouseDown(){
+		if(Map.using==null)mouseDownEffect();
 	}
 	@Override
-	public void mouseUp() {
+	public void mouseUp(){
+		if(Map.using==null)mouseUpEffect();
 	}
+	
+	public abstract void mouseUpEffect();
+	public abstract void mouseDownEffect();
+	
+	public void regularMouseDown(){
+		if(Map.using==this)return;
+		fadeHexesIn();
+	}
+	
+	public void regularMouseUp(){
+		if(Map.using==this)return;
+		fadeOutHighlights();
+	}
+	
 	@Override
 	public void update(float delta) {
 	}
@@ -138,6 +157,9 @@ public abstract class MapAbility extends Mouser{
 	}
 
 	public void fadeHexesIn(){
+		for(Hex h:Map.grid.drawableHexes){
+			h.highlight=false;
+		}
 		for(Hex h:getValidHexes())h.mapAbilityChoiceFadein();
 	}
 

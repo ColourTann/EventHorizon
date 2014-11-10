@@ -44,5 +44,15 @@ public class EmergencyTeleport extends MapAbility{
 	public String getText() {
 		return "blah blah need to code";
 	}
+	
+	@Override
+	public void mouseDownEffect() {
+		regularMouseDown();
+	}
+
+	@Override
+	public void mouseUpEffect() {
+		regularMouseUp();
+	}
 
 }

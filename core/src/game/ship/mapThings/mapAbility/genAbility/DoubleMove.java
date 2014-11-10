@@ -23,9 +23,9 @@ public class DoubleMove extends MapAbility{
 
 	@Override
 	public boolean isValidChoice(Hex target) {
-		Hex origin=mapShip.hex;
-		int distance=origin.getDistance(target);
 		if(target.isBlocked(false))return false;
+		Hex origin=mapShip.hex;
+		int distance=origin.pathFind(target).size();
 		return distance==2;
 	}
 
@@ -58,7 +58,15 @@ public class DoubleMove extends MapAbility{
 		return "Move two spaces";
 	}
 
+	@Override
+	public void mouseDownEffect() {
+		regularMouseDown();
+	}
 
+	@Override
+	public void mouseUpEffect() {
+		regularMouseUp();
+	}
 
 
 }

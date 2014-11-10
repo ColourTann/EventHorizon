@@ -44,7 +44,6 @@ public class Colours {
 	public static Color shiftedTowards(Color source, Color target, float amount){
 		if(amount>1) amount=1;
 		if(amount<0) amount=0;
-		System.out.println(amount);
 		float r=source.r+((target.r-source.r)*amount);
 		float g=source.g+(target.g-source.g)*amount;
 		float b=source.b+(target.b-source.b)*amount;

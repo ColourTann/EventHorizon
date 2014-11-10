@@ -53,6 +53,7 @@ public class Hex {
 	float idealDist=-1;
 	float moves=-1;
 	Timer mapAbilityFadeTimer;
+	private Timer empTimer;
 
 
 	public static void init(){
@@ -294,14 +295,12 @@ public class Hex {
 			reset.idealDist=-1;
 			reset.moves=-1;
 		}
-		System.out.println("Can't find path, took too long");return null;
+		System.out.println("Can't find path, took too long");return new ArrayList<Hex>();
 	}
 
 	private boolean isSwallowed() {
 		return(getLineDistance(Map.explosion)<Map.getExplosionSize()+.5f);
 	}
-
-
 
 	public float howGood(MapShip ship){
 		float result=0;
@@ -354,14 +353,17 @@ public class Hex {
 	}
 
 	public void mapAbilityChoiceFadein(){
-		mapAbilityFadeTimer=new Timer(0, 1, 1/2f, Interp.SQUARE);
+		if(mapAbilityFadeTimer!=null){
+			mapAbilityFadeTimer=new Timer(mapAbilityFadeTimer.getFloat(), 1, 1/2f, Interp.SQUARE);
+		}
+		else mapAbilityFadeTimer=new Timer(0, 1, 1/2f, Interp.SQUARE);
+		
 	}
 
 	public void mapAbilityChoiceFadeout(){
+		if(mapAbilityFadeTimer==null)return;
 		mapAbilityFadeTimer=new Timer(mapAbilityFadeTimer.getFloat(), 0, 1/2f, Interp.SQUARE);
 	}
-
-
 
 	public void renderFilled(ShapeRenderer shape){
 		shape.setColor(Colours.dark);
@@ -377,6 +379,14 @@ public class Hex {
 		
 		if(isSwallowed())shape.setColor(Colours.redWeaponCols4[0]);
 
+		if(empTimer!=null&&empTimer.getFloat()>0){
+			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
+		}
+		
+		if(mapShip!=null&&mapShip.isStunned()){
+			shape.setColor(Colours.genCols5[3]);
+		}
+		
 		Pair s=getPixel();
 		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[2], s.y+points[3], s.x+points[4], s.y+points[5]);
 		shape.triangle(s.x+points[4], s.y+points[5], s.x+points[6], s.y+points[7], s.x+points[8], s.y+points[9]);
@@ -427,7 +437,24 @@ public class Hex {
 		return this;
 	}
 
+	public void Emp(){
+		empTimer=new Timer(1,0,1/Map.phaseSpeed,Interp.LINEAR);
+		if(mapShip!=null){
+			mapShip.stun(2);
+		}
+	}
 
+
+
+	public void forceField(int turns) {
+		forceField=turns;
+		mapAbilityChoiceFadeout();
+	}
+	
+	public void unForceField(){
+		forceField=0;
+		mapAbilityChoiceFadein();
+	}
 
 
 }

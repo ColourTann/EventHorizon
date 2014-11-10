@@ -49,6 +49,7 @@ public class PushBeam extends MapAbility{
 			}
 		}
 		target.moveTo(best);
+		target.tractor();
 	}
 
 	//Use to destroy, limited looting!//
@@ -60,5 +61,15 @@ public class PushBeam extends MapAbility{
 	@Override
 	public String getText() {
 		return "Push an enemy ship 3 spaces away from you";
+	}
+	
+	@Override
+	public void mouseDownEffect() {
+		regularMouseDown();
+	}
+
+	@Override
+	public void mouseUpEffect() {
+		regularMouseUp();
 	}
 }

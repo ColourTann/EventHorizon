@@ -53,6 +53,7 @@ public class PullBeam extends MapAbility{
 			}
 		}
 		target.moveTo(best);
+		target.tractor();
 	}
 
 	@Override
@@ -63,5 +64,15 @@ public class PullBeam extends MapAbility{
 	@Override
 	public String getText() {
 		return "Drag an enemy ship 2 spaces towards you";
+	}
+	
+	@Override
+	public void mouseDownEffect() {
+		regularMouseDown();
+	}
+
+	@Override
+	public void mouseUpEffect() {
+		regularMouseUp();
 	}
 }

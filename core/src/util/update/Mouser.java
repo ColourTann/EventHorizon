@@ -14,7 +14,7 @@ public abstract class Mouser extends Updater{
 	
 	public Collider collider;
 	public boolean moused=false;
-	public static Pair currentMoused;
+	public static Pair currentMousePosition;
 
 	//Call this to add something to the mouse list//
 	public void mousectivate(Collider collider){
@@ -30,7 +30,7 @@ public abstract class Mouser extends Updater{
 
 	public static void updateMoused(){
 		updateMousePosition();
-		boolean found=false;
+		Mouser foundMouser=null;
 		for(int i=0;i<mousers.size();i++){
 			Mouser mouseCheck= mousers.get(i);
 			if(mouseCheck.dead){
@@ -39,33 +39,37 @@ public abstract class Mouser extends Updater{
 				continue;
 			}
 			if(mouseCheck.layer!=getLayer()&&mouseCheck.layer!=Layer.ALL)continue;
-			if(found){
+			if(foundMouser!=null){
 				mouseCheck.deMouse();
 				continue;
 			}
-			found=mouseCheck.checkMoused(currentMoused);
+			if(mouseCheck.checkMoused(currentMousePosition, false)){
+				foundMouser=mouseCheck;
+			}
+		}
+		if(foundMouser!=null){
+			if(!foundMouser.moused){
+				foundMouser.moused=true;
+				foundMouser.mouseDown();
+			}
 		}
 	}	
 
 	private static void updateMousePosition(){
-		currentMoused=new Pair(
+		currentMousePosition=new Pair(
 				Gdx.input.getX()/(float)Gdx.graphics.getWidth()*(float)Main.width,
 				(Gdx.input.getY()/(float)Gdx.graphics.getHeight()*(float)Main.height));
 	}
 
 	public static Pair getMousePosition(){
-		if(currentMoused==null)currentMoused=new Pair(
+		if(currentMousePosition==null)currentMousePosition=new Pair(
 				Gdx.input.getX()/(float)Gdx.graphics.getWidth()*(float)Main.width,
 				(Gdx.input.getY()/(float)Gdx.graphics.getHeight()*(float)Main.height));
-		return currentMoused;
+		return currentMousePosition;
 	}
 
-	private boolean checkMoused(Pair s){
+	private boolean checkMoused(Pair s, boolean mouseDown){
 		if(collider.collidePoint(s)){
-			if(!moused){
-				moused=true;
-				mouseDown();
-			}
 			return true;
 		}
 		if(moused){
@@ -111,7 +115,7 @@ public abstract class Mouser extends Updater{
 		for(int i=0;i<mousers.size();i++){
 			Mouser checkMoused=mousers.get(i);
 			if(checkMoused.layer!=getLayer()&&checkMoused.layer!=Layer.ALL)continue;
-			if(checkMoused.checkClicked(currentMoused, left))return true;
+			if(checkMoused.checkClicked(currentMousePosition, left))return true;
 		}
 		return false;
 	}

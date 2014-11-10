@@ -2,6 +2,7 @@ package game.ship.mapThings;
 
 import java.util.ArrayList;
 
+import util.Colours;
 import util.Draw;
 import util.maths.Pair;
 import util.update.Timer;
@@ -15,6 +16,7 @@ import game.screen.map.Map;
 import game.screen.map.Map.MapState;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
+import game.ship.mapThings.mapAbility.genAbility.Teleport;
 import game.ship.shipClass.Aurora;
 import game.ship.shipClass.Eclipse;
 import game.ship.shipClass.Scout;
@@ -33,8 +35,13 @@ public class MapShip {
 	public float rotation = 0;
 	public ArrayList<MapAbility> mapAbilities = new ArrayList<MapAbility>();
 	int stunTime=0;
-	public Timer stretch=new Timer();
-	
+
+
+	private boolean tractoring;
+	private boolean teleporting;
+	private int cloakTurns;
+	private Timer cloakTimer;
+
 
 	public MapShip(Ship ship, Hex hex) {
 		init(ship);
@@ -51,19 +58,19 @@ public class MapShip {
 		else s=new Eclipse(false, 0);
 		init(s);
 	}
-	
+
 	public void init(Ship ship){
 		setShip(ship);
 		ArrayList<MapAbility> abilities=ship.getMapAbilities();
 		for(MapAbility a:abilities)a.mapShip=this;
 		mapAbilities=abilities;
 	}
-	
+
 	private void setShip(Ship ship) {
 		this.ship = ship;
 		ship.setMapShip(this);
 	}
-	
+
 	public void playerStartTurn() {
 		Map.incrementExplosionSize();
 		if (path != null && path.size() > 0) {
@@ -71,43 +78,47 @@ public class MapShip {
 			moveTo(path.remove(path.size()-1));
 		}
 		else path=null;
-		
+
 	}
-	
+
 	public void playerAfterMove(){
 		tickMapAbilities();
 	}
 
 	public void tickMapAbilities(){
 		for(MapAbility ma:mapAbilities)ma.turn();
+		cloakTurns--;
+		if(cloakTurns==0){
+			cloakTimer=new Timer(cloakTimer.getFloat(),1,.3f,Interp.LINEAR);
+		}
 	}
-	
+
 	public void takeAITurn() {
 		if(stunTime>0){
 			stunTime--;
 			return;
 		}
 		if(ship==null)init();
-		
+
 		HexChoice best=getBestRegular();
-		
+
 		for(MapAbility ma:mapAbilities){
 			if(!ma.isUsable())continue;
 			HexChoice abilChoice=ma.getBestTarget();
 			if(abilChoice.isBetterThan(best))	best=abilChoice;
 		}
-		
+
 		boolean moved=false;
-		
+
 		if(best.source==null){
 			moveTo(best.hex);
 			moved=true;
 		}
 		if(!moved){
-		best.source.use();
-		best.source.pickHex(best.hex);
+			best.source.use();
+			best.source.pickHex(best.hex);
 		}
-		
+
 		tickMapAbilities();
 	}
 
@@ -125,8 +136,17 @@ public class MapShip {
 		return new HexChoice(best, value);
 	}
 
-	
+	public void tractor(){
+		tractoring=true;
+	}
+
+	public void teleport() {
+		teleporting=true;
+	}
+
 	public void moveTo(Hex h) {
+		tractoring=false;
+		teleporting=false;
 		if (isMoving()) return;
 		if(ship.player)h.highlight=false;
 		source = hex.getPixel();
@@ -148,28 +168,44 @@ public class MapShip {
 			init();
 			source = hex.getPixel();
 		}
-		distance = new Pair(0, 0);
+		//distance = new Pair(0, 0);
 		if (timer == null)return;
 		if (timer.getFloat() <= 0) {
-			timer = null;
+			//	timer = null;
 			source = hex.getPixel();
 			destination = null;
 		}
-		if (destination != null) {
+		else if (destination != null) {
 			distance = source.subtract(destination);
 			distance = distance.multiply(timer.getFloat());
 		}			
+		
 	}
 
 	public void render(SpriteBatch batch) {
 		if (ship == null)	return;
+		batch.setColor(1,1,1,1);
+		float scale=hex.size/300f;
+		float bonusScale=0;
 		
-		batch.setColor(1-stretch.getFloat(), 1-stretch.getFloat()/2, 1, 1);
+		
+		if(teleporting){
+			float sin=(float)((Math.sin(timer.getFloat()*Math.PI)));
+			batch.setColor(1-sin, 1-sin/2, 1, 1);	
+			bonusScale=(float) (sin/1.3f);
+		}
+		if(tractoring){
+			float sin=(float)((Math.sin(timer.getFloat()*Math.PI)));
+			batch.setColor(1,1f-sin,1f-sin,1);
+		}
+		if(cloakTimer!=null){
+			batch.setColor(Colours.withAlpha(batch.getColor(), cloakTimer.getFloat()));
+		}
 		Draw.drawCenteredRotatedScaled(batch, ship.shipPic.get(),
 				(int) (hex.getPixel().x + distance.x),
 				(int) (hex.getPixel().y + distance.y), 
-				(Hex.size / 300)*(1+stretch.getFloat()/1.3f),
-				(Hex.size / 300)*(1-stretch.getFloat()/1.3f), 
+				scale*(1+bonusScale),
+				scale*(1-bonusScale), 
 				rotation);
 	}
 
@@ -177,7 +213,7 @@ public class MapShip {
 		this.path = path;
 		if (path.size() > 0) moveTo(path.remove(path.size()-1));
 	}
-	
+
 	public void resetPath() {
 		if(path==null)return;
 		for(Hex h:path){
@@ -193,4 +229,20 @@ public class MapShip {
 	public void stun(int i) {
 		stunTime+=i;
 	}
+
+	public boolean isStunned() {
+		return stunTime>0;
+	}
+
+	public void cloak(int amount) {
+		cloakTurns=amount;
+		cloakTimer=new Timer(1,.2f,.3f,Interp.LINEAR);
+	}
+	
+	public boolean isCloaked(){
+		
+		return cloakTurns>0;
+	}
+
+
 }

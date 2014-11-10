@@ -15,11 +15,14 @@ public class DiagonalMove extends MapAbility{
 
 	@Override
 	public boolean isValidChoice(Hex target) {
+		if(target.isBlocked(false))return false;
 		Hex origin=mapShip.hex;
 		int distance=origin.getDistance(target);
 		int xDiff=Math.abs(origin.x-target.x);
 		int yDiff=Math.abs(origin.y-target.y);
-		if(target.isBlocked(false))return false;
+		
+		int actualDistace=origin.pathFind(target).size();
+		if(actualDistace!=2)return false;
 		return distance==2&&!(xDiff%2==0&&yDiff%2==0);
 	}
 
@@ -54,6 +57,14 @@ public class DiagonalMove extends MapAbility{
 		return "Move like a knight!";
 	}
 
-	
+	@Override
+	public void mouseDownEffect() {
+		regularMouseDown();
+	}
+
+	@Override
+	public void mouseUpEffect() {
+		regularMouseUp();
+	}
 
 }
