@@ -1,6 +1,9 @@
 package util;
 
 public class Option {
+	/*
+	 * For using with volume and stuff
+	 */
 	private float amount=.75f;
 	public Option(float start){
 		amount=start;

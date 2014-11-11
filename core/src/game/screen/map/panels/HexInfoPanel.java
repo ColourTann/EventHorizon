@@ -48,22 +48,22 @@ public class HexInfoPanel extends SidePanel{
 		
 		if(mapShip!=null&&mapShip!=Map.player){
 			
-			Ship ship = mapShip.ship;
+			Ship ship = mapShip.getShip();
 			if(ship==null){
 				System.out.println("a null ship whuhoh");
 			}
 			Font.drawFontCentered(batch, ship.shipName, Font.medium, Main.width-width/2, gap);
 			Draw.drawCenteredScaled(batch, ship.getPic().get(), Main.width-width/2, 100, .33f, .33f);
 			
-			int powerDifference=(int)((ship.getStats().power-Map.player.ship.getStats().power)*10);
+			int powerDifference=(int)((ship.getStats().power-Map.player.getShip().getStats().power)*10);
 			Font.medium.setColor(Colours.genCols5[3]);
-			if(powerDifference>5){
+			if(powerDifference>MapShip.ignoreRange*10){
 				Font.medium.setColor(Colours.enemy2[0]);
 			}
-			if(powerDifference<-5){
+			if(powerDifference<-MapShip.ignoreRange*10){
 				Font.medium.setColor(Colours.player2[1]);
 			}
-			Font.drawFontCentered(batch, "Power difference: "+(int)((ship.getStats().power-Map.player.ship.getStats().power)*10), Font.medium, Main.width-width/2, gap+23);
+			Font.drawFontCentered(batch, "Power difference: "+(int)((ship.getStats().power-Map.player.getShip().getStats().power)*10), Font.medium, Main.width-width/2, gap+23);
 			Font.medium.setColor(Colours.light);
 			for(MapAbility ma:mapShip.mapAbilities)ma.render(batch);
 			

@@ -23,10 +23,10 @@ import game.ship.shipClass.Scout;
 
 public class MapShip {
 
-	public Ship ship;
+	private Ship ship;
 	private Timer timer;
 
-
+	public static float ignoreRange=.4f;
 	Pair source = new Pair(0, 0);
 	Pair destination = new Pair(0, 0);
 	public Pair distance = new Pair(0, 0);
@@ -41,8 +41,10 @@ public class MapShip {
 	private boolean teleporting;
 	private int cloakTurns;
 	private Timer cloakTimer;
+	private boolean defeated;
 
-
+	public enum MapShipStrength{Low, Medium, High};
+	
 	public MapShip(Ship ship, Hex hex) {
 		init(ship);
 		hex.addShip(this);
@@ -53,10 +55,14 @@ public class MapShip {
 	}
 
 	public void init() {
-		Ship s=null;
-		if(Math.random()>.5)s=new Scout(false, 0);
-		else s=new Eclipse(false, 0);
+		Ship s;
+		s=Ship.makeRandomShip(false, 0);
 		init(s);
+	}
+	
+	public Ship getShip(){
+		if (ship==null) init();
+		return ship;
 	}
 
 	public void init(Ship ship){
@@ -94,6 +100,7 @@ public class MapShip {
 	}
 
 	public void takeAITurn() {
+		if(defeated)return;
 		if(stunTime>0){
 			stunTime--;
 			if(stunTime==0)hex.clearEMP();
@@ -243,6 +250,10 @@ public class MapShip {
 	public boolean isCloaked(){
 		
 		return cloakTurns>0;
+	}
+
+	public void battle() {
+		defeated=true;
 	}
 
 

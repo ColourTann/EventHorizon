@@ -3,9 +3,11 @@ package game.ship.shipClass;
 import game.assets.Gallery;
 import game.module.component.computer.Alpha;
 import game.module.component.computer.Gamma;
+import game.module.component.computer.RubbishComputer;
 import game.module.component.generator.Four;
 import game.module.component.generator.Two;
 import game.module.component.shield.Deflector;
+import game.module.component.shield.Repeller;
 import game.module.component.weapon.Laser;
 import game.module.component.weapon.Pulse;
 import game.module.component.weapon.Ray;
@@ -51,9 +53,9 @@ public class Scout extends Ship{
 
 		setWeapon(new Laser(0), 0);
 		setWeapon(new Pulse(0), 1);
-		setShield(new Deflector(0));
+		setShield(new Repeller(0));
 		setGenerator(new Two());
-		setComputer(new Alpha());
+		setComputer(new RubbishComputer());
 	}
 
 	@Override

@@ -85,7 +85,7 @@ public class Hex {
 	}
 
 	public Pair getPixel(){
-		
+
 		//return new Pair((float) Math.round((x*xGap+y*yGap/sqr3)),(float)Math.round(y*yGap));
 		return new Pair((float) (x*xGap+y*yGap/sqr3),(y*yGap));
 	}
@@ -159,7 +159,7 @@ public class Hex {
 			Map.using.pickHex(this);
 			return;
 		}
-		
+
 		if(Map.getState()!=MapState.PlayerTurn){
 			Map.player.resetPath();
 			return;
@@ -176,6 +176,10 @@ public class Hex {
 	}
 
 	public void addShip(MapShip ship) {
+		if(this.mapShip!=null){
+			System.out.println("a battle!");
+			this.mapShip.battle();
+		}
 		this.mapShip=ship;
 		ship.hex=this;
 	}
@@ -208,6 +212,11 @@ public class Hex {
 		if(forceField>=0){
 			ForceFieldTimer=new Timer(ForceFieldTimer.getFloat(), forceField/3f, .3f, Interp.LINEAR);
 		}
+		if(content!=null)content.turn();
+
+
+
+
 	}
 
 	public void makeMapShip(){
@@ -307,7 +316,7 @@ public class Hex {
 
 	public float howGood(MapShip ship){
 		float result=0;
-		float myPower=ship.ship.getStats().power;
+		float myPower=ship.getShip().getStats().power;
 
 
 
@@ -321,7 +330,7 @@ public class Hex {
 
 
 		//Nearby Ships//
-		float ignoreRange=.01f;
+		
 		int distanceCutoff=4;			//Past this distance will be ignored//
 		float playerAttack=500;			//except for attacking//
 		float enemyAttack=700;
@@ -331,16 +340,16 @@ public class Hex {
 		for(Hex h:getHexesWithin(distanceCutoff, true)){
 			MapShip hexShip= h.mapShip;
 			if(hexShip==null||hexShip==ship)continue;
-			if(hexShip.ship==null)hexShip.init();
-			boolean player=hexShip.ship.player;
+
+			boolean player=hexShip.getShip().player;
 			float theirPower=hexShip.getPowerLevel();
 			//Flee decision//
 			float fleeMult=0;
-			if(Math.abs(theirPower-myPower)<ignoreRange)fleeMult=0;
+			if(Math.abs(theirPower-myPower)<MapShip.ignoreRange)fleeMult=0;
 			else fleeMult=myPower>theirPower?attackMultuplier:fleeMultiplier;	//Run away or not?
 			float shipDistance=h.getDistance(this);
-			
-			
+
+
 			if(shipDistance==0){
 				if(fleeMult<0)return -9;			//Don't attack ships you can't take on
 				result+=fleeMult*(player?playerAttack:enemyAttack);
@@ -360,7 +369,7 @@ public class Hex {
 			mapAbilityFadeTimer=new Timer(mapAbilityFadeTimer.getFloat(), 1, 1/2f, Interp.SQUARE);
 		}
 		else mapAbilityFadeTimer=new Timer(0, 1, 1/2f, Interp.SQUARE);
-		
+
 	}
 
 	public void mapAbilityChoiceFadeout(){
@@ -374,22 +383,22 @@ public class Hex {
 		if(mapAbilityFadeTimer!=null&&mapAbilityFadeTimer.getFloat()>0){
 			shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[2],mapAbilityFadeTimer.getFloat()));
 		}
-	//	if(Map.using.isValidChoice(Map.player.hex, this))shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[2],ticks%1));
+		//	if(Map.using.isValidChoice(Map.player.hex, this))shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[2],ticks%1));
 
 		if(highlight)shape.setColor(Colours.blueWeaponCols4[2]);
 		if(moused)shape.setColor(Colours.light);	
 		if(ForceFieldTimer!=null)shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.blueWeaponCols4[1], ForceFieldTimer.getFloat()));
-		
+
 		if(isSwallowed())shape.setColor(Colours.redWeaponCols4[0]);
 
 		if(empTimer!=null&&empTimer.getFloat()>0){
 			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
 		}
-		
-//		if(mapShip!=null&&mapShip.isStunned()){
-//			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
-//		}
-		
+
+		//		if(mapShip!=null&&mapShip.isStunned()){
+		//			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
+		//		}
+
 		Pair s=getPixel();
 		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[2], s.y+points[3], s.x+points[4], s.y+points[5]);
 		shape.triangle(s.x+points[4], s.y+points[5], s.x+points[6], s.y+points[7], s.x+points[8], s.y+points[9]);
@@ -404,7 +413,7 @@ public class Hex {
 		shape.line(vertices[0], vertices[1], vertices[2], vertices[3]);
 		shape.line(vertices[4], vertices[5], vertices[2], vertices[3]);
 		shape.line(vertices[4], vertices[5], vertices[6], vertices[7]);
-//		shape.polygon(p.getTransformedVertices());
+		//		shape.polygon(p.getTransformedVertices());
 
 	}
 
@@ -457,7 +466,7 @@ public class Hex {
 		ForceFieldTimer=new Timer(1,1,0,Interp.LINEAR);
 		mapAbilityChoiceFadeout();
 	}
-	
+
 	public void unForceField(){
 		forceField=0;
 		mapAbilityChoiceFadein();

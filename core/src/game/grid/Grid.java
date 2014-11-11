@@ -21,8 +21,10 @@ public class Grid {
 	private Hex[][] hexes;
 	public ArrayList<Hex> drawableHexes;
 	public static int viewDist;
-	public static int activeDist=80;
-	
+	public static final int interestingDist=7;
+	public static final int goodNumberOfShips=9;
+	public static int activeDist=7;
+	private static ArrayList<MapShip> closeShips=new ArrayList<MapShip>();
 	public static Grid MakeGrid(){
 		Grid g= new Grid();
 		g.setupGrid();
@@ -115,10 +117,26 @@ public class Grid {
 		}
 	}
 
-	public void gridTurn(){
+	public void turn(){
+		updateCloseShips();
 		for(Hex h:drawableHexes)h.hexTurn();
 	}
 	
+	public static ArrayList<MapShip> getCloseShips(){
+		return closeShips;
+	}
+	
+	public void addShip(MapShip ship){
+		closeShips.add(ship);
+	}
+	
+	private void updateCloseShips() {
+		closeShips.clear();
+		for(Hex h:Map.player.hex.getHexesWithin(interestingDist, false)){
+			if(h.mapShip!=null)closeShips.add(h.mapShip);
+		}
+	}
+
 	public void shapeRender(ShapeRenderer shape){
 		shape.begin(ShapeType.Filled);
 		shape.setColor(0, 0, 0, 1);

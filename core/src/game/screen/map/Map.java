@@ -99,7 +99,7 @@ public class Map extends Screen{
 			break;
 		case PlayerTurn:
 			Hex.mousedHex.moused=false;
-			grid.gridTurn();
+			grid.turn();
 			player.playerStartTurn();
 			break;
 		case PlayerMoving:

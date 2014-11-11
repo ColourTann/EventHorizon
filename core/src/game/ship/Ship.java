@@ -47,6 +47,7 @@ import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.interfaceJunk.FightStats;
 import game.ship.mapThings.MapShip;
+import game.ship.mapThings.MapShip.MapShipStrength;
 import game.ship.mapThings.mapAbility.MapAbility;
 import game.ship.niche.Niche;
 import game.ship.shipClass.Aurora;
@@ -54,6 +55,7 @@ import game.ship.shipClass.Comet;
 import game.ship.shipClass.Eclipse;
 import game.ship.shipClass.Hornet;
 import game.ship.shipClass.Nova;
+import game.ship.shipClass.Scout;
 
 public abstract class Ship {
 	public static Class[] classes= new Class[]{Aurora.class, Nova.class, Hornet.class, Comet.class, Eclipse.class};
@@ -82,7 +84,7 @@ public abstract class Ship {
 	private ShipStats shipStats;
 	private ShipGraphic battleGraphic;
 	private ModuleStats[] utilityStats= new ModuleStats[3];
-	
+
 	private int currentEnergy;
 	public boolean dead=false;
 	public boolean exploded=false;
@@ -93,7 +95,7 @@ public abstract class Ship {
 	private Component specialComponent; //this is a bit shit...//
 
 	//Enemy ai stuff//
-//	public Component focusTarget;
+	//	public Component focusTarget;
 	public Timer turnTimer = new Timer();
 
 	//Map stuff//
@@ -108,7 +110,7 @@ public abstract class Ship {
 		this.tier=Math.min(12f, tier);
 		this.player=player;
 		this.shipPic=shipPic;
-		
+
 		setupNiches();
 		placeNiches();
 
@@ -133,7 +135,7 @@ public abstract class Ship {
 	private void setupTiers() {
 
 		int baseTier=(int) (tier/3);
-		
+
 
 		int shieldTier=baseTier;
 		int[] weaponTier = new int[]{baseTier,baseTier};
@@ -156,7 +158,7 @@ public abstract class Ship {
 		if(smallRemainder>.8){
 			utilityTier[1]=baseTier+1;
 		}
-	
+
 
 		try {
 
@@ -267,7 +269,7 @@ public abstract class Ship {
 	private void addAttack(Attack a){
 
 		a.atkgrphc.order=attacks.size();
-		
+
 
 		attacks.add(a);
 		ParticleSystem.systems.add(a.atkgrphc);
@@ -399,7 +401,7 @@ public abstract class Ship {
 				enemySpendShields(true);
 				enemySpendShields(false);
 			}
-			
+
 			c.getGraphic().slide(new Pair(
 					975-(i/2)*(gap+CardGraphic.width),
 					80+(i%2)*(CardGraphic.height/2+gap)),
@@ -409,11 +411,11 @@ public abstract class Ship {
 			c=pickCard(p);
 			i++;
 		}
-		
+
 		CardHover.enemyHoverPosition = new Pair(
-					975-(i/2)*(gap+CardGraphic.width),
-					80+(i%2)*(CardGraphic.height/2+gap));
-	
+				975-(i/2)*(gap+CardGraphic.width),
+				80+(i%2)*(CardGraphic.height/2+gap));
+
 		if(i==0){
 			endPhase();
 		}
@@ -433,7 +435,7 @@ public abstract class Ship {
 			return;
 		}
 		for(Card c:playList) c.fadeAndAddIcon();
-		
+
 		endPhase();
 	}
 
@@ -471,7 +473,7 @@ public abstract class Ship {
 
 	private Card decideBest(int priority, boolean weapon, boolean shield){
 
-		
+
 
 		for(Card c:hand){
 			if(c.selected)continue; //Probably just for debugging//
@@ -502,9 +504,9 @@ public abstract class Ship {
 
 
 		for(Component c:getRandomisedModules()){
-			
+
 			if(shieldPoints.size()==0)return;
-			
+
 			CardCode shieldCode=shieldPoints.get(0).card.getCode();
 			//Need to put in reasons not to shield//
 			if(shieldCode.contains(Special.ShieldOnlyDamaged)){
@@ -574,7 +576,7 @@ public abstract class Ship {
 		discard(c);
 		deck.add(0, c);
 	}
-	
+
 	public void drawCard(int number){
 		if(number<=0)return;
 		for(int i=0;i<number;i++){
@@ -863,7 +865,7 @@ public abstract class Ship {
 
 
 	public boolean hasSpendableShields() {
-		
+
 		for(ShieldPoint sp:shieldPoints){
 			if(sp.card.getCode().contains(Special.ShieldOnlyDamaged)){
 				return false;
@@ -871,9 +873,9 @@ public abstract class Ship {
 			if(sp.card.getCode().contains(Special.ShieldOnlyPristine)){
 				return false;
 			}
-			
+
 		}
-		
+
 		if(shieldPoints.size()>0){
 			for(Component c:components){
 				if(c.getShieldableIncoming()>0){
@@ -932,11 +934,11 @@ public abstract class Ship {
 		for(Utility u:utilities){
 			if(u!=null)bonus+=u.getBonusEffect(c, effect);
 		}
-		
+
 		if(c.type==ModuleType.SHIELD&&c.mod!=getShield()){
-			
+
 		}
-		
+
 		return bonus;
 	}
 
@@ -1068,6 +1070,10 @@ public abstract class Ship {
 		return powerLevel;*/
 	}
 
+	public int getSimpleStats(){
+		return getGenerator().getIncome()+getComputer().getMaximumHandSize();
+	}
+
 	private void setupConsumableCard(Card c){
 		c.mod=getSpecialComponent();
 	}
@@ -1125,7 +1131,7 @@ public abstract class Ship {
 			ums.deactivate();
 		}
 	}
-	
+
 	public void onScramble(Component c){
 		for(Utility u:utilities) if(u!=null) u.onScramble(c);
 	}
@@ -1148,7 +1154,7 @@ public abstract class Ship {
 		}
 		return utilityStats;
 	}
-	
+
 	public boolean containsModule(Module mod, boolean ignoreTier){
 		for(Component c:components){
 			if(mod.getClass()==c.getClass()){
@@ -1173,7 +1179,7 @@ public abstract class Ship {
 			c.getStats().alpha=0;
 			c.getStats().info.alpha=0;
 			c.getStats().buffList=null;
-			
+
 		}
 	}
 
@@ -1185,5 +1191,44 @@ public abstract class Ship {
 		return false;
 	}
 
-	
+	//<=7, 8,9, >=10//
+	@SuppressWarnings("rawtypes")
+	public static Class[] weakClasses = new Class[]{Scout.class, Aurora.class};
+	@SuppressWarnings("rawtypes")
+	public static Class[] mediumClasses = new Class[]{Nova.class, Hornet.class};
+	@SuppressWarnings("rawtypes")
+	public static Class[] strongClasses = new Class[]{Comet.class, Eclipse.class};
+	@SuppressWarnings("unchecked")
+	public static Class<? extends Ship> getClass (MapShipStrength strength){
+		switch(strength){
+		case High:
+			return strongClasses[(int)(Math.random()*strongClasses.length)];
+		case Low:
+			return weakClasses[(int)(Math.random()*weakClasses.length)];
+		case Medium:
+			return mediumClasses[(int)(Math.random()*mediumClasses.length)];
+		default:
+			return null;
+		}
+	}
+
+	public static Ship getShip(MapShipStrength strength, float power){
+		try {
+			return getClass(strength).getConstructor(boolean.class, float.class).newInstance(false, power);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Some error with Ship.getShip()");
+		return null;
+	}
 }

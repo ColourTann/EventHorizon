@@ -72,7 +72,7 @@ public class Colours {
 		float r=Math.abs(a.r-aa.r);
 		float g=Math.abs(a.g-aa.g);
 		float b=Math.abs(a.b-aa.b);
-		float wiggle=.00001f;
+		float wiggle=.01f;
 		return r<wiggle&&g<wiggle&&b<wiggle;
 	}
 }

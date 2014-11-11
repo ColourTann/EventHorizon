@@ -28,4 +28,8 @@ public class Star extends HexContent{
 		return "star";
 	}
 
+	@Override
+	public void turn() {
+	}
+
 }

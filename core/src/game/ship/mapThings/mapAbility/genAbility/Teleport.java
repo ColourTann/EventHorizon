@@ -37,7 +37,7 @@ public class Teleport extends MapAbility{
 	public void pickHex(Hex hex) {
 		if(!isValidChoice(hex))return;
 		use();
-		if(mapShip.ship.player) afterPlayerUse();
+		if(mapShip.getShip().player) afterPlayerUse();
 		
 		mapShip.moveTo(hex);
 		mapShip.teleport();

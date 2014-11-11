@@ -103,6 +103,7 @@ public abstract class MapAbility extends Mouser{
 
 	@Override
 	public void mouseDown(){
+		if(Map.getState()!=MapState.PlayerTurn)return;
 		if(Map.using==null)mouseDownEffect();
 	}
 	@Override
@@ -182,7 +183,7 @@ public abstract class MapAbility extends Mouser{
 		
 		//hotkey//
 		Font.small.setColor(Colours.light);
-		if(mapShip.ship.player){
+		if(mapShip.getShip().player){
 			Font.small.draw(batch, index+")", location.x-43, location.y-33);
 		}
 
@@ -202,7 +203,7 @@ public abstract class MapAbility extends Mouser{
 		if(moused){
 			if(writer==null)setupWriter();
 			if(writerRenderLocation==null){
-				writerRenderLocation=mapShip.ship.player?new Pair(150,10):new Pair(100,300);
+				writerRenderLocation=mapShip.getShip().player?new Pair(150,10):new Pair(100,300);
 			}
 			writer.render(batch, writerRenderLocation.x, writerRenderLocation.y);
 		}
@@ -215,7 +216,7 @@ public abstract class MapAbility extends Mouser{
 		if(range>0){
 			text+="|n|Range "+range;
 		}
-		if(mapShip.ship.player){
+		if(mapShip.getShip().player){
 			
 		}
 		//text+="|n|Fuel "+fuelCost;
