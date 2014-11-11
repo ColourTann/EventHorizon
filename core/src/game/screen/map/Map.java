@@ -21,6 +21,7 @@ import game.assets.Gallery;
 import game.grid.Grid;
 import game.grid.hex.Hex;
 import game.screen.map.panels.HexInfoPanel;
+import game.screen.map.panels.Parastar;
 import game.screen.map.panels.SidePanel;
 import game.ship.Ship;
 import game.ship.mapThings.MapShip;
@@ -215,7 +216,15 @@ public class Map extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch) {
-
+		
+		batch.end();
+		
+		uiBatch.setProjectionMatrix(Main.uiCam.combined);
+		uiBatch.begin();
+		Parastar.render(uiBatch, Main.getCam(), Hex.size/200f);
+		uiBatch.end();
+		
+		batch.begin();
 		grid.render(batch);
 		batch.end();
 
@@ -230,7 +239,7 @@ public class Map extends Screen{
 		
 		
 		
-		//batch2 is for interface stuff//
+		
 		uiBatch.setProjectionMatrix(Main.uiCam.combined);
 		uiBatch.begin();
 		uiBatch.draw(Gallery.mapslice.get(), 0, 0);
