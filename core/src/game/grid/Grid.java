@@ -2,6 +2,7 @@ package game.grid;
 
 import java.util.ArrayList;
 
+import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 import util.Colours;
 import util.maths.Pair;
 
@@ -21,9 +22,9 @@ public class Grid {
 	private Hex[][] hexes;
 	public ArrayList<Hex> drawableHexes;
 	public static int viewDist;
-	public static final int interestingDist=7;
+	public static final int interestingDist=8;
 	public static final int goodNumberOfShips=9;
-	public static int activeDist=7;
+	public static int activeDist=15;
 	private static ArrayList<MapShip> closeShips=new ArrayList<MapShip>();
 	public static Grid MakeGrid(){
 		Grid g= new Grid();
@@ -40,6 +41,10 @@ public class Grid {
 		}
 		for(int i=0;i<2000;i++){
 			getRandomHex().makeMapShip();
+		}
+		
+		for(int i=0;i<000;i++){
+			getRandomHex().startNebula(0);
 		}
 		
 	}

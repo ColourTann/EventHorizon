@@ -45,7 +45,7 @@ import game.ship.shipClass.Scout;
 public class Main extends ApplicationAdapter  {
 
 	public static float version=0.534f;
-	public static boolean debug=!true;
+	public static boolean debug=true;
 	public static float ticks;
 	public static int height=700;
 	public static int width=1280;
@@ -154,6 +154,7 @@ public class Main extends ApplicationAdapter  {
 		currentScreen.shapeRender(shape);
 		//EscapeMenu.get().shapeRender(shape);
 		//batch.getProjectionMatrix().setToOrtho2D((int)(cam.x), (int)(cam.y), Main.width, Main.height);
+		
 		batch.setProjectionMatrix(mainCam.combined);
 		batch.begin();
 		batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -175,7 +176,7 @@ public class Main extends ApplicationAdapter  {
 			batch.setProjectionMatrix(uiCam.combined);
 			batch.begin();
 			Font.small.setColor(Colours.white);
-			Font.small.draw(batch, "FPS: "+(int)(1/delta), 0, 0);
+			Font.small.draw(batch, "FPS: "+(int)(Gdx.graphics.getFramesPerSecond()), 0, 0);
 		}
 
 		
@@ -255,7 +256,7 @@ public class Main extends ApplicationAdapter  {
 	}
 
 	public static void setCam(Pair cam){
-		mainCam.position.set(cam.x, cam.y, 0);
+		mainCam.position.set((int)cam.x, (int)cam.y, 0);
 	}
 
 	public static Screen getCurrentInputScreen(){

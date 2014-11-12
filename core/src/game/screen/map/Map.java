@@ -59,6 +59,7 @@ public class Map extends Screen{
 		MapAbility.init();
 		grid=Grid.MakeGrid();
 		player=new MapShip(ship, grid.getHex(55, 50));
+		 grid.getHex(60, 50).startNebula(0);
 		//player=new MapShip(new Nova(true, 0), grid.getHex(55, 50));
 		Map.explosion=grid.getHex(45, 48);
 		
@@ -224,6 +225,7 @@ public class Map extends Screen{
 		Parastar.render(uiBatch, Main.getCam(), Hex.size/200f);
 		uiBatch.end();
 		
+		
 		batch.begin();
 		grid.render(batch);
 		batch.end();
@@ -242,6 +244,7 @@ public class Map extends Screen{
 		
 		uiBatch.setProjectionMatrix(Main.uiCam.combined);
 		uiBatch.begin();
+		uiBatch.setColor(1,1,1,1);
 		uiBatch.draw(Gallery.mapslice.get(), 0, 0);
 		
 		Draw.drawScaled(uiBatch, Gallery.mapsliceRight.get(), Main.width, Main.height	, -1, -1);

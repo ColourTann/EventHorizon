@@ -3,6 +3,7 @@ package game.screen.test;
 import java.util.ArrayList;
 
 import util.Draw;
+import util.Noise;
 import util.TextWriter;
 import util.TextWriter.Alignment;
 import util.assets.Font;
@@ -12,6 +13,10 @@ import util.update.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Blending;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -21,23 +26,73 @@ import game.assets.particles.Lightning;
 
 public class Test extends Screen{
 
-	TextWriter tw;
+
 	float ticks=0;
-
-
+	int octaves=1;
+	Pixmap map;
+	Texture noise;
+	double z =1;
 	@Override
 	public void init() {
-		tw=new TextWriter(Font.big, "1111 222 3333 444444 555 66666666 hi 777777 |energy| 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h 1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h ");
-		//tw=new TextWriter(Font.big, "bello hi hi hi ho billo he bollo ballo");
-		tw.setWrapWidth(250);
-		tw.setPassiveReplacements();
-		tw.addObstacleTopLeft(150, 30);
+		makeNoiseTexture();
 
 	}
+	
+	private void makeNoiseTexture() {
+		if(noise!=null){
+			noise.dispose();
+			map.dispose();
+		}
+		
+		map = new Pixmap(400,400,Format.RGBA8888);
+		Pixmap.setBlending(Blending.None);
+		float scale=.011f;
+		float offset=400;
+		Pair[] foci = new Pair[]{new Pair(100,100), new Pair(250,100), new Pair(175,150)};
+		
+		float maxDist=(float) Math.sqrt(50*50+50*50);
+		maxDist=80;
+		for(int x=0;x<map.getWidth();x++){
+			for(int y=0;y<map.getHeight();y++){
+				float bestCloseness=0;
+				for(Pair p:foci){
+					float newDist = p.getDistance(new Pair(x,y));
+					float closeness=newDist/maxDist;
+					closeness=1-closeness;
+					if(closeness>0){
+						bestCloseness+=Math.pow(closeness, 1.09);
+					}
+				}
+				bestCloseness=Math.min(1, bestCloseness);
+				
+				
+				float noise =(float)Noise.noise(x*scale+offset, y*scale+offset, z+offset, octaves);
+				noise++;
+				noise/=2d;
+				//noise+=dist*2;
+				//noise-=2f;
+				noise=Math.max(0, noise);
+				noise=Math.min(1, noise);
+				//noise*=bestCloseness;
+				//noise=bestCloseness;
+				
+				//purple nebula//
+				
+				
+				map.setColor((noise*noise)%.5f, noise*noise*.8f, .5f+noise/4f, bestCloseness*bestCloseness);
+				
+				
+				//map.setColor(noise%.2f, (noise%.5f), noise, 1);
+				map.drawPixel(x, y);
+			}
+		}
+		noise=new Texture(map);
+	}
+	
 	@Override
 	public void update(float delta) {
 
-		//System.out.println(rockets.size());
+
 	}
 
 
@@ -50,14 +105,7 @@ public class Test extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch) {
-		batch.setColor(.2f,.2f,.2f,1);
-		Draw.drawScaled(batch, Gallery.whiteSquare.get(), 200, 200, tw.getWrapWidth(), tw.getHeight());
-		batch.setColor(1,1,1,1);
-		Font.medium.setColor(1,1,1,1);
-		//for(int i=0;i<2000;i++)Font.small.drawWrapped(batch, "1111 222 3333 |hi| 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h 1111 222 3333 hi 444444 555 66666666 hi 777777 ho 88888 9 00000000 aaa bbbb c hi hi hi d e f ggggg h", 50, 50, 50);
-		//for(int i=0;i<1000;i++)Draw.draw(batch, Gallery.shipAurora.get(), 50, 50);
-		for(int i=0;i<1;i++)tw.render(batch, 200, 200);
-		ParticleSystem.renderAll(batch);
+		Draw.draw(batch, noise, 50, 50);
 
 	}
 
@@ -75,23 +123,22 @@ public class Test extends Screen{
 			ParticleSystem.debugDontUse.add(new Lightning(new Pair(700,400), new Pair(Main.width-10,Main.height-10), 3, 1));
 			break;
 		case Input.Keys.UP:
-			for(int i=0;i<1000;i++){
-				tw.setWrapWidth(tw.getWrapWidth()-20);
-				tw.setWrapWidth(tw.getWrapWidth()+20);
-				tw.setupTexture();
-			}
+			z+=5.03f;
+			makeNoiseTexture();
 			break;
 		case Input.Keys.LEFT:
-			tw.setWrapWidth(tw.getWrapWidth()-20);
+			octaves--;
+			
 			break;
 		case Input.Keys.RIGHT:
-			tw.setWrapWidth(tw.getWrapWidth()+20);
+			octaves++;
+			makeNoiseTexture();
 			break;
 		case Input.Keys.L:
-			tw.setAlignment(Alignment.Left);
+			
 			break;
 		case Input.Keys.C:
-			tw.setAlignment(Alignment.Center);
+
 			break;
 		}
 	}

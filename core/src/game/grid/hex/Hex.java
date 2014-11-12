@@ -4,19 +4,30 @@ import java.util.ArrayList;
 
 import util.Colours;
 import util.Draw;
+import util.Noise;
 import util.assets.Font;
+import util.image.PairPic;
+import util.image.Pic;
 import util.maths.Pair;
 import util.update.Timer;
 import util.update.Timer.Interp;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Blending;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.utils.Array;
 
+import game.assets.Gallery;
 import game.grid.Grid;
 import game.grid.hexContent.HexContent;
 import game.grid.hexContent.Planet;
 import game.grid.hexContent.Star;
+import game.screen.battle.tutorial.PicLoc;
 import game.screen.map.Map;
 import game.screen.map.Map.MapState;
 import game.ship.mapThings.MapShip;
@@ -26,7 +37,10 @@ public class Hex {
 	public static double sqr3=Math.sqrt(3);
 	private static Polygon p;
 	private static float[] points = new float[12];
-	public static float size=30f;
+
+//	public static float size=26.6f; //for 8 hexes
+	public static float size=30;
+	
 	static float width; static float height;
 	public static float xGap;
 	public static float yGap;
@@ -55,7 +69,9 @@ public class Hex {
 	Timer mapAbilityFadeTimer;
 	private Timer empTimer;
 	private Timer ForceFieldTimer;
-
+	private boolean nebula;
+	Texture nebulaTexture;
+	
 	public static void init(){
 		for(int i=0;i<12;i+=2){
 			points[i]=(float) Math.sin(i*Math.PI/6)*size;
@@ -173,6 +189,12 @@ public class Hex {
 
 	public void rightClick(){
 		System.out.println(howGood(Map.player));
+		if(nebulaTexture!=null){
+			for(Hex h:getHexesWithin(10, true)){
+				h.nebula=false;
+			}
+			startNebula(0);
+		}
 	}
 
 	public void addShip(MapShip ship) {
@@ -395,6 +417,8 @@ public class Hex {
 			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
 		}
 
+		
+		
 		//		if(mapShip!=null&&mapShip.isStunned()){
 		//			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
 		//		}
@@ -404,9 +428,15 @@ public class Hex {
 		shape.triangle(s.x+points[4], s.y+points[5], s.x+points[6], s.y+points[7], s.x+points[8], s.y+points[9]);
 		shape.triangle(s.x+points[8], s.y+points[9], s.x+points[10], s.y+points[11], s.x+points[0], s.y+points[1]);
 		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[4], s.y+points[5], s.x+points[8], s.y+points[9]);
+		
+		
+		
 	}
 
 	public void renderBorder(ShapeRenderer shape) {
+		
+		if(true)return;
+		
 		Pair s=getPixel();
 		p.setPosition((float)Math.round(s.x), (float)Math.round(s.y));
 		float[] vertices=p.getTransformedVertices();
@@ -419,6 +449,10 @@ public class Hex {
 
 	public void renderBackGround(SpriteBatch batch) {
 		if(content!=null)content.render(batch);
+		batch.setColor(1,1,1,1);
+		if(nebulaTexture!=null){
+			Draw.draw(batch, nebulaTexture, (getPixel().x+nebulaDrawOffset.x-nebulaOffset), (getPixel().y+nebulaOffset+nebulaDrawOffset.y-nebulaOffset-Hex.size));
+		}
 	}
 
 	public void renderContents(SpriteBatch batch) {
@@ -433,6 +467,7 @@ public class Hex {
 	public boolean isBlocked(boolean shipsBlock){
 		if(shipsBlock&&mapShip!=null)return true;
 		if(forceField>0)return true;
+		if(nebula)return true;
 		return blocked;
 	}
 
@@ -472,5 +507,126 @@ public class Hex {
 		mapAbilityChoiceFadein();
 	}
 
+	public void addNebula(){
+		nebulae.add(this);
+		nebula=true;
+	}
+	
+	public boolean getNebula(){
+		return nebula;
+	}
+
+	private static int nebulaSize=0;
+	private static ArrayList<Hex> nebulae= new ArrayList<Hex>();
+	public void startNebula(int size) {
+		if(size==0){
+			nebulaSize=0;
+			nebulae.clear();
+		}
+		addNebula();
+		nebulaSize++;
+		for(Hex h:getHexesWithin(1, false)){
+			if(h.getNebula())continue;
+			if(Math.random()*nebulaSize<1.5){
+				h.startNebula(nebulaSize);
+			}
+		}
+		if(size==0){
+			System.out.println("Neb complete, setting up texture");
+			setupNebulaTexture(nebulae);
+		}
+	}
+
+	
+
+	private void setupNebulaTexture(ArrayList<Hex> nebulae2) {
+		//get boudns first//
+		Pair topLeft=null;
+		Pair botRight=null;
+		
+		for(Hex h:nebulae2){
+			Pair loc = h.getPixel();
+			if(topLeft==null){
+			
+				topLeft=loc.copy();
+				botRight=loc.copy();
+				continue;
+			}
+			if(loc.x<topLeft.x){
+				topLeft.x=loc.x;
+			}
+			if(loc.y<topLeft.y){
+				topLeft.y=loc.y;
+			}
+			if(loc.x>botRight.x){
+				botRight.x=loc.x;
+			}
+			if(loc.y>botRight.y){
+				botRight.y=loc.y;
+			}
+		}
+		
+		//bounds got!
+
+		ArrayList<Pair> foci = new ArrayList<Pair>();
+		for(Hex h:nebulae){
+			foci.add(h.getPixel().subtract(topLeft));
+		}
+		makeNoiseTexture((int)(botRight.x-topLeft.x), (int)(botRight.y-topLeft.y), foci);
+		nebulaDrawOffset=topLeft.subtract(getPixel());
+		
+	}
+	private Pair nebulaDrawOffset;
+	private static int nebulaOffset=(int) Hex.size;
+	private void makeNoiseTexture(int width, int height, ArrayList<Pair> foci) {
+		
+		Pixmap map = new Pixmap(width+nebulaOffset*2,height+nebulaOffset*2,Format.RGBA8888);
+		Pixmap.setBlending(Blending.None);
+		float scale=.031f;
+		float offset=400;
+	
+		
+		
+		float maxDist=(float) Math.sqrt(Hex.size*Hex.size*2);
+		//maxDist=40;
+		for(int x=-nebulaOffset;x<map.getWidth();x++){
+			for(int y=-nebulaOffset;y<map.getHeight();y++){
+				float bestCloseness=0;
+				for(Pair p:foci){
+					float newDist = p.getDistance(new Pair(x,y));
+					float closeness=newDist/maxDist;
+					closeness=1-closeness;
+					if(closeness>0){
+						bestCloseness+=Math.pow(closeness, 1.09);
+					}
+				}
+				bestCloseness=Math.min(1, bestCloseness);
+				
+				
+				float noise =(float)Noise.noise(x*scale+offset, y*scale+offset, 500, 8);
+				noise++;
+				noise/=2d;
+				//noise+=dist*2;
+				//noise-=2f;
+				noise=Math.max(0, noise);
+				noise=Math.min(1, noise);
+				//noise*=bestCloseness;
+				//noise=bestCloseness;
+				
+				//purple nebula//
+				
+				
+				map.setColor((noise*noise)%.5f, noise*noise*.8f, .5f+noise/4f, bestCloseness*bestCloseness);
+				
+				
+				//map.setColor(noise%.2f, (noise%.5f), noise, 1);
+				map.drawPixel(x+nebulaOffset, y+nebulaOffset);
+			}
+		}
+	
+	
+		
+		nebulaTexture=new Texture(map);
+	}
 
 }
