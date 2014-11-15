@@ -26,6 +26,7 @@ public class Grid {
 	public static final int goodNumberOfShips=9;
 	public static int activeDist=15;
 	private static ArrayList<MapShip> closeShips=new ArrayList<MapShip>();
+	private ArrayList<Hex> farRender= new ArrayList<Hex>();
 	public static Grid MakeGrid(){
 		Grid g= new Grid();
 		g.setupGrid();
@@ -36,6 +37,11 @@ public class Grid {
 		hexes=new Hex[size][];
 		for(int i=0;i<size;i++)hexes[i]=new Hex[size];
 		for(int x=0;x<size;x++)for(int y=0;y<size;y++)hexes[x][y]= new Hex(x,y,this);
+		
+		
+		for(int i=0;i<0000;i++){
+			getRandomHex().startNebula(0);;
+		}
 		for(int i=0;i<1500;i++){
 			getRandomHex().makeSolarSystem();
 		}
@@ -43,9 +49,7 @@ public class Grid {
 			getRandomHex().makeMapShip();
 		}
 		
-		for(int i=0;i<000;i++){
-			getRandomHex().startNebula(0);
-		}
+		
 		
 	}
 
@@ -115,7 +119,7 @@ public class Grid {
 		Hex start =pixelToHex((int)Main.getCam().x+Main.width/2, (int)Main.getCam().y+Main.height/2);
 		drawableHexes=null;
 		start=Map.player.hex;
-		if(start!=null)drawableHexes=start.getHexesWithin(viewDist+2, true);
+		if(start!=null)drawableHexes=start.getHexesWithin(viewDist+3, true);
 		if(drawableHexes==null)return;
 		for(Hex h:start.getHexesWithin(viewDist+2, true)){
 			h.update(delta);
@@ -159,7 +163,14 @@ public class Grid {
 		if(drawableHexes==null)return;
 		for(Hex h:drawableHexes)	h.renderBackGround(batch);
 		for(Hex h:drawableHexes)	h.renderContents(batch);
+		for(Hex h:farRender) h.renderFar(batch);
 		//for(Hex h:drawableHexes) h.renderLocation(batch);
+	}
+	
+	public void addFarRenderHex(Hex hex){
+		if(farRender.contains(hex))return;
+		farRender.add(hex);
+		
 	}
 
 

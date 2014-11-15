@@ -132,11 +132,13 @@ public class Noise {  // Simplex noise in 2D, 3D and 4D
     return 70.0 * (n0 + n1 + n2);
   }
 
+
+  
   public static double noise(double xin, double yin, int octaves) {
 	  double result=0;
 	  
 	  for(int i=1;i<octaves+1;i++){
-		  result+=noise(xin*i, yin*i)/i;
+		  result+=noise((xin*i), (yin*i))/i;
 	  }
 	  
 	  return result;

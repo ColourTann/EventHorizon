@@ -54,10 +54,10 @@ public class ForceField extends MapAbility{
 		
 		if(!isValidChoice(hex))return;
 		
-		hex.forceField(3);
+		hex.forceField(4);
 		forceFields.add(hex);
 		Sounds.cardSelect.play();
-		if(forceFields.size()==3){
+		if(forceFields.size()==14){
 			for(Hex h:Map.grid.drawableHexes)if(isValidChoice(h))h.mapAbilityChoiceFadeout();
 			Map.using=null;
 			use();
@@ -73,7 +73,7 @@ public class ForceField extends MapAbility{
 
 	@Override
 	public String getText() {
-		return "Block 3 hexes for 4 turns";
+		return "Block 4 hexes for 4 turns";
 	}
 
 	@Override

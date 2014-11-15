@@ -41,6 +41,11 @@ public class Pair {
 		float yDist=Math.abs(y-p.y);
 		return (float) Math.sqrt(xDist*xDist+yDist*yDist);
 	}
+	public float getFastDistance(Pair p){
+		float xDist=Math.abs(x-p.x);
+		float yDist=Math.abs(y-p.y);
+		return xDist*xDist+yDist*yDist;
+	}
 	public Pair normalise(){
 		float dist = getDistance();
 		return new Pair(x=x/dist,y=y/dist);
@@ -111,5 +116,12 @@ public class Pair {
 	}
 	public Pair absolute() {
 		return new Pair(Math.abs(x),Math.abs(y));
+	}
+	public Pair ceil() {
+		return new Pair((int)Math.ceil(x),(int)Math.ceil(y));
+	
+	}
+	public Pair round() {
+		return new Pair((int)Math.round(x),(int)Math.round(y));
 	}
 }

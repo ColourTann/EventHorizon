@@ -40,7 +40,7 @@ public class Map extends Screen{
 	private static float explosionSize=9;
 	public static float growthRate=.8f;
 	public static float progress=0;
-	public static float phaseSpeed=3;
+	public static float phaseSpeed=3f;
 	public static MapAbility using;
 	public static ArrayList<Hex> path= new ArrayList<Hex>();
 	static HexInfoPanel hexPanel;
@@ -59,7 +59,7 @@ public class Map extends Screen{
 		MapAbility.init();
 		grid=Grid.MakeGrid();
 		player=new MapShip(ship, grid.getHex(55, 50));
-		 grid.getHex(60, 50).startNebula(0);
+//		 grid.getHex(60, 50).startNebula(0);
 		//player=new MapShip(new Nova(true, 0), grid.getHex(55, 50));
 		Map.explosion=grid.getHex(45, 48);
 		
@@ -76,7 +76,7 @@ public class Map extends Screen{
 		state=MapState.PlayerTurn;
 		progress=0;
 		explosionSize=9;
-		phaseSpeed=3;
+		
 		using=null;
 		path=null;
 		hexPanel=null;
@@ -183,12 +183,7 @@ public class Map extends Screen{
 	}
 
 	public static void updateCamPosition() {
-		Pair bonus=new Pair(0,0);
-		if(getState()==MapState.PlayerMoving){
-			bonus=new Pair().add(player.distance);
-		}
-		
-		Main.setCam(player.hex.getPixel().add(bonus));
+		Main.setCam(player.locationTimer.getPair().round());
 	}
 
 	@Override
@@ -235,7 +230,7 @@ public class Map extends Screen{
 		Main.shape.begin(ShapeType.Filled);
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Main.shape.setColor(0,0,0,1);
-		Main.shape.circle(explosion.getPixel().x,explosion.getPixel().y, (explosionSize+progress*(growthRate/2))*Hex.size);
+		Main.shape.circle(explosion.getPixel().x,explosion.getPixel().y, (explosionSize+progress*(growthRate/2))*Hex.height);
 		Main.shape.end();
 
 		

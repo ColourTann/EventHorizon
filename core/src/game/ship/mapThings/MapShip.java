@@ -10,6 +10,7 @@ import util.update.Timer.Interp;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import game.Main;
 import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
 import game.screen.map.Map;
@@ -24,12 +25,14 @@ import game.ship.shipClass.Scout;
 public class MapShip {
 
 	private Ship ship;
-	private Timer timer;
+	//private Timer timer;
+	
+	public Timer locationTimer=new Timer();
 
 	public static float ignoreRange=.4f;
-	Pair source = new Pair(0, 0);
-	Pair destination = new Pair(0, 0);
-	public Pair distance = new Pair(0, 0);
+//	Pair source = new Pair(0, 0);
+//	Pair destination = new Pair(0, 0);
+//	public Pair distance = new Pair(0, 0);
 	public Hex hex;
 	public ArrayList<Hex> path= new ArrayList<Hex>();
 	public float rotation = 0;
@@ -46,8 +49,9 @@ public class MapShip {
 	public enum MapShipStrength{Low, Medium, High};
 	
 	public MapShip(Ship ship, Hex hex) {
-		init(ship);
+		
 		hex.addShip(this);
+		init(ship);
 	}
 
 	public MapShip(Hex hex) {
@@ -58,6 +62,7 @@ public class MapShip {
 		Ship s;
 		s=Ship.makeRandomShip(false, 0);
 		init(s);
+		
 	}
 	
 	public Ship getShip(){
@@ -70,6 +75,7 @@ public class MapShip {
 		ArrayList<MapAbility> abilities=ship.getMapAbilities();
 		for(MapAbility a:abilities)a.mapShip=this;
 		mapAbilities=abilities;
+		locationTimer=new Timer(hex.getPixel(), hex.getPixel(), 0, Interp.LINEAR);
 	}
 
 	private void setShip(Ship ship) {
@@ -157,37 +163,37 @@ public class MapShip {
 		teleporting=false;
 		if (isMoving()) return;
 		if(ship.player)h.highlight=false;
-		source = hex.getPixel();
-		destination = h.getPixel();
-		timer = new Timer(1, 0, 1/Map.phaseSpeed, Interp.SQUARE);
+		Pair source = hex.getPixel();
+		Pair destination = h.getPixel();
+		locationTimer= new Timer(source, destination, 1/Map.phaseSpeed, Interp.SQUARE);
 		rotation = source.getAngle(destination);
 		if (hex.mapShip == this)hex.mapShip = null;
 		h.addShip(this);
 	}
 
 	public boolean isMoving() {
-		if (timer == null) 	return false;
-		if (timer.getFloat() <= .0)	return false;
+		if (locationTimer == null) 	return false;
+		if (locationTimer.getFloat() >= 1)	return false;
 		return true;
 	}
 
 	public void update(float delta) {
 		if (ship == null) {
 			init();
-			source = hex.getPixel();
+			locationTimer=new Timer(hex.getPixel(), hex.getPixel(), 0, Interp.LINEAR);
 		}
 		//distance = new Pair(0, 0);
-		if (timer == null)return;
-		if (timer.getFloat() <= 0) {
-			//	timer = null;
-			source = hex.getPixel();
-			destination = null;
-		}
-		else if (destination != null) {
-			distance = source.subtract(destination);
-			distance = distance.multiply(timer.getFloat());
-		}			
-		
+//		if (timer == null)return;
+//		if (timer.getFloat() <= 0) {
+//			//	timer = null;
+//			source = hex.getPixel();
+//			destination = null;
+//		}
+//		else if (destination != null) {
+//			distance = source.subtract(destination);
+//			distance = distance.multiply(timer.getFloat());
+//		}			
+//		
 	}
 
 	public void render(SpriteBatch batch) {
@@ -198,20 +204,22 @@ public class MapShip {
 		
 		
 		if(teleporting){
-			float sin=(float)((Math.sin(timer.getFloat()*Math.PI)));
+			float sin=(float)((Math.sin(locationTimer.getFloat()*Math.PI)));
 			batch.setColor(1-sin, 1-sin/2, 1, 1);	
 			bonusScale=(float) (sin/1.3f);
 		}
 		if(tractoring){
-			float sin=(float)((Math.sin(timer.getFloat()*Math.PI)));
+			float sin=(float)((Math.sin(locationTimer.getFloat()*Math.PI)));
 			batch.setColor(1,1f-sin,1f-sin,1);
 		}
 		if(cloakTimer!=null){
 			batch.setColor(Colours.withAlpha(batch.getColor(), cloakTimer.getFloat()));
 		}
+		Pair drawAt= locationTimer.getPair();
+		if(getShip().player)drawAt=Main.getCam();
 		Draw.drawCenteredRotatedScaled(batch, ship.shipPic.get(),
-				(int) (hex.getPixel().x + distance.x),
-				(int) (hex.getPixel().y + distance.y), 
+				(int) (drawAt.x),
+				(int) (drawAt.y), 
 				scale*(1+bonusScale),
 				scale*(1-bonusScale), 
 				rotation);

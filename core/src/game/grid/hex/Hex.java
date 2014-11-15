@@ -1,6 +1,7 @@
 package game.grid.hex;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import util.Colours;
 import util.Draw;
@@ -38,10 +39,10 @@ public class Hex {
 	private static Polygon p;
 	private static float[] points = new float[12];
 
-//	public static float size=26.6f; //for 8 hexes
+	//	public static float size=26.6f; //for 8 hexes
 	public static float size=30;
-	
-	static float width; static float height;
+
+	public static float width, height;
 	public static float xGap;
 	public static float yGap;
 
@@ -61,17 +62,21 @@ public class Hex {
 	public MapShip mapShip;
 	public int forceField;
 	private boolean blocked;
-	float ticks=0;
+	//
 	//Pathfinding stuff//
 	Hex parent;
 	float idealDist=-1;
 	float moves=-1;
+
+
 	Timer mapAbilityFadeTimer;
 	private Timer empTimer;
-	private Timer ForceFieldTimer;
+	private Timer forceFieldTimer;
 	private boolean nebula;
 	Texture nebulaTexture;
-	
+	private Hex nebulaOrigin;
+	private ArrayList<Hex> nebulaList;
+
 	public static void init(){
 		for(int i=0;i<12;i+=2){
 			points[i]=(float) Math.sin(i*Math.PI/6)*size;
@@ -126,14 +131,15 @@ public class Hex {
 	}
 
 	public float getDistanceFromExplosion() {
-		return(getLineDistance(Map.explosion)-(Map.getExplosionSize()+.5f));
+		
+		return(getLineDistance(Map.explosion)-(Map.getExplosionSize()));
 	}
 
 	public float getLineDistance(Hex h){
 		Pair origin=getPixel();
 		Pair target=h.getPixel();
 		Pair distance=target.subtract(origin);
-		return (float) (Math.sqrt(distance.x*distance.x+distance.y*distance.y))/Hex.size;
+		return (float) (Math.sqrt(distance.x*distance.x+distance.y*distance.y))/Hex.height;
 	}
 	public void mouse() {
 		if(getDistance(Map.player.hex)>Grid.viewDist){
@@ -188,7 +194,8 @@ public class Hex {
 	}
 
 	public void rightClick(){
-		System.out.println(howGood(Map.player));
+		System.out.println(getDistanceFromExplosion());
+		//System.out.println(howGood(Map.player));
 		if(nebulaTexture!=null){
 			for(Hex h:getHexesWithin(10, true)){
 				h.nebula=false;
@@ -206,7 +213,8 @@ public class Hex {
 		ship.hex=this;
 	}
 	public boolean makeSolarSystem() {
-		if(solarSystemWithin16||blocked)return false;
+		if(solarSystemWithin16||isBlocked(true))return false;
+		for(Hex h:getHexesWithin(3, true))if(h.isBlocked(true))return false;
 		content=new Star(this);
 		for(Hex h:getHexesWithin(2, true))h.blocked=true;
 		for(Hex h:getHexesWithin(16, true)){
@@ -217,13 +225,13 @@ public class Hex {
 		int planets=(int) (7+Math.random()*4);
 		for(int i=0;i<planets;i++){
 			Hex h=possibles.remove(0);
+			if(h.isBlocked(true))continue;
 			if(h.getDistance(this)<3)continue;
 			h.content=new Planet(h);
 		}
 		return true;
 	}
 	public void update(float delta){
-		ticks+=delta ;
 		if(mapShip!=null){
 			mapShip.update(delta);
 		}
@@ -232,7 +240,7 @@ public class Hex {
 	public void hexTurn(){
 		forceField--;
 		if(forceField>=0){
-			ForceFieldTimer=new Timer(ForceFieldTimer.getFloat(), forceField/3f, .3f, Interp.LINEAR);
+			forceFieldTimer=new Timer(forceFieldTimer.getFloat(), forceField/3f, .3f, Interp.LINEAR);
 		}
 		if(content!=null)content.turn();
 
@@ -242,7 +250,7 @@ public class Hex {
 	}
 
 	public void makeMapShip(){
-		if(blocked)return;
+		if(isBlocked(true))return;
 		mapShip=new MapShip(this);
 	}
 
@@ -260,7 +268,11 @@ public class Hex {
 		totalDist=totalDist.absolute();
 		totalDist.x+=.0001f;
 		totalDist.y+=.0001f;
+		int maxChecks=1000;
+		int checks=0;
 		while(open.size()>0){
+			checks++;
+			if(checks>=maxChecks)break;
 			float closest=9999;
 			Hex check=null;
 			for(Hex h:open){
@@ -332,32 +344,79 @@ public class Hex {
 		System.out.println("Can't find path, took too long");return new ArrayList<Hex>();
 	}
 
-	private boolean isSwallowed() {
-		return(getLineDistance(Map.explosion)<Map.getExplosionSize()+.5f);
-	}
+
+
 
 	public float howGood(MapShip ship){
-		float result=0;
-		float myPower=ship.getShip().getStats().power;
-
-
-
+		//Ensure won't instantly die//
+		float baseDistance=getDistanceFromExplosion()-Map.growthRate;
+		if(baseDistance<0)return -999;	
+		
+		//
+		float result = 0;
+		int analyseDistance=6;
+		SurroundingAnalysis lyse = analyse(analyseDistance);
+		result+=lyse.furthestDistance;
+		if(true)return result;
+		
 		//Distance from explosion!//
+	
+		
+		
+		//Get furthest from black hole in <=6 steps
+		int maxSteps=12;
+		HashMap<Hex, Integer> checked = new HashMap<Hex, Integer>();
+		ArrayList<Hex> toCheck = new ArrayList<Hex>();
+		checked.put(this, 0);
+		toCheck.add(this);
+		while(toCheck.size()>0){
+			Hex current = toCheck.remove(0);
 
-		float explosionDistance=getDistanceFromExplosion()-Map.growthRate;	//adjusted for how long it takes to move//
-		if(explosionDistance<0)return -999;	//Too close to explosion//
-		float distanceMult=2;
-		float adjustedDistance=(float) (-1/Math.pow(explosionDistance, 2))*distanceMult;
-		result+=adjustedDistance;
+			int steps=checked.get(current);
+			if(steps>=maxSteps)continue;
+			for(Hex h:current.getHexesWithin(1, false)){
+				if(h.isBlocked(false))continue;
+				if(checked.get(h)!=null)continue;
+				if(current.getDistance(this)>maxSteps)continue;
+				checked.put(h, steps+1);
+				toCheck.add(toCheck.size(), h);
+			}
+		}
+		//Find the best one
+		//This is the furthest you can get in <=maxsteps moves//
+		float explosionDistance=0;
+		float bestTurns=0;
+		for(Hex h:checked.keySet()){
+			float thisDistance=h.getDistanceFromExplosion();
+			if(thisDistance>explosionDistance){
+				explosionDistance=thisDistance;
+				bestTurns=checked.get(h);
+			}
+		}
+		//Subtract steps+1 turns of black hole movement
+		explosionDistance-=Map.growthRate*(bestTurns+1);
+		if(explosionDistance<=0)return -999;
+
+		float distanceMultiplier=2;
+
+		float adjustedExplosionDistance=(float) (-1/Math.pow(explosionDistance, 2))*distanceMultiplier;
+
+		//System.out.println("Adjusted explosion: "+adjustedExplosionDistance+", best turns: "+bestTurns);
+		result += adjustedExplosionDistance;
+
+		//http://i.imgur.com/dMOkeTK.png cool weights//
+
+
 
 
 		//Nearby Ships//
-		
+
+		float myPower=ship.getPowerLevel();
 		int distanceCutoff=4;			//Past this distance will be ignored//
-		float playerAttack=500;			//except for attacking//
-		float enemyAttack=700;
-		float attackMultuplier=.02f;
-		float fleeMultiplier=-.04f;
+		float playerAttack=1;			//except for attacking//
+		float enemyAttack=1.1f;
+		float attackMultuplier=.01f;
+		float fleeMultiplier=-.02f;
 
 		for(Hex h:getHexesWithin(distanceCutoff, true)){
 			MapShip hexShip= h.mapShip;
@@ -382,9 +441,50 @@ public class Hex {
 			result+=fleeMult*(1/shipDistance);
 		}
 
+		
+		return result;
+	}
+
+	private SurroundingAnalysis analyse(int range){
+		SurroundingAnalysis result = new SurroundingAnalysis();
+		if(isBlocked(false))return result;
+		int currentDistance=0;
+		ArrayList<Hex> open = new ArrayList<Hex>();
+		ArrayList<Hex> future = new ArrayList<Hex>();
+		ArrayList<Hex> closed = new ArrayList<Hex>();
+		
+		open.add(this);
+		closed.add(this);
+		if(mapShip!=null)result.addShip(mapShip, currentDistance);
+		result.setDistance(getDistanceFromExplosion());
+		while(currentDistance<range){
+			while(open.size()>0){
+				Hex check=open.remove(0);
+				for(Hex h:check.getHexesWithin(1, false)){
+					if(h.swallowed(currentDistance+1))continue;
+					if(h.isBlocked(false))continue;
+					if(closed.contains(h))continue;
+					if(future.contains(h))continue;
+					future.add(h);
+					closed.add(h);
+					if(h.mapShip!=null)result.addShip(h.mapShip, currentDistance);
+					result.setDistance(h.getDistanceFromExplosion());
+				}
+				
+			}
+			currentDistance++;
+			open=future;
+			future= new ArrayList<Hex>();
+		}
 
 		return result;
 	}
+
+	private boolean swallowed(int turns) {
+		return getDistanceFromExplosion()-turns<.5f;
+	}
+
+
 
 	public void mapAbilityChoiceFadein(){
 		if(mapAbilityFadeTimer!=null){
@@ -409,16 +509,18 @@ public class Hex {
 
 		if(highlight)shape.setColor(Colours.blueWeaponCols4[2]);
 		if(moused)shape.setColor(Colours.light);	
-		if(ForceFieldTimer!=null)shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.blueWeaponCols4[1], ForceFieldTimer.getFloat()));
+		if(forceFieldTimer!=null&&forceFieldTimer.getFloat()>0){
+			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.blueWeaponCols4[1], forceFieldTimer.getFloat()));
+		}
 
-		if(isSwallowed())shape.setColor(Colours.redWeaponCols4[0]);
+		if(swallowed(0))shape.setColor(Colours.redWeaponCols4[0]);
 
 		if(empTimer!=null&&empTimer.getFloat()>0){
 			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
 		}
 
-		
-		
+
+
 		//		if(mapShip!=null&&mapShip.isStunned()){
 		//			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
 		//		}
@@ -428,36 +530,46 @@ public class Hex {
 		shape.triangle(s.x+points[4], s.y+points[5], s.x+points[6], s.y+points[7], s.x+points[8], s.y+points[9]);
 		shape.triangle(s.x+points[8], s.y+points[9], s.x+points[10], s.y+points[11], s.x+points[0], s.y+points[1]);
 		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[4], s.y+points[5], s.x+points[8], s.y+points[9]);
-		
-		
-		
+
+
+
 	}
 
 	public void renderBorder(ShapeRenderer shape) {
-		
-		if(true)return;
-		
+
+		//		if(true)return;
+
 		Pair s=getPixel();
 		p.setPosition((float)Math.round(s.x), (float)Math.round(s.y));
 		float[] vertices=p.getTransformedVertices();
 		shape.line(vertices[0], vertices[1], vertices[2], vertices[3]);
 		shape.line(vertices[4], vertices[5], vertices[2], vertices[3]);
 		shape.line(vertices[4], vertices[5], vertices[6], vertices[7]);
-		//		shape.polygon(p.getTransformedVertices());
+		//				shape.polygon(p.getTransformedVertices());
 
 	}
 
 	public void renderBackGround(SpriteBatch batch) {
 		if(content!=null)content.render(batch);
 		batch.setColor(1,1,1,1);
-		if(nebulaTexture!=null){
-			Draw.draw(batch, nebulaTexture, (getPixel().x+nebulaDrawOffset.x-nebulaOffset), (getPixel().y+nebulaOffset+nebulaDrawOffset.y-nebulaOffset-Hex.size));
-		}
+
 	}
 
 	public void renderContents(SpriteBatch batch) {
 		if(mapShip!=null)mapShip.render(batch);
+		if(nebulaOrigin!=null){
+			Map.grid.addFarRenderHex(nebulaOrigin);
+		}
 	}
+
+	public void renderFar(SpriteBatch batch) {
+
+		setupNebulaTexture();
+		Draw.draw(batch, nebulaTexture, (getPixel().x+nebulaDrawOffset.x-nebulaOffset), (getPixel().y+nebulaOffset+nebulaDrawOffset.y-nebulaOffset-Hex.size));
+
+	}
+
+
 
 	public void renderLocation(SpriteBatch batch){
 		String s=this.toString();
@@ -498,27 +610,31 @@ public class Hex {
 
 	public void forceField(int turns) {
 		forceField=turns;
-		ForceFieldTimer=new Timer(1,1,0,Interp.LINEAR);
+		forceFieldTimer=new Timer(1,1,0,Interp.LINEAR);
 		mapAbilityChoiceFadeout();
 	}
 
 	public void unForceField(){
 		forceField=0;
+		forceFieldTimer=new Timer(0,0,0,Interp.LINEAR);
 		mapAbilityChoiceFadein();
+		forceFieldTimer.update(1);
+		System.out.println(forceFieldTimer);
 	}
 
 	public void addNebula(){
 		nebulae.add(this);
 		nebula=true;
 	}
-	
+
 	public boolean getNebula(){
 		return nebula;
 	}
 
 	private static int nebulaSize=0;
 	private static ArrayList<Hex> nebulae= new ArrayList<Hex>();
-	public void startNebula(int size) {
+	private static final int maxNebulaDistance=6;
+	public void startNebula(int size){
 		if(size==0){
 			nebulaSize=0;
 			nebulae.clear();
@@ -532,22 +648,26 @@ public class Hex {
 			}
 		}
 		if(size==0){
-			System.out.println("Neb complete, setting up texture");
-			setupNebulaTexture(nebulae);
+			for(int i=nebulae.size()-1;i>=0;i--){
+				Hex h=nebulae.get(i);
+				h.nebulaOrigin=this;
+			}
+			nebulaList=(ArrayList<Hex>) nebulae.clone();
 		}
+
 	}
 
-	
 
-	private void setupNebulaTexture(ArrayList<Hex> nebulae2) {
+	private void setupNebulaTexture() {
 		//get boudns first//
+		if(nebulaTexture!=null)return;
 		Pair topLeft=null;
 		Pair botRight=null;
-		
-		for(Hex h:nebulae2){
+
+		for(Hex h:nebulaList){
 			Pair loc = h.getPixel();
 			if(topLeft==null){
-			
+
 				topLeft=loc.copy();
 				botRight=loc.copy();
 				continue;
@@ -565,32 +685,33 @@ public class Hex {
 				botRight.y=loc.y;
 			}
 		}
-		
+
 		//bounds got!
 
 		ArrayList<Pair> foci = new ArrayList<Pair>();
-		for(Hex h:nebulae){
+		for(Hex h:nebulaList){
 			foci.add(h.getPixel().subtract(topLeft));
 		}
 		makeNoiseTexture((int)(botRight.x-topLeft.x), (int)(botRight.y-topLeft.y), foci);
 		nebulaDrawOffset=topLeft.subtract(getPixel());
-		
+
 	}
 	private Pair nebulaDrawOffset;
 	private static int nebulaOffset=(int) Hex.size;
 	private void makeNoiseTexture(int width, int height, ArrayList<Pair> foci) {
-		
+
 		Pixmap map = new Pixmap(width+nebulaOffset*2,height+nebulaOffset*2,Format.RGBA8888);
 		Pixmap.setBlending(Blending.None);
 		float scale=.031f;
-		float offset=400;
-	
-		
-		
+		float offset=nebulaOffset;
+
+
+
 		float maxDist=(float) Math.sqrt(Hex.size*Hex.size*2);
 		//maxDist=40;
-		for(int x=-nebulaOffset;x<map.getWidth();x++){
-			for(int y=-nebulaOffset;y<map.getHeight();y++){
+		int fidelity=2;
+		for(int x=-nebulaOffset;x<map.getWidth();x+=fidelity){
+			for(int y=-nebulaOffset;y<map.getHeight();y+=fidelity){
 				float bestCloseness=0;
 				for(Pair p:foci){
 					float newDist = p.getDistance(new Pair(x,y));
@@ -601,9 +722,12 @@ public class Hex {
 					}
 				}
 				bestCloseness=Math.min(1, bestCloseness);
-				
-				
-				float noise =(float)Noise.noise(x*scale+offset, y*scale+offset, 500, 8);
+				//				float bestCloseness=.5f;
+
+
+				float noise =(float)Noise.noise(x*scale+offset, y*scale+offset, 8);
+
+				//				float noise=1;
 				noise++;
 				noise/=2d;
 				//noise+=dist*2;
@@ -612,20 +736,20 @@ public class Hex {
 				noise=Math.min(1, noise);
 				//noise*=bestCloseness;
 				//noise=bestCloseness;
-				
+
 				//purple nebula//
-				
-				
+
+
 				map.setColor((noise*noise)%.5f, noise*noise*.8f, .5f+noise/4f, bestCloseness*bestCloseness);
-				
-				
+
+
 				//map.setColor(noise%.2f, (noise%.5f), noise, 1);
-				map.drawPixel(x+nebulaOffset, y+nebulaOffset);
+				map.fillRectangle(x+nebulaOffset, y+nebulaOffset, fidelity, fidelity);
 			}
 		}
-	
-	
-		
+
+
+
 		nebulaTexture=new Texture(map);
 	}
 

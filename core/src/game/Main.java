@@ -3,6 +3,7 @@ package game;
 
 import util.Colours;
 import util.Draw;
+import util.Noise;
 import util.TextWriter;
 import util.assets.Font;
 import util.maths.Pair;
@@ -89,7 +90,6 @@ public class Main extends ApplicationAdapter  {
 		Font.init();
 		CardHover.init();
 		Ship.init();
-		
 		batch = new SpriteBatch();
 		uiBatch=new SpriteBatch();
 		shape=new ShapeRenderer();
@@ -155,7 +155,9 @@ public class Main extends ApplicationAdapter  {
 		//EscapeMenu.get().shapeRender(shape);
 		//batch.getProjectionMatrix().setToOrtho2D((int)(cam.x), (int)(cam.y), Main.width, Main.height);
 		
+		//mainCam.zoom=5f;
 		batch.setProjectionMatrix(mainCam.combined);
+		
 		batch.begin();
 		batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		batch.setColor(Colours.white);

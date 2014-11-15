@@ -5,7 +5,7 @@ import util.maths.Pair;
 public class Timer extends Updater{
 	public enum Interp{SQUARE, CUBE, INVERSESQUARED, LINEAR, SANTIBOUNCE, SIN}	
 	float seconds;
-	Interp lerpType;
+	Interp lerpType=Interp.LINEAR;
 
 	Pair startPosition;
 	Pair endPosition;
@@ -66,6 +66,7 @@ public class Timer extends Updater{
 	}
 
 	public Pair getPair(){
+		if(startPosition==null)return new Pair(-1,-1);
 		float lerpedRatio=get();
 		float x=startPosition.x+(endPosition.x-startPosition.x)*lerpedRatio;
 		float y=startPosition.y+(endPosition.y-startPosition.y)*lerpedRatio;
@@ -73,7 +74,7 @@ public class Timer extends Updater{
 	}
 
 	public float getFloat(){
-		if(fromFloat==0&&toFloat==0)return 0;
+		//if(fromFloat==0&&toFloat==0)return ratio;
 		
 		if(lerpType==null)return ratio;
 		return fromFloat+((toFloat-fromFloat)*get());
