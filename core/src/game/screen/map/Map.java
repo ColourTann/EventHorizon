@@ -38,7 +38,7 @@ public class Map extends Screen{
 	private static MapState state;
 	public static Hex explosion;
 	private static float explosionSize=9;
-	public static float growthRate=.8f;
+	public static float growthRate=.4f;
 	public static float progress=0;
 	public static float phaseSpeed=3f;
 	public static MapAbility using;

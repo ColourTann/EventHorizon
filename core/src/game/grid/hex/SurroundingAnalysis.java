@@ -14,15 +14,21 @@ public class SurroundingAnalysis {
 		ships.add(new ShipDist(ship, dist));
 	}
 	public String toString(){
+		for(ShipDist sd:ships){
+			System.out.println(sd);
+		}
 		return "Best distance: "+furthestDistance+", Ships: "+ships.size();
+		
 	}
 	static class ShipDist{
-
 		MapShip ship;
 		int dist;
 		public ShipDist(MapShip ship, int dist){
 			this.ship=ship;
 			this.dist=dist;
+		}
+		public String toString(){
+			return ship+", dist: "+dist;
 		}
 	}
 

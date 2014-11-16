@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.Array;
 
 import game.assets.Gallery;
 import game.grid.Grid;
+import game.grid.hex.SurroundingAnalysis.ShipDist;
 import game.grid.hexContent.HexContent;
 import game.grid.hexContent.Planet;
 import game.grid.hexContent.Star;
@@ -131,8 +132,8 @@ public class Hex {
 	}
 
 	public float getDistanceFromExplosion() {
-		
-		return(getLineDistance(Map.explosion)-(Map.getExplosionSize()));
+		return(getLineDistance(Map.explosion)-(Map.getExplosionSize())-.5f);
+//		return(getLineDistance(Map.explosion)-(Map.getExplosionSize()));
 	}
 
 	public float getLineDistance(Hex h){
@@ -194,8 +195,9 @@ public class Hex {
 	}
 
 	public void rightClick(){
-		System.out.println(getDistanceFromExplosion());
-		//System.out.println(howGood(Map.player));
+
+		System.out.println(howGood(Map.player));
+
 		if(nebulaTexture!=null){
 			for(Hex h:getHexesWithin(10, true)){
 				h.nebula=false;
@@ -352,59 +354,18 @@ public class Hex {
 		float baseDistance=getDistanceFromExplosion()-Map.growthRate;
 		if(baseDistance<0)return -999;	
 		
-		//
 		float result = 0;
-		int analyseDistance=6;
+		
+		//analyse//
+		int analyseDistance=8;
 		SurroundingAnalysis lyse = analyse(analyseDistance);
-		result+=lyse.furthestDistance;
-		if(true)return result;
-		
-		//Distance from explosion!//
-	
-		
-		
-		//Get furthest from black hole in <=6 steps
-		int maxSteps=12;
-		HashMap<Hex, Integer> checked = new HashMap<Hex, Integer>();
-		ArrayList<Hex> toCheck = new ArrayList<Hex>();
-		checked.put(this, 0);
-		toCheck.add(this);
-		while(toCheck.size()>0){
-			Hex current = toCheck.remove(0);
-
-			int steps=checked.get(current);
-			if(steps>=maxSteps)continue;
-			for(Hex h:current.getHexesWithin(1, false)){
-				if(h.isBlocked(false))continue;
-				if(checked.get(h)!=null)continue;
-				if(current.getDistance(this)>maxSteps)continue;
-				checked.put(h, steps+1);
-				toCheck.add(toCheck.size(), h);
-			}
-		}
-		//Find the best one
-		//This is the furthest you can get in <=maxsteps moves//
-		float explosionDistance=0;
-		float bestTurns=0;
-		for(Hex h:checked.keySet()){
-			float thisDistance=h.getDistanceFromExplosion();
-			if(thisDistance>explosionDistance){
-				explosionDistance=thisDistance;
-				bestTurns=checked.get(h);
-			}
-		}
-		//Subtract steps+1 turns of black hole movement
-		explosionDistance-=Map.growthRate*(bestTurns+1);
-		if(explosionDistance<=0)return -999;
-
+		System.out.println(lyse);
+		float explosionDistance=lyse.furthestDistance-analyseDistance;
 		float distanceMultiplier=2;
-
 		float adjustedExplosionDistance=(float) (-1/Math.pow(explosionDistance, 2))*distanceMultiplier;
-
-		//System.out.println("Adjusted explosion: "+adjustedExplosionDistance+", best turns: "+bestTurns);
 		result += adjustedExplosionDistance;
-
 		//http://i.imgur.com/dMOkeTK.png cool weights//
+		
 
 
 
@@ -412,33 +373,35 @@ public class Hex {
 		//Nearby Ships//
 
 		float myPower=ship.getPowerLevel();
+		float baseMultiplier=.1f;
 		int distanceCutoff=4;			//Past this distance will be ignored//
 		float playerAttack=1;			//except for attacking//
 		float enemyAttack=1.1f;
-		float attackMultuplier=.01f;
-		float fleeMultiplier=-.02f;
+		float attackMultuplier=1;
+		float fleeMultiplier=-2;
 
-		for(Hex h:getHexesWithin(distanceCutoff, true)){
-			MapShip hexShip= h.mapShip;
-			if(hexShip==null||hexShip==ship)continue;
-
-			boolean player=hexShip.getShip().player;
-			float theirPower=hexShip.getPowerLevel();
+		for(ShipDist sd:lyse.ships){
+			if(sd.ship==ship)continue; //don't care about self//
+			MapShip mShip=sd.ship;
+			boolean player=mShip.getShip().player;
+			float theirPower=mShip.getPowerLevel();
 			//Flee decision//
 			float fleeMult=0;
 			if(Math.abs(theirPower-myPower)<MapShip.ignoreRange)fleeMult=0;
 			else fleeMult=myPower>theirPower?attackMultuplier:fleeMultiplier;	//Run away or not?
-			float shipDistance=h.getDistance(this);
+			float shipDistance=sd.dist;
 
 
 			if(shipDistance==0){
 				if(fleeMult<0)return -9;			//Don't attack ships you can't take on
-				result+=fleeMult*(player?playerAttack:enemyAttack);
+				result+=fleeMult*baseMultiplier*(player?playerAttack:enemyAttack);
+			}
+			if(shipDistance>distanceCutoff){
+				continue;
 			}
 
 
-
-			result+=fleeMult*(1/shipDistance);
+			result+=fleeMult*baseMultiplier*(1/shipDistance);
 		}
 
 		
@@ -461,13 +424,12 @@ public class Hex {
 			while(open.size()>0){
 				Hex check=open.remove(0);
 				for(Hex h:check.getHexesWithin(1, false)){
-					if(h.swallowed(currentDistance+1))continue;
-					if(h.isBlocked(false))continue;
 					if(closed.contains(h))continue;
 					if(future.contains(h))continue;
+					if(h.swallowed(currentDistance+1))continue;
+					if(h.isBlocked(false))continue;
 					future.add(h);
 					closed.add(h);
-					if(h.mapShip!=null)result.addShip(h.mapShip, currentDistance);
 					result.setDistance(h.getDistanceFromExplosion());
 				}
 				
@@ -476,12 +438,14 @@ public class Hex {
 			open=future;
 			future= new ArrayList<Hex>();
 		}
-
+		for(Hex h:getHexesWithin(range, true)){
+			if(h.mapShip!=null)result.addShip(h.mapShip, h.getDistance(this));
+		}
 		return result;
 	}
 
 	private boolean swallowed(int turns) {
-		return getDistanceFromExplosion()-turns<.5f;
+		return getDistanceFromExplosion()-turns<0;
 	}
 
 
