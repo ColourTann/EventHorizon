@@ -71,7 +71,7 @@ public class EscapeMenu extends Screen{
 	public EscapeMenu(){
 		position=new Pair(Main.width/2-width/2, Main.height/2-height/2);
 		Font.medium.setColor(Colours.light);
-		buttons.add(new AdvancedButton(new Pair(Main.width/2-buttonSeparation-buttonWidth/2,buttonY), new Pair(buttonWidth,0), "Quit", Font.medium, new Code() {
+		buttons.add(new AdvancedButton(new Pair(Main.width/2-buttonSeparation-buttonWidth/2,buttonY), false, new Pair(buttonWidth,0), "Quit", Font.medium, new Code() {
 			@Override
 			public void onPress() {
 				deactivate();
@@ -80,7 +80,7 @@ public class EscapeMenu extends Screen{
 			}
 		}));
 		
-		buttons.add(new AdvancedButton(new Pair(Main.width/2+buttonSeparation-buttonWidth/2,buttonY), new Pair(buttonWidth,0), "Resume", Font.medium, new Code() {
+		buttons.add(new AdvancedButton(new Pair(Main.width/2+buttonSeparation-buttonWidth/2,buttonY), false, new Pair(buttonWidth,0), "Resume", Font.medium, new Code() {
 			@Override
 			public void onPress() {
 				deactivate();

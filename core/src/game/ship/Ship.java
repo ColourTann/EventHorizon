@@ -105,6 +105,7 @@ public abstract class Ship {
 	public abstract void placeNiches();
 	float tier;
 	public String shipName;
+	private int fuel=30;
 	public Ship(boolean player, float tier, String shipName, Pic shipPic, Pic genPic, Pic comPic){
 		this.shipName=shipName;
 		this.tier=Math.min(12f, tier);
@@ -1230,5 +1231,19 @@ public abstract class Ship {
 		}
 		System.out.println("Some error with Ship.getShip()");
 		return null;
+	}
+
+
+	public int getFuel() {
+		return fuel;
+	}
+	
+	public void spendFuel(int amount){
+		fuel-=amount;
+	}
+
+
+	public void addFuel(int amount) {
+		fuel+=amount;
 	}
 }

@@ -57,7 +57,7 @@ public class ForceField extends MapAbility{
 		hex.forceField(4);
 		forceFields.add(hex);
 		Sounds.cardSelect.play();
-		if(forceFields.size()==14){
+		if(forceFields.size()==4){
 			for(Hex h:Map.grid.drawableHexes)if(isValidChoice(h))h.mapAbilityChoiceFadeout();
 			Map.using=null;
 			use();

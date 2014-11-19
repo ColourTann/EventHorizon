@@ -62,7 +62,7 @@ public class Scout extends Ship{
 	public ArrayList<MapAbility> getMapAbilities() {
 		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
 		result.add(new Teleport(5,5,.02f));
-		result.add(new DoubleMove(3,1,.1f));
+		result.add(new DoubleMove(3,.1f));
 		
 		return result;
 	}

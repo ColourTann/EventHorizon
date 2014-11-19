@@ -1,6 +1,7 @@
 package game.grid.hexContent;
 
 import util.Draw;
+import util.image.Pic;
 import util.maths.Pair;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -30,6 +31,25 @@ public class Star extends HexContent{
 
 	@Override
 	public void turn() {
+	}
+
+	@Override
+	public void action() {
+	}
+
+	@Override
+	public String getFlavour() {
+		return null;
+	}
+
+	@Override
+	public String getActionName() {
+		return null;
+	}
+
+	@Override
+	public Pic getPic() {
+		return null;
 	}
 
 }

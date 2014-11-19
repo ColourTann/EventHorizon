@@ -58,7 +58,7 @@ public class Comet extends Ship{
 	@Override
 	public ArrayList<MapAbility> getMapAbilities() {
 		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
-		result.add(new DoubleMove(5,3,.02f));
+		result.add(new DoubleMove(5,.02f));
 		if(player){
 			result.add(new ForceField());
 		}

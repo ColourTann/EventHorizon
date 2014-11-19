@@ -17,13 +17,14 @@ public class AdvancedButton extends Mouser{
 	BitmapFont font=Font.medium;
 	TextWriter tw;
 	Code code;
-	int width, height;
-	public AdvancedButton(Pair position, Pair overrideSize, String name, BitmapFont font, Code code) {
+	int width;
+	public int height;
+	public AdvancedButton(Pair position, boolean center, Pair overrideSize, String name, BitmapFont font, Code code) {
 		this.font=font;
 		tw=new TextWriter(font, name);
 		tw.setupTexture();
 		this.code=code;
-		
+
 		width=(int) (tw.maxWidth+xOffset*2);
 		height=(int) (tw.maxHeight+yOffset*2);
 		if(overrideSize!=null){
@@ -34,10 +35,18 @@ public class AdvancedButton extends Mouser{
 				height=(int) overrideSize.y;
 			}
 		}
-		this.position=position;
-		mousectivate(new BoxCollider(position.x, position.y, width, height));
+		setPosition(position, center);
 	}
 
+	public void setPosition(Pair position, boolean center){
+		demousectivate();
+		if(center){
+			this.position=position.subtract(new Pair(width/2, height/2));
+		}
+		else this.position=position;
+		mousectivate(new BoxCollider(this.position.x, this.position.y, width, height));
+	}
+	
 	@Override
 	public void mouseDown() {
 		
@@ -45,6 +54,7 @@ public class AdvancedButton extends Mouser{
 
 	@Override
 	public void mouseUp() {
+		
 	}
 
 	@Override
@@ -58,6 +68,6 @@ public class AdvancedButton extends Mouser{
 
 	public void render(SpriteBatch batch){
 		TextBox.renderBox(batch, position, width, height, Alignment.Left);
-		tw.render(batch, position.x+width/2-tw.maxWidth/2, position.y+yOffset);
+		tw.render(batch, (int)(position.x+width/2-tw.maxWidth/2), (int)(position.y+yOffset));
 	}
 }

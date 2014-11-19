@@ -62,9 +62,9 @@ public class Hornet extends Ship{
 	@Override
 	public ArrayList<MapAbility> getMapAbilities() {
 		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
-		result.add(new DoubleMove(7,1,.02f));
+		result.add(new DoubleMove(7,.02f));
 		if(player){
-			result.add(new EMP(4,4,.01f));
+			result.add(new EMP(4,.01f));
 		}
 		return result;
 	}

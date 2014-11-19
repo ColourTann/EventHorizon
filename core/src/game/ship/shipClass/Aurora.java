@@ -62,7 +62,7 @@ public class Aurora extends Ship{
 	public ArrayList<MapAbility> getMapAbilities() {
 		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
 		result.add(new Teleport(5,5,.02f));
-		result.add(new DiagonalMove(3, 2, .01f));
+		result.add(new DiagonalMove(3,.01f));
 		if(player){
 			result.add(new Cloak());
 		}

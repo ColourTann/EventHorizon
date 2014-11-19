@@ -54,7 +54,7 @@ public class Eclipse extends Ship{
 	@Override
 	public ArrayList<MapAbility> getMapAbilities() {
 		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
-		result.add(new DiagonalMove(4,1,.01f));
+		result.add(new DiagonalMove(4,.01f));
 		if(player){
 			result.add(new PullBeam());
 		}

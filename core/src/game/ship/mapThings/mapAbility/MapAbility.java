@@ -29,7 +29,8 @@ import game.ship.mapThings.MapShip;
 
 public abstract class MapAbility extends Mouser{
 
-	public int baseCooldown, cooldown, fuelCost;
+	public int baseCooldown, cooldown;
+	private int fuelCost;
 	Pair location;
 	public MapShip mapShip;
 	public int range;
@@ -47,6 +48,10 @@ public abstract class MapAbility extends Mouser{
 	}
 
 	public abstract String getText();
+	
+	public int getFuel(){
+		return fuelCost;
+	}
 	
 	@Override
 	public void mouseClicked(boolean left) {
@@ -199,16 +204,20 @@ public abstract class MapAbility extends Mouser{
 		}
 
 		Draw.drawCenteredScaled(batch, abilityPic.get(), location.x, location.y, 1, 1);
-		Draw.drawScaled(batch, Gallery.mapAbilityCooldown.get(), (int)location.x+44, (int)location.y-36, 2, 2);
+//		Draw.drawScaled(batch, Gallery.mapAbilityCooldown.get(), (int)location.x+44, (int)location.y-36, 2, 2);
+		Draw.drawScaled(batch, Gallery.mapAbilityCooldown.get(), (int)location.x+46, (int)location.y-16, 2, 2);
 		Font.medium.setColor(Colours.genCols5[3]);
-		Font.drawFontCentered(batch, ""+baseCooldown, Font.medium, (int)location.x+64,  (int)location.y+8);
+		Font.drawFontCentered(batch, ""+baseCooldown, Font.medium, (int)location.x+66,  (int)location.y+28);
 
 		if(cooldown==0){
 			Font.medium.setColor(Colours.player2[1]);
 		}
 		else Font.medium.setColor(Colours.genCols5[2]);
-		Font.drawFontCentered(batch, ""+cooldown, Font.medium,(int)location.x+64,  (int)location.y-24);
+		Font.drawFontCentered(batch, ""+cooldown, Font.medium,(int)location.x+66,  (int)location.y-4);
 		
+		Draw.draw(batch, Gallery.fuel.get(), location.x+38, location.y-42);
+		Font.medium.setColor(Colours.weaponCols8[0]);
+		Font.medium.draw(batch, ":"+getFuel(), location.x+68, location.y-38);
 		
 		
 		if(moused){
@@ -238,6 +247,7 @@ public abstract class MapAbility extends Mouser{
 
 	public void use() {
 		cooldown=baseCooldown+1;
+		mapShip.getShip().spendFuel(getFuel());
 		if(mapShip.getShip().player)Map.using=null;		
 	}
 

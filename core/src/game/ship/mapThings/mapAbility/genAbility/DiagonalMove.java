@@ -9,8 +9,8 @@ import game.ship.mapThings.mapAbility.MapAbility;
 
 public class DiagonalMove extends MapAbility{
 
-	public DiagonalMove(int cooldown, int fuelCost, float effort) {
-		super(Gallery.mapAbilityDiagonalMove, cooldown, fuelCost, 2, effort);
+	public DiagonalMove(int cooldown, float effort) {
+		super(Gallery.mapAbilityDiagonalMove, cooldown, 2, 2, effort);
 	}
 
 	@Override

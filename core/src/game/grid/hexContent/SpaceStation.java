@@ -1,6 +1,7 @@
 package game.grid.hexContent;
 
 import util.Draw;
+import util.image.Pic;
 import util.maths.Pair;
 import game.assets.Gallery;
 import game.grid.hex.Hex;
@@ -27,6 +28,25 @@ public class SpaceStation extends HexContent{
 	@Override
 	public String toString() {
 		return "Space Station";
+	}
+
+	@Override
+	public void action() {
+	}
+
+	@Override
+	public String getFlavour() {
+		return "A trade hub, you can buy or sell modules for fuel here. Docking here takes no time.";
+	}
+
+	@Override
+	public String getActionName() {
+		return "Visit Station";
+	}
+
+	@Override
+	public Pic getPic() {
+		return Gallery.spaceStation;
 	}
 
 }

@@ -148,6 +148,7 @@ public class Hex {
 		return (float) (Math.sqrt(distance.x*distance.x+distance.y*distance.y))/Hex.height;
 	}
 	public void mouse() {
+		if(Map.getState()==MapState.Event)return;
 		if(getDistance(Map.player.hex)>Grid.viewDist){
 			mousedHex.unMouse();
 			return;
@@ -194,8 +195,8 @@ public class Hex {
 		}
 		ArrayList<Hex> path=Map.player.hex.pathFind(this);
 		if(path!=null){
-			Map.setState(MapState.PlayerMoving);
 			Map.player.setPath(path);
+			Map.player.playerPath();
 		}
 	}
 
@@ -383,7 +384,7 @@ public class Hex {
 		float result = 0;
 
 		//analyse//
-		int analyseDistance=8;
+		int analyseDistance=1;
 		SurroundingAnalysis lyse = analyse(analyseDistance);
 
 		float explosionDistance=lyse.furthestDistance-analyseDistance;

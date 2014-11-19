@@ -2,6 +2,8 @@ package game.grid.hexContent;
 
 import java.util.ArrayList;
 
+import util.image.Pic;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.grid.Grid;
@@ -17,6 +19,10 @@ public abstract class HexContent {
 	}
 	public abstract void turn();
 	public abstract void render(SpriteBatch batch);
+	public abstract String getFlavour();
+	public abstract String getActionName();
+	public abstract Pic getPic();
+	public abstract void action();
 	public abstract String toString();
 	
 	public void chanceToMakeShip(){

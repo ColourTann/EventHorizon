@@ -2,6 +2,7 @@ package game.grid.hexContent;
 
 import util.Colours;
 import util.Draw;
+import util.image.Pic;
 import util.maths.Pair;
 import util.particleSystem.Particle;
 
@@ -32,6 +33,25 @@ public class Planet extends HexContent{
 	@Override
 	public String toString() {
 		return "Planet";
+	}
+
+	@Override
+	public void action() {
+	}
+
+	@Override
+	public String getFlavour() {
+		return "A planet, nothing interesting on the surface";
+	}
+
+	@Override
+	public String getActionName() {
+		return null;
+	}
+
+	@Override
+	public Pic getPic() {
+		return Gallery.auroraComputer;
 	}
 
 }

@@ -29,11 +29,11 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
 
 public class TextWriter {
-	public final static int yOffset=2;
+	public final static int yOffset=8;
 	public static ArrayList<TextWriter> staticList= new ArrayList<TextWriter>();
 	public enum Alignment{Left, Center}
 	String text;
-	int baseWrapWidth=9999;
+	int baseWrapWidth=300;
 	float spaceWidth;
 	public float height;
 	float bonusHeight=3;
@@ -285,9 +285,10 @@ public class TextWriter {
 		if(x>maxWidth){
 			maxWidth=x;
 		}
+		
 	}
 
-	private void smallDispose() {
+	public void smallDispose() {
 		if(texture!=null){
 			texture.dispose();
 			buffer.dispose();
@@ -360,6 +361,10 @@ public class TextWriter {
 		replace("majordamage", Gallery.redHP[1].get());
 		replace("shield", Gallery.shieldIcon[1].getScaled(2).get());
 		replace("shot", Gallery.iconShots.getScaled(2).get());
+	}
+	
+	public void setMapReplacements(){
+		replace("fuel", Gallery.fuel.get());
 	}
 
 	public static void disposeAll() {

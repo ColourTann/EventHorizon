@@ -14,12 +14,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.sun.media.jfxmedia.events.PlayerEvent;
 
 import game.Main;
 import game.assets.Gallery;
 import game.grid.Grid;
 import game.grid.hex.Hex;
+import game.screen.map.panels.ActionPanel;
 import game.screen.map.panels.HexInfoPanel;
 import game.screen.map.panels.PlayerStatsPanel;
 import game.screen.map.panels.SidePanel;
@@ -34,7 +36,7 @@ public class Map extends Screen{
 
 	public static MapShip player;
 	SpriteBatch uiBatch=new SpriteBatch();
-	public enum MapState{PlayerTurn,PlayerMoving,EnemyMoving,PickHex}
+	public enum MapState{PlayerTurn,PlayerMoving,EnemyMoving,PickHex, Event}
 	private static MapState state;
 	public static Hex explosion;
 	private static float explosionSize=9;
@@ -45,8 +47,9 @@ public class Map extends Screen{
 	public static ArrayList<Hex> path= new ArrayList<Hex>();
 	static HexInfoPanel hexInfoPanel;
 	static PlayerStatsPanel playerStatsPanel;
+	static ActionPanel actionPanel;
 	ArrayList<SidePanel> panels = new ArrayList<SidePanel>();
-
+	static Event currentEvent;
 	private Ship ship;
 	
 	public Map(Ship ship){
@@ -79,15 +82,17 @@ public class Map extends Screen{
 		}
 		hexInfoPanel=new HexInfoPanel();
 		playerStatsPanel=new PlayerStatsPanel();
+		actionPanel=new ActionPanel();
 		panels.add(hexInfoPanel);
 		panels.add(playerStatsPanel);
+		panels.add(actionPanel);
 	}
 
 	public static void resetStatics(){
 		state=MapState.PlayerTurn;
 		progress=0;
 		explosionSize=9;
-
+		currentEvent=null;
 		using=null;
 		path=null;
 		hexInfoPanel=null;
@@ -99,6 +104,10 @@ public class Map extends Screen{
 
 	public static void returnToPlayerTurn(){
 		using=null;
+		if(currentEvent!=null){
+			currentEvent.dispose();
+			currentEvent=null;	
+		}
 		Map.state=MapState.PlayerTurn;
 	}
 
@@ -268,6 +277,8 @@ public class Map extends Screen{
 		batch.setColor(1,1,1,1);
 		for(SidePanel p:panels)p.render(uiBatch);
 
+		if(currentEvent!=null)currentEvent.render(uiBatch);
+		
 		uiBatch.end();
 
 
@@ -293,6 +304,10 @@ public class Map extends Screen{
 	public static void mouseOverHex(Hex h){
 		hexInfoPanel.hexMouse(h);
 	}
+	
+	public static void updateActionPanel(Hex h){
+		actionPanel.init(h);
+	}
 
 	public static void incrementExplosionSize() {
 		explosionSize+=Map.growthRate/2;
@@ -302,6 +317,10 @@ public class Map extends Screen{
 		return explosionSize;
 	}
 
+	public static void event(Event e){
+		setState(MapState.Event);
+		currentEvent=e;
+	}
 
 
 

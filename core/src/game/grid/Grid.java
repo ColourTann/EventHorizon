@@ -53,6 +53,9 @@ public class Grid {
 		for(int i=0;i<2500;i++){
 			getRandomHex().addAsteroid();
 		}
+		for(int i=0;i<25000;i++){
+			getRandomHex().addAsteroid();
+		}
 		for(int i=0;i<3500;i++){
 			getRandomHex().addSpaceStation();
 		}
@@ -93,9 +96,6 @@ public class Grid {
 				if(found)continue;
 				result.add(h.mapShip);
 			}
-		}
-		for(MapShip ms:result){
-			System.out.println(ms.getPowerLevel());
 		}
 		return result;
 	}

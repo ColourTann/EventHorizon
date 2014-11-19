@@ -64,7 +64,7 @@ public class Nova extends Ship{
 	@Override
 	public ArrayList<MapAbility> getMapAbilities() {
 		ArrayList<MapAbility> result = new ArrayList<MapAbility>();
-		result.add(new DoubleMove(3,3,.1f));
+		result.add(new DoubleMove(3,.1f));
 		if(player){
 			result.add(new PullBeam());
 			result.add(new PushBeam());

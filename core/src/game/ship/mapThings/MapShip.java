@@ -86,12 +86,16 @@ public class MapShip {
 	public void playerStartTurn() {
 		hex.endBattle();
 		Map.incrementExplosionSize();
+		playerPath();
+	}
+	
+	public void playerPath(){
 		if (path != null && path.size() > 0) {
 			Map.setState(MapState.PlayerMoving);
 			moveTo(path.remove(path.size()-1));
+			getShip().spendFuel(1);
 		}
 		else path=null;
-
 	}
 
 	public void playerAfterMove(){
@@ -172,6 +176,7 @@ public class MapShip {
 		rotation = source.getAngle(destination);
 		if (hex.mapShip == this)hex.mapShip = null;
 		h.addShip(this);
+		if(getShip().player)Map.updateActionPanel(h);
 	}
 
 	public boolean isMoving() {
@@ -218,7 +223,7 @@ public class MapShip {
 
 	public void setPath(ArrayList<Hex> path) {
 		this.path = path;
-		if (path.size() > 0) moveTo(path.remove(path.size()-1));
+		//if (path.size() > 0) moveTo(path.remove(path.size()-1));
 	}
 
 	public void resetPath() {

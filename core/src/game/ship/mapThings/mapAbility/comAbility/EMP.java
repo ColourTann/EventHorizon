@@ -12,8 +12,8 @@ import game.ship.mapThings.mapAbility.MapAbility;
 
 public class EMP extends MapAbility{
 
-	public EMP(int cooldown, int fuelCost, float effort) {
-		super(Gallery.mapAbilityEMP, cooldown, fuelCost, 4, effort);
+	public EMP(int cooldown, float effort) {
+		super(Gallery.mapAbilityEMP, cooldown, 2, 4, effort);
 	}
 
 	@Override

@@ -10,8 +10,8 @@ import game.ship.mapThings.mapAbility.MapAbility;
 
 public class DoubleMove extends MapAbility{
 
-	public DoubleMove(int cooldown, int fuelCost, float effort) {
-		super(Gallery.mapAbilityDoubleMove ,cooldown, fuelCost, 2, effort);
+	public DoubleMove(int cooldown, float effort) {
+		super(Gallery.mapAbilityDoubleMove ,cooldown, 2, 2, effort);
 	}
 
 
