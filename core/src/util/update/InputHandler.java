@@ -27,7 +27,7 @@ public class InputHandler implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		boolean esc=Screen.isActiveType(EscapeMenu.class);
-		Mouser.updateClicked(button==0);
+		if(Mouser.updateClicked(button==0))return true;
 		if(!esc)Main.touchDown(new Pair((float)screenX/(float)Gdx.graphics.getWidth()*Main.width, ((float)screenY/(float)Gdx.graphics.getHeight()*Main.height)),button==0);
 		
 		return false;
