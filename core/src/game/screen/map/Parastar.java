@@ -1,4 +1,4 @@
-package game.screen.map.panels;
+package game.screen.map;
 
 import game.Main;
 import game.assets.Gallery;

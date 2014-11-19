@@ -17,7 +17,7 @@ public class EMP extends MapAbility{
 	}
 
 	@Override
-	public void doStuff() {
+	public void selectAction() {
 		
 		for(Hex h:getValidHexes()){
 			h.Emp();
@@ -55,6 +55,11 @@ public class EMP extends MapAbility{
 	@Override
 	public void mouseUpEffect() {
 		regularMouseUp();
+	}
+
+	@Override
+	protected void interrupt() {
+		Map.player.resetPath();
 	}
 
 }

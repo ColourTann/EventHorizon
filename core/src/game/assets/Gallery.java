@@ -213,6 +213,10 @@ public class Gallery {
 	public static Pic mapsliceRight= new Pic("Interface/mapsliceright");
 	public static Pic star=new Pic("Map/star");
 	public static Pic paraStar=new Pic("Map/parastar");
+	public static Pic mapBattle=new Pic("Map/battle");
+	public static Pic asteroid=new Pic("Map/asteroid");
+	public static Pic spaceStation=new Pic("Map/spacestation");
+	public static Pic fuel=new Pic("Map/fuel");
 	
 	//Map Abilities//
 	//Gen//

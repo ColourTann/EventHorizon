@@ -16,7 +16,7 @@ public class DoubleMove extends MapAbility{
 
 
 	@Override
-	public void doStuff() {
+	public void selectAction() {
 		fadeHexesIn();
 		Map.setState(MapState.PickHex);
 	}
@@ -66,6 +66,14 @@ public class DoubleMove extends MapAbility{
 	@Override
 	public void mouseUpEffect() {
 		regularMouseUp();
+	}
+
+
+	@Override
+	protected void interrupt() {
+		Map.player.resetPath();
+		Map.using=this;
+		fadeHexesIn();
 	}
 
 

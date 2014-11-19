@@ -3,6 +3,7 @@ package game.ship.mapThings.mapAbility.comAbility;
 import game.assets.Gallery;
 import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
+import game.screen.map.Map;
 import game.ship.mapThings.mapAbility.MapAbility;
 
 public class Cloak extends MapAbility{
@@ -12,7 +13,7 @@ public class Cloak extends MapAbility{
 		super(Gallery.mapAbilityCloak,12, 1, 0, 1);
 	}
 	@Override
-	public void doStuff() {
+	public void selectAction() {
 		mapShip.cloak(6);
 		use();
 		mapShip.tickMapAbilities();
@@ -41,6 +42,10 @@ public class Cloak extends MapAbility{
 	}
 	@Override
 	public void mouseUpEffect() {
+	}
+	@Override
+	protected void interrupt() {
+		Map.player.resetPath();
 	}
 
 	

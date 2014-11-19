@@ -26,8 +26,10 @@ import com.badlogic.gdx.utils.Array;
 import game.assets.Gallery;
 import game.grid.Grid;
 import game.grid.hex.SurroundingAnalysis.ShipDist;
+import game.grid.hexContent.Asteroid;
 import game.grid.hexContent.HexContent;
 import game.grid.hexContent.Planet;
+import game.grid.hexContent.SpaceStation;
 import game.grid.hexContent.Star;
 import game.screen.battle.tutorial.PicLoc;
 import game.screen.map.Map;
@@ -50,6 +52,7 @@ public class Hex {
 	//Map gen stuff//
 	public Grid grid;
 	public boolean solarSystemWithin16;
+	private boolean nearbySpaceStation;
 
 	public HexContent content;
 
@@ -77,7 +80,9 @@ public class Hex {
 	Texture nebulaTexture;
 	private Hex nebulaOrigin;
 	private ArrayList<Hex> nebulaList;
-
+	public boolean battle;
+	private Timer battleTimer;
+	
 	public static void init(){
 		for(int i=0;i<12;i+=2){
 			points[i]=(float) Math.sin(i*Math.PI/6)*size;
@@ -133,7 +138,7 @@ public class Hex {
 
 	public float getDistanceFromExplosion() {
 		return(getLineDistance(Map.explosion)-(Map.getExplosionSize())-.5f);
-//		return(getLineDistance(Map.explosion)-(Map.getExplosionSize()));
+		//		return(getLineDistance(Map.explosion)-(Map.getExplosionSize()));
 	}
 
 	public float getLineDistance(Hex h){
@@ -178,7 +183,7 @@ public class Hex {
 	public void click(){
 		mouse();
 		if(getDistance(Map.player.hex)>Grid.viewDist)return;
-		if(Map.using!=null){
+		if(Map.using!=null&&Map.getState()==MapState.PickHex){
 			Map.using.pickHex(this);
 			return;
 		}
@@ -208,12 +213,26 @@ public class Hex {
 
 	public void addShip(MapShip ship) {
 		if(this.mapShip!=null){
-			System.out.println("a battle!");
 			this.mapShip.battle();
+			battle();
 		}
 		this.mapShip=ship;
 		ship.hex=this;
 	}
+
+	private void battle() {
+		battle=true;
+		battleTimer=new Timer(1,1,0,Interp.LINEAR);
+	}
+
+	public void endBattle() {
+		if(battle){
+			battle=false;
+			battleTimer=new Timer(1,0,.2f,Interp.LINEAR);
+		}
+	}
+
+
 	public boolean makeSolarSystem() {
 		if(solarSystemWithin16||isBlocked(true))return false;
 		for(Hex h:getHexesWithin(3, true))if(h.isBlocked(true))return false;
@@ -222,9 +241,9 @@ public class Hex {
 		for(Hex h:getHexesWithin(16, true)){
 			h.solarSystemWithin16=true;
 		}
-		ArrayList<Hex> possibles=getHexesWithin(6, false);
+		ArrayList<Hex> possibles=getHexesWithin(10, false);
 		Draw.shuffle(possibles);
-		int planets=(int) (7+Math.random()*4);
+		int planets=(int) (8+Math.random()*8);
 		for(int i=0;i<planets;i++){
 			Hex h=possibles.remove(0);
 			if(h.isBlocked(true))continue;
@@ -348,37 +367,34 @@ public class Hex {
 
 
 
-
+	static float baseMultiplier=.08f;
+	static int distanceCutoff=4;			//Past this distance will be ignored//
+	static float playerAttack=1;			//except for attacking//
+	static float enemyAttack=1.1f;
+	static float attackMultuplier=1;
+	static float fleeMultiplier=-2;
+	public static int total=0;
 	public float howGood(MapShip ship){
 		//Ensure won't instantly die//
+		total++;
 		float baseDistance=getDistanceFromExplosion()-Map.growthRate;
 		if(baseDistance<0)return -999;	
-		
+
 		float result = 0;
-		
+
 		//analyse//
 		int analyseDistance=8;
 		SurroundingAnalysis lyse = analyse(analyseDistance);
-		System.out.println(lyse);
+
 		float explosionDistance=lyse.furthestDistance-analyseDistance;
 		float distanceMultiplier=2;
 		float adjustedExplosionDistance=(float) (-1/Math.pow(explosionDistance, 2))*distanceMultiplier;
 		result += adjustedExplosionDistance;
 		//http://i.imgur.com/dMOkeTK.png cool weights//
-		
-
-
-
 
 		//Nearby Ships//
-
 		float myPower=ship.getPowerLevel();
-		float baseMultiplier=.1f;
-		int distanceCutoff=4;			//Past this distance will be ignored//
-		float playerAttack=1;			//except for attacking//
-		float enemyAttack=1.1f;
-		float attackMultuplier=1;
-		float fleeMultiplier=-2;
+
 
 		for(ShipDist sd:lyse.ships){
 			if(sd.ship==ship)continue; //don't care about self//
@@ -404,18 +420,20 @@ public class Hex {
 			result+=fleeMult*baseMultiplier*(1/shipDistance);
 		}
 
-		
+
 		return result;
 	}
-
+	private static ArrayList<Hex> open = new ArrayList<Hex>();
+	private static ArrayList<Hex> future = new ArrayList<Hex>();
+	private static ArrayList<Hex> closed = new ArrayList<Hex>();
 	private SurroundingAnalysis analyse(int range){
+		open.clear();
+		future.clear();
+		closed.clear();
+
 		SurroundingAnalysis result = new SurroundingAnalysis();
 		if(isBlocked(false))return result;
 		int currentDistance=0;
-		ArrayList<Hex> open = new ArrayList<Hex>();
-		ArrayList<Hex> future = new ArrayList<Hex>();
-		ArrayList<Hex> closed = new ArrayList<Hex>();
-		
 		open.add(this);
 		closed.add(this);
 		if(mapShip!=null)result.addShip(mapShip, currentDistance);
@@ -432,7 +450,7 @@ public class Hex {
 					closed.add(h);
 					result.setDistance(h.getDistanceFromExplosion());
 				}
-				
+
 			}
 			currentDistance++;
 			open=future;
@@ -444,7 +462,7 @@ public class Hex {
 		return result;
 	}
 
-	private boolean swallowed(int turns) {
+	public boolean swallowed(int turns) {
 		return getDistanceFromExplosion()-turns<0;
 	}
 
@@ -524,11 +542,19 @@ public class Hex {
 		if(nebulaOrigin!=null){
 			Map.grid.addFarRenderHex(nebulaOrigin);
 		}
+		if(battleTimer!=null&&battleTimer.getFloat()>0){
+			batch.setColor(1, 1, 1, battleTimer.getFloat());
+			Draw.drawCentered(batch, Gallery.mapBattle.get(), getPixel().x, getPixel().y);
+		}
+		batch.setColor(1, 1, 1, 1);
+
+
 	}
 
 	public void renderFar(SpriteBatch batch) {
 
 		setupNebulaTexture();
+		batch.setColor(1,1,1,1);
 		Draw.draw(batch, nebulaTexture, (getPixel().x+nebulaDrawOffset.x-nebulaOffset), (getPixel().y+nebulaOffset+nebulaDrawOffset.y-nebulaOffset-Hex.size));
 
 	}
@@ -544,6 +570,8 @@ public class Hex {
 		if(shipsBlock&&mapShip!=null)return true;
 		if(forceField>0)return true;
 		if(nebula)return true;
+		if(swallowed(0))return true;
+		if(battle)return true;
 		return blocked;
 	}
 
@@ -583,7 +611,6 @@ public class Hex {
 		forceFieldTimer=new Timer(0,0,0,Interp.LINEAR);
 		mapAbilityChoiceFadein();
 		forceFieldTimer.update(1);
-		System.out.println(forceFieldTimer);
 	}
 
 	public void addNebula(){
@@ -599,6 +626,9 @@ public class Hex {
 	private static ArrayList<Hex> nebulae= new ArrayList<Hex>();
 	private static final int maxNebulaDistance=6;
 	public void startNebula(int size){
+		if(isBlocked(true))return;
+		if(content!=null)return;
+		if(getNebula())return;
 		if(size==0){
 			nebulaSize=0;
 			nebulae.clear();
@@ -607,6 +637,8 @@ public class Hex {
 		nebulaSize++;
 		for(Hex h:getHexesWithin(1, false)){
 			if(h.getNebula())continue;
+			if(h.isBlocked(true))continue;
+			if(h.content!=null)continue;
 			if(Math.random()*nebulaSize<1.5){
 				h.startNebula(nebulaSize);
 			}
@@ -716,5 +748,27 @@ public class Hex {
 
 		nebulaTexture=new Texture(map);
 	}
+
+
+
+	public void addAsteroid() {
+		if(isBlocked(false))return;
+		if(content!=null)return;
+		content=new Asteroid(this);
+	}
+
+
+
+	public void addSpaceStation() {
+		if(nearbySpaceStation)return;
+		if(isBlocked(false))return;
+		if(content!=null)return;
+		content=new SpaceStation(this);
+		for(Hex h:getHexesWithin(12, true))h.nearbySpaceStation=true;
+	}
+
+
+
+
 
 }

@@ -84,6 +84,7 @@ public class MapShip {
 	}
 
 	public void playerStartTurn() {
+		hex.endBattle();
 		Map.incrementExplosionSize();
 		if (path != null && path.size() > 0) {
 			Map.setState(MapState.PlayerMoving);
@@ -106,6 +107,8 @@ public class MapShip {
 	}
 
 	public void takeAITurn() {
+		hex.endBattle();
+		if(hex.swallowed(0))return;
 		if(defeated)return;
 		if(stunTime>0){
 			stunTime--;
@@ -182,18 +185,6 @@ public class MapShip {
 			init();
 			locationTimer=new Timer(hex.getPixel(), hex.getPixel(), 0, Interp.LINEAR);
 		}
-		//distance = new Pair(0, 0);
-//		if (timer == null)return;
-//		if (timer.getFloat() <= 0) {
-//			//	timer = null;
-//			source = hex.getPixel();
-//			destination = null;
-//		}
-//		else if (destination != null) {
-//			distance = source.subtract(destination);
-//			distance = distance.multiply(timer.getFloat());
-//		}			
-//		
 	}
 
 	public void render(SpriteBatch batch) {
@@ -239,7 +230,7 @@ public class MapShip {
 	}
 
 	public float getPowerLevel() {
-		return ship.getStats().power;
+		return getShip().getStats().power;
 	}
 
 	public void stun(int i) {

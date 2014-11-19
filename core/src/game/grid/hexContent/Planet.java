@@ -26,12 +26,12 @@ public class Planet extends HexContent{
 	}
 	
 	public void turn(){
-		chanceToMakeShip();
+		if(Math.random()>.75f)chanceToMakeShip();
 	}
 	
 	@Override
 	public String toString() {
-		return "planet";
+		return "Planet";
 	}
 
 }

@@ -1,11 +1,5 @@
 package game.ship.mapThings.mapAbility.genAbility;
 
-
-
-
-
-import util.update.Timer;
-import util.update.Timer.Interp;
 import game.assets.Gallery;
 import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
@@ -22,7 +16,7 @@ public class Teleport extends MapAbility{
 	
 
 	@Override
-	public void doStuff() {
+	public void selectAction() {
 		fadeHexesIn();
 		Map.setState(MapState.PickHex);
 	}
@@ -72,5 +66,14 @@ public class Teleport extends MapAbility{
 	@Override
 	public void mouseUpEffect() {
 		regularMouseUp();
+	}
+
+
+
+	@Override
+	protected void interrupt() {
+		Map.player.resetPath();
+		Map.using=this;
+		fadeHexesIn();
 	}
 }

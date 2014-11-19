@@ -21,10 +21,10 @@ public class Grid {
 
 	private Hex[][] hexes;
 	public ArrayList<Hex> drawableHexes;
-	public static int viewDist;
+	public static int viewDist=8;
 	public static final int interestingDist=8;
 	public static final int goodNumberOfShips=9;
-	public static int activeDist=15;
+	public static int activeDist=viewDist+4;
 	private static ArrayList<MapShip> closeShips=new ArrayList<MapShip>();
 	private ArrayList<Hex> farRender= new ArrayList<Hex>();
 	public static Grid MakeGrid(){
@@ -38,17 +38,24 @@ public class Grid {
 		for(int i=0;i<size;i++)hexes[i]=new Hex[size];
 		for(int x=0;x<size;x++)for(int y=0;y<size;y++)hexes[x][y]= new Hex(x,y,this);
 		
+		Map.explosion=getHex(45, 48);
 		
-		for(int i=0;i<0000;i++){
-			getRandomHex().startNebula(0);;
-		}
+		
 		for(int i=0;i<1500;i++){
 			getRandomHex().makeSolarSystem();
 		}
 		for(int i=0;i<2000;i++){
 			getRandomHex().makeMapShip();
 		}
-		
+		for(int i=0;i<1000;i++){
+			getRandomHex().startNebula(0);
+		}
+		for(int i=0;i<2500;i++){
+			getRandomHex().addAsteroid();
+		}
+		for(int i=0;i<3500;i++){
+			getRandomHex().addSpaceStation();
+		}
 		
 		
 	}
@@ -74,10 +81,10 @@ public class Grid {
 		ArrayList<MapShip> result= new ArrayList<MapShip>();
 		for(Hex h:Map.player.hex.getHexesWithin(activeDist, false)){
 			if(h.mapShip!=null){
-				float dist=h.getDistanceFromExplosion();
+				float power=h.mapShip.getPowerLevel();
 				boolean found=false;
 				for(int i=0;i<result.size();i++){
-					if(result.get(i).hex.getDistanceFromExplosion()<dist){
+					if(result.get(i).getPowerLevel()>power){
 						result.add(i, h.mapShip);
 						found=true;
 						break;
@@ -86,6 +93,9 @@ public class Grid {
 				if(found)continue;
 				result.add(h.mapShip);
 			}
+		}
+		for(MapShip ms:result){
+			System.out.println(ms.getPowerLevel());
 		}
 		return result;
 	}
@@ -115,11 +125,11 @@ public class Grid {
 
 	public void update(float delta){
 		
-		viewDist=(int) (Main.height/Hex.yGap/2);
+		
 		Hex start =pixelToHex((int)Main.getCam().x+Main.width/2, (int)Main.getCam().y+Main.height/2);
 		drawableHexes=null;
 		start=Map.player.hex;
-		if(start!=null)drawableHexes=start.getHexesWithin(viewDist+3, true);
+		if(start!=null)drawableHexes=start.getHexesWithin((int) ((viewDist+3)*Main.mainCam.zoom), true);
 		if(drawableHexes==null)return;
 		for(Hex h:start.getHexesWithin(viewDist+2, true)){
 			h.update(delta);

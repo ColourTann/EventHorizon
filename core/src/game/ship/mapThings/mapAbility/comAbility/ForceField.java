@@ -29,7 +29,7 @@ public class ForceField extends MapAbility{
 	}
 	
 	@Override
-	public void doStuff() {
+	public void selectAction() {
 		forceFields.clear();
 		fadeHexesIn();
 		Map.using=this;
@@ -84,6 +84,11 @@ public class ForceField extends MapAbility{
 	@Override
 	public void mouseUpEffect() {
 		regularMouseUp();
+	}
+
+	@Override
+	protected void interrupt() {
+		Map.using=this;
 	}
 
 }

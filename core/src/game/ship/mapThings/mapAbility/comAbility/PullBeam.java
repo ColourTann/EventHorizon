@@ -25,7 +25,7 @@ public class PullBeam extends MapAbility{
 	}
 
 	@Override
-	public void doStuff() {
+	public void selectAction() {
 		fadeHexesIn();
 		Map.using=this;
 		Map.setState(MapState.PickHex);
@@ -39,7 +39,7 @@ public class PullBeam extends MapAbility{
 	@Override
 	public void pickHex(Hex targetHex) {
 		if(!isValidChoice(targetHex))return;
-		afterPlayerUse();
+		
 		
 		MapShip target=targetHex.mapShip;
 		Hex best=targetHex;
@@ -54,6 +54,10 @@ public class PullBeam extends MapAbility{
 		}
 		target.moveTo(best);
 		target.tractor();
+		use();
+		endPlayerTurn();
+		mapShip.tickMapAbilities();
+		fadeOutHighlights();
 	}
 
 	@Override
@@ -74,5 +78,11 @@ public class PullBeam extends MapAbility{
 	@Override
 	public void mouseUpEffect() {
 		regularMouseUp();
+	}
+
+	@Override
+	protected void interrupt() {
+		Map.player.resetPath();
+		Map.using=this;
 	}
 }

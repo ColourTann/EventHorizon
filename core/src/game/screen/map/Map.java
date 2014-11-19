@@ -21,7 +21,7 @@ import game.assets.Gallery;
 import game.grid.Grid;
 import game.grid.hex.Hex;
 import game.screen.map.panels.HexInfoPanel;
-import game.screen.map.panels.Parastar;
+import game.screen.map.panels.PlayerStatsPanel;
 import game.screen.map.panels.SidePanel;
 import game.ship.Ship;
 import game.ship.mapThings.MapShip;
@@ -43,43 +43,54 @@ public class Map extends Screen{
 	public static float phaseSpeed=3f;
 	public static MapAbility using;
 	public static ArrayList<Hex> path= new ArrayList<Hex>();
-	static HexInfoPanel hexPanel;
+	static HexInfoPanel hexInfoPanel;
+	static PlayerStatsPanel playerStatsPanel;
 	ArrayList<SidePanel> panels = new ArrayList<SidePanel>();
-	
+
 	private Ship ship;
+	
 	public Map(Ship ship){
 		this.ship=ship;
 	}
 
 	public void init(){
-		
+
 		resetStatics();
 		Main.setCam(new Pair(0,0));
 		Hex.init();
 		MapAbility.init();
 		grid=Grid.MakeGrid();
-		player=new MapShip(ship, grid.getHex(55, 50));
-//		 grid.getHex(60, 50).startNebula(0);
+
+		for(Hex h:grid.getHex(55, 50).getHexesWithin(5, true)){
+			if(!h.isBlocked(true)&&!h.swallowed(3)){
+				player=new MapShip(ship, h);
+				break;
+			}
+		}
+
+		//		 grid.getHex(60, 50).startNebula(0);
 		//player=new MapShip(new Nova(true, 0), grid.getHex(55, 50));
-		Map.explosion=grid.getHex(45, 48);
-		
+
+
 		for(int i=0;i<player.mapAbilities.size();i++){
 			MapAbility a=player.mapAbilities.get(i);
 			a.showAt(new Pair(5+MapAbility.width/2, 5+MapAbility.height/2+i*MapAbility.gap));
 			a.index=i+1;
 		}
-		hexPanel=new HexInfoPanel();
-		panels.add(hexPanel);
+		hexInfoPanel=new HexInfoPanel();
+		playerStatsPanel=new PlayerStatsPanel();
+		panels.add(hexInfoPanel);
+		panels.add(playerStatsPanel);
 	}
 
 	public static void resetStatics(){
 		state=MapState.PlayerTurn;
 		progress=0;
 		explosionSize=9;
-		
+
 		using=null;
 		path=null;
-		hexPanel=null;
+		hexInfoPanel=null;
 	}
 
 	public static MapState getState(){
@@ -90,19 +101,26 @@ public class Map extends Screen{
 		using=null;
 		Map.state=MapState.PlayerTurn;
 	}
-	
+
 	public static void setState(MapState state){
+		
 		progress=0;
 		Map.state=state;
 		switch (state){
 		case EnemyMoving:
 			explosionSize+=growthRate/2;
 			enemyTurn();
+			grid.turn();
 			break;
 		case PlayerTurn:
 			Hex.mousedHex.moused=false;
-			grid.turn();
 			player.playerStartTurn();
+			if(Map.using!=null){
+				MapAbility toUse=Map.using;
+				Map.using=null;
+				toUse.select();
+				
+			}
 			break;
 		case PlayerMoving:
 			player.playerAfterMove();
@@ -113,7 +131,7 @@ public class Map extends Screen{
 	}
 
 	private void updateState(float delta) {
-
+		//System.out.println(state+":"+progress+":"+using);
 		switch(state){
 		case EnemyMoving:
 			progress+=delta*phaseSpeed;
@@ -128,7 +146,7 @@ public class Map extends Screen{
 			progress+=delta*phaseSpeed;
 			if(progress>1){
 				progress=0;
-				
+
 				setState(MapState.EnemyMoving);
 			}
 			break;
@@ -137,11 +155,11 @@ public class Map extends Screen{
 		}
 	}
 
-	public static void enemyTurn(){
-		for(MapShip enemy:grid.getActiveEnemies())enemy.takeAITurn();
+	public static void enemyTurn(){	
+		for(MapShip enemy:grid.getActiveEnemies())enemy.takeAITurn();		
 	}
 
-	
+
 
 	@Override
 	public void keyPress(int keycode) {
@@ -153,15 +171,15 @@ public class Map extends Screen{
 			zoom(1);
 		case Input.Keys.SPACE:
 			break;
-		
+
 		}
 		//hotkeys 8-16
 		int hotkey=keycode-8;
 		if(hotkey>=0&&hotkey<=9){
 			if(player.mapAbilities.size()>hotkey)
-			player.mapAbilities.get(hotkey).select();
+				player.mapAbilities.get(hotkey).select();
 		}
-		
+
 	}
 
 	@Override
@@ -178,8 +196,8 @@ public class Map extends Screen{
 	}
 
 	public void zoom(int amount) {
-		if(Hex.size-amount<1)return;
-		Hex.resize(Hex.size-amount);
+		Main.mainCam.zoom+=amount;
+		System.out.println(Main.mainCam.zoom);
 	}
 
 	public static void updateCamPosition() {
@@ -198,11 +216,11 @@ public class Map extends Screen{
 			Main.setCam(Main.getCam().add(1, 0));
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-		Main.setCam(Main.getCam().add(-1, 0));
-		
+			Main.setCam(Main.getCam().add(-1, 0));
+
 		}
 	}
-	
+
 	@Override
 	public void shapeRender(ShapeRenderer shape) {		
 		Gdx.gl20.glEnable(GL20.GL_BLEND);
@@ -212,15 +230,15 @@ public class Map extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch) {
-		
+
 		batch.end();
-		
+
 		uiBatch.setProjectionMatrix(Main.uiCam.combined);
 		uiBatch.begin();
 		Parastar.render(uiBatch, Main.getCam(), Hex.size/200f);
 		uiBatch.end();
-		
-		
+
+
 		batch.begin();
 		grid.render(batch);
 		batch.end();
@@ -233,15 +251,15 @@ public class Map extends Screen{
 		Main.shape.circle(explosion.getPixel().x,explosion.getPixel().y, (explosionSize+progress*(growthRate/2))*Hex.height);
 		Main.shape.end();
 
-		
-		
-		
-		
+
+
+
+
 		uiBatch.setProjectionMatrix(Main.uiCam.combined);
 		uiBatch.begin();
 		uiBatch.setColor(1,1,1,1);
 		uiBatch.draw(Gallery.mapslice.get(), 0, 0);
-		
+
 		Draw.drawScaled(uiBatch, Gallery.mapsliceRight.get(), Main.width, Main.height	, -1, -1);
 		uiBatch.setColor(Colours.white);
 		Font.medium.setColor(Colours.light);
@@ -249,14 +267,14 @@ public class Map extends Screen{
 		for(MapAbility a:player.mapAbilities)a.render(uiBatch);
 		batch.setColor(1,1,1,1);
 		for(SidePanel p:panels)p.render(uiBatch);
-		
+
 		uiBatch.end();
 
 
 
 		batch.begin();
 
-		
+
 	}
 
 	@Override
@@ -273,7 +291,7 @@ public class Map extends Screen{
 	}
 
 	public static void mouseOverHex(Hex h){
-		hexPanel.hexMouse(h);
+		hexInfoPanel.hexMouse(h);
 	}
 
 	public static void incrementExplosionSize() {

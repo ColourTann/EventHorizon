@@ -16,6 +16,7 @@ import util.update.Timer.Finisher;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 import game.assets.Gallery;
 import game.assets.Sounds;
@@ -53,6 +54,8 @@ public abstract class MapAbility extends Mouser{
 	}
 
 	public void select(){
+		
+		
 		if(!isUsable()){
 			Sounds.error.play();
 			return;
@@ -69,12 +72,19 @@ public abstract class MapAbility extends Mouser{
 		}
 		if(Map.getState()==MapState.PlayerTurn){
 			Map.using=this;
-			doStuff(); 
+			selectAction(); 
 			return;
 		}
+		if(Map.getState()==MapState.PlayerMoving||Map.getState()==MapState.EnemyMoving){
+			interrupt();
+		}
+		
 	}
 	
-	public abstract void doStuff();
+	protected abstract void interrupt();
+		
+
+	public abstract void selectAction();
 
 	public void deselect() {
 		Map.returnToPlayerTurn();
@@ -116,6 +126,7 @@ public abstract class MapAbility extends Mouser{
 	
 	public void regularMouseDown(){
 		if(Map.using==this)return;
+		fadeOutHighlights();
 		fadeHexesIn();
 	}
 	
@@ -165,7 +176,7 @@ public abstract class MapAbility extends Mouser{
 	}
 
 	public void fadeOutHighlights(){
-		for(Hex h:getValidHexes())h.mapAbilityChoiceFadeout();
+		for(Hex h:mapShip.hex.getHexesWithin(range, true))h.mapAbilityChoiceFadeout();
 	}
 
 	public void showAt(Pair location){
@@ -177,7 +188,7 @@ public abstract class MapAbility extends Mouser{
 
 	public void render(SpriteBatch batch) {
 		if(location==null){
-			System.out.println("null location");
+			//System.out.println("null location");
 			return;
 		}
 		
@@ -227,7 +238,7 @@ public abstract class MapAbility extends Mouser{
 
 	public void use() {
 		cooldown=baseCooldown+1;
-		Map.using=null;
+		if(mapShip.getShip().player)Map.using=null;		
 	}
 
 	public boolean isUsable(){

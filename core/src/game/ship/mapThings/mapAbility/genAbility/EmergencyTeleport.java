@@ -16,7 +16,7 @@ public class EmergencyTeleport extends MapAbility{
 
 
 	@Override
-	public void doStuff() {
+	public void selectAction() {
 		System.out.println("need to code this bit");
 	}
 	@Override
@@ -53,6 +53,12 @@ public class EmergencyTeleport extends MapAbility{
 	@Override
 	public void mouseUpEffect() {
 		regularMouseUp();
+	}
+
+
+	@Override
+	protected void interrupt() {
+		Map.player.resetPath();
 	}
 
 }
