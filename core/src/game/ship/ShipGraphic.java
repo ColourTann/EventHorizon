@@ -39,7 +39,7 @@ public class ShipGraphic extends Updater{
 	public static int height=270;
 	public static int width=390;
 	public Pic composite;
-	PicCut picCut;
+	public PicCut picCut;
 	ArrayList<Animation> animations= new ArrayList<Animation>();
 	ArrayList<Shard> shards= new ArrayList<Shard>();
 	Pixmap shipMap;
@@ -48,6 +48,7 @@ public class ShipGraphic extends Updater{
 	public ShipGraphic(Ship s){
 		ship=s;
 		drawMap(true);
+		
 	}
 
 	public void drawMap(boolean overwrite){

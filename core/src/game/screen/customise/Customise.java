@@ -45,7 +45,7 @@ import util.update.Timer;
 import util.update.Timer.Interp;
 
 public class Customise extends Screen{
-	static float fadeInSpeed=0f;
+	public static float fadeInSpeed=0f;
 	static float fadeOutSpeed=.3f;
 	public static Ship ship;
 	public ArrayList<ModuleStats> stats=new ArrayList<ModuleStats>();

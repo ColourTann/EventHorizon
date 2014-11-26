@@ -33,7 +33,8 @@ public class ModuleInfo extends TextBox{
 	//279373
 	float cardOffset=4;
 	float width;
-	float height=CardGraphic.height*2-1;
+	public float height=CardGraphic.height*2-1;
+	public static float staticHeight=CardGraphic.height+TextBox.gap*2;
 	public Module mod;
 	public Card[] consumableCards;
 	public ArrayList<CardGraphic> graphics = new ArrayList<CardGraphic>();
@@ -132,12 +133,11 @@ public class ModuleInfo extends TextBox{
 
 
 	public void render(SpriteBatch batch) {
-
 		if (alpha<=0)return;
 		Font.small.setColor(Colours.withAlpha(Colours.light,alpha));
 		batch.setColor(1,1,1,alpha);
 		renderBox(batch, width, height/2f);
-
+	
 		if(consumableCards!=null&&alpha>0){
 		
 			for(Card c:consumableCards){

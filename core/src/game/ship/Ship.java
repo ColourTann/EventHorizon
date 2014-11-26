@@ -46,6 +46,7 @@ import game.module.utility.armour.Plating;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.Phase;
 import game.screen.battle.interfaceJunk.FightStats;
+import game.screen.map.stuff.Item;
 import game.ship.mapThings.MapShip;
 import game.ship.mapThings.MapShip.MapShipStrength;
 import game.ship.mapThings.mapAbility.MapAbility;
@@ -79,7 +80,7 @@ public abstract class Ship {
 	private ArrayList<Attack> attacks=new ArrayList<Attack>();
 	public ArrayList<ShieldPoint> shieldPoints= new ArrayList<ShieldPoint>();
 	private ArrayList<Card> consumableStore= new ArrayList<Card>();
-
+	private ArrayList<Item> inventory= new ArrayList<Item>();
 	public FightStats fightStats;
 	private ShipStats shipStats;
 	private ShipGraphic battleGraphic;
@@ -129,6 +130,11 @@ public abstract class Ship {
 
 		for(int i=0;i<0;i++){
 			addConsumableCard(ConsumableCard.get(1));
+		}
+		if(player){
+			for(int i=0;i<5;i++){
+				inventory.add(new Item(Weapon.getRandomWeapon(0)));
+			}
 		}
 	}
 
@@ -1245,5 +1251,9 @@ public abstract class Ship {
 
 	public void addFuel(int amount) {
 		fuel+=amount;
+	}
+	
+	public ArrayList<Item> getInv(){
+		return inventory;
 	}
 }

@@ -55,8 +55,8 @@ public class Star{
 
 
 		for(Star s:playerStars){
-			s.location.x+=(s.size-.1f)*delta*playerSpeed;
-			s.location.x+=delta;
+			s.location.x+=(s.size)*delta*playerSpeed;
+//			
 			if(s.location.x<150){
 				s.location.x=700;
 			}

@@ -21,10 +21,13 @@ import game.Main;
 import game.assets.Gallery;
 import game.grid.Grid;
 import game.grid.hex.Hex;
+import game.module.junk.ModuleStats;
 import game.screen.map.panels.ActionPanel;
 import game.screen.map.panels.HexInfoPanel;
 import game.screen.map.panels.PlayerStatsPanel;
 import game.screen.map.panels.SidePanel;
+import game.screen.map.stuff.Base;
+import game.screen.map.stuff.Equip;
 import game.ship.Ship;
 import game.ship.mapThings.MapShip;
 import game.ship.mapThings.mapAbility.MapAbility;
@@ -36,7 +39,7 @@ public class Map extends Screen{
 
 	public static MapShip player;
 	SpriteBatch uiBatch=new SpriteBatch();
-	public enum MapState{PlayerTurn,PlayerMoving,EnemyMoving,PickHex, Event}
+	public enum MapState{PlayerTurn,PlayerMoving,EnemyMoving,PickHex,Event,Equipping}
 	private static MapState state;
 	public static Hex explosion;
 	private static float explosionSize=9;
@@ -51,6 +54,7 @@ public class Map extends Screen{
 	ArrayList<SidePanel> panels = new ArrayList<SidePanel>();
 	static Event currentEvent;
 	private Ship ship;
+	static Base currentBase;
 	
 	public Map(Ship ship){
 		this.ship=ship;
@@ -246,7 +250,7 @@ public class Map extends Screen{
 		uiBatch.begin();
 		Parastar.render(uiBatch, Main.getCam(), Hex.size/200f);
 		uiBatch.end();
-
+		
 
 		batch.begin();
 		grid.render(batch);
@@ -278,7 +282,7 @@ public class Map extends Screen{
 		for(SidePanel p:panels)p.render(uiBatch);
 
 		if(currentEvent!=null)currentEvent.render(uiBatch);
-		
+		if(currentBase!=null)currentBase.render(uiBatch);
 		uiBatch.end();
 
 
@@ -320,6 +324,17 @@ public class Map extends Screen{
 	public static void event(Event e){
 		setState(MapState.Event);
 		currentEvent=e;
+	}
+
+	public static void showEquip() {
+		setState(MapState.Equipping);
+		currentBase=new Equip();
+	}
+
+	public static void mouseStats(ModuleStats moduleStats) {
+		if(currentBase!=null){
+			currentBase.mouseStats(moduleStats);
+		}
 	}
 
 

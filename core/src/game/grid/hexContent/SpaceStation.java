@@ -36,7 +36,7 @@ public class SpaceStation extends HexContent{
 
 	@Override
 	public String getFlavour() {
-		return "A trade hub, you can buy or sell modules for fuel here. Docking here takes no time.";
+		return "A trade hub, you can buy and sell modules and outfit your ship here.";
 	}
 
 	@Override

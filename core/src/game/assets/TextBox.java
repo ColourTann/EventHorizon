@@ -14,7 +14,7 @@ import util.update.Updater;
 public class TextBox extends Updater{
 	static int cornerSize=Gallery.textBoxTopLeftCorner.getHeight();
 	static int sideSize=Gallery.textBoxTop.getHeight();
-	
+	public static int gap=4;
 	protected Alignment align=Alignment.Left;
 	TextWriter tw;
 	float width,height;

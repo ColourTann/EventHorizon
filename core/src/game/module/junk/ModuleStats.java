@@ -27,6 +27,7 @@ import game.screen.battle.Battle;
 import game.screen.battle.tutorial.Tutorial;
 import game.screen.customise.Customise;
 import game.screen.customise.Reward;
+import game.screen.map.Map;
 import game.screen.preBattle.PreBattle;
 
 public class ModuleStats extends Mouser{
@@ -134,7 +135,9 @@ public class ModuleStats extends Mouser{
 				Customise.mouseOver(fUtil);
 			}
 			else Customise.unMouse(null);
-
+		}
+		if(Screen.isActiveType(Map.class)){
+			Map.mouseStats(this);
 		}
 
 	}
