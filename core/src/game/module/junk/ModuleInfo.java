@@ -61,10 +61,10 @@ public class ModuleInfo extends TextBox{
 		}
 		if(mod.ship==null)return;
 		setPosition(new Pair(mod.ship.player?130+width/2:Main.width-130-width/2, 0));
-		
-		
+
+
 	}
-	
+
 	public ModuleInfo(Card[] cards){
 		this.consumableCards=cards;
 		width=CardGraphic.width*3-3+11;
@@ -72,25 +72,25 @@ public class ModuleInfo extends TextBox{
 	}
 
 	public void setPosition(Pair pos){
-		
+
 		this.position=pos.add(-width/2,0);
 		this.position=position.floor();
 		if(mod==null){
-			
+
 			for (int i=0;i<consumableCards.length;i++){
-				
+
 				CardGraphic cg=consumableCards[i].getGraphic();
 				cg.setPosition(new Pair(position.x+i*Gallery.cardBase.getWidth()+cardOffset, position.y+cardOffset));
 				cg.override=true;
 				graphics.add(cg);
 				cg.demousectivate();
 			}
-			
-			
+
+
 			return;
 		}
 		graphics.clear();
-		
+
 		if(mod instanceof Weapon||mod instanceof Shield){
 
 			for(int i=0;i<=3;i++){
@@ -103,7 +103,7 @@ public class ModuleInfo extends TextBox{
 			graphics.add(cg);
 		}
 		else if(mod.numCards==0){
-			
+
 		}
 		else{
 			//height-=124;
@@ -131,15 +131,24 @@ public class ModuleInfo extends TextBox{
 		fadeOut(CardGraphic.fadeSpeed/1.2f, Interp.LINEAR);
 	}
 
+	public void unFade(){
+		stopFading();
+		alpha=1;
+		for(CardGraphic cg: graphics){
+			cg.stopFading();
+			cg.alpha=1;
+		}
+
+	}
 
 	public void render(SpriteBatch batch) {
 		if (alpha<=0)return;
 		Font.small.setColor(Colours.withAlpha(Colours.light,alpha));
 		batch.setColor(1,1,1,alpha);
 		renderBox(batch, width, height/2f);
-	
+
 		if(consumableCards!=null&&alpha>0){
-		
+
 			for(Card c:consumableCards){
 				if(noDrawCards)break;;
 				CardGraphic cg=c.getGraphic();
@@ -149,7 +158,7 @@ public class ModuleInfo extends TextBox{
 			}
 			return;
 		}
-		
+
 		Font.medium.setColor(Colours.withAlpha(Colours.light,alpha));
 		String s=mod.moduleName;
 		float nameHeight=Font.medium.getWrappedBounds(s, CardGraphic.width).height;
@@ -157,8 +166,8 @@ public class ModuleInfo extends TextBox{
 		//Font.drawFontCentered(batch, s, Font.medium, position.x+CardGraphic.width/2, position.y+25);
 		//Font.small.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+17);
 		s="Cards:";
-		
-		
+
+
 		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2, position.y+80);
 		s=""+mod.numCards;
 		if(mod.ship!=null&&mod.numCards>0){
@@ -167,8 +176,8 @@ public class ModuleInfo extends TextBox{
 		Font.medium.draw(batch, s, position.x+CardGraphic.width/2-Font.medium.getBounds(s).width/2+cardOffset, position.y+100);
 
 		if(mod instanceof Armour){
-	
-			
+
+
 			s="HP multiplier "+((Armour)mod).multiplier;
 			Font.small.drawWrapped(batch, s, position.x, position.y+50+nameHeight/2+cardOffset, CardGraphic.width, HAlignment.CENTER);
 		}
@@ -193,13 +202,13 @@ public class ModuleInfo extends TextBox{
 			float fHeight=statsWriter.maxHeight;
 			statsWriter.render(batch, (int)(position.x+offset+cardOffset), (int)(position.y+CardGraphic.height*3/4-fHeight/2));
 		}
-	
+
 		String words=mod.type+"";
 		if(!(mod instanceof Utility)||mod instanceof Armour){
-		words+=(mod.tier==-1?"":" Tier "+mod.tier);
+			words+=(mod.tier==-1?"":" Tier "+mod.tier);
 		}
 		Font.drawFontCentered(batch, words, Font.small, position.x+CardGraphic.width/2+cardOffset, position.y+42+nameHeight/2);
-		
+
 		//Font.medium.drawWrapped(batch, s, width/4, 20, 500, HAlignment.CENTER);
 		if(alpha>0){
 			for(CardGraphic cg:graphics){

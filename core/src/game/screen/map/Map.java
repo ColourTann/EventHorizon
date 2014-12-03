@@ -21,6 +21,8 @@ import game.Main;
 import game.assets.Gallery;
 import game.grid.Grid;
 import game.grid.hex.Hex;
+import game.module.Module;
+import game.module.junk.ModuleInfo;
 import game.module.junk.ModuleStats;
 import game.screen.map.panels.ActionPanel;
 import game.screen.map.panels.HexInfoPanel;
@@ -28,6 +30,7 @@ import game.screen.map.panels.PlayerStatsPanel;
 import game.screen.map.panels.SidePanel;
 import game.screen.map.stuff.Base;
 import game.screen.map.stuff.Equip;
+import game.screen.map.stuff.Item;
 import game.ship.Ship;
 import game.ship.mapThings.MapShip;
 import game.ship.mapThings.mapAbility.MapAbility;
@@ -298,7 +301,7 @@ public class Map extends Screen{
 
 	@Override
 	public void scroll(int amount) {
-		zoom(amount);
+		if(currentBase!=null)currentBase.scroll(amount);
 	}
 
 	@Override
@@ -331,10 +334,26 @@ public class Map extends Screen{
 		currentBase=new Equip();
 	}
 
-	public static void mouseStats(ModuleStats moduleStats) {
+	public static void mouseStats(ModuleInfo info) {
 		if(currentBase!=null){
-			currentBase.mouseStats(moduleStats);
+			currentBase.mouseInfo(info);
 		}
+	}
+	public static void unMouse() {
+		if(currentBase!=null){
+			currentBase.unMouse();
+		}
+	}
+	public static void mouseItem(Item i){
+		if(currentBase!=null){
+			currentBase.mouseItem(i);
+		}
+	}
+	public static void selectItem(Item i){
+		if(currentBase!=null){
+			currentBase.select(i);
+		}
+		
 	}
 
 

@@ -13,6 +13,7 @@ import util.maths.Pair;
 public class SimpleButton extends Mouser{
 
 	public Code code;
+	
 	public Pic pic;
 	public String name;
 	public int width,height;
@@ -26,13 +27,21 @@ public class SimpleButton extends Mouser{
 		width=pic.get().getWidth();
 		height=pic.get().getHeight();
 		mousectivate(new BoxCollider(position.x, position.y, width, height));
+		moveToTop();
 	}
 	
 	public void setScale(float scale){
 		this.scale=scale;
-		mousectivate(new BoxCollider(position.x, position.y, width*scale, height*scale));
+		width=(int) (pic.getWidth()*scale);
+		height=(int) (pic.getHeight()*scale);
+		mousectivate(new BoxCollider(position.x, position.y, width, height));
 	}
 
+	public void setPosition(Pair position){
+		this.position=position;
+		mousectivate(new BoxCollider(position.x, position.y, width, height));
+	}
+	
 	public interface Code{
 		public void onPress();
 	}
@@ -67,6 +76,8 @@ public class SimpleButton extends Mouser{
 		Font.drawFontCentered(batch, name, font, position.x+width/2, position.y+height/2);
 		batch.setColor(base);
 	}
+
+	
 
 
 }

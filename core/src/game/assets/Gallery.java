@@ -194,6 +194,8 @@ public class Gallery {
 	public static Pic tickButton= new Pic("Interface/tickbutton");
 	public static Pic crossButton= new Pic("Interface/crossbutton");
 	public static Pic leftButton= new Pic("Interface/leftbutton");
+	public static Pic upButton= new Pic("Interface/upbutton");
+	public static Pic binButton= new Pic("Interface/binbutton");
 	public static Pic rewardOutline= new Pic("Interface/rewardoutline");
 	public static Pic rewardHighlights= new Pic("Interface/rewardhighlights");
 	public static Pic threeCards= new Pic("Interface/threecards");

@@ -112,7 +112,7 @@ public class Customise extends Screen{
 
 				}
 			}));
-			buttons.add(new SimpleButton(new Pair(shipX-170, Main.height-108), "", Gallery.leftButton.getFlipped(), new Code() {
+			buttons.add(new SimpleButton(new Pair(shipX-170, Main.height-108), "", Gallery.leftButton.getFlipped(true), new Code() {
 
 				@Override
 				public void onPress() {

@@ -7,41 +7,171 @@ import java.util.ArrayList;
 import game.Main;
 import game.assets.Gallery;
 import game.assets.TextBox;
+import game.module.Module;
+import game.module.Module.ModuleType;
 import game.module.component.Component;
+import game.module.component.shield.Shield;
+import game.module.component.weapon.Weapon;
 import game.module.junk.ModuleInfo;
 import game.module.junk.ModuleStats;
+import game.module.utility.Utility;
+import game.screen.customise.Reward;
 import game.screen.map.Map;
+import game.screen.map.panels.PlayerStatsPanel;
 import game.ship.Ship;
 import game.ship.ShipGraphic;
+import util.Colours;
 import util.Draw;
+import util.assets.Font;
 import util.maths.BoxCollider;
 import util.maths.Pair;
+import util.update.SimpleButton;
 import util.update.Updater;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.sun.org.glassfish.external.statistics.annotations.Reset;
 
 public abstract class Base extends Updater{
-	final static Pair size=new Pair(900,600);
-	final static Pair location=new Pair(Main.width/2-size.x/2, Main.height/2-size.y/2).floor();
 	
-//	final static Pair infoLoc=new Pair(location.x+473+infoGap, location.y+size.y-ModuleInfo.staticHeight-TextBox.gap-infoGap);
-//	final static Pair shipLoc=new Pair(location.x+300,location.y+size.y-550);
+	final static Pair size=new Pair(850,600);
+	final static Pair location=new Pair(Main.width/2-size.x/2, Main.height/2-size.y/2).floor();
+
+	//	final static Pair infoLoc=new Pair(location.x+473+infoGap, location.y+size.y-ModuleInfo.staticHeight-TextBox.gap-infoGap);
+	//	final static Pair shipLoc=new Pair(location.x+300,location.y+size.y-550);
+	final static Pair statsLoc= new Pair(location.x+65,location.y+57);
 	final static Pair infoLoc=new Pair(location.x+473+5,location.y+TextBox.gap*2);
 	final static Pair shipLoc=new Pair(location.x+300, location.y+size.y-ShipGraphic.height-20);
-	
-	final static Pair scrollerSize=new Pair(Gallery.rewardOutline.getWidth()*4+TextBox.gap*2,Gallery.rewardHighlights.getHeight()*4*5-4+TextBox.gap*2);
-	final static Pair scrollerLoc=new Pair(location.x+size.x-scrollerSize.x-TextBox.gap, location.y+TextBox.gap);
-	
+
+
+	final static Pair scrollerLoc=new Pair(location.x+size.x-Scroller.width-TextBox.gap*2, location.y+TextBox.gap*2+25);
+	static Item selectedItem;
 	ArrayList<ModuleStats> stats= new ArrayList<ModuleStats>();
 	ShipGraphic playerGraphic;
-	Ship player;
+	static Ship player;
 	ModuleInfo oldInfo;
 	ModuleInfo info;
+	ModuleStats newStats;
+	ModuleStats oldStats;
 	public Scroller inv;
+	public static Base me;
+	Trasher trasher;
 	public Base(){
+		me=this;
 		player=Map.player.getShip();
+		refreshStats();
+		inv=new Scroller(player.getInv(), scrollerLoc, 4);
+		trasher=new Trasher();
+	}
+
+	public void render(SpriteBatch batch){
+		TextBox.renderBox(batch, location, size.x, size.y, util.TextWriter.Alignment.Left);
+		for(ModuleStats ms:stats)ms.render(batch);
+		for(ModuleStats ms:player.getUtilityStats()){
+			ms.render(batch);
+		}
+		batch.setColor(1,1,1,1);
+		Draw.draw(batch, playerGraphic.picCut.get(), shipLoc.x, shipLoc.y);
+		inv.render(batch);
+
+		if(info!=null)info.render(batch);
+		if(oldInfo!=null)oldInfo.render(batch);
+
+		if(newStats!=null)newStats.render(batch);
+		if(oldStats!=null)oldStats.render(batch);
+		Font.medium.setColor(Colours.light);
+		Font.drawFontCentered(batch, "INV", Font.medium, 982, location.y+18);
+		trasher.render(batch);
+		//Draw.drawScaled(batch, Gallery.whiteSquare.get(), location.x, location.y, size.x, size.y);
+	}
+
+	public void mouseInfo(ModuleInfo moused) {
+		oldInfo=info;
+		info=moused;
+		moused.setPosition(infoLoc);
+		moused.unFade();
+	}
+	public void unMouse(){
+		oldStats=newStats;
+		if(oldStats!=null)oldStats.fade();
+		oldInfo=info;
+	}
+
+	public void mouseItem(Item i){
+		if(i.mod instanceof Component){
+			System.out.println("making thing");
+			Component c = (Component) i.mod;
+			c.pretend(player);
+			newStats=c.getStats();
+			newStats.collider.position=statsLoc;
+			newStats.stopFading();
+			newStats.alpha=1;
+		}
+	}
+	
+	
+	
+	public void select(Item i) {
+		if(selectedItem==i){
+			i.unSelect();
+			selectedItem=null;		
+			return;
+		}
+		if(selectedItem!=null)selectedItem.unSelect();
+		selectedItem=i;
+		i.select();
+	}
+
+	public static ModuleType getReplaceableType() {
+		
+		if(selectedItem!=null){
+			return selectedItem.mod.type;
+		}
+		return null;
+	}
+
+	public void replace(Module m, int i) {
+		Module old = null;
+		if(m instanceof Component){
+			Component comp=(Component) m;
+			comp.getStats().demousectivate();
+			Component replacer = ((Component)selectedItem.mod);
+			info.fadeAll();
+			//mouseInfo(replacer.getInfo());
+			replacer.pretending=false;
+			if(m instanceof Weapon){
+				old=player.setWeapon((Weapon) selectedItem.mod, comp.getIndex());	
+			}
+			if(m instanceof Shield){
+				old=player.setShield((Shield) selectedItem.mod);
+			}
+			
+		}
+		if(selectedItem.mod instanceof Utility){
+			
+			old=player.setUtility((Utility) selectedItem.mod, i);
+			
+		}
+		refreshStats();
+		inv.removeItem(selectedItem);
+		if(old!=null)inv.addItem(new Item(old));
+		inv.updateLocations(false);
+		selectedItem=null;
+	}
+
+	private void refreshStats() {
+		stats.clear();
+		player.resetGraphics();
+		
 		for(Component c:player.components){
 			stats.add(c.getStats());
+			c.getStats().stopFading();
+			c.getStats().alpha=1;
+		}
+		
+		for(ModuleStats ms:player.getUtilityStats()){
+			ms.collider.position=ms.collider.position.add(220,-73);
+			ms.position=ms.collider.position.copy();
+			ms.mousectivate(null);
 		}
 		int x=(int) (location.x+TextBox.gap+ModuleStats.width);
 		int y=(int) (location.y+size.y-TextBox.gap-ModuleStats.height*3);
@@ -54,27 +184,61 @@ public abstract class Base extends Updater{
 				x-=ModuleStats.width;
 			}
 		}
+		player.getGraphic().drawMap(true);
 		playerGraphic=player.getGraphic();
 		playerGraphic.position=shipLoc;
-		inv=new Scroller(player.getInv(), scrollerLoc, scrollerSize);
-	}
-	
-	public void render(SpriteBatch batch){
-		TextBox.renderBox(batch, location, size.x, size.y, util.TextWriter.Alignment.Left);
-		for(ModuleStats ms:stats)ms.render(batch);
-		Draw.draw(batch, playerGraphic.picCut.get(), shipLoc.x, shipLoc.y);
-		
-		if(info!=null)info.render(batch);
-		if(oldInfo!=null)oldInfo.render(batch);
-		inv.render(batch);
-		//Draw.drawScaled(batch, Gallery.whiteSquare.get(), location.x, location.y, size.x, size.y);
 	}
 
-	public void mouseStats(ModuleStats moduleStats) {
-		oldInfo=info;
-		info=moduleStats.info;
-		info.setPosition(infoLoc);
-		info.alpha=1;
-		System.out.println(info.position);
+	public void scroll(int amount) {
+		for(Item i:inv.items){
+			if(i.moused){
+				if(amount==1)inv.bot.code.onPress();
+				if(amount==-1)inv.top.code.onPress();
+				return;
+			}
+		}
+	}
+	
+	public void trashItem(Item i){
+		inv.removeItem(i);
+		player.addFuel(i.getBinValue());
+		inv.updateLocations(false);
+		selectedItem=null;
+	}
+	
+	class Trasher{
+		final Pair buttonLocation= new Pair(875,570);
+		final Pair fuelLocation= new Pair(955,580);
+		final Pair textLocation= new Pair(1015,595);
+		Module mod;
+		int fuel;
+		SimpleButton button;
+		
+		public Trasher(){
+			button=new SimpleButton(buttonLocation, "", Gallery.binButton, new SimpleButton.Code() {
+				
+				@Override
+				public void onPress() {
+					if(selectedItem!=null) trashItem(selectedItem);
+				}
+			});
+			button.setScale(2);
+		
+		}
+		
+		public void render(SpriteBatch batch){
+			button.render(batch);
+			if(selectedItem!=null){
+				batch.setColor(Reward.selectedColor);
+				Draw.drawScaled(batch, Gallery.binButton.getOutline(), buttonLocation.x, buttonLocation.y, 2, 2);
+				batch.setColor(1,1,1,1);
+				Draw.drawScaled(batch, Gallery.fuel.get(), fuelLocation.x, fuelLocation.y,2,2);
+				Font.medium.setColor(PlayerStatsPanel.fuelCol);
+				Font.medium.draw(batch, ":"+selectedItem.getBinValue(), textLocation.x, textLocation.y);
+			}
+			
+			
+			
+		}
 	}
 }

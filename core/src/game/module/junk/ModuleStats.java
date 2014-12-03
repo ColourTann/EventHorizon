@@ -28,6 +28,7 @@ import game.screen.battle.tutorial.Tutorial;
 import game.screen.customise.Customise;
 import game.screen.customise.Reward;
 import game.screen.map.Map;
+import game.screen.map.stuff.Base;
 import game.screen.preBattle.PreBattle;
 
 public class ModuleStats extends Mouser{
@@ -56,11 +57,19 @@ public class ModuleStats extends Mouser{
 	public BuffList buffList;
 
 	public ModuleStats(Component c) {
-		mousectivate(new BoxCollider(c.ship.player?0:Main.width-width, height*c.getIndex(), width, height));
+		boolean left=true;
+		if(c.ship!=null){
+			left=c.ship.player;
+		}
+		System.out.println(c.getIndex());
+		mousectivate(new BoxCollider(left?0:Main.width-width, height*c.getIndex(), width, height));
+		if(collider.position.y<0)collider.position.y=0;
 		component=c;
 		info=new ModuleInfo(c);
-
+		type=c.type;
 	}
+
+
 
 	public ModuleStats(Utility aUtil, int aIndex, boolean player){
 		utilityStats=true;
@@ -106,6 +115,17 @@ public class ModuleStats extends Mouser{
 
 		}
 		if(component!=null)component.clicked(left);
+
+		if(Screen.isActiveType(Map.class)){
+			if(utilityStats){
+				if(Base.getReplaceableType()==type){
+					Base.me.replace(fUtil, index);
+				}
+			}
+			else if(Base.getReplaceableType()==component.type){
+				Base.me.replace(component, -1);
+			}
+		}
 	}
 	@Override
 	public void mouseDown() {
@@ -137,7 +157,7 @@ public class ModuleStats extends Mouser{
 			else Customise.unMouse(null);
 		}
 		if(Screen.isActiveType(Map.class)){
-			Map.mouseStats(this);
+			Map.mouseStats(info);
 		}
 
 	}
@@ -166,7 +186,6 @@ public class ModuleStats extends Mouser{
 	}
 
 	public void render(SpriteBatch batch) {
-		
 		if(Main.currentScreen instanceof Battle|| Main.currentScreen instanceof PreBattle){
 			if(info!=null&&info!=ModuleInfo.top)info.render(batch);
 			if(component!=null){
@@ -177,6 +196,7 @@ public class ModuleStats extends Mouser{
 			}
 
 		}
+
 
 		if(utilityStats){
 			Draw.drawScaled(batch, Gallery.baseUtilityStats.get(), position.x, position.y, 2, 2);
@@ -192,7 +212,7 @@ public class ModuleStats extends Mouser{
 				batch.setColor(1,1,1,1);	
 			}
 
-			if(Customise.getReplaceableType()==type){
+			if(Base.getReplaceableType()==type||Customise.getReplaceableType()==type){
 				batch.setColor(Reward.selectedColor);
 				Draw.drawScaled(batch, Gallery.baseUtilityStats.getOutline(), collider.position.x, collider.position.y,2,2);
 				batch.setColor(Colours.white);
@@ -217,7 +237,7 @@ public class ModuleStats extends Mouser{
 		default:
 			overlay=Gallery.baseModuleStats;
 		}
-		batch.setColor(1,1,1,1);
+		batch.setColor(1,1,1,alpha);
 		Draw.draw(batch, Gallery.baseModuleStats.get(), collider.position.x, collider.position.y);
 		Draw.draw(batch, overlay.get(), collider.position.x, collider.position.y);
 
@@ -228,19 +248,24 @@ public class ModuleStats extends Mouser{
 				Draw.draw(batch, Gallery.statsMoused.get(), collider.position.x, collider.position.y);
 				batch.setColor(Colours.white);
 			}
-
-
-
-
+		}
+		if(Main.currentScreen instanceof Map){
+			if(Base.getReplaceableType()==type){
+				if(!component.pretending){
+					batch.setColor(Reward.selectedColor);
+					Draw.drawScaled(batch, Gallery.statsMoused.get(), collider.position.x, collider.position.y,1,1);
+					batch.setColor(1, 1, 1, alpha);
+				}
+			}
 		}
 
 		if(component.targeteds>0)	Draw.draw(batch, Gallery.statsTargeted.get(), collider.position.x, collider.position.y);
 		if(component.immune)Draw.draw(batch, Gallery.statsImmune.get(), collider.position.x, collider.position.y);
 
 		if(component.type==ModuleType.WEAPON){
-			batch.setColor(1, 1, 1, .5f);
+			batch.setColor(1, 1, 1, .5f*alpha);
 			Draw.drawCenteredScaled(batch, component.modulePic.get(), collider.position.x+37, collider.position.y+94, 2f/3f,2f/3f);
-			batch.setColor(1, 1, 1, 1);
+			batch.setColor(1, 1, 1, alpha);
 			//Draw.drawTexture(batch, mod.modulePic.get(),collider.x+5,collider.y+5);
 		}
 
@@ -287,7 +312,7 @@ public class ModuleStats extends Mouser{
 				p=Gallery.orangeHP;
 				if(i>=damage+incoming+unshieldable-shields){
 					p=Gallery.blueHP;
-				
+
 				}
 			}
 			if(component.thresholds[0]==i+1||component.thresholds[1]==i+1){
@@ -334,6 +359,10 @@ public class ModuleStats extends Mouser{
 			Draw.draw(batch, component.buffs.get(i).getPic().get(), collider.position.x+8+pos*gap, collider.position.y+70);
 			pos++;
 		}
+
+
+
+
 	}
 
 	public void reset() {
@@ -352,5 +381,11 @@ public class ModuleStats extends Mouser{
 			}
 		}
 
+	}
+
+
+
+	public void fade() {
+		fadeOut(.3f, Interp.LINEAR);
 	}
 }

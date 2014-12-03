@@ -32,6 +32,7 @@ public class Timer extends Updater{
 		toFloat=to;
 		this.seconds=seconds;
 		lerpType=type;
+		
 	}
 
 	public Timer(Pair from, Pair to, float seconds, Interp type){
@@ -74,12 +75,15 @@ public class Timer extends Updater{
 	}
 
 	public float getFloat(){
-		//if(fromFloat==0&&toFloat==0)return ratio;
-		
 		if(lerpType==null)return ratio;
 		return fromFloat+((toFloat-fromFloat)*get());
 	}
 
+	public float getTarget(){
+		if(lerpType==null)return 1;
+		return toFloat;
+	}
+	
 	private float get(){
 		if(ratio>1)ratio=1;
 		switch (lerpType){

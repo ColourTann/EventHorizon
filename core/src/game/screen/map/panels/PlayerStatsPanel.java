@@ -11,11 +11,13 @@ import util.maths.Pair;
 import util.update.Mouser;
 import util.update.SimpleButton.Code;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class PlayerStatsPanel extends SidePanel{
 	static final Pair fuelLoc=new Pair(50,Main.height/2+80);
 	static final Pair equipLoc=new Pair(50,Main.height/2+120);
+	public static final Color fuelCol= Colours.weaponCols8[3];
 	AdvancedButton equip;
 	public PlayerStatsPanel(){
 		Font.medium.setColor(Colours.white);
@@ -36,7 +38,7 @@ public class PlayerStatsPanel extends SidePanel{
 	@Override
 	public void render(SpriteBatch batch) {
 		Draw.drawCenteredScaled(batch, Gallery.fuel.get(), fuelLoc.x, fuelLoc.y, 2, 2);
-		Font.big.setColor(Colours.weaponCols8[0]);
+		Font.big.setColor(fuelCol);
 		Font.drawFontCentered(batch, ":"+Map.player.getShip().getFuel(), Font.big, fuelLoc.x+58, fuelLoc.y);
 		equip.render(batch);
 	}

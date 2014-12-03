@@ -70,6 +70,7 @@ public abstract class Component extends Module{
 
 	private Pair center;
 	private Pair barrel;
+	public boolean pretending;
 
 
 	public Component(int tier, String name, Pic modulePic, int variants, int numCards, int baseThresholds[]){
@@ -378,8 +379,16 @@ public abstract class Component extends Module{
 		for(DamagePoint p:incomingDamage)p.reset();
 	}
 
+	public void pretend(Ship s){
+		this.ship=s;
+		recalculateThresholds();
+		pretending=true;
+	}
+	
 	//Getters and setters//
 
+	
+	
 	public int getIndex(){
 		if(index==-1)System.out.println(this+" isn't installed on a ship");
 		return index;

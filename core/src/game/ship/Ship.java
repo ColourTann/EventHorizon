@@ -132,9 +132,16 @@ public abstract class Ship {
 			addConsumableCard(ConsumableCard.get(1));
 		}
 		if(player){
-			for(int i=0;i<5;i++){
+			for(int i=0;i<2;i++){
 				inventory.add(new Item(Weapon.getRandomWeapon(0)));
 			}
+			for(int i=0;i<2;i++){
+				inventory.add(new Item(Shield.getRandomShield(0)));
+			}
+			for(int i=0;i<2;i++){
+				inventory.add(new Item(Utility.getRandomUtility(0)));
+			}
+			Collections.shuffle(inventory);
 		}
 	}
 
@@ -814,7 +821,7 @@ public abstract class Ship {
 		return result;
 	}
 	public Component getComponent(int index){return components[index];}
-	public Component getShield(){return components[2];}
+	public Shield getShield(){return (Shield) components[2];}
 	public Generator getGenerator(){return (Generator) components[3];}
 	public Computer getComputer(){return (Computer) components[4];}
 
@@ -825,16 +832,20 @@ public abstract class Ship {
 	public MapShip getMapShip(){
 		return mapShip;
 	}
-	public void setWeapon(Weapon w, int i){
+	public Weapon setWeapon(Weapon w, int i){
 		if(i!=0&&i!=1){
 			System.out.println("bad set weapon index");
-			return;
+			return null;
 		}
+		Weapon old = (Weapon) niches[i].component;
 		niches[i].install(w);
 		components[i]=w;
+		return old;
 	}
-	public void setShield(Shield s){
+	public Shield setShield(Shield s){
+		Shield old = getShield();
 		niches[2].install(s);
+		return old;
 	}
 	public void setGenerator(Generator g){
 		niches[3].install(g);
@@ -843,20 +854,23 @@ public abstract class Ship {
 		maxCards=c.maxCards;
 		niches[4].install(c);
 	}
-	public void setArmour(Armour a){
+	public Armour setArmour(Armour a){
+		Armour old = armour;
 		utilities[2]=a;
 		this.armour=a;
 		a.ship=this;
 		recalculateThresholds();
+		return old;
 	}
 
-	public void setUtility(Utility u, int position){
+	public Utility setUtility(Utility u, int position){
 		if(u instanceof Armour){
-			setArmour((Armour) u);
-			return;
+			return setArmour((Armour) u);
 		}
+		Utility old = utilities[position];
 		utilities[position]=u;
 		u.ship=this;
+		return old;
 	}
 
 	public Pic getPic(){
@@ -1183,7 +1197,7 @@ public abstract class Ship {
 		utilityStats=new ModuleStats[3];
 		for(Component c:components){
 			c.getStats().mousectivate(null);
-			c.getStats().alpha=0;
+			c.getStats().alpha=1;
 			c.getStats().info.alpha=0;
 			c.getStats().buffList=null;
 
@@ -1256,4 +1270,5 @@ public abstract class Ship {
 	public ArrayList<Item> getInv(){
 		return inventory;
 	}
+
 }

@@ -148,6 +148,7 @@ public class Hex {
 		return (float) (Math.sqrt(distance.x*distance.x+distance.y*distance.y))/Hex.height;
 	}
 	public void mouse() {
+		if(Map.getState()==MapState.Equipping)return;
 		if(Map.getState()==MapState.Event)return;
 		if(getDistance(Map.player.hex)>Grid.viewDist){
 			mousedHex.unMouse();
