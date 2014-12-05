@@ -68,6 +68,7 @@ public class EscapeMenu extends Screen{
 	TextWriter creditsWriter;
 	SimpleSlider sfx = new SimpleSlider(sliderPosition, (int)(sliderWidth), (int)(sliderHeight), Colours.grey, Colours.backgrounds1[0], 3, SoundClip.soundLevel);
 	SimpleSlider music = new SimpleSlider(sliderPosition.add(0,-sliderGap), (int)(sliderWidth), (int)sliderHeight, Colours.grey, Colours.backgrounds1[0], 3, MusicClip.musicLevel);
+	
 	public EscapeMenu(){
 		position=new Pair(Main.width/2-width/2, Main.height/2-height/2);
 		Font.medium.setColor(Colours.light);
@@ -138,7 +139,8 @@ public class EscapeMenu extends Screen{
 	}
 
 	@Override
-	public void keyPress(int keycode) {
+	public boolean keyPress(int keycode) {
+		return false;
 	}
 
 	@Override

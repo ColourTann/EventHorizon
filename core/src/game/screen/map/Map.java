@@ -6,7 +6,9 @@ import util.Colours;
 import util.Draw;
 import util.assets.Font;
 import util.maths.Pair;
+import util.update.Mouser;
 import util.update.Screen;
+import util.update.Updater;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -24,6 +26,7 @@ import game.grid.hex.Hex;
 import game.module.Module;
 import game.module.junk.ModuleInfo;
 import game.module.junk.ModuleStats;
+import game.screen.escape.EscapeMenu;
 import game.screen.map.panels.ActionPanel;
 import game.screen.map.panels.HexInfoPanel;
 import game.screen.map.panels.PlayerStatsPanel;
@@ -58,13 +61,18 @@ public class Map extends Screen{
 	static Event currentEvent;
 	private Ship ship;
 	static Base currentBase;
-	
+	public static Map me;
+	private boolean initialised;
 	public Map(Ship ship){
 		this.ship=ship;
 	}
 
 	public void init(){
-
+		if(initialised){
+			restoreAll();
+			return;
+		}
+		initialised=true;
 		resetStatics();
 		Main.setCam(new Pair(0,0));
 		Hex.init();
@@ -93,6 +101,8 @@ public class Map extends Screen{
 		panels.add(hexInfoPanel);
 		panels.add(playerStatsPanel);
 		panels.add(actionPanel);
+		restoreAll();
+		me=this;
 	}
 
 	public static void resetStatics(){
@@ -178,16 +188,17 @@ public class Map extends Screen{
 
 
 	@Override
-	public void keyPress(int keycode) {
+	public boolean keyPress(int keycode) {
 		switch(keycode){
-		case (Input.Keys.COMMA):
-			zoom(-1);
-		break;
-		case (Input.Keys.PERIOD):
-			zoom(1);
-		case Input.Keys.SPACE:
+		case Input.Keys.ESCAPE: 
+			if(currentBase!=null)return currentBase.keyPress(keycode);
 			break;
-
+		case Input.Keys.SPACE:
+//			saveAll();
+//			Updater.clearAll();
+//			Mouser.clearAll();
+//			restoreAll();
+			break;
 		}
 		//hotkeys 8-16
 		int hotkey=keycode-8;
@@ -195,7 +206,8 @@ public class Map extends Screen{
 			if(player.mapAbilities.size()>hotkey)
 				player.mapAbilities.get(hotkey).select();
 		}
-
+		
+		return false;
 	}
 
 	@Override
@@ -222,7 +234,7 @@ public class Map extends Screen{
 
 	@Override
 	public void update(float delta) {
-
+		if(Screen.isActiveType(EscapeMenu.class))return;
 		updateState(delta);		
 		grid.update(delta);		
 		updateCamPosition();
@@ -329,7 +341,11 @@ public class Map extends Screen{
 		currentEvent=e;
 	}
 
-	public static void showEquip() {
+	public static void toggleEquip() {
+		if(getState()==MapState.Equipping){
+			closeBase();
+			return;
+		}
 		setState(MapState.Equipping);
 		currentBase=new Equip();
 	}
@@ -354,6 +370,12 @@ public class Map extends Screen{
 			currentBase.select(i);
 		}
 		
+	}
+
+	public static void closeBase() {
+		returnToPlayerTurn();
+		currentBase.dispose();
+		currentBase=null;
 	}
 
 

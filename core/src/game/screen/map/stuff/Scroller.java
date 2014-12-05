@@ -145,4 +145,16 @@ public class Scroller {
 		
 		
 	}
+
+	public void dispose() {
+		//items, top, bot
+		for(Item i:items){
+			i.demousectivate();
+			i.deactivate();
+		}
+		top.demousectivate();
+		top.deactivate();
+		bot.demousectivate();
+		bot.deactivate();
+	}
 }

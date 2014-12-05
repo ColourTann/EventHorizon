@@ -4,6 +4,7 @@ import game.Main;
 import game.assets.AdvancedButton;
 import game.assets.Gallery;
 import game.screen.map.Map;
+import game.screen.map.Map.MapState;
 import util.Colours;
 import util.Draw;
 import util.assets.Font;
@@ -25,12 +26,17 @@ public class PlayerStatsPanel extends SidePanel{
 
 			@Override
 			public void onPress() {
-				Map.showEquip();
+				if(Map.getState()==MapState.PlayerTurn||Map.getState()==MapState.Equipping){
+					Map.toggleEquip();
+				}
+				else{
+					Map.player.resetPath();
+				}
 			}
-			
+
 		});
 	}
-	
+
 	@Override
 	public void update(float delta) {
 	}

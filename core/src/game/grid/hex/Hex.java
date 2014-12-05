@@ -1,5 +1,6 @@
 package game.grid.hex;
 
+import java.sql.Savepoint;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,6 +24,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.Array;
 
+import game.Main;
 import game.assets.Gallery;
 import game.grid.Grid;
 import game.grid.hex.SurroundingAnalysis.ShipDist;
@@ -31,9 +33,13 @@ import game.grid.hexContent.HexContent;
 import game.grid.hexContent.Planet;
 import game.grid.hexContent.SpaceStation;
 import game.grid.hexContent.Star;
+import game.screen.battle.Battle;
+import game.screen.battle.Battle.BattleType;
 import game.screen.battle.tutorial.PicLoc;
 import game.screen.map.Map;
 import game.screen.map.Map.MapState;
+import game.screen.preBattle.PreBattle;
+import game.ship.Ship;
 import game.ship.mapThings.MapShip;
 
 public class Hex {
@@ -216,15 +222,25 @@ public class Hex {
 	public void addShip(MapShip ship) {
 		if(this.mapShip!=null){
 			this.mapShip.battle();
-			battle();
+			battle(ship);
 		}
 		this.mapShip=ship;
 		ship.hex=this;
+		
 	}
 
-	private void battle() {
+	private void battle(MapShip target) {
 		battle=true;
 		battleTimer=new Timer(1,1,0,Interp.LINEAR);
+		if(target.getShip().player||this.mapShip.getShip().player){
+			Ship enemy;
+			if(!target.getShip().player){
+				enemy=target.getShip();
+			}
+			else enemy=mapShip.getShip();
+			Main.changeScreen(new PreBattle(Map.player.getShip(), enemy, BattleType.Map));
+			Map.me.saveAll();
+		}
 	}
 
 	public void endBattle() {

@@ -57,19 +57,20 @@ public class ModuleStats extends Mouser{
 	public BuffList buffList;
 
 	public ModuleStats(Component c) {
-		boolean left=true;
-		if(c.ship!=null){
-			left=c.ship.player;
-		}
-		System.out.println(c.getIndex());
-		mousectivate(new BoxCollider(left?0:Main.width-width, height*c.getIndex(), width, height));
-		if(collider.position.y<0)collider.position.y=0;
 		component=c;
+		moveToDefaultPosition();
 		info=new ModuleInfo(c);
 		type=c.type;
 	}
 
-
+	public void moveToDefaultPosition(){
+		boolean left=true;
+		if(component.ship!=null){
+			left=component.ship.player;
+		}
+		mousectivate(new BoxCollider(left?0:Main.width-width, height*component.getIndex(), width, height));
+		if(collider.position.y<0)collider.position.y=0;
+	}
 
 	public ModuleStats(Utility aUtil, int aIndex, boolean player){
 		utilityStats=true;
@@ -359,15 +360,20 @@ public class ModuleStats extends Mouser{
 			Draw.draw(batch, component.buffs.get(i).getPic().get(), collider.position.x+8+pos*gap, collider.position.y+70);
 			pos++;
 		}
-
-
-
-
+		if(component.type==ModuleType.WEAPON){
+			Font.medium.setColor(Colours.withAlpha(Colours.weaponCols8[6], alpha));
+			Font.drawFontCentered(batch, component.tier+"", Font.medium, collider.position.x+92, collider.position.y+height-30);
+		}
+		if(component.type==ModuleType.SHIELD){
+			Font.medium.setColor(Colours.withAlpha(Colours.shieldCols6[1], alpha));
+			Font.drawFontCentered(batch, component.tier+"", Font.medium, collider.position.x+63, collider.position.y+height-32);
+		}
 	}
 
 	public void reset() {
 		activate();
 		mousectivate(null);
+		moveToDefaultPosition();
 	}
 
 	public void dispose(){

@@ -1,5 +1,7 @@
 package util.update;
 
+import game.screen.escape.EscapeMenu;
+
 import java.util.ArrayList;
 
 import util.maths.Pair;
@@ -131,6 +133,20 @@ public abstract class Updater {
 	
 	public static Layer getLayer(){
 		return currentLayer;
+	}
+
+	public static ArrayList<Updater> getAllUpdaters() {
+		ArrayList<Updater> updaters = new ArrayList<Updater>();
+		for(Updater u : tickers){
+			if(u.layer!=Layer.Escape){
+				updaters.add(u);
+			}
+		}
+		return updaters;
+	}
+	
+	public static void addList(ArrayList<Updater> updaters){
+		tickers.addAll(updaters);
 	}
 	
 	

@@ -17,6 +17,7 @@ import game.module.junk.ModuleInfo;
 import game.module.junk.ModuleStats;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
+import game.screen.battle.Battle.BattleType;
 import game.screen.battle.interfaceJunk.HelpPanel;
 import game.screen.customise.Reward.RewardType;
 import game.screen.map.Map;
@@ -159,6 +160,8 @@ public class Customise extends Screen{
 		consumables=new ConsumableContainer();
 		
 		ship.resetGraphics();
+		
+		me=this;
 	}
 	
 	public static Ship makeEnemyShip() {
@@ -303,7 +306,7 @@ public class Customise extends Screen{
 
 	public static void changeStats(ModuleInfo info){
 		if(info==null){
-
+			
 			me.infoBox.fadeOut(fadeOutSpeed, Interp.LINEAR);
 			return;
 		}
@@ -315,9 +318,12 @@ public class Customise extends Screen{
 		info.fadeIn(fadeInSpeed, Interp.LINEAR);
 		info.setPosition(new Pair(shipX,280));
 		me.infoBox=info;
+		
+		
 	}
 
 	public static void mouseOver(Module mod) {
+		System.out.println("mousing");
 		changeStats(new ModuleInfo(mod));
 	}
 
@@ -341,6 +347,7 @@ public class Customise extends Screen{
 
 	@Override
 	public void update(float delta) {
+		
 	}
 
 	@Override
@@ -355,6 +362,7 @@ public class Customise extends Screen{
 		for(Reward r:rewards) r.render(batch);
 		for(ModuleStats ms:ship.getUtilityStats())ms.render(batch);
 		Draw.drawCentered(batch, ship.getGraphic().composite.get(), shipX, 140);
+		
 		
 		if(infoBox!=null)infoBox.render(batch);
 		if(oldInfoBox!=null)oldInfoBox.render(batch);
@@ -456,7 +464,7 @@ public class Customise extends Screen{
 			
 			@Override
 			public void finish() {
-				Main.changeScreen(new PreBattle(ship, makeEnemyShip()),.5f);
+				Main.changeScreen(new PreBattle(ship, makeEnemyShip(), BattleType.Arena),.5f);
 			}
 		});
 	}
@@ -482,8 +490,8 @@ public class Customise extends Screen{
 	}
 
 	@Override
-	public void keyPress(int keycode) {
-
+	public boolean keyPress(int keycode) {
+		return false;
 	}
 
 	@Override

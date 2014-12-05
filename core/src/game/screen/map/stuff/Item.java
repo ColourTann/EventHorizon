@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import util.Colours;
 import util.Draw;
+import util.assets.Font;
 import util.maths.BoxCollider;
 import util.maths.Pair;
 import util.update.Mouser;
@@ -13,12 +14,12 @@ import game.assets.Gallery;
 import game.assets.TextBox;
 import game.card.Card;
 import game.module.Module;
+import game.module.Module.ModuleType;
 import game.module.junk.ModuleInfo;
 import game.screen.customise.Reward;
 import game.screen.map.Map;
 
 public class Item extends Mouser{
-	private static final float timerSpeed = .3f;
 	Module mod;
 	Card card;
 	public static float height=Gallery.rewardOutline.getHeight()*4-4;
@@ -41,9 +42,10 @@ public class Item extends Mouser{
 	public void moveY(float y){
 		yTimer=new Timer(yTimer.getFloat(),y,Scroller.viewSpeed,Interp.SQUARE);
 	}
-	
+
 	@Override
 	public void mouseDown() {
+		System.out.println("mousing"+ mod);
 		Map.mouseStats(mod.getInfo());
 		Map.mouseItem(this);
 	}
@@ -58,13 +60,13 @@ public class Item extends Mouser{
 	}
 	@Override
 	public void update(float delta) {
-		
+
 
 	}
 	public void updateCollider(Pair scrollPo, float view) {
 		collider.position.x=scrollPo.x;
 		collider.position.y=scrollPo.y+Scroller.buttonHeight+view+yTimer.getFloat();
-	
+
 	}
 	public void render(SpriteBatch batch, float x, float y) {
 		batch.setColor(1,1,1,1);
@@ -72,6 +74,18 @@ public class Item extends Mouser{
 		if(mod!=null){
 			Draw.drawCenteredScaled(batch, mod.getPic(0).get(), x+size.x/2, y+yTimer.getFloat()+size.y/2, 4, 4);
 		}	
+		if(mod!=null){
+			if(mod.type==ModuleType.WEAPON||mod.type==ModuleType.SHIELD){
+				if(mod.type==ModuleType.WEAPON){
+					Font.medium.setColor(Colours.withAlpha(Colours.weaponCols8[6], alpha));
+				}
+				if(mod.type==ModuleType.SHIELD){
+					Font.medium.setColor(Colours.withAlpha(Colours.shieldCols6[1], alpha));
+				}
+				Font.drawFontCentered(batch, mod.tier+"", Font.medium, x+20, collider.position.y+20);
+			}
+		}
+
 	}
 	public void postRender(SpriteBatch batch, float x, float y){
 		if(moused){
@@ -92,5 +106,5 @@ public class Item extends Mouser{
 	public int getBinValue() {
 		return 10;
 	}
-	
+
 }

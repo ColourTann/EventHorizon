@@ -114,7 +114,7 @@ public class Test extends Screen{
 	}
 
 	@Override
-	public void keyPress(int keycode) {
+	public boolean keyPress(int keycode) {
 
 		switch(keycode){
 
@@ -141,6 +141,7 @@ public class Test extends Screen{
 
 			break;
 		}
+		return false;
 	}
 
 	@Override

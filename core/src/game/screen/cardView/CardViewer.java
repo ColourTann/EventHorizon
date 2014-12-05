@@ -67,19 +67,20 @@ public class CardViewer extends Screen{
 	}
 
 	@Override
-	public void keyPress(int keycode) {
+	public boolean keyPress(int keycode) {
 		switch(keycode){
-		case Input.Keys.RIGHT:
-			tier++;
-			init();
-			break;
-		case Input.Keys.LEFT:
-			tier--;
-			init();
-			break;
-			
-			
+//		case Input.Keys.RIGHT:
+//			tier++;
+//			init();
+//			break;
+//		case Input.Keys.LEFT:
+//			tier--;
+//			init();
+//			break;
+//			
+//			
 		}
+		return false;
 	}
 
 	@Override

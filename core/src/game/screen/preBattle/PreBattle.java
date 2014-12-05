@@ -11,6 +11,7 @@ import game.module.component.Component;
 import game.module.junk.ModuleInfo;
 import game.module.junk.ModuleStats;
 import game.screen.battle.Battle;
+import game.screen.battle.Battle.BattleType;
 import game.screen.customise.Customise;
 import game.ship.Ship;
 import game.ship.ShipGraphic;
@@ -50,16 +51,21 @@ public class PreBattle extends Screen{
 	
 	ModuleInfo slotInfo;
 	static PreBattle me;
-
-	public PreBattle(Ship player, Ship enemy){
+	
+	BattleType type;
+	public PreBattle(Ship player, Ship enemy, BattleType type){
 		this.player=player;
 		this.enemy=enemy;
+		this.type=type;
 	}
 
 	@Override
 	public void init() {
 	player.resetGraphics();
 	enemy.resetGraphics();
+	for(Component  c:player.components){
+		c.getStats().moveToDefaultPosition();
+	}
 		flashTimer=new Timer();
 		
 		me=this;
@@ -138,7 +144,7 @@ public class PreBattle extends Screen{
 			@Override
 			public void onPress() {
 				Sounds.bigAccept.overlay();
-				Main.changeScreen(new Battle(player, enemy, false, true));
+				Main.changeScreen(new Battle(player, enemy, type));
 			}
 		});
 		fightButton.font=Font.big;
@@ -229,12 +235,13 @@ public class PreBattle extends Screen{
 	}
 
 	@Override
-	public void keyPress(int keycode) {
+	public boolean keyPress(int keycode) {
 		if(Main.debug){
 			deactivateJunk();
 			enemy=Customise.makeEnemyShip();
 			resetJunk();
 		}
+		return false;
 	}
 
 

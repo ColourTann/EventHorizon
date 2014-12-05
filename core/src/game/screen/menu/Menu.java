@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import game.Main;
 import game.assets.Sounds;
 import game.screen.battle.Battle;
+import game.screen.battle.Battle.BattleType;
 import game.screen.customise.Customise;
 import game.screen.map.Map;
 import game.screen.preBattle.PreBattle;
@@ -36,11 +37,11 @@ public class Menu extends Screen{
 		Customise.power=0;
 		choices.clear();
 		choices.add(new GameChoice(Main.width/2, 155, "tutorial", 
-				new Battle(new Nova(true, 0), new Aurora(false, 0), true, false)));
+				new Battle(new Nova(true, 0), new Aurora(false, 0), BattleType.Tutorial)));
 		choices.add(new GameChoice(Main.width/2, 255, "easy", 
-				new Battle(new Hornet(true, 0), new Aurora(false, 0), false, false)));
+				new Battle(new Hornet(true, 0), new Aurora(false, 0), BattleType.Basic)));
 		choices.add(new GameChoice(Main.width/2, 355, "medium", 	
-				new Battle(new Comet(true, 0), new Eclipse(false, 0), false, false)));
+				new Battle(new Comet(true, 0), new Eclipse(false, 0), BattleType.Basic)));
 		choices.add(new GameChoice(Main.width/2, 455, "arena", 	
 				new Customise(new Aurora(true, 0), true, false)));
 		choices.add(new GameChoice(Main.width/2, 555, "map", 	
@@ -65,7 +66,7 @@ public class Menu extends Screen{
 	}
 
 	@Override
-	public void keyPress(int keycode) {
+	public boolean keyPress(int keycode) {
 		switch(keycode){
 		case Input.Keys.NUM_1:
 			
@@ -78,6 +79,7 @@ public class Menu extends Screen{
 
 			break;
 		}
+		return false;
 
 
 	}

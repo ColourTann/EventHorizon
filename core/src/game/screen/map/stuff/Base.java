@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import game.Main;
 import game.assets.Gallery;
 import game.assets.TextBox;
+import game.card.CardGraphic;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.Component;
@@ -28,6 +29,7 @@ import util.maths.Pair;
 import util.update.SimpleButton;
 import util.update.Updater;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sun.org.glassfish.external.statistics.annotations.Reset;
 
@@ -38,9 +40,9 @@ public abstract class Base extends Updater{
 
 	//	final static Pair infoLoc=new Pair(location.x+473+infoGap, location.y+size.y-ModuleInfo.staticHeight-TextBox.gap-infoGap);
 	//	final static Pair shipLoc=new Pair(location.x+300,location.y+size.y-550);
-	final static Pair statsLoc= new Pair(location.x+65,location.y+57);
-	final static Pair infoLoc=new Pair(location.x+473+5,location.y+TextBox.gap*2);
-	final static Pair shipLoc=new Pair(location.x+300, location.y+size.y-ShipGraphic.height-20);
+	final static Pair statsLoc= new Pair(location.x+65,location.y+377);
+	final static Pair infoLoc=new Pair(location.x+473+5,location.y+size.y-TextBox.gap*(4)-CardGraphic.height);
+	final static Pair shipLoc=new Pair(location.x+300, location.y+20);
 
 
 	final static Pair scrollerLoc=new Pair(location.x+size.x-Scroller.width-TextBox.gap*2, location.y+TextBox.gap*2+25);
@@ -98,13 +100,15 @@ public abstract class Base extends Updater{
 
 	public void mouseItem(Item i){
 		if(i.mod instanceof Component){
-			System.out.println("making thing");
 			Component c = (Component) i.mod;
 			c.pretend(player);
 			newStats=c.getStats();
 			newStats.collider.position=statsLoc;
 			newStats.stopFading();
 			newStats.alpha=1;
+		}
+		else{
+			newStats=null;
 		}
 	}
 	
@@ -164,23 +168,25 @@ public abstract class Base extends Updater{
 		
 		for(Component c:player.components){
 			stats.add(c.getStats());
+			c.getStats().activate();
+			c.getStats().mousectivate(null);
 			c.getStats().stopFading();
 			c.getStats().alpha=1;
 		}
 		
 		for(ModuleStats ms:player.getUtilityStats()){
-			ms.collider.position=ms.collider.position.add(220,-73);
+			ms.collider.position=ms.collider.position.add(220,-273);
 			ms.position=ms.collider.position.copy();
 			ms.mousectivate(null);
 		}
 		int x=(int) (location.x+TextBox.gap+ModuleStats.width);
-		int y=(int) (location.y+size.y-TextBox.gap-ModuleStats.height*3);
+		int y=(int) (location.y+TextBox.gap);
 		for(int i=0;i<stats.size();i++){
 			ModuleStats ms=stats.get(i);
 			ms.mousectivate(new BoxCollider(x, y, ModuleStats.width, ModuleStats.height));
 			y+=ModuleStats.height;
 			if(i==2){
-				y=(int) (location.y+size.y-TextBox.gap-ModuleStats.height*3);
+				y=(int) (location.y+TextBox.gap);
 				x-=ModuleStats.width;
 			}
 		}
@@ -207,9 +213,10 @@ public abstract class Base extends Updater{
 	}
 	
 	class Trasher{
-		final Pair buttonLocation= new Pair(875,570);
-		final Pair fuelLocation= new Pair(955,580);
-		final Pair textLocation= new Pair(1015,595);
+		final Pair buttonLocation= new Pair(location.x+20,570);
+		final Pair fuelLocation= new Pair(location.x+100,580);
+		final Pair textLocation= new Pair(location.x+160,595);
+		
 		Module mod;
 		int fuel;
 		SimpleButton button;
@@ -240,5 +247,31 @@ public abstract class Base extends Updater{
 			
 			
 		}
+
+		public void dispose() {
+			button.demousectivate();
+			button.deactivate();
+		}
+	}
+
+	public boolean keyPress(int keycode) {
+		switch(keycode){
+		
+		case Input.Keys.ESCAPE:
+			Map.closeBase();
+			return true;
+		}
+		
+		return false;
+	}
+
+	public void dispose() {
+		//stats trasher inv
+		for(ModuleStats ms:stats){
+			ms.demousectivate();
+			ms.deactivate();
+		}
+		trasher.dispose();
+		inv.dispose();
 	}
 }

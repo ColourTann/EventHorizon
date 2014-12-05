@@ -43,6 +43,7 @@ import game.screen.battle.tutorial.Tutorial;
 import game.screen.battle.tutorial.UndoButton;
 import game.screen.battle.tutorial.Tutorial.Trigger;
 import game.screen.customise.Customise;
+import game.screen.map.Map;
 import game.screen.menu.Menu;
 import game.ship.Ship;
 import game.ship.niche.Niche;
@@ -90,19 +91,25 @@ public class Battle extends Screen{
 	private static Battle me;
 	ArrayList<Animation> animations=new ArrayList<Animation>();
 	float animTicker=0;
-	public static boolean arena;
+	
 	private static Timer endTimer=new Timer();
 	static Timer victoryFadeInTimer=new Timer();
-
+	
 	public boolean clicked=false;
-
-
-	public Battle(Ship player, Ship enemy, boolean tutorial, boolean arena){
+	
+	
+	public static BattleType battleType;
+	public enum BattleType{Tutorial, Basic, Arena, Map}
+	
+	public Battle(Ship player, Ship enemy, BattleType type){
 		this.player=player;
 		this.enemy=enemy;
-		this.tutorial=tutorial;
-		Battle.arena=arena;
+		this.battleType=type;
+		if(battleType==BattleType.Tutorial) tutorial=true;
+		
+		
 		CycleTeacher.get();
+		
 	}
 
 	@Override
@@ -283,7 +290,7 @@ public class Battle extends Screen{
 			endTimer=new Timer();
 		}
 		if(getPlayer().dead)victor=getEnemy();
-		if(!arena){
+		if(battleType==BattleType.Basic){
 
 			Timer t=new Timer(0,1,5,Interp.LINEAR);
 
@@ -297,7 +304,21 @@ public class Battle extends Screen{
 			});
 		}
 		if(victor.player&&!victor.dead){
-			if(arena){
+			
+			if(battleType==BattleType.Map){
+				endTimer=new Timer(0,1,5,Interp.LINEAR);
+
+				endTimer.addFinisher(new Finisher() {
+
+					@Override
+					public void finish() {
+						Main.changeScreen(Map.me,1);
+						Sounds.battleMusic.fadeOut(.3f);
+					}
+				});
+			}
+			
+			else if(battleType==BattleType.Arena){
 				endTimer=new Timer(0,1,5,Interp.LINEAR);
 
 				endTimer.addFinisher(new Finisher() {
@@ -323,31 +344,20 @@ public class Battle extends Screen{
 	}
 
 	@Override
-	public void keyPress(int keyCode) {
+	public boolean keyPress(int keyCode) {
 		switch (keyCode){
 
 		case Input.Keys.SPACE:
-			if(Main.debug){player.drawCard(1); player.addEnergy(1, true);
+			if(Main.debug){
+				player.drawCard(1); player.addEnergy(1, true);
 			}
 			break;
-
-			//case Input.Keys.F:player=Ship.getRandomShip(true);enemy=Ship.getRandomShip(false);break;
 		case Input.Keys.D:
-
 
 			break;
 		case Input.Keys.M:
-			for(Component c:player.components){
-				System.out.println(c+":"+c.getShieldsRequiredToAvoidMajor());
-			}
-			for(Component c:enemy.components){
-				System.out.println(c+":"+c.getShieldsRequiredToAvoidMajor());
-			}
-
 			break;
 		case Input.Keys.Q:
-
-			//show enemy cards//
 			if(Main.debug){
 				for(int i=0;i<enemy.hand.size();i++){
 					CardGraphic cg=new CardGraphic(enemy.hand.get(i));
@@ -358,47 +368,21 @@ public class Battle extends Screen{
 				}
 			}
 			break;
-
-
 		case Input.Keys.CONTROL_LEFT:
 			if(Main.debug){
 				Card c=player.pickCard(getPhase());
 				if(c!=null)c.playerSelect();
 			}
 			break;
-
-
 		case Input.Keys.S:
-			if(Main.debug){
-				getPlayer().getGenerator().destroyed=true;
-				getPlayer().getComputer().destroyed=true;
-				getPlayer().getGraphic().drawMap(true);
-			}
 			break;
 		case Input.Keys.A:
 			if(Main.debug){
 				battleWon(player);
-				getEnemy().getGenerator().destroyed=true;
-				getEnemy().getComputer().destroyed=true;
-				getEnemy().getGraphic().drawMap(true);
 			}
 			break;
-
-
-
-		case Input.Keys.TAB:
-
-			if(tutorial){
-				Tutorial.next();
-			}
-
-			break;
-
-		case Input.Keys.ESCAPE:
-			Main.changeScreen(new Menu());
-			break;
-
 		}
+		return false;
 
 
 
@@ -636,7 +620,7 @@ public class Battle extends Screen{
 			Font.big.setColor(Colours.withAlpha(Colours.light,victoryFadeInTimer.getFloat()));
 			Font.drawFontCentered(batch, s, Font.big, Main.width/2, 205);
 			if(!victor.player){
-				if(arena){ Font.drawFontCentered(batch, "You defeated "+Customise.totalShipsDefeated+" ship"+(Customise.totalShipsDefeated==1?"":"s"), Font.big, Main.width/2, 100);
+				if(battleType==BattleType.Arena){ Font.drawFontCentered(batch, "You defeated "+Customise.totalShipsDefeated+" ship"+(Customise.totalShipsDefeated==1?"":"s"), Font.big, Main.width/2, 100);
 				Font.drawFontCentered(batch, "esc to return", Font.big, Main.width/2, 130);
 				}
 			}
@@ -680,7 +664,7 @@ public class Battle extends Screen{
 		for(Component c:enemy.components){
 			c.getStats().render(batch);
 		}
-		if(arena&&Customise.totalShipsDefeated==0&&!clicked){
+		if(battleType==BattleType.Arena&&Customise.totalShipsDefeated==0&&!clicked){
 			CycleTeacher.get().render(batch);
 		}
 		CardGraphic.renderOffCuts(batch);

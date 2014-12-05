@@ -268,11 +268,14 @@ public class Main extends ApplicationAdapter  {
 	}
 
 	public static void keyPress(int keycode) {
+		
+		if(getCurrentInputScreen().keyPress(keycode)){
+			return;
+		}
 		if(keycode==Input.Keys.ESCAPE){
 			EscapeMenu.get().cycle();
 			return;
 		}
-		getCurrentInputScreen().keyPress(keycode);
 	}
 
 	public static void keyUp(int keyCode) {
