@@ -15,6 +15,7 @@ import game.grid.hex.Hex;
 import game.grid.hex.HexChoice;
 import game.screen.map.Map;
 import game.screen.map.Map.MapState;
+import game.screen.map.stuff.Item;
 import game.ship.Ship;
 import game.ship.mapThings.mapAbility.MapAbility;
 import game.ship.mapThings.mapAbility.genAbility.Teleport;
@@ -195,7 +196,7 @@ public class MapShip {
 	public void render(SpriteBatch batch) {
 		if (ship == null)	return;
 		batch.setColor(1,1,1,1);
-		float scale=hex.size/300f;
+		float scale=Hex.size/300f;
 		float bonusScale=0;
 		
 		
@@ -219,6 +220,7 @@ public class MapShip {
 				scale*(1+bonusScale),
 				scale*(1-bonusScale), 
 				rotation);
+		
 	}
 
 	public void setPath(ArrayList<Hex> path) {
@@ -259,6 +261,8 @@ public class MapShip {
 	public void battle() {
 		defeated=true;
 	}
+
+	
 
 
 }

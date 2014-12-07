@@ -119,7 +119,7 @@ public class EscapeMenu extends Screen{
 		
 		batch.setColor(1, 1, 1, alphaTimer.getFloat());
 		
-		TextBox.renderBox(batch, position, width, height, Alignment.Left);
+		TextBox.renderBox(batch, position, width, height, Alignment.Left, false);
 		//Draw.drawCenteredScaled(batch, Gallery.pauseBase.get(), Main.width/2, Main.height/2, 1, 1);
 		for(AdvancedButton ab:buttons){
 			ab.render(batch);

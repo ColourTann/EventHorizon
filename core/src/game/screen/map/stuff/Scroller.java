@@ -25,7 +25,7 @@ import util.update.Updater.Layer;
 public class Scroller {
 	
 	public Pair position;
-	ArrayList<Item> items;
+	ArrayList<Item> items= new ArrayList<Item>();
 	final static float viewSpeed=.4f;
 	public Timer view= new Timer();
 	private Pair size;
@@ -35,20 +35,20 @@ public class Scroller {
 	int numItems;
 	public static int buttonHeight=Gallery.upButton.getHeight()*4;
 	public static float width= Item.size.x+TextBox.gap*2;
-	public Scroller(ArrayList<Item> items, Pair position, int numItems){
+	public Scroller(ArrayList<Item> aItems, Pair position, int numItems){
 		this.numItems=numItems;
-		this.items=items;
 		updateLocations(true);
 		this.position=position;
+		
 		size=new Pair(Gallery.rewardOutline.getWidth()*4,(Gallery.rewardHighlights.getHeight()-1)*4*numItems+4);
 		top = new ScrollerButton(true);
 		bot = new ScrollerButton(false);
-		for(Item i:items){
-			i.layer=Layer.ALL;
-			i.activate();
-			i.mousectivate(null);
+		for(Item i:aItems){
+			addItem(i);
+			
 		}
 		updateMousers();
+		System.out.println(items.size());
 	}
 	
 	public void updateMousers(){
@@ -70,7 +70,7 @@ public class Scroller {
 		item.activate();
 		item.mousectivate(null);
 		items.add(item);
-		item.setY((items.indexOf(item)+1)*Item.height);
+		item.setY((items.indexOf(item))*Item.height);
 	}
 	
 	public void removeItem(Item item){
@@ -108,7 +108,7 @@ public class Scroller {
 	
 	public void render(SpriteBatch batch){
 		
-		TextBox.renderBox(batch, position.add(-TextBox.gap, -TextBox.gap+buttonHeight), size.x+TextBox.gap*2, size.y+TextBox.gap*2, Alignment.Left);
+		TextBox.renderBox(batch, position.add(-TextBox.gap, -TextBox.gap+buttonHeight), size.x+TextBox.gap*2, size.y+TextBox.gap*2, Alignment.Left, false);
 		top.render(batch);
 		bot.render(batch);
 		batch.flush();

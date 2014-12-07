@@ -1,11 +1,10 @@
-package game.screen.map;
+package game.screen.map.popup;
 
 import util.Colours;
 import util.TextWriter;
 import util.TextWriter.Alignment;
 import util.assets.Font;
 import util.maths.Pair;
-import util.update.SimpleButton;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -13,15 +12,16 @@ import game.Main;
 import game.assets.AdvancedButton;
 import game.assets.TextBox;
 
-public class Event {
+public class Event extends Popup{
 	static final Pair center=new Pair(Main.width/2, Main.height/2);
 	AdvancedButton[] buttons;
-	static final int width=400;
+	int width;
 	static final int gap=10;
 	int height;
 	String text;
 	TextWriter writer;
 	public Event(String s, AdvancedButton[] buttons){
+		width=400;
 		text=s;
 		this.buttons=buttons;
 		Font.medium.setColor(Colours.light);
@@ -41,9 +41,11 @@ public class Event {
 		height+=maxButtHeight;
 		//if(maxButtHeight>0)height+=gap;
 	}
+
 	
+
 	public void render(SpriteBatch batch){
-		TextBox.renderBox(batch, center, width, height, Alignment.Center);
+		TextBox.renderBox(batch, center, width, height, Alignment.Center, false);
 		writer.render(batch, center.x-width/2+gap, center.y-height/2+gap);
 		for(AdvancedButton butt:buttons)butt.render(batch);
 	}
@@ -54,5 +56,11 @@ public class Event {
 			b.deactivate();
 			b.demousectivate();
 		}
+	}
+
+
+
+	@Override
+	public void update(float delta) {
 	}
 }

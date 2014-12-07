@@ -16,6 +16,7 @@ import game.module.Module.ModuleType;
 import game.module.component.Component;
 import game.module.component.weapon.Weapon;
 import game.module.junk.DamagePoint;
+import game.module.junk.InfoBox;
 import game.module.junk.ShieldPoint;
 import game.module.junk.buff.Buff;
 import game.module.junk.buff.Buff.BuffType;
@@ -1529,5 +1530,12 @@ public class Card {
 		cg=null;
 	}
 
+	private InfoBox info;
+	public InfoBox getCardInfo(){
+		if(info==null){
+			info=new InfoBox(new Card[]{this});
+		}
+		return info;
+	}
 
 }

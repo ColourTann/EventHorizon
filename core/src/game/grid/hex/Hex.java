@@ -155,7 +155,7 @@ public class Hex {
 	}
 	public void mouse() {
 		if(Map.getState()==MapState.Equipping)return;
-		if(Map.getState()==MapState.Event)return;
+		if(Map.getState()==MapState.Popup)return;
 		if(getDistance(Map.player.hex)>Grid.viewDist){
 			mousedHex.unMouse();
 			return;
@@ -238,8 +238,8 @@ public class Hex {
 				enemy=target.getShip();
 			}
 			else enemy=mapShip.getShip();
-			Main.changeScreen(new PreBattle(Map.player.getShip(), enemy, BattleType.Map));
 			Map.me.saveAll();
+			Main.changeScreen(new PreBattle(Map.player.getShip(), enemy, BattleType.Map),.5f, true);
 		}
 	}
 

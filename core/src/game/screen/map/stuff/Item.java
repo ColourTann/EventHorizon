@@ -1,5 +1,6 @@
 package game.screen.map.stuff;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import util.Colours;
@@ -15,13 +16,17 @@ import game.assets.TextBox;
 import game.card.Card;
 import game.module.Module;
 import game.module.Module.ModuleType;
-import game.module.junk.ModuleInfo;
+import game.module.component.shield.Shield;
+import game.module.component.weapon.Weapon;
+import game.module.junk.InfoBox;
+import game.module.utility.Utility;
+import game.module.utility.armour.Armour;
 import game.screen.customise.Reward;
 import game.screen.map.Map;
 
 public class Item extends Mouser{
-	Module mod;
-	Card card;
+	public Module mod;
+	public Card card;
 	public static float height=Gallery.rewardOutline.getHeight()*4-4;
 	public static float width=Gallery.rewardOutline.getWidth()*4;
 	public Timer yTimer= new Timer();
@@ -35,6 +40,9 @@ public class Item extends Mouser{
 	}
 	public Item(Card card){
 		this.card=card;
+		mousectivate(new BoxCollider(0, 0, width, height));
+		demousectivate();
+		deactivate();
 	}
 	public void setY(float y){
 		yTimer=new Timer(y,y,0,Interp.LINEAR);
@@ -44,14 +52,18 @@ public class Item extends Mouser{
 	}
 
 	@Override
-	public void mouseDown() {
-		System.out.println("mousing"+ mod);
-		Map.mouseStats(mod.getInfo());
+	public void mouseDown() {		
+		Map.mouseStats(getInfo());
 		Map.mouseItem(this);
+	}
+	private InfoBox getInfo() {
+		if(mod!=null)return mod.getInfo();
+		if(card!=null)return card.getCardInfo();
+		return null;
 	}
 	@Override
 	public void mouseUp() {
-		mod.getInfo().fadeAll();
+		getInfo().fadeAll();
 		Map.unMouse();
 	}
 	@Override
@@ -70,9 +82,9 @@ public class Item extends Mouser{
 	}
 	public void render(SpriteBatch batch, float x, float y) {
 		batch.setColor(1,1,1,1);
-		Draw.drawScaled(batch, Gallery.rewardOutline.get(), x, y+yTimer.getFloat(), 4, 4);
+		Draw.drawScaled(batch, Gallery.rewardOutline.get(), (int)x, (int)(y+yTimer.getFloat()), 4, 4);
 		if(mod!=null){
-			Draw.drawCenteredScaled(batch, mod.getPic(0).get(), x+size.x/2, y+yTimer.getFloat()+size.y/2, 4, 4);
+			Draw.drawCenteredScaled(batch, mod.getPic(0).get(), (int)(x+size.x/2), (int)(y+yTimer.getFloat()+size.y/2), 4, 4);
 		}	
 		if(mod!=null){
 			if(mod.type==ModuleType.WEAPON||mod.type==ModuleType.SHIELD){
@@ -82,9 +94,24 @@ public class Item extends Mouser{
 				if(mod.type==ModuleType.SHIELD){
 					Font.medium.setColor(Colours.withAlpha(Colours.shieldCols6[1], alpha));
 				}
-				Font.drawFontCentered(batch, mod.tier+"", Font.medium, x+20, collider.position.y+20);
+				Font.drawFontCentered(batch, mod.tier+"", Font.medium, (int)(x+20), (int)(collider.position.y+y+26));
 			}
 		}
+		if(card!=null){
+			Draw.drawCenteredScaled(batch, card.getImage(0).get(), (int)(x+size.x/2), (int)(y+yTimer.getFloat()+size.y/2), 4, 4);
+		}
+		
+		Color col=null;
+		if(mod!=null){
+			if(mod instanceof Weapon)col=Colours.weaponCols8[4];
+			if(mod instanceof Shield)col=Colours.shieldCols6[4];
+			if(mod instanceof Utility)col=Colours.compCols6[2];
+			if(mod instanceof Armour)col=Colours.shipHull7[2];
+		}
+		if(col==null)col=Colours.orangeHPCols[1];
+		batch.setColor(Colours.withAlpha(col, alpha));
+		
+		Draw.drawScaled(batch, Gallery.rewardHighlights.get(), (int)x, (int)(y+yTimer.getFloat()),4,4);
 
 	}
 	public void postRender(SpriteBatch batch, float x, float y){

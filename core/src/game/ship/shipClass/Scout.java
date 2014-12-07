@@ -29,20 +29,20 @@ public class Scout extends Ship{
 
 	@Override
 	public void placeNiches() {
-		Polygon weapon1= new Polygon(new float[]{216,83,0,0,0,0});
-		Polygon weapon2= new Polygon(new float[]{216,188,0,0,0,0});
-		Polygon shield = new Polygon(new float[]{138,99,0,0,0,0});
+		Polygon weapon1= new Polygon(new float[]{206,83,0,0,0,0});
+		Polygon weapon2= new Polygon(new float[]{206,188,0,0,0,0});
+		Polygon shield = new Polygon(new float[]{185,130,0,0,0,0});
 		Polygon generator = new Polygon(new float[]{
-				39,24,
-				108,29,
-				108,240,
-				39,240});
+				27*3,42*3,
+				27*3,42*3,
+				27*3,42*3,
+				27*3,42*3});
 		Polygon computer = new Polygon(new float[]{
-				182,138,
-				200,138,
-				216,160,
-				210,195,
-				180,195			
+				37*3,36*3,
+				37*3,36*3,
+				37*3,36*3,
+				37*3,36*3,
+				37*3,36*3	
 				});
 
 		niches[0].setup(weapon1);

@@ -17,8 +17,6 @@ public abstract class Screen {
 	public void saveAll(){
 		savedUpdaters=Updater.getAllUpdaters();
 		savedMousers=Mouser.getAllMousers();
-		for(Updater u:savedUpdaters)System.out.println(u);
-		for(Updater u:savedMousers)System.out.println(u);
 	}
 	public void restoreAll(){
 		Updater.addList(savedUpdaters);

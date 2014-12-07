@@ -67,7 +67,8 @@ public class AdvancedButton extends Mouser{
 	}
 
 	public void render(SpriteBatch batch){
-		TextBox.renderBox(batch, position, width, height, Alignment.Left);
+		
+		TextBox.renderBox(batch, position, width, height, Alignment.Left, moused);
 		tw.render(batch, (int)(position.x+width/2-tw.maxWidth/2), (int)(position.y+yOffset));
 	}
 }

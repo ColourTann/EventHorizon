@@ -11,9 +11,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.assets.AdvancedButton;
 import game.assets.Gallery;
 import game.grid.hex.Hex;
-import game.screen.map.Event;
 import game.screen.map.Map;
 import game.screen.map.Map.MapState;
+import game.screen.map.popup.Event;
+import game.screen.map.popup.Popup;
 
 public class Asteroid extends HexContent{
 	float rotation;
@@ -55,7 +56,7 @@ public class Asteroid extends HexContent{
 				Map.setState(MapState.EnemyMoving);
 			}
 		});
-		Map.event(new Event("You mined "+fuel+" |fuel| from the asteroid.", butts));
+		Map.popup(new Event("You mined "+fuel+" |fuel| from the asteroid.", butts));
 	}
 
 	@Override

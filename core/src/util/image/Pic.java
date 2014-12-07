@@ -146,12 +146,8 @@ public class Pic {
 		get();
 		int width=t.getWidth();
 		int height=t.getHeight();
-	
 		Pixmap base=getPixMap();
 		Pixmap pixMap=new Pixmap(width, height, Format.RGBA8888);
-
-
-
 		pixMap.setColor(color);
 		for(int x=0;x<width;x++){			
 			for(int y=0;y<height;y++){
@@ -165,7 +161,6 @@ public class Pic {
 		Texture result=new Texture(pixMap);
 		base.dispose();
 		mask=result;
-
 		return mask;
 	}
 
@@ -174,7 +169,6 @@ public class Pic {
 		get();
 		int width=t.getWidth();
 		int height=t.getHeight();
-		
 		Pixmap base=getPixMap();
 		Pixmap result=new Pixmap(width, height, Format.RGBA8888);
 		for(int x=0;x<width;x++){			

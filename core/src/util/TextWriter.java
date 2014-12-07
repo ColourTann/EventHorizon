@@ -329,6 +329,10 @@ public class TextWriter {
 		}
 		Draw.drawRotatedScaledFlipped(batch, texture, startX, startY-yOffset, 1, 1, 0, false, false);
 	}
+	
+	public void renderCentered(SpriteBatch batch, float x, float y) {
+		render(batch, (int)(x-maxWidth/2), (int)(y-maxHeight/2));
+	}
 
 	public int getWrapWidth() {
 		return baseWrapWidth;
@@ -373,6 +377,8 @@ public class TextWriter {
 		}
 		staticList.clear();
 	}
+
+	
 
 
 }

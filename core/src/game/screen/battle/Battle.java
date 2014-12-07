@@ -31,7 +31,7 @@ import game.card.CardIcon;
 import game.card.CardCode.Special;
 import game.module.component.Component;
 import game.module.junk.DamagePoint;
-import game.module.junk.ModuleInfo;
+import game.module.junk.InfoBox;
 import game.module.junk.ModuleStats;
 import game.module.utility.Utility;
 import game.screen.battle.interfaceJunk.CycleButton;
@@ -182,7 +182,7 @@ public class Battle extends Screen{
 		help=null;
 		victoryFadeInTimer=new Timer();
 		CardGraphic.onTopGraphic=null;
-		ModuleInfo.top=null;
+		InfoBox.top=null;
 		player.resetGraphics();
 		enemy.resetGraphics();
 
@@ -312,7 +312,7 @@ public class Battle extends Screen{
 
 					@Override
 					public void finish() {
-						Main.changeScreen(Map.me,1);
+						Main.changeScreen(Map.me,1, false);
 						Sounds.battleMusic.fadeOut(.3f);
 					}
 				});
@@ -325,7 +325,7 @@ public class Battle extends Screen{
 
 					@Override
 					public void finish() {
-						Main.changeScreen(new Customise(victor, false, false),1);
+						Main.changeScreen(new Customise(victor, false, false),1, false);
 						Sounds.battleMusic.fadeOut(.3f);
 					}
 				});
@@ -646,7 +646,7 @@ public class Battle extends Screen{
 			a.render(batch);
 		}
 
-		if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
+		if(InfoBox.top!=null)InfoBox.top.render(batch);
 		for(ModuleStats ums:player.getUtilityStats()){
 			ums.render(batch);
 		}

@@ -20,7 +20,7 @@ import game.card.Card;
 import game.module.Module;
 import game.module.component.shield.Shield;
 import game.module.component.weapon.Weapon;
-import game.module.junk.ModuleInfo;
+import game.module.junk.InfoBox;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
 import game.screen.battle.interfaceJunk.HelpPanel;
@@ -32,7 +32,7 @@ public class Reward extends Mouser{
 	static int height=Gallery.rewardOutline.getHeight()*4;
 	static int offset=15;
 	static int y=640;
-	private ModuleInfo info;
+	private InfoBox info;
 	public boolean selected;
 	public enum RewardType{Weapon, Shield, Armour, Utility, Booster}
 	public static RewardType[] typeList = new RewardType[]{RewardType.Weapon, RewardType.Weapon, RewardType.Shield, RewardType.Armour, RewardType.Utility, RewardType.Booster};
@@ -53,10 +53,10 @@ public class Reward extends Mouser{
 		mousectivate(new BoxCollider(position.x, position.y, width, height));
 	}
 
-	public ModuleInfo getInfo(){
+	public InfoBox getInfo(){
 		if(info==null){
-			if(module!=null)info=new ModuleInfo(module);
-			if(cards!=null)info=new ModuleInfo(cards);
+			if(module!=null)info=new InfoBox(module);
+			if(cards!=null)info=new InfoBox(cards);
 		}
 		return info;
 	}

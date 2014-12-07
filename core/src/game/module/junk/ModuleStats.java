@@ -35,7 +35,7 @@ public class ModuleStats extends Mouser{
 	public static int height=Main.height/5-17;
 	public static int width=128;
 	public Component component;
-	public ModuleInfo info;
+	public InfoBox info;
 	static Pair hpLoc=new Pair(14, 9);
 	static Pair hpGap=new Pair(16,15);
 	static int row=6;
@@ -59,7 +59,7 @@ public class ModuleStats extends Mouser{
 	public ModuleStats(Component c) {
 		component=c;
 		moveToDefaultPosition();
-		info=new ModuleInfo(c);
+		info=new InfoBox(c);
 		type=c.type;
 	}
 
@@ -99,7 +99,7 @@ public class ModuleStats extends Mouser{
 		if(!player) x=Main.width-x-uWidth;
 		position=new Pair(x,y);
 		mousectivate(new BoxCollider(position.x, position.y, uWidth, uHeight));
-		if(aUtil!=null)info=new ModuleInfo(aUtil);		
+		if(aUtil!=null)info=new InfoBox(aUtil);		
 	}
 
 	@Override
@@ -133,12 +133,12 @@ public class ModuleStats extends Mouser{
 		if(component==null&&fUtil==null)return;
 		if(component!=null)component.moused();
 
-		ModuleInfo.top=info;
+		InfoBox.top=info;
 
 		if(!Battle.isTutorial()){
 			info.stopFading();
 			info.alpha=1;
-			ModuleInfo.top=info;
+			InfoBox.top=info;
 			if(buffList!=null){
 				buffList.stopFading();
 				buffList.alpha=1;
@@ -188,7 +188,7 @@ public class ModuleStats extends Mouser{
 
 	public void render(SpriteBatch batch) {
 		if(Main.currentScreen instanceof Battle|| Main.currentScreen instanceof PreBattle){
-			if(info!=null&&info!=ModuleInfo.top)info.render(batch);
+			if(info!=null&&info!=InfoBox.top)info.render(batch);
 			if(component!=null){
 				if(buffList==null){
 					buffList=new BuffList(component);

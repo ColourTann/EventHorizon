@@ -10,7 +10,7 @@ import game.card.Card;
 import game.card.CardCode;
 import game.module.Module.ModuleType;
 import game.module.component.SpecialComponent;
-import game.module.junk.ModuleInfo;
+import game.module.junk.InfoBox;
 import game.module.junk.buff.Buff;
 import game.module.junk.buff.Buff.BuffType;
 import game.ship.Ship;
@@ -52,7 +52,7 @@ public abstract class Module {
 
 
 
-	private ModuleInfo info;
+	private InfoBox info;
 
 	public boolean moused;
 
@@ -139,8 +139,8 @@ public abstract class Module {
 	}
 
 
-	public ModuleInfo getInfo(){
-		if(info==null)info=new ModuleInfo(this);
+	public InfoBox getInfo(){
+		if(info==null)info=new InfoBox(this);
 		return info;
 	}
 

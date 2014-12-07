@@ -1,7 +1,5 @@
 package util.update;
 
-import game.screen.escape.EscapeMenu;
-
 import java.util.ArrayList;
 
 import util.maths.Pair;
@@ -9,7 +7,7 @@ import util.particleSystem.ParticleSystem;
 import util.update.Timer.Interp;
 
 public abstract class Updater {
-	private static ArrayList<Updater> tickers = new ArrayList<Updater>();
+	protected static ArrayList<Updater> tickers = new ArrayList<Updater>();
 	
 	static boolean debug=false;
 	public enum Layer{Default, Escape, ALL}
@@ -56,7 +54,6 @@ public abstract class Updater {
 	public void stopFading(){
 		if(fader!=null)fader.stop();
 		fader=null;
-		
 		//alpha=1;
 	}
 

@@ -52,7 +52,7 @@ public class GameChoice extends Mouser{
 
 
 	public void render(SpriteBatch batch) {
-		TextBox.renderBox(batch, position, width, height, Alignment.Left);
+		TextBox.renderBox(batch, position, width, height, Alignment.Left, false);
 //		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y, 2f, 2f);
 //		Draw.drawScaled(batch, Gallery.tutPanelMain.get(), x, y-height, 2f, height);
 //		Draw.drawScaled(batch,Gallery.tutPanelBorder.get(), x,y-height, 2f, -2f);

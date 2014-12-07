@@ -13,7 +13,7 @@ import game.module.Module.ModuleType;
 import game.module.component.Component;
 import game.module.component.shield.Shield;
 import game.module.component.weapon.Weapon;
-import game.module.junk.ModuleInfo;
+import game.module.junk.InfoBox;
 import game.module.junk.ModuleStats;
 import game.module.utility.Utility;
 import game.screen.customise.Reward;
@@ -50,8 +50,8 @@ public abstract class Base extends Updater{
 	ArrayList<ModuleStats> stats= new ArrayList<ModuleStats>();
 	ShipGraphic playerGraphic;
 	static Ship player;
-	ModuleInfo oldInfo;
-	ModuleInfo info;
+	InfoBox oldInfo;
+	InfoBox info;
 	ModuleStats newStats;
 	ModuleStats oldStats;
 	public Scroller inv;
@@ -66,7 +66,7 @@ public abstract class Base extends Updater{
 	}
 
 	public void render(SpriteBatch batch){
-		TextBox.renderBox(batch, location, size.x, size.y, util.TextWriter.Alignment.Left);
+		TextBox.renderBox(batch, location, size.x, size.y, util.TextWriter.Alignment.Left, false);
 		for(ModuleStats ms:stats)ms.render(batch);
 		for(ModuleStats ms:player.getUtilityStats()){
 			ms.render(batch);
@@ -86,7 +86,7 @@ public abstract class Base extends Updater{
 		//Draw.drawScaled(batch, Gallery.whiteSquare.get(), location.x, location.y, size.x, size.y);
 	}
 
-	public void mouseInfo(ModuleInfo moused) {
+	public void mouseInfo(InfoBox moused) {
 		oldInfo=info;
 		info=moused;
 		moused.setPosition(infoLoc);
@@ -127,7 +127,8 @@ public abstract class Base extends Updater{
 
 	public static ModuleType getReplaceableType() {
 		
-		if(selectedItem!=null){
+		if(selectedItem!=null&&selectedItem.mod!=null){
+			
 			return selectedItem.mod.type;
 		}
 		return null;
@@ -147,8 +148,7 @@ public abstract class Base extends Updater{
 			}
 			if(m instanceof Shield){
 				old=player.setShield((Shield) selectedItem.mod);
-			}
-			
+			}	
 		}
 		if(selectedItem.mod instanceof Utility){
 			

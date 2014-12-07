@@ -101,7 +101,7 @@ public class Timer extends Updater{
 	}
 
 	public String toString(){
-		return "Timer, from "+fromFloat+" to "+toFloat+". ratio: "+ratio;
+		return "Timer, from "+fromFloat+" to "+toFloat+". ratio: "+ratio+": "+tickers.contains(this);
 	}
 
 	public void removeFinisher() {

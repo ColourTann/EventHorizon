@@ -13,7 +13,7 @@ import game.module.Module.ModuleType;
 import game.module.component.Component;
 import game.module.component.shield.Shield;
 import game.module.component.weapon.Weapon;
-import game.module.junk.ModuleInfo;
+import game.module.junk.InfoBox;
 import game.module.junk.ModuleStats;
 import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
@@ -56,8 +56,8 @@ public class Customise extends Screen{
 
 	public static Reward selectedReward;
 
-	ModuleInfo infoBox;
-	ModuleInfo oldInfoBox;
+	InfoBox infoBox;
+	InfoBox oldInfoBox;
 	private static Customise me;
 	HelpPanel panel;
 	HelpPanel oldPanel;
@@ -255,10 +255,10 @@ public class Customise extends Screen{
 				reward=new Reward(Armour.getRandomArmour(tier), i);
 				break;
 			case Booster:
-				if(ship.getConsumables().size()>3){
-					System.out.println("canceling booster");
-					cancel=true;
-				}
+//				if(ship.getConsumables().size()>3){
+//					System.out.println("canceling booster");
+//					cancel=true;
+//				}
 				reward=new Reward(new Card[]{ConsumableCard.get(tier),ConsumableCard.get(tier),ConsumableCard.get(tier)},i);
 				break;
 			case Utility:
@@ -304,7 +304,7 @@ public class Customise extends Screen{
 		addDeclineButton();
 	}
 
-	public static void changeStats(ModuleInfo info){
+	public static void changeStats(InfoBox info){
 		if(info==null){
 			
 			me.infoBox.fadeOut(fadeOutSpeed, Interp.LINEAR);
@@ -324,7 +324,7 @@ public class Customise extends Screen{
 
 	public static void mouseOver(Module mod) {
 		System.out.println("mousing");
-		changeStats(new ModuleInfo(mod));
+		changeStats(new InfoBox(mod));
 	}
 
 	public static void checkEnergy(Module[] remove, Module[]add){
@@ -464,7 +464,7 @@ public class Customise extends Screen{
 			
 			@Override
 			public void finish() {
-				Main.changeScreen(new PreBattle(ship, makeEnemyShip(), BattleType.Arena),.5f);
+				Main.changeScreen(new PreBattle(ship, makeEnemyShip(), BattleType.Arena),.5f, false);
 			}
 		});
 	}

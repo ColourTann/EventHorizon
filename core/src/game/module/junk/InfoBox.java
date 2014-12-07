@@ -29,7 +29,7 @@ import game.module.utility.Utility;
 import game.module.utility.armour.Armour;
 import game.screen.customise.Customise;
 
-public class ModuleInfo extends TextBox{
+public class InfoBox extends TextBox{
 	//279373
 	float cardOffset=4;
 	float width;
@@ -39,10 +39,10 @@ public class ModuleInfo extends TextBox{
 	public Card[] consumableCards;
 	public ArrayList<CardGraphic> graphics = new ArrayList<CardGraphic>();
 	public boolean noDrawCards;
-	public static ModuleInfo top;
+	public static InfoBox top;
 	float offset=3;
 	TextWriter statsWriter;
-	public ModuleInfo(Module m) {
+	public InfoBox(Module m) {
 		if(m==null)return;
 		mod=m;
 		width=CardGraphic.width*2-2;
@@ -65,9 +65,9 @@ public class ModuleInfo extends TextBox{
 
 	}
 
-	public ModuleInfo(Card[] cards){
+	public InfoBox(Card[] cards){
 		this.consumableCards=cards;
-		width=CardGraphic.width*3-3+11;
+		width=CardGraphic.width*cards.length-3+11;
 		height+=18;
 	}
 
@@ -81,7 +81,6 @@ public class ModuleInfo extends TextBox{
 
 				CardGraphic cg=consumableCards[i].getGraphic();
 				cg.setPosition(new Pair(position.x+i*Gallery.cardBase.getWidth()+cardOffset, position.y+cardOffset));
-				cg.override=true;
 				graphics.add(cg);
 				cg.demousectivate();
 			}
@@ -127,7 +126,16 @@ public class ModuleInfo extends TextBox{
 	public void fadeAll(){
 		for(CardGraphic cg: graphics){
 			cg.fadeOut(CardGraphic.fadeSpeed/1.2f, CardGraphic.fadeType);
+			cg.layer=Layer.ALL;
 		}
+		if(consumableCards!=null){
+		for(Card c:consumableCards){
+			c.getGraphic().fadeOut(CardGraphic.fadeSpeed/1.2f, CardGraphic.fadeType);
+			c.getGraphic().layer=Layer.ALL;
+			
+		}
+		}
+		layer=Layer.ALL;
 		fadeOut(CardGraphic.fadeSpeed/1.2f, Interp.LINEAR);
 	}
 

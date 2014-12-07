@@ -24,13 +24,15 @@ import game.assets.Gallery;
 import game.grid.Grid;
 import game.grid.hex.Hex;
 import game.module.Module;
-import game.module.junk.ModuleInfo;
+import game.module.junk.InfoBox;
 import game.module.junk.ModuleStats;
 import game.screen.escape.EscapeMenu;
 import game.screen.map.panels.ActionPanel;
 import game.screen.map.panels.HexInfoPanel;
 import game.screen.map.panels.PlayerStatsPanel;
 import game.screen.map.panels.SidePanel;
+import game.screen.map.popup.Popup;
+import game.screen.map.popup.PostBattle;
 import game.screen.map.stuff.Base;
 import game.screen.map.stuff.Equip;
 import game.screen.map.stuff.Item;
@@ -45,7 +47,7 @@ public class Map extends Screen{
 
 	public static MapShip player;
 	SpriteBatch uiBatch=new SpriteBatch();
-	public enum MapState{PlayerTurn,PlayerMoving,EnemyMoving,PickHex,Event,Equipping}
+	public enum MapState{PlayerTurn,PlayerMoving,EnemyMoving,PickHex,Popup,Equipping}
 	private static MapState state;
 	public static Hex explosion;
 	private static float explosionSize=9;
@@ -58,7 +60,7 @@ public class Map extends Screen{
 	static PlayerStatsPanel playerStatsPanel;
 	static ActionPanel actionPanel;
 	ArrayList<SidePanel> panels = new ArrayList<SidePanel>();
-	static Event currentEvent;
+	static Popup currentEvent;
 	private Ship ship;
 	static Base currentBase;
 	public static Map me;
@@ -194,10 +196,7 @@ public class Map extends Screen{
 			if(currentBase!=null)return currentBase.keyPress(keycode);
 			break;
 		case Input.Keys.SPACE:
-//			saveAll();
-//			Updater.clearAll();
-//			Mouser.clearAll();
-//			restoreAll();
+			popup(new PostBattle(ship));
 			break;
 		}
 		//hotkeys 8-16
@@ -336,9 +335,9 @@ public class Map extends Screen{
 		return explosionSize;
 	}
 
-	public static void event(Event e){
-		setState(MapState.Event);
-		currentEvent=e;
+	public static void popup(Popup p){
+		setState(MapState.Popup);
+		currentEvent=p;
 	}
 
 	public static void toggleEquip() {
@@ -350,7 +349,7 @@ public class Map extends Screen{
 		currentBase=new Equip();
 	}
 
-	public static void mouseStats(ModuleInfo info) {
+	public static void mouseStats(InfoBox info) {
 		if(currentBase!=null){
 			currentBase.mouseInfo(info);
 		}

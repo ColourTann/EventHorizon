@@ -8,7 +8,7 @@ import game.assets.Sounds;
 import game.card.Card;
 import game.card.CardGraphic;
 import game.module.component.Component;
-import game.module.junk.ModuleInfo;
+import game.module.junk.InfoBox;
 import game.module.junk.ModuleStats;
 import game.screen.battle.Battle;
 import game.screen.battle.Battle.BattleType;
@@ -49,7 +49,7 @@ public class PreBattle extends Screen{
 	SimpleButton fightButton;
 	ArrayList<Card> consumables;
 	
-	ModuleInfo slotInfo;
+	InfoBox slotInfo;
 	static PreBattle me;
 	
 	BattleType type;
@@ -205,7 +205,7 @@ public class PreBattle extends Screen{
 							difficultyStart.y, 3, 3);
 
 			
-			if(ModuleInfo.top!=null)ModuleInfo.top.render(batch);
+			if(InfoBox.top!=null)InfoBox.top.render(batch);
 			for(Component  c:player.components){
 				c.getStats().render(batch);
 			}

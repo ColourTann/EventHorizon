@@ -7,7 +7,7 @@ import game.card.CardCode.Special;
 import game.module.Module;
 import game.module.Module.ModuleType;
 import game.module.component.SpecialComponent;
-import game.module.junk.ModuleInfo;
+import game.module.junk.InfoBox;
 import game.module.junk.buff.Buff;
 import game.module.junk.buff.Buff.BuffType;
 

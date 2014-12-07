@@ -59,7 +59,7 @@ import game.ship.shipClass.Nova;
 import game.ship.shipClass.Scout;
 
 public abstract class Ship {
-	public static Class[] classes= new Class[]{Aurora.class, Nova.class, Hornet.class, Comet.class, Eclipse.class};
+	public static Class[] classes= new Class[]{Scout.class, Aurora.class, Nova.class, Hornet.class, Comet.class, Eclipse.class};
 	private static ArrayList<Integer> shipGenPool = new ArrayList<Integer>();
 	public boolean player;
 	public Pic shipPic;
@@ -128,7 +128,7 @@ public abstract class Ship {
 		specialComponent= new SpecialComponent();
 		specialComponent.ship=this;
 
-		for(int i=0;i<0;i++){
+		for(int i=0;i<5;i++){
 			addConsumableCard(ConsumableCard.get(1));
 		}
 		if(player){
@@ -1257,7 +1257,7 @@ public abstract class Ship {
 	public int getFuel() {
 		return fuel;
 	}
-	
+
 	public void spendFuel(int amount){
 		fuel-=amount;
 	}
@@ -1266,9 +1266,25 @@ public abstract class Ship {
 	public void addFuel(int amount) {
 		fuel+=amount;
 	}
-	
+
 	public ArrayList<Item> getInv(){
-		return inventory;
+		ArrayList<Item> result = new ArrayList<Item>();
+		result.addAll(inventory);
+		for(Card c:consumableStore){
+			result.add(new Item(c));
+		}
+		return result;
+	}
+
+
+	public Item getLoot() {
+		return new Item(getShield());
+	}
+
+
+	public void addInv(Item loot) {
+		if(loot.mod!=null)inventory.add(loot);
+		if(loot.card!=null)consumableStore.add(loot.card);
 	}
 
 }

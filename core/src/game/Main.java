@@ -211,7 +211,7 @@ public class Main extends ApplicationAdapter  {
 
 		if(nextScreen!=null){
 			if(fadeTimer.getFloat()>=1){
-
+				if(saveStuff)currentScreen.saveAll();
 				TextWisp.wisps.clear();
 				Updater.clearAll();
 				fadeTimer=new Timer(1, 0, fadeSpeed, Interp.LINEAR);
@@ -239,17 +239,20 @@ public class Main extends ApplicationAdapter  {
 	public static void changeScreen(Screen newScreen){
 		Gdx.input.setCursorImage(null,0,0);
 		fadeSpeed=.5f;
+		saveStuff=false;
 		//if(type==ScreenType.Menu&&currentScreen==select)return;
 		TextWisp.wisps.clear();
 		nextScreen=newScreen;
 		fadeTimer=new Timer(fadeTimer.getFloat(), 1, fadeSpeed, Interp.LINEAR);
 	}
 
-	public static void changeScreen(Screen newScreen, float seconds){
+	static boolean saveStuff;
+	public static void changeScreen(Screen newScreen, float seconds, boolean saveStuff){
 		//if(type==ScreenType.Menu&&currentScreen==select)return;
 		fadeSpeed=seconds;
 		TextWisp.wisps.clear();
 		nextScreen=newScreen;
+		Main.saveStuff=saveStuff;
 		fadeTimer=new Timer(fadeTimer.getFloat(), 1, fadeSpeed, Interp.LINEAR);
 
 	}

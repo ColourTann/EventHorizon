@@ -8,7 +8,10 @@ import util.image.Pic;
 public class RubbishComputer extends Computer{
 
 	public RubbishComputer() {
-		super("RubbishComputer", Gallery.auroraComputer, 3, new int[]{5,8,12});
+		super("TI-85", Gallery.auroraComputer, 3, new int[]{5,8,12});
+		for(int i=0;i<=variants;i++){
+			cardPic[i]=Gallery.cardComputer[i*1];
+		}
 		name[1]="Subroutine";
 		cost[1]=0;
 		effect[1]=0;
