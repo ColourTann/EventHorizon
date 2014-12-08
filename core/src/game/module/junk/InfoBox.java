@@ -124,19 +124,20 @@ public class InfoBox extends TextBox{
 	}
 
 	public void fadeAll(){
+		float spd=.2f;
 		for(CardGraphic cg: graphics){
-			cg.fadeOut(CardGraphic.fadeSpeed/1.2f, CardGraphic.fadeType);
+			cg.fadeOut(spd, CardGraphic.fadeType);
 			cg.layer=Layer.ALL;
 		}
 		if(consumableCards!=null){
 		for(Card c:consumableCards){
-			c.getGraphic().fadeOut(CardGraphic.fadeSpeed/1.2f, CardGraphic.fadeType);
+			c.getGraphic().fadeOut(spd, CardGraphic.fadeType);
 			c.getGraphic().layer=Layer.ALL;
 			
 		}
 		}
 		layer=Layer.ALL;
-		fadeOut(CardGraphic.fadeSpeed/1.2f, Interp.LINEAR);
+		fadeOut(spd, Interp.LINEAR);
 	}
 
 	public void unFade(){

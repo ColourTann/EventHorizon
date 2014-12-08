@@ -392,6 +392,6 @@ public class ModuleStats extends Mouser{
 
 
 	public void fade() {
-		fadeOut(.3f, Interp.LINEAR);
+		fadeOut(.2f, Interp.LINEAR);
 	}
 }

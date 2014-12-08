@@ -44,6 +44,7 @@ import game.screen.battle.tutorial.UndoButton;
 import game.screen.battle.tutorial.Tutorial.Trigger;
 import game.screen.customise.Customise;
 import game.screen.map.Map;
+import game.screen.map.popup.PostBattle;
 import game.screen.menu.Menu;
 import game.ship.Ship;
 import game.ship.niche.Niche;
@@ -313,9 +314,11 @@ public class Battle extends Screen{
 					@Override
 					public void finish() {
 						Main.changeScreen(Map.me,1, false);
+						Map.popup(new PostBattle(getEnemy()));
 						Sounds.battleMusic.fadeOut(.3f);
 					}
 				});
+				
 			}
 			
 			else if(battleType==BattleType.Arena){

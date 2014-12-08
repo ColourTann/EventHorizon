@@ -1281,6 +1281,9 @@ public abstract class Ship {
 		return new Item(getShield());
 	}
 
+	public int getRewardFuel(){
+		return (int) (Math.random()*8)+4;
+	}
 
 	public void addInv(Item loot) {
 		if(loot.mod!=null)inventory.add(loot);

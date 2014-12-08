@@ -37,12 +37,9 @@ public abstract class Base extends Updater{
 	
 	final static Pair size=new Pair(850,600);
 	final static Pair location=new Pair(Main.width/2-size.x/2, Main.height/2-size.y/2).floor();
-
-	//	final static Pair infoLoc=new Pair(location.x+473+infoGap, location.y+size.y-ModuleInfo.staticHeight-TextBox.gap-infoGap);
-	//	final static Pair shipLoc=new Pair(location.x+300,location.y+size.y-550);
 	final static Pair statsLoc= new Pair(location.x+65,location.y+377);
 	final static Pair infoLoc=new Pair(location.x+473+5,location.y+size.y-TextBox.gap*(4)-CardGraphic.height);
-	final static Pair shipLoc=new Pair(location.x+300, location.y+20);
+	final static Pair shipLoc=new Pair(location.x+275, location.y+20);
 
 
 	final static Pair scrollerLoc=new Pair(location.x+size.x-Scroller.width-TextBox.gap*2, location.y+TextBox.gap*2+25);

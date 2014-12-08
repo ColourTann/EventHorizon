@@ -55,9 +55,10 @@ public class PostBattle extends Popup{
 			public void onPress() {
 				Map.returnToPlayerTurn();
 				Map.player.getShip().addFuel(fuelReward);
-				Map.player.getShip().addInv(loot);
+				if(loot!=null)Map.player.getShip().addInv(loot);
 			}
 		});
+		button.layer=Layer.ALL;
 	}
 	
 	@Override

@@ -49,20 +49,18 @@ public class TextBox extends Updater{
 		Texture mid;
 		Texture topLeft;
 		Texture top;
-
+		mid = Gallery.textBoxMid.get();
 		if(moused){
-			mid = Gallery.textBoxMid.getMask(Colours.white);
 			topLeft = Gallery.textBoxTopLeftCorner.getMask(Colours.white);
 			top = Gallery.textBoxTop.getMask(Colours.white);
 		}
 		else{
-			mid = Gallery.textBoxMid.get();
 			topLeft = Gallery.textBoxTopLeftCorner.get();
 			top = Gallery.textBoxTop.get();
 		}
 
 		if(moused){
-			batch
+			batch.setColor(Colours.light);
 		}
 		Draw.drawScaled(batch, mid, x+sideSize, y+sideSize, width-sideSize*2, height-sideSize*2);
 
