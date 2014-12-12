@@ -94,7 +94,7 @@ public class Item extends Mouser{
 				if(mod.type==ModuleType.SHIELD){
 					Font.medium.setColor(Colours.withAlpha(Colours.shieldCols6[1], alpha));
 				}
-				Font.drawFontCentered(batch, mod.tier+"", Font.medium, (int)(x+20), (int)(collider.position.y+y+26));
+				Font.drawFontCentered(batch, (mod.tier+1)+"", Font.medium, (int)(x+20), (int)(collider.position.y+y+26));
 			}
 		}
 		if(card!=null){

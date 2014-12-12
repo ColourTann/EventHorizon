@@ -2,7 +2,6 @@ package game.grid;
 
 import java.util.ArrayList;
 
-import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 import util.Colours;
 import util.maths.Pair;
 
@@ -44,23 +43,25 @@ public class Grid {
 		for(int i=0;i<1500;i++){
 			getRandomHex().makeSolarSystem();
 		}
-		for(int i=0;i<2000;i++){
+		for(int i=0;i<3500;i++){
 			getRandomHex().makeMapShip();
 		}
 		for(int i=0;i<1000;i++){
 			getRandomHex().startNebula(0);
 		}
-		for(int i=0;i<2500;i++){
-			getRandomHex().addAsteroid();
-		}
-		for(int i=0;i<25000;i++){
-			getRandomHex().addAsteroid();
-		}
 		for(int i=0;i<3500;i++){
-			getRandomHex().addSpaceStation();
+			getRandomHex().addAsteroid();
 		}
-		
-		
+//		for(int i=0;i<25000;i++){
+//			getRandomHex().addAsteroid();
+//		}
+//		for(int i=0;i<3500;i++){
+//			getRandomHex().addSpaceStation();
+//		}
+	}
+	
+	public void setupDrawableHexes(){
+		drawableHexes=Map.player.hex.getHexesWithin((int) ((viewDist+3)*Main.mainCam.zoom), true);
 	}
 
 	private Hex getRandomHex(){
@@ -129,7 +130,7 @@ public class Grid {
 		Hex start =pixelToHex((int)Main.getCam().x+Main.width/2, (int)Main.getCam().y+Main.height/2);
 		drawableHexes=null;
 		start=Map.player.hex;
-		if(start!=null)drawableHexes=start.getHexesWithin((int) ((viewDist+3)*Main.mainCam.zoom), true);
+		if(start!=null)setupDrawableHexes();
 		if(drawableHexes==null)return;
 		for(Hex h:start.getHexesWithin(viewDist+2, true)){
 			h.update(delta);
@@ -137,8 +138,15 @@ public class Grid {
 	}
 
 	public void turn(){
+		
 		updateCloseShips();
 		for(Hex h:drawableHexes)h.hexTurn();
+	}
+	
+	public void startOfPlayerTurn() {
+		for(Hex h:drawableHexes){
+			if(h.swallowed(1))h.aboutToBlow=true;
+		}
 	}
 	
 	public static ArrayList<MapShip> getCloseShips(){
@@ -182,6 +190,8 @@ public class Grid {
 		farRender.add(hex);
 		
 	}
+
+	
 
 
 }

@@ -211,6 +211,7 @@ public class Gallery {
 	public static Pic fightButton= new Pic("Interface/fightbutton");
 	
 	//Map stuff//
+	public static Pic mapExclamationMark= new Pic("Icon/excl");
 	public static Pic mapslice= new Pic("Interface/mapslice");
 	public static Pic mapsliceRight= new Pic("Interface/mapsliceright");
 	public static Pic star=new Pic("Map/star");

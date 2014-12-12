@@ -313,6 +313,7 @@ public class Battle extends Screen{
 
 					@Override
 					public void finish() {
+						Map.player.hex.endBattle();
 						Main.changeScreen(Map.me,1, false);
 						Map.popup(new PostBattle(getEnemy()));
 						Sounds.battleMusic.fadeOut(.3f);

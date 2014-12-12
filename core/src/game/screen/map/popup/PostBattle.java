@@ -36,7 +36,7 @@ public class PostBattle extends Popup{
 	AdvancedButton button;
 	public PostBattle(Ship defeated){
 		loot=defeated.getLoot();
-		
+		fuelReward=defeated.getRewardFuel();
 		if(loot!=null){
 			loot.deactivate();
 			loot.demousectivate();
@@ -79,6 +79,8 @@ public class PostBattle extends Popup{
 	@Override
 	public void dispose() {
 		tw.smallDispose();
+		button.demousectivate();
+		button.deactivate();
 	}
 
 	@Override

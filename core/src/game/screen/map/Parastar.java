@@ -2,8 +2,6 @@ package game.screen.map;
 
 import game.Main;
 import game.assets.Gallery;
-import game.grid.hex.Hex;
-
 import java.util.ArrayList;
 
 import util.Colours;
@@ -12,7 +10,6 @@ import util.maths.Pair;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sun.org.glassfish.external.statistics.impl.StatsImpl;
 
 public class Parastar {
 	private static ArrayList<Parastar> stars=new ArrayList<Parastar>();

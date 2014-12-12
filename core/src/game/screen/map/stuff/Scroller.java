@@ -6,15 +6,10 @@ import game.assets.TextBox;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
-import com.sun.org.apache.bcel.internal.classfile.Code;
-
-import util.Draw;
 import util.TextWriter.Alignment;
-import util.image.Pic;
 import util.maths.Pair;
 import util.update.SimpleButton;
 import util.update.Timer;

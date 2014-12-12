@@ -54,10 +54,8 @@ public class CardHover {
 
 
 	public static void render(SpriteBatch batch, Card c, float baseY, float alpha) {
-		System.out.println(c.getGraphic().mousedSide);
 		int bonusY=0;
 		card=c;
-		System.out.println(baseY+yOffset+bonusY);
 		if(c.mod.getBuffAmount(BuffType.Scrambled)==0&&CardHover.getReminderTypes(card).size()==0){
 			return;
 		}

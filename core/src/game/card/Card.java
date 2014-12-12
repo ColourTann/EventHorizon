@@ -2,8 +2,6 @@ package game.card;
 
 import java.util.ArrayList;
 
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
-
 import util.Draw;
 import util.image.Pic;
 import game.assets.Sounds;

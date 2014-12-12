@@ -60,7 +60,7 @@ public class TextBox extends Updater{
 		}
 
 		if(moused){
-			batch.setColor(Colours.light);
+			batch.setColor(Colours.withAlpha(Colours.light, batch.getColor().a));
 		}
 		Draw.drawScaled(batch, mid, x+sideSize, y+sideSize, width-sideSize*2, height-sideSize*2);
 

@@ -16,8 +16,6 @@ import util.update.Timer.Finisher;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
-
 import game.assets.Gallery;
 import game.assets.Sounds;
 import game.grid.hex.Hex;

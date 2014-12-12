@@ -46,7 +46,7 @@ import game.ship.shipClass.Scout;
 public class Main extends ApplicationAdapter  {
 
 	public static float version=0.534f;
-	public static boolean debug=true;
+	public static boolean debug=false;
 	public static float ticks;
 	public static int height=700;
 	public static int width=1280;
@@ -208,7 +208,7 @@ public class Main extends ApplicationAdapter  {
 		ticks+=delta;
 		currentScreen.update(delta);
 		Updater.updateAll(delta);
-
+		mainCam.update();
 		if(nextScreen!=null){
 			if(fadeTimer.getFloat()>=1){
 				if(saveStuff)currentScreen.saveAll();
@@ -225,7 +225,7 @@ public class Main extends ApplicationAdapter  {
 			return;
 		}
 
-		mainCam.update();
+		
 	
 
 	}

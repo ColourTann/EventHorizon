@@ -8,6 +8,8 @@ import util.assets.Font;
 import util.maths.Pair;
 import util.update.Mouser;
 import util.update.Screen;
+import util.update.Timer;
+import util.update.Timer.Finisher;
 import util.update.Updater;
 
 import com.badlogic.gdx.Gdx;
@@ -36,6 +38,7 @@ import game.screen.map.popup.PostBattle;
 import game.screen.map.stuff.Base;
 import game.screen.map.stuff.Equip;
 import game.screen.map.stuff.Item;
+import game.screen.menu.Menu;
 import game.ship.Ship;
 import game.ship.mapThings.MapShip;
 import game.ship.mapThings.mapAbility.MapAbility;
@@ -51,7 +54,7 @@ public class Map extends Screen{
 	private static MapState state;
 	public static Hex explosion;
 	private static float explosionSize=9;
-	public static float growthRate=.4f;
+	public static float growthRate=.7f;
 	public static float progress=0;
 	public static float phaseSpeed=3f;
 	public static MapAbility using;
@@ -65,6 +68,7 @@ public class Map extends Screen{
 	static Base currentBase;
 	public static Map me;
 	private boolean initialised;
+	private boolean losing;
 	public Map(Ship ship){
 		this.ship=ship;
 	}
@@ -105,6 +109,8 @@ public class Map extends Screen{
 		panels.add(actionPanel);
 		restoreAll();
 		me=this;
+		grid.setupDrawableHexes();
+		grid.startOfPlayerTurn();
 	}
 
 	public static void resetStatics(){
@@ -122,6 +128,7 @@ public class Map extends Screen{
 	}
 
 	public static void returnToPlayerTurn(){
+		System.out.println("returning "+currentEvent);
 		using=null;
 		if(currentEvent!=null){
 			currentEvent.dispose();
@@ -131,7 +138,7 @@ public class Map extends Screen{
 	}
 
 	public static void setState(MapState state){
-		
+
 		progress=0;
 		Map.state=state;
 		switch (state){
@@ -141,14 +148,24 @@ public class Map extends Screen{
 			grid.turn();
 			break;
 		case PlayerTurn:
+
 			Hex.mousedHex.moused=false;
 			player.playerStartTurn();
+			grid.startOfPlayerTurn();
 			if(Map.using!=null){
 				MapAbility toUse=Map.using;
 				Map.using=null;
 				toUse.select();
-				
 			}
+
+			if(player.getShip().getFuel()<=0){
+				lose();
+			}
+			
+			if(player.hex.swallowed(0)){
+				lose();
+			}
+
 			break;
 		case PlayerMoving:
 			player.playerAfterMove();
@@ -205,7 +222,7 @@ public class Map extends Screen{
 			if(player.mapAbilities.size()>hotkey)
 				player.mapAbilities.get(hotkey).select();
 		}
-		
+
 		return false;
 	}
 
@@ -233,6 +250,7 @@ public class Map extends Screen{
 
 	@Override
 	public void update(float delta) {
+		if(losing)return;
 		if(Screen.isActiveType(EscapeMenu.class))return;
 		updateState(delta);		
 		grid.update(delta);		
@@ -264,7 +282,7 @@ public class Map extends Screen{
 		uiBatch.begin();
 		Parastar.render(uiBatch, Main.getCam(), Hex.size/200f);
 		uiBatch.end();
-		
+
 
 		batch.begin();
 		grid.render(batch);
@@ -297,6 +315,11 @@ public class Map extends Screen{
 
 		if(currentEvent!=null)currentEvent.render(uiBatch);
 		if(currentBase!=null)currentBase.render(uiBatch);
+		
+		if(losing){
+			Font.big.setColor(Colours.light);
+			Font.drawFontCentered(uiBatch, "You lose", Font.big, Main.width/2, Main.height/2);
+		}
 		uiBatch.end();
 
 
@@ -322,7 +345,7 @@ public class Map extends Screen{
 	public static void mouseOverHex(Hex h){
 		hexInfoPanel.hexMouse(h);
 	}
-	
+
 	public static void updateActionPanel(Hex h){
 		actionPanel.init(h);
 	}
@@ -368,7 +391,7 @@ public class Map extends Screen{
 		if(currentBase!=null){
 			currentBase.select(i);
 		}
-		
+
 	}
 
 	public static void closeBase() {
@@ -377,6 +400,17 @@ public class Map extends Screen{
 		currentBase=null;
 	}
 
-
+	public static void lose(){
+		me.losing=true;
+		Timer.event(2, new Finisher() {
+			
+			@Override
+			public void finish() {
+				Main.changeScreen(new Menu() );
+			}
+		});
+		
+		
+	}
 
 }

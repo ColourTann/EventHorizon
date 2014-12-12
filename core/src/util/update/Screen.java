@@ -20,7 +20,7 @@ public abstract class Screen {
 	}
 	public void restoreAll(){
 		Updater.addList(savedUpdaters);
-		Mouser.addList(savedMousers);
+		Mouser.addMouserList(savedMousers);
 		savedUpdaters.clear();
 		savedMousers.clear();
 	}

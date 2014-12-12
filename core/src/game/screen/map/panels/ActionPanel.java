@@ -58,7 +58,7 @@ public class ActionPanel extends SidePanel{
 
 	@Override
 	public void render(SpriteBatch batch) {
-		if(h==null||h.content==null)return;
+		if(h==null||h.content==null||h.content.getActionName()==null)return;
 		Draw.drawCenteredScaled(batch, h.content.getPic().get(), PicCenter.x, PicCenter.y, 2, 2);
 		Font.medium.setColor(Colours.light);
 		Font.drawFontCentered(batch,  h.content.toString(), Font.medium, TitleCenter.x, TitleCenter.y);

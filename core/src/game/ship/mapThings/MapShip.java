@@ -61,7 +61,7 @@ public class MapShip {
 
 	public void init() {
 		Ship s;
-		s=Ship.makeRandomShip(false, 0);
+		s=Ship.makeRandomShip(false, hex.getTier());
 		init(s);
 		
 	}
@@ -88,6 +88,7 @@ public class MapShip {
 		hex.endBattle();
 		Map.incrementExplosionSize();
 		playerPath();
+		
 	}
 	
 	public void playerPath(){

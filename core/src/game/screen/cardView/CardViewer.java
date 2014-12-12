@@ -45,7 +45,6 @@ public class CardViewer extends Screen{
 		
 		cards.clear();
 		for(Module m:modules){
-			System.out.println(m.tier);
 			cards.addAll(m.getCardsJustForShowing());
 		}
 		for(int i=0;i<cards.size();i++){

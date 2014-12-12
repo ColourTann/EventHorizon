@@ -362,11 +362,11 @@ public class ModuleStats extends Mouser{
 		}
 		if(component.type==ModuleType.WEAPON){
 			Font.medium.setColor(Colours.withAlpha(Colours.weaponCols8[6], alpha));
-			Font.drawFontCentered(batch, component.tier+"", Font.medium, collider.position.x+92, collider.position.y+height-30);
+			Font.drawFontCentered(batch, (component.tier+1)+"", Font.medium, collider.position.x+92, collider.position.y+height-30);
 		}
 		if(component.type==ModuleType.SHIELD){
 			Font.medium.setColor(Colours.withAlpha(Colours.shieldCols6[1], alpha));
-			Font.drawFontCentered(batch, component.tier+"", Font.medium, collider.position.x+63, collider.position.y+height-32);
+			Font.drawFontCentered(batch, (component.tier+1)+"", Font.medium, collider.position.x+63, collider.position.y+height-32);
 		}
 	}
 

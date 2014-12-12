@@ -88,7 +88,7 @@ public class Hex {
 	private ArrayList<Hex> nebulaList;
 	public boolean battle;
 	private Timer battleTimer;
-	
+	public boolean aboutToBlow;
 	public static void init(){
 		for(int i=0;i<12;i+=2){
 			points[i]=(float) Math.sin(i*Math.PI/6)*size;
@@ -143,9 +143,14 @@ public class Hex {
 	}
 
 	public float getDistanceFromExplosion() {
-		return(getLineDistance(Map.explosion)-(Map.getExplosionSize())-.5f);
-		//		return(getLineDistance(Map.explosion)-(Map.getExplosionSize()));
+		return(getDistanceFromCenter()-(Map.getExplosionSize())-.3f);
 	}
+	
+	public float getDistanceFromCenter(){
+		return(getLineDistance(Map.explosion));
+	}
+	
+	
 
 	public float getLineDistance(Hex h){
 		Pair origin=getPixel();
@@ -282,7 +287,7 @@ public class Hex {
 			forceFieldTimer=new Timer(forceFieldTimer.getFloat(), forceField/3f, .3f, Interp.LINEAR);
 		}
 		if(content!=null)content.turn();
-
+		
 
 
 
@@ -405,8 +410,8 @@ public class Hex {
 		SurroundingAnalysis lyse = analyse(analyseDistance);
 
 		float explosionDistance=lyse.furthestDistance-analyseDistance;
-		float distanceMultiplier=2;
-		float adjustedExplosionDistance=(float) (-1/Math.pow(explosionDistance, 2))*distanceMultiplier;
+		float explosionDistanceMultiplier=2.5f;
+		float adjustedExplosionDistance=(float) (-1/Math.pow(explosionDistance, 2))*explosionDistanceMultiplier;
 		result += adjustedExplosionDistance;
 		//http://i.imgur.com/dMOkeTK.png cool weights//
 
@@ -481,7 +486,7 @@ public class Hex {
 	}
 
 	public boolean swallowed(int turns) {
-		return getDistanceFromExplosion()-turns<0;
+		return getDistanceFromExplosion()-turns*Map.growthRate<0;
 	}
 
 
@@ -502,9 +507,13 @@ public class Hex {
 	public void renderFilled(ShapeRenderer shape){
 		shape.setColor(Colours.dark);
 
-		if(mapAbilityFadeTimer!=null&&mapAbilityFadeTimer.getFloat()>0){
-			shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[2],mapAbilityFadeTimer.getFloat()));
-		}
+		
+		int distance = getTier();
+		
+		shape.setColor(distance/10f,distance/10f,distance/10f,1);
+		
+		
+		
 		//	if(Map.using.isValidChoice(Map.player.hex, this))shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[2],ticks%1));
 
 		if(highlight)shape.setColor(Colours.blueWeaponCols4[2]);
@@ -513,13 +522,13 @@ public class Hex {
 			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.blueWeaponCols4[1], forceFieldTimer.getFloat()));
 		}
 
-		if(swallowed(0))shape.setColor(Colours.redWeaponCols4[0]);
-
+		if(swallowed(0))shape.setColor(Colours.genCols5[1]);
+		
 		if(empTimer!=null&&empTimer.getFloat()>0){
 			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
 		}
 
-
+		
 
 		//		if(mapShip!=null&&mapShip.isStunned()){
 		//			shape.setColor(Colours.shiftedTowards(Colours.dark, Colours.genCols5[3], empTimer.getFloat()/1.5f));
@@ -530,9 +539,23 @@ public class Hex {
 		shape.triangle(s.x+points[4], s.y+points[5], s.x+points[6], s.y+points[7], s.x+points[8], s.y+points[9]);
 		shape.triangle(s.x+points[8], s.y+points[9], s.x+points[10], s.y+points[11], s.x+points[0], s.y+points[1]);
 		shape.triangle(s.x+points[0], s.y+points[1], s.x+points[4], s.y+points[5], s.x+points[8], s.y+points[9]);
+		if(mapAbilityFadeTimer!=null&&mapAbilityFadeTimer.getFloat()>0){
+			shape.setColor(Colours.withAlpha(Colours.blueWeaponCols4[2],mapAbilityFadeTimer.getFloat()));
+			shape.triangle(s.x+points[0], s.y+points[1], s.x+points[2], s.y+points[3], s.x+points[4], s.y+points[5]);
+			shape.triangle(s.x+points[4], s.y+points[5], s.x+points[6], s.y+points[7], s.x+points[8], s.y+points[9]);
+			shape.triangle(s.x+points[8], s.y+points[9], s.x+points[10], s.y+points[11], s.x+points[0], s.y+points[1]);
+			shape.triangle(s.x+points[0], s.y+points[1], s.x+points[4], s.y+points[5], s.x+points[8], s.y+points[9]);
+		}
 
 
+	}
 
+	private int getHexDistanceFromCenter() {
+		return getDistance(Map.explosion);
+	}
+
+	public int getTier() {
+		return Math.max(0, getHexDistanceFromCenter()/15-1);
 	}
 
 	public void renderBorder(ShapeRenderer shape) {
@@ -564,6 +587,10 @@ public class Hex {
 			batch.setColor(1, 1, 1, battleTimer.getFloat());
 			Draw.drawCentered(batch, Gallery.mapBattle.get(), getPixel().x, getPixel().y);
 		}
+		if(aboutToBlow){
+			Draw.drawCentered(batch, Gallery.mapExclamationMark.get(), getPixel().x, getPixel().y);
+		}
+		
 		batch.setColor(1, 1, 1, 1);
 
 
@@ -576,8 +603,6 @@ public class Hex {
 		Draw.draw(batch, nebulaTexture, (getPixel().x+nebulaDrawOffset.x-nebulaOffset), (getPixel().y+nebulaOffset+nebulaDrawOffset.y-nebulaOffset-Hex.size));
 
 	}
-
-
 
 	public void renderLocation(SpriteBatch batch){
 		String s=this.toString();
@@ -784,6 +809,10 @@ public class Hex {
 		content=new SpaceStation(this);
 		for(Hex h:getHexesWithin(12, true))h.nearbySpaceStation=true;
 	}
+
+
+
+	
 
 
 

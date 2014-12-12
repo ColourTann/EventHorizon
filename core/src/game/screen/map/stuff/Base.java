@@ -31,7 +31,6 @@ import util.update.Updater;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sun.org.glassfish.external.statistics.annotations.Reset;
 
 public abstract class Base extends Updater{
 	
@@ -42,7 +41,7 @@ public abstract class Base extends Updater{
 	final static Pair shipLoc=new Pair(location.x+275, location.y+20);
 
 
-	final static Pair scrollerLoc=new Pair(location.x+size.x-Scroller.width-TextBox.gap*2, location.y+TextBox.gap*2+25);
+	final static Pair scrollerLoc=new Pair(location.x+size.x-Scroller.width-TextBox.gap*2, location.y+TextBox.gap*2+70);
 	static Item selectedItem;
 	ArrayList<ModuleStats> stats= new ArrayList<ModuleStats>();
 	ShipGraphic playerGraphic;
@@ -77,8 +76,8 @@ public abstract class Base extends Updater{
 
 		if(newStats!=null)newStats.render(batch);
 		if(oldStats!=null)oldStats.render(batch);
-		Font.medium.setColor(Colours.light);
-		Font.drawFontCentered(batch, "INV", Font.medium, 982, location.y+18);
+		Font.big.setColor(Colours.light);
+		Font.drawFontCentered(batch, "INV", Font.big, 982, location.y+40);
 		trasher.render(batch);
 		//Draw.drawScaled(batch, Gallery.whiteSquare.get(), location.x, location.y, size.x, size.y);
 	}

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Main;
 import util.maths.Collider;
 import util.maths.Pair;
-import util.update.Updater.Layer;
 
 public abstract class Mouser extends Updater{	
 	public static ArrayList<Mouser> mousers = new ArrayList<Mouser>();
@@ -151,7 +150,7 @@ public abstract class Mouser extends Updater{
 		return cMousers;
 	}
 	
-	public static void addList(ArrayList<Mouser> newMousers){
+	public static void addMouserList(ArrayList<Mouser> newMousers){
 		mousers.addAll(newMousers);
 	}
 

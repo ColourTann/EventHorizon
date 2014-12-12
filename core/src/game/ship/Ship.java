@@ -59,7 +59,8 @@ import game.ship.shipClass.Nova;
 import game.ship.shipClass.Scout;
 
 public abstract class Ship {
-	public static Class[] classes= new Class[]{Scout.class, Aurora.class, Nova.class, Hornet.class, Comet.class, Eclipse.class};
+	// + scout sometimes
+	public static Class[] classes= new Class[]{Aurora.class, Nova.class, Hornet.class, Comet.class, Eclipse.class};
 	private static ArrayList<Integer> shipGenPool = new ArrayList<Integer>();
 	public boolean player;
 	public Pic shipPic;
@@ -106,10 +107,11 @@ public abstract class Ship {
 	public abstract void placeNiches();
 	float tier;
 	public String shipName;
-	private int fuel=30;
+	private int fuel=20;
 	public Ship(boolean player, float tier, String shipName, Pic shipPic, Pic genPic, Pic comPic){
 		this.shipName=shipName;
 		this.tier=Math.min(12f, tier);
+		this.tier=Math.max(0, tier);
 		this.player=player;
 		this.shipPic=shipPic;
 
@@ -128,21 +130,21 @@ public abstract class Ship {
 		specialComponent= new SpecialComponent();
 		specialComponent.ship=this;
 
-		for(int i=0;i<5;i++){
-			addConsumableCard(ConsumableCard.get(1));
-		}
-		if(player){
-			for(int i=0;i<2;i++){
-				inventory.add(new Item(Weapon.getRandomWeapon(0)));
-			}
-			for(int i=0;i<2;i++){
-				inventory.add(new Item(Shield.getRandomShield(0)));
-			}
-			for(int i=0;i<2;i++){
-				inventory.add(new Item(Utility.getRandomUtility(0)));
-			}
-			Collections.shuffle(inventory);
-		}
+//		for(int i=0;i<5;i++){
+//			addConsumableCard(ConsumableCard.get(1));
+//		}
+//		if(player){
+//			for(int i=0;i<2;i++){
+//				inventory.add(new Item(Weapon.getRandomWeapon(0)));
+//			}
+//			for(int i=0;i<2;i++){
+//				inventory.add(new Item(Shield.getRandomShield(0)));
+//			}
+//			for(int i=0;i<2;i++){
+//				inventory.add(new Item(Utility.getRandomUtility(0)));
+//			}
+//			Collections.shuffle(inventory);
+//		}
 	}
 
 
@@ -1276,9 +1278,35 @@ public abstract class Ship {
 		return result;
 	}
 
+	private int getMaxTier(){
+		int maxTier=0;
+		for(Component c:components){
+			if(c.tier>maxTier){
+				maxTier=c.tier;
+			}
+		}
+		return maxTier;
+	}
 
 	public Item getLoot() {
-		return new Item(getShield());
+		int tier=getMaxTier();
+		if(Math.random()<.5){
+			return null;
+		}
+		if(tier==0){
+			return new Item(Utility.getRandomUtility(0));
+		}
+		double rand = Math.random();
+		if(rand>.9){
+			return new Item(ConsumableCard.get(tier));
+		}
+		if(rand>.8){
+			return new Item(Utility.getRandomUtility(0));
+		}
+		if(rand>.55){
+			return new Item(Shield.getRandomShield(tier));
+		}
+		return new Item(Weapon.getRandomWeapon(tier));
 	}
 
 	public int getRewardFuel(){

@@ -51,14 +51,13 @@ public class Event extends Popup{
 	}
 
 	public void dispose() {
+		System.out.println("disposing event");
 		writer.smallDispose();
 		for(AdvancedButton b:buttons){
 			b.deactivate();
 			b.demousectivate();
 		}
 	}
-
-
 
 	@Override
 	public void update(float delta) {

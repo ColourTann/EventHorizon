@@ -214,7 +214,7 @@ public class InfoBox extends TextBox{
 
 		String words=mod.type+"";
 		if(!(mod instanceof Utility)||mod instanceof Armour){
-			words+=(mod.tier==-1?"":" Tier "+mod.tier);
+			words+=(mod.tier==-1?"":" Tier "+(mod.tier+1));
 		}
 		Font.drawFontCentered(batch, words, Font.small, position.x+CardGraphic.width/2+cardOffset, position.y+42+nameHeight/2);
 
