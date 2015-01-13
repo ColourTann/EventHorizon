@@ -51,6 +51,7 @@ import game.screen.map.popup.PostBattle;
 import game.screen.menu.Menu;
 import game.ship.Ship;
 import game.ship.niche.Niche;
+import game.ship.shipClass.Aurora;
 
 public class Battle extends Screen{
 	public enum Phase{ShieldPhase, EnemyWeaponsFiring, WeaponPhase, EnemyShieldPhase, PlayerWeaponsFiring, EnemyWeaponPhase, End};
@@ -100,6 +101,7 @@ public class Battle extends Screen{
 	static Timer victoryFadeInTimer=new Timer();
 
 	public boolean clicked=false;
+	private boolean restartable;
 
 
 	public static BattleType battleType;
@@ -392,7 +394,10 @@ public class Battle extends Screen{
 			}
 			break;
 		case Input.Keys.R:
-			
+			if(restartable){
+				restartable=false;
+				Main.changeScreen(new Customise(new Aurora(true, 0), true, false));
+			}
 			break;
 		}
 
@@ -697,7 +702,7 @@ public class Battle extends Screen{
 				if(battleType==BattleType.Arena){ Font.drawFontCentered(batch, "You defeated "+Customise.totalShipsDefeated+" ship"+(Customise.totalShipsDefeated==1?"":"s"), Font.big, Main.width/2, 190);
 				Font.drawFontCentered(batch, "r to restart", Font.big, Main.width/2, 230);
 				Font.drawFontCentered(batch, "esc to return", Font.big, Main.width/2, 270);
-
+				restartable=true;
 				}
 			}
 		}
