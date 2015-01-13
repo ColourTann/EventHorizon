@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import util.Colours;
 import util.Draw;
 import util.Noise;
+import util.TextWriter.Alignment;
 import util.assets.Font;
 import util.maths.Pair;
 import util.particleSystem.ParticleSystem;
@@ -20,10 +21,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.sun.javafx.scene.control.behavior.TextBinding;
 
 import game.Main;
 import game.assets.Gallery;
 import game.assets.Sounds;
+import game.assets.TextBox;
 import game.card.Card;
 import game.card.CardCode;
 import game.card.CardGraphic;
@@ -92,25 +95,25 @@ public class Battle extends Screen{
 	private static Battle me;
 	ArrayList<Animation> animations=new ArrayList<Animation>();
 	float animTicker=0;
-	
+
 	private static Timer endTimer=new Timer();
 	static Timer victoryFadeInTimer=new Timer();
-	
+
 	public boolean clicked=false;
-	
-	
+
+
 	public static BattleType battleType;
 	public enum BattleType{Tutorial, Basic, Arena, Map}
-	
+
 	public Battle(Ship player, Ship enemy, BattleType type){
 		this.player=player;
 		this.enemy=enemy;
 		this.battleType=type;
 		if(battleType==BattleType.Tutorial) tutorial=true;
-		
-		
+
+
 		CycleTeacher.get();
-		
+
 	}
 
 	@Override
@@ -305,7 +308,7 @@ public class Battle extends Screen{
 			});
 		}
 		if(victor.player&&!victor.dead){
-			
+
 			if(battleType==BattleType.Map){
 				endTimer=new Timer(0,1,5,Interp.LINEAR);
 
@@ -319,9 +322,9 @@ public class Battle extends Screen{
 						Sounds.battleMusic.fadeOut(.3f);
 					}
 				});
-				
+
 			}
-			
+
 			else if(battleType==BattleType.Arena){
 				endTimer=new Timer(0,1,5,Interp.LINEAR);
 
@@ -379,13 +382,20 @@ public class Battle extends Screen{
 			}
 			break;
 		case Input.Keys.S:
+			if(Main.debug){
+				battleWon(enemy);
+			}
 			break;
 		case Input.Keys.A:
 			if(Main.debug){
 				battleWon(player);
 			}
 			break;
+		case Input.Keys.R:
+			
+			break;
 		}
+
 		return false;
 
 
@@ -619,16 +629,9 @@ public class Battle extends Screen{
 			Font.medium.draw(batch, "Phase: "+currentPhase+", State: "+currentState, 300, 80);
 		}
 
-		if(getPhase()==Phase.End){
-			String s=victor.player?"You win!":"You lose";
-			Font.big.setColor(Colours.withAlpha(Colours.light,victoryFadeInTimer.getFloat()));
-			Font.drawFontCentered(batch, s, Font.big, Main.width/2, 205);
-			if(!victor.player){
-				if(battleType==BattleType.Arena){ Font.drawFontCentered(batch, "You defeated "+Customise.totalShipsDefeated+" ship"+(Customise.totalShipsDefeated==1?"":"s"), Font.big, Main.width/2, 100);
-				Font.drawFontCentered(batch, "esc to return", Font.big, Main.width/2, 130);
-				}
-			}
-		}
+
+
+
 
 
 	}
@@ -676,6 +679,27 @@ public class Battle extends Screen{
 		for(CardIcon icon:CardIcon.icons)icon.mousedGraphic.render(batch);
 		if(isTutorial()){
 			Tutorial.renderAll(batch);
+		}
+
+
+		if(getPhase()==Phase.End){
+			batch.setColor(1,1,1,1);
+			Pair endSize=new Pair(480,180);
+			Pair endPosition=new Pair(Main.width/2-endSize.x/2, Main.height/3-20-endSize.y/2);
+
+
+			String s=victor.player?"You win!":"You lose";
+			Font.big.setColor(Colours.withAlpha(Colours.light,victoryFadeInTimer.getFloat()));
+			Font.drawFontCentered(batch, s, Font.big, Main.width/2, 230);
+			if(!victor.player){
+				TextBox.renderBox(batch, endPosition, endSize.x, endSize.y, Alignment.Left, false);
+				Font.drawFontCentered(batch, s, Font.big, Main.width/2, 150);
+				if(battleType==BattleType.Arena){ Font.drawFontCentered(batch, "You defeated "+Customise.totalShipsDefeated+" ship"+(Customise.totalShipsDefeated==1?"":"s"), Font.big, Main.width/2, 190);
+				Font.drawFontCentered(batch, "r to restart", Font.big, Main.width/2, 230);
+				Font.drawFontCentered(batch, "esc to return", Font.big, Main.width/2, 270);
+
+				}
+			}
 		}
 	}
 

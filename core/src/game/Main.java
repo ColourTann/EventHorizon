@@ -46,7 +46,7 @@ import game.ship.shipClass.Scout;
 public class Main extends ApplicationAdapter  {
 
 	public static float version=0.534f;
-	public static boolean debug=false;
+	public static boolean debug=true;
 	public static float ticks;
 	public static int height=700;
 	public static int width=1280;
